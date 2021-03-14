@@ -1,0 +1,19 @@
+{
+    "name": "alleyinteractive/block-editor-tools",
+    "description": "A WordPress Plugin to make the block editor even better.",
+	"authors": [
+		{
+		  "name": "Alley Interactive",
+		  "email": "noreply@alleyinteractive.com"
+		}
+	],
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "alleyinteractive/alley-coding-standards": "^0.3.0"
+    },
+	"scripts": {
+		"phpcs": "phpcs . -p",
+		"phpcbf": "phpcbf .",
+		"changelog": "./bin/script-draft-changelog.sh"
+	}
+}
