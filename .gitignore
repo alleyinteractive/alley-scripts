@@ -1,3 +1,12 @@
+# System/hidden files
+.DS_Store
+.thumbsdb
+.vscode
+*.code-workspace
+
+# Log files
+*.log
+
 # Dependencies
 node_modules
 vendor
