@@ -1,10 +1,4 @@
 # Alley Block Editor Tools #
-**Contributors:** [alleyinteractive](https://profiles.wordpress.org/alleyinteractive/)
-**Tags:** gutenberg, blocks
-**License:** GPLv2 or later
-**License URI:** https://www.gnu.org/licenses/gpl-2.0.html
-
-Block editor tools supercharges your block editor experience, Alley style.
 
 ## Description ##
 
