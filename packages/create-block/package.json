@@ -1,0 +1,13 @@
+{
+	"name": "@alley/create-block",
+	"description": "A command line tool for scaffolding blocks.",
+	"version": "0.1.0",
+	"author": "Alley Interactive",
+	"license": "GPL-2.0-or-later",
+	"scripts": {},
+	"dependencies": {
+		"chalk": "^4.1.0",
+		"commander": "^7.1.0",
+		"mustache": "^4.1.0"
+	}
+}
