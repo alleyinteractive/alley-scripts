@@ -12,7 +12,7 @@
         "alleyinteractive/alley-coding-standards": "^0.3.0"
     },
 	"scripts": {
-		"phpcs": "phpcs . -p",
+		"phpcs": "phpcs . --basepath=.",
 		"phpcbf": "phpcbf .",
 		"changelog": "./bin/script-draft-changelog.sh"
 	}
