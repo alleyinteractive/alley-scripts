@@ -1,56 +1,56 @@
 <?xml version="1.0"?>
 <ruleset name="Alley Block Editor Tools">
-	<description>PHP_CodeSniffer standard for Alley Block Editor Tools.</description>
+  <description>PHP_CodeSniffer standard for Alley Block Editor Tools.</description>
 
-	<!-- Include Alley Rules -->
-	<rule ref="Alley-Interactive" />
-	<!--
-	Pass some flags to PHPCS:
-		p flag: Show progress of the run.
-		s flag: Show sniff codes in all reports.
-		n flag: Do not print warnings.
-	-->
-	<arg value="ps" />
+  <!-- Include Alley Rules -->
+  <rule ref="Alley-Interactive" />
+  <!--
+  Pass some flags to PHPCS:
+    p flag: Show progress of the run.
+    s flag: Show sniff codes in all reports.
+    n flag: Do not print warnings.
+  -->
+  <arg value="ps" />
 
-	<!-- Whenever possible, cache the scan results and re-use those for unchanged files on the next scan. -->
-	<arg name="cache" value=".phpcs/cache.json" />
+  <!-- Whenever possible, cache the scan results and re-use those for unchanged files on the next scan. -->
+  <arg name="cache" value=".phpcs/cache.json" />
 
-	<!-- Check up to 20 files simultaneously. -->
-	<arg name="parallel" value="20" />
+  <!-- Check up to 20 files simultaneously. -->
+  <arg name="parallel" value="20" />
 
-	<!-- Set severity to 1 to see everything that isn't effectively turned off. -->
-	<arg name="severity" value="1" />
+  <!-- Set severity to 1 to see everything that isn't effectively turned off. -->
+  <arg name="severity" value="1" />
 
-	<!-- Project customizations go here -->
+  <!-- Project customizations go here -->
 
-	<rule ref="WordPress.WP.I18n">
-		<properties>
-			<!--
-			Verify that the text_domain is set to the desired text-domain.
-			Multiple valid text domains can be provided as a comma-delimited list.
-			 -->
-			<property name="text_domain" type="array" value="alley-block-editor-tools" />
-		</properties>
-	</rule>
+  <rule ref="WordPress.WP.I18n">
+    <properties>
+      <!--
+      Verify that the text_domain is set to the desired text-domain.
+      Multiple valid text domains can be provided as a comma-delimited list.
+       -->
+      <property name="text_domain" type="array" value="alley-block-editor-tools" />
+    </properties>
+  </rule>
 
-	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-		<properties>
-			<property name="prefixes" type="array">
-				<element value="Alley\Block_Editor_Tools"/>
-			</property>
-		</properties>
-		<exclude-pattern>/tests/bootstrap\.php</exclude-pattern>
-	</rule>
+  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+    <properties>
+      <property name="prefixes" type="array">
+        <element value="Alley\Block_Editor_Tools"/>
+      </property>
+    </properties>
+    <exclude-pattern>/tests/bootstrap\.php</exclude-pattern>
+  </rule>
 
 
-	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>/tests/*</exclude-pattern>
-	</rule>
+  <rule ref="WordPress.Files.FileName.InvalidClassFileName">
+    <exclude-pattern>/tests/*</exclude-pattern>
+  </rule>
 
-	<!-- The version set here matches the minimum we're testing. -->
-  	<config name="minimum_supported_wp_version" value="5.7" />
+  <!-- The version set here matches the minimum we're testing. -->
+    <config name="minimum_supported_wp_version" value="5.7" />
 
-  	<!-- Don't fail CI build on warnings. -->
-  	<config name="ignore_warnings_on_exit" value="1"/>
+    <!-- Don't fail CI build on warnings. -->
+    <config name="ignore_warnings_on_exit" value="1"/>
 
 </ruleset>
