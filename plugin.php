@@ -1,23 +1,22 @@
 <?php
 /**
- * Plugin Name: block-editor-tools — CGB Gutenberg Block Plugin
- * Plugin URI: https://github.com/ahmadawais/create-guten-block/
- * Description: block-editor-tools — is a Gutenberg plugin created via create-guten-block.
- * Author: mrahmadawais, maedahbatool
- * Author URI: https://AhmadAwais.com/
- * Version: 1.0.0
+ * Plugin Name: Alley Block Editor Tools
+ * Plugin URI: https://github.com/alleyinteractive/block-editor-tools/
+ * Description: Common blocks and features to make the block editor even better.
+ * Author: Alley Interactive
+ * Author URI: https://alley.co
+ * Version: 0.1.0
+ * Text Domain: alley-block-editor-tools
+ * Domain Path: /languages
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  *
- * @package CGB
+ * @package Alley\Block_Editor_Tools
  */
+
+namespace Alley\Block_Editor_Tools;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/**
- * Block Initializer.
- */
-require_once plugin_dir_path( __FILE__ ) . 'src/init.php';
