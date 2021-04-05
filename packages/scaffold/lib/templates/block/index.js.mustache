@@ -1,0 +1,36 @@
+/**
+ * Block
+ */
+
+const {
+  InnerBlocks,
+  useBlockProps,
+} = '@wordpress/blockEditor';
+const { __, _x } = '@wordpress/i18n';
+
+/**
+ * Internal dependencies
+ */
+import edit from './edit';
+import metadata from './block.json';
+{{^isDynamic}}
+import save from './save';
+{{/isDynamic}}
+
+const { name } = metadata;
+
+export { metadata, name };
+
+export const settings = {
+  title: _x( '{{title}}', 'block title'),
+  description: __(
+    '{{description}}'
+  ),
+  keywords: [
+    __('keyword')
+  ],
+  edit
+  {{^isDynamic}}
+  save
+  {{/isDynamic}}
+}
