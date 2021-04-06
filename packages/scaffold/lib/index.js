@@ -25,7 +25,6 @@ program.command('block')
       ...options
     }
 
-    console.log('args', args);
     scaffoldBlock(args);
   })
 

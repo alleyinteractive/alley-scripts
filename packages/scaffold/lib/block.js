@@ -1,3 +1,6 @@
+/**
+ * External dependencies.
+ */
 const glob = require( 'fast-glob' );
 const makeDir = require( 'make-dir' );
 const { fromPairs, pickBy } = require( 'lodash' );
@@ -5,6 +8,11 @@ const { dirname, join } = require( 'path' );
 const { readFile } = require( 'fs' ).promises;
 const { render } = require( 'mustache' );
 const { writeFile } = require( 'fs' ).promises;
+
+/**
+ * Internal dependencies.
+ */
+const { success } = require( './log' );
 
 const getTemplates = async () => {
   const path = join( __dirname, 'templates', 'block' );
@@ -30,11 +38,9 @@ const getTemplates = async () => {
 }
 
 const renderTemplates = async ( args ) => {
-  console.log('renderArgs', args);
   const { slug } = args;
   const templates = await getTemplates();
 
-  console.log(templates);
   await Promise.all(
     Object.keys(templates).map( async outputFile => {
       const outputFilePath = join(
@@ -64,7 +70,14 @@ module.exports = args => {
     // ...getFromConfig() @todo
   };
 
-  console.log( 'parsed', parsedArgs );
-
   renderTemplates( parsedArgs );
+
+  const {
+    slug,
+    namespace
+  } = parsedArgs;
+
+  success(
+    `Your block, "${namespace}/${slug}" was successfully created.`
+  );
 };
