@@ -1,5 +1,5 @@
 {
-	"name": "@alley/scaffold",
+	"name": "@alleyco/scaffold",
 	"description": "A command line tool for scaffolding features.",
 	"version": "0.1.0",
 	"author": "Alley Interactive",
