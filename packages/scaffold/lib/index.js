@@ -10,7 +10,7 @@ const program = new Command();
 program.command('block')
   .arguments('<slug>')
   .description('Create a block.')
-  .option( '--category <name>', 'category name for the block', 'layout' )
+  .option( '--category <value>', 'category name for the block', 'layout' )
   .option( '--dynamic <value>', 'is the block dynamic', true )
   .option( '--namespace <value>', 'internal namespace for the block name', 'alley-blocks'  )
   .option( '--short-description <value>', 'short description for the block', '' )
