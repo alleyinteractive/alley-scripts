@@ -14,6 +14,11 @@ import { __ } from '@wordpress/i18n';
  */
 import './editor.scss';
 
+{{#hasInnerBlocks}}
+// Define the block template for InnerBlocks.
+const BLOCKS_TEMPLATE = [
+];
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -22,10 +27,6 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-{{#hasInnerBlocks}}
-const BLOCKS_TEMPLATE = [
-];
-
 const Edit = () => (
   <div {...useBlockProps()}>
     <InnerBlocks
