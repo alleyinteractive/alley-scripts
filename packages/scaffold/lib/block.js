@@ -58,9 +58,7 @@ const renderTemplates = async ( args ) => {
 module.exports = args => {
   // Make sure all values are defined.
   const optionsValues = pickBy(
-    {
-      ...args
-    },
+    args,
     ( value ) => value !== undefined
   );
 
