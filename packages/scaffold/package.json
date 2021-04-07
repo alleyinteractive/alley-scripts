@@ -1,0 +1,20 @@
+{
+	"name": "@alleyco/scaffold",
+	"description": "A command line tool for scaffolding features.",
+	"version": "0.1.0",
+	"author": "Alley Interactive",
+	"license": "GPL-2.0-or-later",
+	"bin": {
+		"scaffold": "./index.js"
+	},
+	"main": "index.js",
+	"scripts": {},
+	"dependencies": {
+		"chalk": "^4.1.0",
+		"commander": "^7.1.0",
+		"fast-glob": "^3.2.5",
+		"lodash": "^4.17.21",
+		"make-dir": "^3.1.0",
+		"mustache": "^4.2.0"
+	}
+}

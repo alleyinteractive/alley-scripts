@@ -1,0 +1,34 @@
+/**
+ * {{title}} block.
+ */
+
+/**
+ * External dependencies.
+ */
+import { __, _x } from '@wordpress/i18n';
+
+/**
+ * Internal dependencies.
+ */
+import edit from './edit';
+import metadata from './block.json';
+import save from './save';
+
+const { name } = metadata;
+
+export { metadata, name };
+
+export const settings = {
+  title: _x( '{{title}}', 'block title', '{{textdomain}}'),
+  description: __(
+    '{{description}}',
+    '{{textdomain}}'
+  ),
+  keywords: [
+    __('keyword', '{{textdomain}}')
+  ],
+  edit
+  {{^isDynamic}}
+  save
+  {{/isDynamic}}
+}

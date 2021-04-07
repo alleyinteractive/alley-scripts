@@ -1,0 +1,44 @@
+{{^isDynamic}}
+/**
+ * External dependencies.
+ */
+import {
+  {{#hasInnerBlocks}}
+  InnerBlocks,
+  {{/hasInnerBlocks}}
+  useBlockProps,
+} from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
+{{/isDynamic}}
+
+/**
+ * The save function defines the way in which the different attributes should
+ * be combined into the final markup, which is then serialized by the block
+ * editor into `post_content`.
+ *
+ * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/#save
+ *
+ * @return {WPElement} Element to render.
+ */
+{{#isDynamic}}
+const save = () => null;
+{{/isDynamic}}
+{{^isDynamic}}
+const save = () => (
+  {{#hasInnerBlocks}}
+  <div {...useBlockProps.save()}>
+    <InnerBlocks.Content />
+  </div>
+  {{/hasInnerBlocks}}
+  {{^hasInnerBlocks}}
+  <p { ...useBlockProps.save() }>
+    { __(
+      '{{title}} – hello from the saved content!',
+      '{{textdomain}}'
+    ) }
+  </p>
+  {{/hasInnerBlocks}}
+);
+{{/isDynamic}}
+
+export default save;
