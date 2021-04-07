@@ -27,7 +27,6 @@ program.command('block')
       isDynamic: options.hasInnerBlocks ? false : options.isDynamic,
     }
 
-    console.log( args );
     scaffoldBlock(args);
   })
 
