@@ -37,7 +37,7 @@ $ scaffold block my-block --namespace my-project
 
 **Options:**
 
-  --category <value>            category name for the block (default: "layout")
+  --category <value>           category name for the block (default: "layout")
   --dynamic <value>            is the block dynamic (default: true)
   --namespace <value>          internal namespace for the block name (default: "alley-blocks")
   --short-description <value>  short description for the block (default: "")
