@@ -1,23 +1,16 @@
 /**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
+ * External dependencies.
  */
+ const {
+  {{#hasInnerBlocks}}
+  InnerBlocks,
+  {{/hasInnerBlocks}}
+  useBlockProps,
+} = '@wordpress/blockEditor';
 import { __ } from '@wordpress/i18n';
 
 /**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
- */
-import { useBlockProps } from '@wordpress/block-editor';
-
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ * Internal dependencies.
  */
 import './editor.scss';
 
@@ -29,10 +22,26 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
+{{#hasInnerBlocks}}
+const BLOCKS_TEMPLATE = [
+];
+
+const Edit = () => (
+  <div {...useBlockProps()}>
+    <InnerBlocks
+      template={BLOCKS_TEMPLATE}
+      templateLock={false}
+      templateInsertUpdatesSelection={false}
+    />
+  </div>
+);
+{{/hasInnerBlocks}}
+{{^hasInnerBlocks}}
 const Edit = () => (
   <p { ...useBlockProps() }>
     { __( '{{title}} – hello from the editor!', '{{textdomain}}' ) }
   </p>
 );
+{{/hasInnerBlocks}}
 
 export default Edit;

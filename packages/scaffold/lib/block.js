@@ -5,9 +5,8 @@ const glob = require( 'fast-glob' );
 const makeDir = require( 'make-dir' );
 const { fromPairs, pickBy } = require( 'lodash' );
 const { dirname, join } = require( 'path' );
-const { readFile } = require( 'fs' ).promises;
+const { readFile, writeFile } = require( 'fs' ).promises;
 const { render } = require( 'mustache' );
-const { writeFile } = require( 'fs' ).promises;
 
 /**
  * Internal dependencies.

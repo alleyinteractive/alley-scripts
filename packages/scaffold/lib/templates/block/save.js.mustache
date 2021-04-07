@@ -1,17 +1,15 @@
+{{^isDynamic}}
 /**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
+ * External dependencies.
  */
+import {
+  {{#hasInnerBlocks}}
+  InnerBlocks,
+  {{/hasInnerBlocks}}
+  useBlockProps,
+} from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
- */
-import { useBlockProps } from '@wordpress/block-editor';
+{{/isDynamic}}
 
 /**
  * The save function defines the way in which the different attributes should
@@ -22,15 +20,25 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
-const save = () => {
-  return (
-    <p { ...useBlockProps.save() }>
-      { __(
-        '{{title}} – hello from the saved content!',
-        '{{textdomain}}'
-      ) }
-    </p>
-  );
-};
+{{#isDynamic}}
+const save = () => null;
+{{/isDynamic}}
+{{^isDynamic}}
+const save = () => (
+  {{#hasInnerBlocks}}
+  <div {...useBlockProps.save()}>
+    <InnerBlocks.Content />
+  </div>
+  {{/hasInnerBlocks}}
+  {{^hasInnerBlocks}}
+  <p { ...useBlockProps.save() }>
+    { __(
+      '{{title}} – hello from the saved content!',
+      '{{textdomain}}'
+    ) }
+  </p>
+  {{/hasInnerBlocks}}
+);
+{{/isDynamic}}
 
 export default save;

@@ -1,33 +1,31 @@
 /**
- * Block
+ * {{title}} block.
  */
 
-const {
-  InnerBlocks,
-  useBlockProps,
-} = '@wordpress/blockEditor';
-const { __, _x } = '@wordpress/i18n';
+/**
+ * External dependencies.
+ */
+import { __, _x } from '@wordpress/i18n';
 
 /**
- * Internal dependencies
+ * Internal dependencies.
  */
 import edit from './edit';
 import metadata from './block.json';
-{{^isDynamic}}
 import save from './save';
-{{/isDynamic}}
 
 const { name } = metadata;
 
 export { metadata, name };
 
 export const settings = {
-  title: _x( '{{title}}', 'block title'),
+  title: _x( '{{title}}', 'block title', '{{textdomain}}'),
   description: __(
-    '{{description}}'
+    '{{description}}',
+    '{{textdomain}}'
   ),
   keywords: [
-    __('keyword')
+    __('keyword', '{{textdomain}}')
   ],
   edit
   {{^isDynamic}}

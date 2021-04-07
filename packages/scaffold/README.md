@@ -37,9 +37,10 @@ $ scaffold block my-block --namespace my-project
 
 **Options:**
 
-  --category <value>           category name for the block (default: "layout")
-  --dynamic <value>            is the block dynamic (default: true)
-  --namespace <value>          internal namespace for the block name (default: "alley-blocks")
-  --short-description <value>  short description for the block (default: "")
-  --text-domain <value>        text domain for the block (default: "alley-blocks")
-  --title <value>              display title for the block (default: "Block Title")
+--category <value>           Category name for the block. (default: "layout")
+--has-inner-blocks           Does the block use innerBlocks? Overrides is-dynamic. (default: false)
+--is-dynamic                 Is the block dynamic? (default: false)
+--namespace <value>          Internal namespace for the block name. (default: "alley-blocks")
+--short-description <value>  Short description for the block. (default: "")
+--text-domain <value>        Text domain for the block. (default: "alley-blocks")
+--title <value>              Display title for the block. (default: "Block Title")
