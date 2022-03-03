@@ -1,5 +1,5 @@
 {
-  "name": "block-editor-tools",
+  "name": "alley-scripts",
   "version": "0.1.0",
   "scripts": {
     "publish:check": "lerna updated",

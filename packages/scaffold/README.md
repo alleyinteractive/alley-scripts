@@ -17,7 +17,7 @@ $ cd my-block
 
 ```bash
 # Link the package locally (only needed once)
-$ cd block-editor-tools/packages/scaffold
+$ cd alley-scripts/packages/scaffold
 $ npm link
 
 # cd to the location of your blocks folder and
