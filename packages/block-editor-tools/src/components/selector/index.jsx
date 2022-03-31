@@ -1,5 +1,4 @@
 // Dependencies.
-import React from 'react';
 import PropTypes from 'prop-types';
 import apiFetch from '@wordpress/api-fetch';
 import classNames from 'classnames';

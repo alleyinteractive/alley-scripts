@@ -8,5 +8,8 @@
   },
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
-  "gitHead": "3480c291fd3545690b8dc00e1039ca1ab56d2f13"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "038de75571af7d98e4b055f8eb85fa6da53133b6"
 }
