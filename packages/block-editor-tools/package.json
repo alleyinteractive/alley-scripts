@@ -1,11 +1,12 @@
 {
   "name": "@alleyco/block-editor-tools",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alley Interactive",
-  "license": "GPL-2.0-or-later"
+  "license": "GPL-2.0-or-later",
+  "gitHead": "3480c291fd3545690b8dc00e1039ca1ab56d2f13"
 }

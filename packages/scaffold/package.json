@@ -1,7 +1,7 @@
 {
 	"name": "@alleyco/scaffold",
 	"description": "A command line tool for scaffolding features.",
-	"version": "0.1.1",
+	"version": "0.1.0",
 	"author": "Alley Interactive",
 	"license": "GPL-2.0-or-later",
 	"bin": {
@@ -16,5 +16,6 @@
 		"lodash": "^4.17.21",
 		"make-dir": "^3.1.0",
 		"mustache": "^4.2.0"
-	}
+	},
+	"gitHead": "3480c291fd3545690b8dc00e1039ca1ab56d2f13"
 }
