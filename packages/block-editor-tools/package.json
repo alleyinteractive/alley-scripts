@@ -11,7 +11,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
@@ -19,5 +18,15 @@
   "bugs": {
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
   },
-  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme"
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "dompurify": "^2.3.9",
+    "lodash": "^4.17.21",
+    "papaparse": "^5.3.2",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2"
+  }
 }
