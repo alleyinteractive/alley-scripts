@@ -1,9 +1,9 @@
 // Dependencies.
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { __ } from '@wordpress/i18n';
-
-import { Selector } from '../selector';
+import Selector from '@alleyco/block-editor-tools';
 
 /**
  * Render term selector component.
@@ -13,7 +13,6 @@ const TermSelector = ({
   emptyLabel,
   label,
   maxPages,
-  maxSelections,
   multiple,
   onSelect,
   placeholder,
@@ -27,7 +26,6 @@ const TermSelector = ({
     emptyLabel={emptyLabel}
     label={label}
     maxPages={maxPages}
-    maxSelections={maxSelections}
     multiple={multiple}
     onSelect={onSelect}
     placeholder={placeholder}
@@ -43,12 +41,11 @@ const TermSelector = ({
  */
 TermSelector.defaultProps = {
   className: '',
-  emptyLabel: __('No terms found', 'prhuk-core'),
-  label: __('Search for terms', 'prhuk-core'),
+  emptyLabel: __('No terms found', 'alley-scripts'),
+  label: __('Search for terms', 'alley-scripts'),
   maxPages: 5,
-  maxSelections: 0,
   multiple: false,
-  placeholder: __('Search for terms', 'prhuk-core'),
+  placeholder: __('Search for terms', 'alley-scripts'),
   subTypes: [],
   selected: [],
   threshold: 3,
@@ -63,7 +60,6 @@ TermSelector.propTypes = {
   emptyLabel: PropTypes.string,
   label: PropTypes.string,
   maxPages: PropTypes.number,
-  maxSelections: PropTypes.number,
   multiple: PropTypes.bool,
   onSelect: PropTypes.func.isRequired,
   placeholder: PropTypes.string,

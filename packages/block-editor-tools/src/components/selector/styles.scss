@@ -9,7 +9,6 @@
 //-----------------------------------------
 .edit-post-sidebar,
 .editor-styles-wrapper {
-
   .autocomplete {
 
     //-----------------------------------------
@@ -72,7 +71,7 @@
       max-height: 0;
       overflow-y: hidden;
       position: absolute;
-      top: calc(100% - 1px); // Offset focus border.
+      top: calc(100% + 1px); // Offset focus border.
       visibility: hidden;
       width: 100%;
       z-index: 10;

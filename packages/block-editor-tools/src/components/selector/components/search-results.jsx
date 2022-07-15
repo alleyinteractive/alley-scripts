@@ -17,7 +17,6 @@ const SearchResults = ({
   loading,
   onSelect,
   options,
-  renderResult,
   selectedItems,
   threshold,
   value,
@@ -32,7 +31,7 @@ const SearchResults = ({
 
   if (loading) {
     className = 'loading';
-    content = __('Loading...', 'prhuk-core');
+    content = __('Loading...', 'alley-scripts');
   } else if (error) {
     className = 'error';
     content = error;
@@ -101,10 +100,10 @@ const SearchResults = ({
             <Button
               onClick={() => onSelect(item)}
               type="button"
-              disabled={selectedItems.some((selection) => selection.id === item.id)}
+              disabled={selectedItems.some((post) => post.id === item.id)}
               isTertiary
             >
-              {renderResult ? renderResult(item) : item.title}
+              {item.title}
             </Button>
           </li>
         ))}
@@ -131,7 +130,6 @@ SearchResults.propTypes = {
     }),
   ).isRequired,
   onSelect: PropTypes.func.isRequired,
-  renderResult: PropTypes.func.isRequired,
   selectedItems: PropTypes.shape([]).isRequired,
   threshold: PropTypes.number.isRequired,
   value: PropTypes.string.isRequired,

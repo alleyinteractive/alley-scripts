@@ -1,12 +1,12 @@
-import usePostMeta from 'hooks/use-post-meta';
+import usePostMeta from '@alleyco/block-editor-tools';
 
 /**
  * A custom React hook that wraps useEntityProp for working with a specific
- * postmeta value. It returns the value for the specified meta key as well as a
+ * post meta value. It returns the value for the specified meta key as well as a
  * setter for the meta value. This hook is intended to reduce boilerplate code
- * in components that need to read and write postmeta. It differs from
- * usePostMeta in that it operates on a specific meta key/value pair.
- * By default, it operates on postmeta for the current post, but you can
+ * in components that need to read and write post meta. It differs from
+ * usePost Meta in that it operates on a specific meta key/value pair.
+ * By default, it operates on post meta for the current post, but you can
  * optionally pass a post type and post ID in order to get and set post meta
  * for an arbitrary post.
  * @param {string} metaKey - The meta key for which to manage the value.
@@ -14,7 +14,7 @@ import usePostMeta from 'hooks/use-post-meta';
  *                            Defaults to the post type of the current post.
  * @param {number} postId - Optional. The post ID to get and set meta for.
  *                          Defaults to the ID of the current post.
- * @returns {array} An array containing the postmeta value and an update function.
+ * @returns {array} An array containing the post meta value and an update function.
  */
 const usePostMetaValue = (metaKey, postType = null, postId = null) => {
   const [meta, setMeta] = usePostMeta(postType, postId);
