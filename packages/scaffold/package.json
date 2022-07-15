@@ -1,21 +1,31 @@
 {
-	"name": "@alleyco/scaffold",
-	"description": "A command line tool for scaffolding features.",
-	"version": "0.1.1-alpha.0",
-	"author": "Alley Interactive",
-	"license": "GPL-2.0-or-later",
-	"bin": {
-		"scaffold": "./index.js"
-	},
-	"main": "index.js",
-	"scripts": {},
-	"dependencies": {
-		"chalk": "^4.1.0",
-		"commander": "^7.1.0",
-		"fast-glob": "^3.2.5",
-		"lodash": "^4.17.21",
-		"make-dir": "^3.1.0",
-		"mustache": "^4.2.0"
-	},
-	"gitHead": "be9412e4ebe0b9a9bd9795ec4d482b39892e744a"
+  "name": "@alleyco/scaffold",
+  "description": "A command line tool for scaffolding features.",
+  "version": "0.1.0",
+  "author": "Alley Interactive",
+  "license": "GPL-2.0-or-later",
+  "bin": {
+    "scaffold": "index.js"
+  },
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "commander": "^7.1.0",
+    "fast-glob": "^3.2.5",
+    "lodash": "^4.17.21",
+    "make-dir": "^3.1.0",
+    "mustache": "^4.2.0"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme"
 }
