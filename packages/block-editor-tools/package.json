@@ -11,5 +11,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "be9412e4ebe0b9a9bd9795ec4d482b39892e744a"
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme"
 }
