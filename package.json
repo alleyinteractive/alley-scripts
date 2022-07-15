@@ -1,12 +1,13 @@
 {
   "name": "alley-scripts",
+  "description": "Shared packages from Alley Interactive.",
   "version": "0.1.0",
+  "author": "Alley Interactive",
+  "private": true,
+  "license": "GPL-2.0-or-later",
   "scripts": {
-    "publish:check": "lerna updated",
-    "publish:patch": "lerna publish --dist-tag patch",
-    "publish:prod": "lerna publish"
   },
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  }
+  "workspaces": [
+    "packages/scaffold"
+  ]
 }
