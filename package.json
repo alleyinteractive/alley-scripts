@@ -1,13 +1,13 @@
 {
-  "name": "alley-scripts",
+  "name": "@alleyinteractive/alley-scripts",
   "description": "Shared packages from Alley Interactive.",
   "version": "0.1.0",
   "author": "Alley Interactive",
   "private": true,
   "license": "GPL-2.0-or-later",
-  "scripts": {
-  },
+  "scripts": {},
   "workspaces": [
-    "packages/scaffold"
+    "packages/scaffold",
+    "packages/block-editor-tools"
   ]
 }

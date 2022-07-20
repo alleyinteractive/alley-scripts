@@ -1,6 +1,7 @@
 # Ignore built files
 build/*
 dist/*
+vendor/*
 
 # Ignore asset files
 assets/*

@@ -1,0 +1,32 @@
+{
+  "name": "@alleyinteractive/block-editor-tools",
+  "version": "0.1.0-alpha.0",
+  "description": "A set of tools to help build products for the WordPress block editor.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alley Interactive",
+  "license": "GPL-2.0-or-later",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "dompurify": "^2.3.9",
+    "lodash": "^4.17.21",
+    "papaparse": "^5.3.2",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2"
+  }
+}
