@@ -1,4 +1,4 @@
-import useInnerBlocks from '@alleyco/block-editor-tools';
+import useInnerBlocks from '@alleyinteractive/block-editor-tools';
 
 /**
  * Gets the total count of all child blocks for a specific block.
