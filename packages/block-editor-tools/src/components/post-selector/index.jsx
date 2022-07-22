@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { __ } from '@wordpress/i18n';
-import { Selector } from '..';
+import { Selector } from '@/components';
 
 /**
  * Render post selector component.

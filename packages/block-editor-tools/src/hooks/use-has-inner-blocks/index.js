@@ -1,4 +1,4 @@
-import { useInnerBlocksCount } from '..';
+import { useInnerBlocksCount } from '@/hooks';
 
 /**
  * Determines if a specific block has inner blocks.

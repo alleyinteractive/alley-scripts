@@ -1,5 +1,5 @@
 // Internal dependencies.
-import { usePostMeta } from '..';
+import { usePostMeta } from '@/hooks';
 
 /**
  * A custom React hook that wraps useEntityProp for working with a specific

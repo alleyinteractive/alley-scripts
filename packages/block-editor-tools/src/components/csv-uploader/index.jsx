@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { parseCSVFile } from '../../services';
+import { parseCSVFile } from '@/services';
 
 /**
  * A component used to upload a CSV file with hooks for data processing.

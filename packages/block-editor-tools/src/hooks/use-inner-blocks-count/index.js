@@ -1,5 +1,5 @@
 // Internal dependencies.
-import { useInnerBlocks } from '..';
+import { useInnerBlocks } from '@/hooks';
 
 /**
  * Gets the total count of all child blocks for a specific block.
