@@ -17,7 +17,7 @@ import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 // Services.
-import getMediaURL from '@alleyinteractive/block-editor-tools';
+import { getMediaUrl } from '@/services';
 
 // Styled components.
 const Container = styled.div`
@@ -59,7 +59,7 @@ const MediaPicker = ({
   }
 
   // If we have a valid source URL of any type, display it.
-  const src = media ? getMediaURL(media, imageSize) : valueURL;
+  const src = media ? getMediaUrl(media, imageSize) : valueURL;
 
   const controls = () => {
     if (!displayControlsInToolbar) {

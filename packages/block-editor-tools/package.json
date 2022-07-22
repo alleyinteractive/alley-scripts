@@ -2,9 +2,22 @@
   "name": "@alleyinteractive/block-editor-tools",
   "version": "0.0.1-0",
   "description": "A set of tools to help build products for the WordPress block editor.",
-  "main": "src/index.js",
+  "main": "./build/index.js",
+  "source": "./src/index.js",
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "engines": {
+    "node": "16",
+    "npm": "8"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "npm run build",
+    "prebuild": "check-node-version --package",
+    "build": "webpack --mode=production",
+    "predev": "check-node-version --package",
+    "dev": "webpack --mode=development --watch"
   },
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
@@ -28,5 +41,24 @@
     "react": "^18.2.0",
     "styled-components": "^5.3.5",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/preset-env": "^7.18.9",
+    "@babel/preset-react": "^7.18.6",
+    "@wordpress/dependency-extraction-webpack-plugin": "^3.7.0",
+    "autoprefixer": "^10.4.7",
+    "babel-loader": "^8.2.5",
+    "babel-plugin-styled-components": "^2.0.7",
+    "check-node-version": "^4.2.1",
+    "css-loader": "^6.7.1",
+    "postcss-loader": "^7.0.1",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
   }
 }

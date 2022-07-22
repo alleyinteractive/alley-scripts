@@ -1,4 +1,5 @@
-import usePostMeta from '@alleyinteractive/block-editor-tools';
+// Internal dependencies.
+import { usePostMeta } from '@/hooks';
 
 /**
  * A custom React hook that wraps useEntityProp for working with a specific
