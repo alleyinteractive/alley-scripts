@@ -17,7 +17,8 @@
     "prebuild": "check-node-version --package",
     "build": "webpack --mode=production",
     "predev": "check-node-version --package",
-    "dev": "webpack --mode=development --watch"
+    "dev": "webpack --mode=development --watch",
+    "test": ""
   },
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
