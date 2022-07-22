@@ -2,7 +2,7 @@
   "name": "@alleyinteractive/block-editor-tools",
   "version": "0.0.1-1",
   "description": "A set of tools to help build products for the WordPress block editor.",
-  "main": "./build/index.js",
+  "main": "./build/index.bundle.min.js",
   "source": "./src/index.js",
   "files": [
     "build",
