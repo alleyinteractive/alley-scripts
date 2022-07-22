@@ -17,7 +17,7 @@ import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 // Services.
-import getMediaURL from '@alleyco/block-editor-tools';
+import getMediaURL from '@alleyinteractive/block-editor-tools';
 
 // Styled components.
 const Container = styled.div`

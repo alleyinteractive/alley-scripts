@@ -1,4 +1,4 @@
-import usePostMeta from '@alleyco/block-editor-tools';
+import usePostMeta from '@alleyinteractive/block-editor-tools';
 
 /**
  * A custom React hook that wraps useEntityProp for working with a specific

@@ -1,6 +1,6 @@
 export { default as useDebounce } from './use-debounce';
 export { default as useHasInnerBlocks } from './use-has-inner-blocks';
-export { default as useInnerBlocksIndex } from './use-inner-blocks-index';
+export { default as useInnerBlocksIndex } from './use-inner-block-index';
 export { default as useInnerBlocks } from './use-inner-blocks';
 export { default as useInnerBlocksAttributes } from './use-inner-blocks-attributes';
 export { default as useInnerBlocksCount } from './use-inner-blocks-count';

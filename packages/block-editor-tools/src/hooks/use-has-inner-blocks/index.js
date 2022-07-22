@@ -1,4 +1,4 @@
-import useInnerBlocksCount from '@alleyco/block-editor-tools';
+import useInnerBlocksCount from '@alleyinteractive/block-editor-tools';
 
 /**
  * Determines if a specific block has inner blocks.

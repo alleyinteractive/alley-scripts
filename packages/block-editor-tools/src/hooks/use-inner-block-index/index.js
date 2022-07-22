@@ -1,5 +1,5 @@
-import useInnerBlocks from '@alleyco/block-editor-tools';
-import useParentBlock from '@alleyco/block-editor-tools';
+import useInnerBlocks from '@alleyinteractive/block-editor-tools';
+import useParentBlock from '@alleyinteractive/block-editor-tools';
 
 /**
  * Gets the current index of a specific block relative to its sibilings.

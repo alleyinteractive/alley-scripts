@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import parseCSVFile from '@alleyco/block-editor-tools';
+import parseCSVFile from '@alleyinteractive/block-editor-tools';
 
 /**
  * A component used to upload a CSV file with hooks for data processing.
