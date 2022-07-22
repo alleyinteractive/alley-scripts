@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 // Components.
-import MediaPicker from '@alleyinteractive/block-editor-tools';
+import { MediaPicker } from '..';
 
 // Styled components.
 const PreviewContainer = styled.div`

@@ -1,4 +1,4 @@
-import useInnerBlocks from '@alleyinteractive/block-editor-tools';
+import { useInnerBlocks } from '..';
 
 /**
  * Gets all child block attributes for a specific block.

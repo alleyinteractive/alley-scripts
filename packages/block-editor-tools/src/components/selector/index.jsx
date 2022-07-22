@@ -14,7 +14,7 @@ import { addQueryArgs } from '@wordpress/url';
 import { v4 as uuidv4 } from 'uuid';
 
 // Custom hooks.
-import useDebounce from '@alleyinteractive/block-editor-tools';
+import { useDebounce } from '../../hooks';
 
 // Components.
 import SearchResults from './components/search-results';

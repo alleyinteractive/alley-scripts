@@ -1,8 +1,8 @@
-import useInnerBlocks from '@alleyinteractive/block-editor-tools';
-import useParentBlock from '@alleyinteractive/block-editor-tools';
+// Internal dependencies.
+import {useInnerBlocks, useParentBlock } from '..';
 
 /**
- * Gets the current index of a specific block relative to its sibilings.
+ * Gets the current index of a specific block relative to its siblings.
  *
  * @param {string} clientId The block client ID.
  * @returns {integer} The block index.
