@@ -1,11 +1,12 @@
 // Dependencies.
-import React, {
+import React from 'react';
+import PropTypes from 'prop-types';
+import {
   useCallback,
   useEffect,
   useRef,
   useState,
-} from 'react';
-import PropTypes from 'prop-types';
+} from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import classNames from 'classnames';
 import { Button } from '@wordpress/components';
