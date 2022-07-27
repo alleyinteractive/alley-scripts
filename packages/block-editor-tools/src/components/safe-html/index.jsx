@@ -1,6 +1,5 @@
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const SafeHTML = ({
   className,
