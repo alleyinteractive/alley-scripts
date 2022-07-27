@@ -1,5 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import { parseCSVFile } from '@/services';
