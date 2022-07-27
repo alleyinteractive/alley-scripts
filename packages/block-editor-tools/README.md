@@ -23,7 +23,7 @@ Install this package in your project:
 npm install @alleyinteractive/block-editor-tools --save
 ```
 
-This package assumes your project is running in an environment compatible with the WordPress block editor that and is using the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) or similar to externalize dependencies included in WordPress. As such, this package does not include these dependencies.
+This package assumes your project is running in an environment compatible with the WordPress block editor and is using the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) or similar to externalize dependencies included in WordPress. As such, this package does not include these dependencies.
 
 ## Usage
 
