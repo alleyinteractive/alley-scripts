@@ -11,12 +11,10 @@ module.exports = (env, { mode }) => ({
    * notice that the build performance in your project is suffering to an
    * unacceptable degree, you can choose different options from the link above.
    */
-  devtool: mode === 'production'
-    ? 'source-map'
-    : 'eval-source-map',
+  devtool: mode === 'production' ? 'source-map' : 'eval-source-map',
 
   entry: {
-    index: './src'
+    index: './src',
   },
 
   // Configure loaders based on extension.
@@ -56,9 +54,10 @@ module.exports = (env, { mode }) => ({
   // Use different filenames for production and development builds for clarity.
   output: {
     clean: mode === 'production',
-    filename: mode === 'production'
-      ? '[name].bundle.min.js'
-      : '[name].js',
+    library: {
+      type: 'umd',
+    },
+    filename: mode === 'production' ? '[name].bundle.min.js' : '[name].js',
     path: path.join(__dirname, 'build'),
   },
 
