@@ -18,6 +18,7 @@
     "build": "webpack --mode=production",
     "predev": "check-node-version --package",
     "dev": "webpack --mode=development --watch",
+    "lint": "eslint --ext .jsx --ext .js .",
     "test": ""
   },
   "author": "Alley Interactive",

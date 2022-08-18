@@ -11,12 +11,10 @@ module.exports = (env, { mode }) => ({
    * notice that the build performance in your project is suffering to an
    * unacceptable degree, you can choose different options from the link above.
    */
-  devtool: mode === 'production'
-    ? 'source-map'
-    : 'eval-source-map',
+  devtool: mode === 'production' ? 'source-map' : 'eval-source-map',
 
   entry: {
-    index: './src'
+    index: './src',
   },
 
   // Configure loaders based on extension.
