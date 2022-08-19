@@ -3,7 +3,6 @@
   "version": "0.0.1-5",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
-  "module": "./src/index.js",
   "source": "./src/index.js",
   "files": [
     "build",
