@@ -16,7 +16,7 @@ import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 // Services.
-import { getMediaUrl } from '@/services';
+import { getMediaUrl } from '../../services';
 
 // Styled components.
 const Container = styled.div`

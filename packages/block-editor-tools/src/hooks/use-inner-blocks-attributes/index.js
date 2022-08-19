@@ -1,4 +1,4 @@
-import { useInnerBlocks } from '@/hooks';
+import { useInnerBlocks } from '..';
 
 /**
  * Gets all child block attributes for a specific block.
