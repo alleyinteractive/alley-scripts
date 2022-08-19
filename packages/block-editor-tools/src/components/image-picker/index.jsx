@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 // Components.
-import { MediaPicker } from '@/components';
+import { MediaPicker } from '..';
 
 // Styled components.
 const PreviewContainer = styled.div`

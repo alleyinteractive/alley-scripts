@@ -1,5 +1,5 @@
 // Internal dependencies.
-import {useInnerBlocks, useParentBlock } from '@/hooks';
+import {useInnerBlocks, useParentBlock } from '..';
 
 /**
  * Gets the current index of a specific block relative to its siblings.

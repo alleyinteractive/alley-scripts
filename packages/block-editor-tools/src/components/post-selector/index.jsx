@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 
 import { __ } from '@wordpress/i18n';
-import { Selector } from '@/components';
+import { Selector } from '..';
 
 /**
  * Render post selector component.
