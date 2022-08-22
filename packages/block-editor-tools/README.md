@@ -30,9 +30,9 @@ This package assumes your project is running in an environment compatible with t
 To use modules from this package, import them into your files using the `import` declaration
 
 ```js
-    import { usePostMeta } from '@alleyinteractive/block-editor-tools';
+import { usePostMeta } from '@alleyinteractive/block-editor-tools';
 
-	const MyComponent = () => {
+const MyComponent = () => {
 	const [meta, setMeta] = usePostMeta();
 	const { my_meta_key: myMetaKey } = meta;
 
@@ -43,7 +43,7 @@ To use modules from this package, import them into your files using the `import`
 			value={myMetaKey}
 		/>
 	);
-	};
+};
 ```
 
 ## Changelog
