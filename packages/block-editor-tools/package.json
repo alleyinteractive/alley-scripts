@@ -15,7 +15,7 @@
   },
   "scripts": {
     "prebuild-types": "check-node-version --package",
-    "build-types": "npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outFile build/index.d.ts",
+    "build-types": "npx -p typescript tsc src/index.js src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir build",
     "prepublishOnly": "npm run build",
     "prebuild": "check-node-version --package",
     "build": "webpack --mode=production && npm run build-types",
