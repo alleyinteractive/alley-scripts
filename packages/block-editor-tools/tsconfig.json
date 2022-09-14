@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./dist/",
+    "paths": {
+      "@/*": ["*"]
+    },
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "exclude": [
+    "jest.config.js",
+    "lib",
+    "node_modules",
+    "tests",
+    "vendor"
+  ]
+}

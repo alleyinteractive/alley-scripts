@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
+  "types": "./build/index.d.ts",
   "source": "./src/index.js",
   "files": [
     "build",
@@ -13,9 +14,11 @@
     "npm": "8"
   },
   "scripts": {
+    "prebuild-types": "check-node-version --package",
+    "build-types": "npx -p typescript tsc src/index.js src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir build",
     "prepublishOnly": "npm run build",
     "prebuild": "check-node-version --package",
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production && npm run build-types",
     "predev": "check-node-version --package",
     "dev": "webpack --mode=development --watch",
     "lint": "eslint --ext .jsx --ext .js .",
@@ -59,6 +62,7 @@
     "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
+    "typescript": "^4.7.4",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0"
   }
