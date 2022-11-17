@@ -19,7 +19,13 @@
     "scss",
     "postcss"
   ],
-  "author": "Alley Interactive",
+  "contributors": [
+    {
+      "name": "Alley",
+      "email": "info@alley.com",
+      "url": "https://alley.com"
+    }
+  ],
   "license": "GPL-2.0-or-later",
   "bugs": {
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
