@@ -4,8 +4,8 @@
   "description": "Alley's sharable stylelint config",
   "main": "index.js",
   "engines": {
-    "node": "16",
-    "npm": "8"
+    "node": ">=14",
+    "npm": ">=6"
   },
   "repository": {
     "type": "git",
