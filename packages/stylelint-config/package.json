@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/stylelint-config",
   "peerDependencies": {
-    "stylelint": "^14.15.0",
-    "stylelint-config-sass-guidelines": "^9.0.1"
+    "stylelint": ">= 14.0.1",
+    "stylelint-config-sass-guidelines": ">= 9.0.1"
   }
 }
