@@ -1,0 +1,32 @@
+{
+  "name": "@alleyinteractive/stylelint-config",
+  "version": "0.0.1",
+  "description": "Alley's sharable stylelint config",
+  "main": "index.js",
+  "engines": {
+    "node": "16",
+    "npm": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "keywords": [
+    "stylelint",
+    "stylelint-config",
+    "stylelint-scss",
+    "css",
+    "scss",
+    "postcss"
+  ],
+  "author": "Alley Interactive",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/stylelint-config",
+  "peerDependencies": {
+    "stylelint": "^14.15.0",
+    "stylelint-config-sass-guidelines": "^9.0.1"
+  }
+}
