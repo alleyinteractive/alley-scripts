@@ -9,18 +9,21 @@
     "module": "es6",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "./dist/",
+    "outDir": "./build/",
     "paths": {
       "@/*": ["*"]
     },
     "sourceMap": true,
+    "skipLibCheck": true,
     "target": "es5"
   },
   "exclude": [
     "jest.config.js",
     "lib",
+    "build",
     "node_modules",
     "tests",
-    "vendor"
+    "vendor",
+    "webpack.config.js"
   ]
 }
