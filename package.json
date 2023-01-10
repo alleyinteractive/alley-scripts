@@ -7,8 +7,10 @@
   "license": "GPL-2.0-or-later",
   "scripts": {},
   "workspaces": [
+    "packages/block-editor-tools",
+    "packages/eslint-config",
     "packages/scaffold",
-    "packages/block-editor-tools"
+    "packages/stylelint-config"
   ],
   "devDependencies": {
     "eslint": "^8.22.0",
