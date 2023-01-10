@@ -1,0 +1,42 @@
+{
+  "author": "Alley <info@alley.com> (https://alley.com)",
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-import-resolver-webpack": "^0.13.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0"
+  },
+  "description": "Alley's ESLint configuration",
+  "files": [
+    "index.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "keywords": [
+    "eslint",
+    "typescript"
+  ],
+  "license": "GPL-2.0-or-later",
+  "main": "index.js",
+  "name": "@alleyinteractive/eslint-config",
+  "peerDependencies": {
+    "eslint": "^8.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "scripts": {
+    "test": ""
+  },
+  "version": "0.0.1"
+}
