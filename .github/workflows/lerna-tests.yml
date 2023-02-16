@@ -27,11 +27,11 @@ jobs:
       # - name: Audit node
       #   run: npm audit --audit-level=high --production
 
-      - name: Runtest
+      - name: Run test
         run: npx lerna run test
 
-      - name: Runlint
+      - name: Run lint
         run: npx lerna run lint
 
-      - name: Runbuild
+      - name: Run build
         run: npx lerna run build
