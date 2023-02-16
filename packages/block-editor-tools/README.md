@@ -48,7 +48,7 @@ const MyComponent = () => {
 
 ## Changelog
 
-### 0.0.2
+### 0.1.0
 
 - Addition of Eslint configuration and rules.
 - Make peer dependency requirements lenient.
