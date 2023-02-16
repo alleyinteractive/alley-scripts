@@ -34,5 +34,6 @@
   "peerDependencies": {
     "stylelint": ">= 14.0.1",
     "stylelint-config-sass-guidelines": ">= 9.0.1"
-  }
+  },
+  "gitHead": "abe033f8252856538f78a70f24d827969bc7367d"
 }
