@@ -2,6 +2,7 @@
   "name": "@alleyinteractive/scaffold",
   "description": "A command line tool for scaffolding features.",
   "version": "0.0.0",
+  "private": true,
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "bin": {
