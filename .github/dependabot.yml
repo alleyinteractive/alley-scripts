@@ -18,3 +18,13 @@ updates:
       timezone: "America/New_York"
     ignore:
       - dependency-name: "@wordpress/*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "09:00"
+      timezone: "America/New_York"
+    ignore:
+      - dependency-name: "@wordpress/*"
