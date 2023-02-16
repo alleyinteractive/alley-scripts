@@ -8,15 +8,13 @@ import { useSelect } from '@wordpress/data';
  * @returns {object} An object containing a hasResolved property
  *                   and an array of returned post objects.
  */
-const usePosts = (postIds, postType = 'post') => useSelect(
-  (select) => {
-    const { getEntityRecords } = select('core');
-    return getEntityRecords(
-      'postType',
-      postType,
-      { include: postIds },
-    );
-  }, [postIds, postType],
-);
+const usePosts = (postIds, postType = 'post') => useSelect((select) => {
+  const { getEntityRecords } = select('core');
+  return getEntityRecords(
+    'postType',
+    postType,
+    { include: postIds },
+  );
+}, [postIds, postType]);
 
 export default usePosts;

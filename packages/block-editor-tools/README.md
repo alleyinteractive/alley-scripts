@@ -48,7 +48,16 @@ const MyComponent = () => {
 
 ## Changelog
 
-0.0.1 – Initial release
+### 0.1.0
+
+- Addition of Eslint configuration and rules.
+- Make peer dependency requirements lenient.
+- Add Styleint config.
+- Include Typescript types.
+
+### 0.0.1
+
+– Initial release
 
 ## Development Process
 
@@ -76,4 +85,3 @@ This project is actively maintained by [Alley Interactive](https://github.com/al
 ## License
 
 This software is released under the terms of the GNU General Public License version 2 or any later version.
-
