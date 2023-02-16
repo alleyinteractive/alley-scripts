@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/stylelint-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Alley's sharable stylelint config",
   "main": "index.js",
   "engines": {
