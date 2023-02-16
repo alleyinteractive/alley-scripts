@@ -22,8 +22,12 @@ jobs:
         with:
           node-version: 16
 
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Install Packages
         run: npx lerna bootstrap
+
       # - name: Audit node
       #   run: npm audit --audit-level=high --production
 
