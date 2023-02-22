@@ -13,3 +13,4 @@ vendor
 
 # Build files
 dist
+storybook-static
