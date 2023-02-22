@@ -59,11 +59,30 @@ AudioPicker.defaultProps = {
 };
 
 AudioPicker.propTypes = {
+  /**
+   * Class name for the media picker container.
+   */
   className: PropTypes.string,
+  /**
+   * Function to reset the audio ID to 0 and/or the audio URL to an empty string.
+   */
   onReset: PropTypes.func.isRequired,
+  /**
+   * Function to set the audio ID on audio selection/upload.
+   */
   onUpdate: PropTypes.func.isRequired,
+  /**
+   * Function to set the audio URL on entry. If not set, the button to enter a
+   * URL manually will not display.
+   */
   onUpdateURL: PropTypes.func,
+  /**
+   * The ID of the selected audio. 0 represents no selection.
+   */
   value: PropTypes.number.isRequired,
+  /**
+   * The URL of the audio. An empty string represents no selection.
+   */
   valueURL: PropTypes.string,
 };
 

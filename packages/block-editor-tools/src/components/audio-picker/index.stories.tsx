@@ -17,12 +17,12 @@ const Template = (args: object) => <AudioPicker {...args} />;
 export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Default.args = {
-  src: '',
+  valueURL: '',
   value: 0,
 };
 
 export const Selected = Template.bind({});
 Selected.args = {
-  src: 'https://cldup.com/59IrU0WJtq.mp3',
   value: 1,
+  valueURL: 'https://cldup.com/59IrU0WJtq.mp3',
 };
