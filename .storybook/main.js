@@ -1,9 +1,7 @@
 module.exports = {
   'stories': [
-    // packages/block-editor-tools/src/components/audio-picker/index.stories.tsx
-    '../packages/block-editor-tools/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../stories/**/*.stories.mdx',
-    // '../stories/**/*.stories.@(js|jsx|ts|tsx)'
+    '../packages/block-editor-tools/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
   'addons': [
     '@storybook/addon-links',

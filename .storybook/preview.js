@@ -1,3 +1,4 @@
+import { addParameters } from '@storybook/client-api';
 import { WithStyles } from './decorators/with-styles';
 
 export const parameters = {
@@ -13,3 +14,7 @@ export const parameters = {
 export const decorators = [
   WithStyles,
 ];
+
+addParameters({
+  viewMode: 'docs',
+});
