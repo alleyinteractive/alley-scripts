@@ -11,9 +11,6 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Checkboxes>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template = (args: object) => <Checkboxes {...args} />;
-
 const options = [
   {
     label: 'Option 1',

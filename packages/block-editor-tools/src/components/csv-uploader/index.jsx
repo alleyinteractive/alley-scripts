@@ -5,7 +5,11 @@ import PropTypes from 'prop-types';
 import { parseCSVFile } from '../../services';
 
 /**
- * A component used to upload a CSV file with hooks for data processing.
+ * Allows a user to upload a CSV file, which is parsed in the browser, converted
+ * to a JSON structure, passed through a user specified callback function for
+ * further transformation, and saved to block attributes. This component is
+ * intended to be used to save the resulting JSON data to postmeta, but that is
+ * controlled in the parent block scope.
  */
 export default class CSVUploader extends React.PureComponent {
   /**
