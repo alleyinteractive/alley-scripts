@@ -2,6 +2,11 @@ import PropTypes from 'prop-types';
 
 import { BaseControl, CheckboxControl } from '@wordpress/components';
 
+/**
+ * Provides a UI component that uses the `Checkbox` component to render the
+ * equivalent of a multi-select without needing to use the `SelectControl`
+ * component.
+ */
 const Checkboxes = ({
   label,
   value,

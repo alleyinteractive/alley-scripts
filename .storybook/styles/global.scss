@@ -1,0 +1,22 @@
+/*---
+Global Styles
+---
+
+@purpose
+  Global styles applied to all previews.
+*/
+
+// Import WordPress styles.
+@import '~@wordpress/base-styles/colors';
+@import '~@wordpress/base-styles/variables';
+@import '~@wordpress/base-styles/mixins';
+@import '~@wordpress/base-styles/breakpoints';
+@import '~@wordpress/base-styles/animations';
+@import '~@wordpress/base-styles/z-index';
+@import '~@wordpress/base-styles/default-custom-properties';
+
+body {
+  color: $gray-900 !important;
+  background: $white !important;
+	font-family: $default-font;
+}

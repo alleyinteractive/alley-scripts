@@ -25,6 +25,12 @@ Preview.propTypes = {
   src: PropTypes.string.isRequired,
 };
 
+/**
+ * Allows a user to select or remove audio using the media modal or via direct
+ * URL entry. This component is a thin wrapper around `MediaPicker` and sets the
+ * allowed types for the `MediaPicker` to `audio` as well as provides a custom
+ * preview component that embeds the selected audio in the editor.
+ */
 const AudioPicker = ({
   className,
   onReset,
