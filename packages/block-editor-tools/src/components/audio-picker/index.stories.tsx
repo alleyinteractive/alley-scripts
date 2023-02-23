@@ -1,5 +1,6 @@
 import React from 'react';
-import { ComponentMeta } from '@storybook/react';
+import { useSelect } from '@wordpress/data';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import AudioPicker from './index';
 
@@ -12,7 +13,29 @@ export default {
 } as ComponentMeta<typeof AudioPicker>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template = (args: object) => <AudioPicker {...args} />;
+const Template: ComponentStory<typeof AudioPicker> = (args: any) => {
+  const store: {
+    getMedia: () => {
+      [key: string]: any;
+    };
+  } = useSelect(
+    (select) => select('core'),
+    [],
+  );
+
+  const {
+    id = 1,
+    valueURL = 'https://cldup.com/59IrU0WJtq.mp3',
+  } = args;
+
+  // Override the getMedia call to use a local image.
+  store.getMedia = () => ({
+    id,
+    source_url: valueURL || 'https://picsum.photos/200/300',
+  });
+
+  return <AudioPicker {...args} />;
+};
 
 export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args

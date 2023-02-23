@@ -59,6 +59,7 @@ const MediaPicker = ({
       <Spinner />
     );
   }
+  console.log('media', media);
 
   // If we have a valid source URL of any type, display it.
   const src = media ? getMediaUrl(media, imageSize) : valueURL;
