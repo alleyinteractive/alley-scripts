@@ -33,8 +33,8 @@ import { parseCSVFile } from '../../services';
  *         title: 'Sample Title',
  *         slug: 'sample-title',
  *         description: 'Lorem ipsum dolor sit amet.',
- *      },
- *    ]
+ *       },
+ *     ]
  *
  * Under the hood, the CSV parser uses PapaParse and attempts to make
  * intelligent choices about data formats based on data in each column. Columns
