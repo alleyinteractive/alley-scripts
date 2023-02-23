@@ -3,6 +3,8 @@
 .thumbsdb
 .vscode
 *.code-workspace
+.turbo
+.next
 
 # Log files
 *.log
