@@ -5,7 +5,10 @@
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "publish-packages": "turbo run build lint test && changeset version && changeset publish"
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "publish-packages": "turbo run build lint test && changeset version && changeset publish",
+    "test": "turbo run test"
   },
   "workspaces": [
     "packages/scaffold",
