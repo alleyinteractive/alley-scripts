@@ -18,7 +18,7 @@
     "build-types": "npx tsc --declaration --emitDeclarationOnly",
     "prepublishOnly": "npm run build",
     "prebuild": "check-node-version --package && rm -rf build/*",
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production && npm run build-types",
     "packages-update": "wp-scripts packages-update",
     "predev": "check-node-version --package",
     "dev": "webpack --mode=development --watch",
