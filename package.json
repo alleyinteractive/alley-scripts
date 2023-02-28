@@ -6,9 +6,9 @@
   "license": "GPL-2.0-or-later",
   "scripts": {},
   "workspaces": [
-    "packages/tsconfig",
+    "packages/block-editor-tools",
     "packages/scaffold",
-    "packages/block-editor-tools"
+    "packages/tsconfig"
   ],
   "devDependencies": {
     "eslint": "^8.22.0",
