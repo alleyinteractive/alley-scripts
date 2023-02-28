@@ -5,12 +5,12 @@ A preset of a [Typescript](https://www.typescriptlang.org/) configuration that y
 ## Installation
 
 ```bash
-$ npm install @alleyinteractive/typescript --save-dev
+$ npm install @alleyinteractive/tsconfig --save-dev
 ```
 
 ## Usage
 
-If you've installed `@alleyinteractive/typescript` locally within your project, extend it from your project's `tsconfig.json` file:
+If you've installed `@alleyinteractive/tsconfig` locally within your project, extend it from your project's `tsconfig.json` file:
 
 ```json
 {
