@@ -18,7 +18,7 @@
     "build-types": "npx tsc --declaration --emitDeclarationOnly",
     "prepublishOnly": "npm run build",
     "prebuild": "check-node-version --package && rm -rf build/*",
-    "build": "webpack --mode=production && npm run build-types",
+    "build": "webpack --mode=production",
     "packages-update": "wp-scripts packages-update",
     "predev": "check-node-version --package",
     "dev": "webpack --mode=development --watch",
@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "dependencies": {
+    "@alleyinteractive/tsconfig": "*",
     "@wordpress/a11y": "^3.22.0",
     "@wordpress/annotations": "^2.22.0",
     "@wordpress/api-fetch": "^6.19.0",

@@ -11,6 +11,7 @@
     "test": "turbo run test"
   },
   "workspaces": [
+    "packages/tsconfig",
     "packages/scaffold",
     "packages/block-editor-tools"
   ],
