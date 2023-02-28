@@ -6,6 +6,7 @@
   "license": "GPL-2.0-or-later",
   "scripts": {},
   "workspaces": [
+    "packages/tsconfig",
     "packages/scaffold",
     "packages/block-editor-tools"
   ],

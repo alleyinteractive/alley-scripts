@@ -1,0 +1,14 @@
+{
+  "name": "@alleyinteractive/tsconfig",
+  "version": "0.1.0",
+  "description": "Shared Typescript Configuration",
+  "main": "base.json",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alley Interactive",
+  "license": "GPL-2.0-or-later",
+  "dependencies": {
+    "typescript": "*"
+  }
+}
