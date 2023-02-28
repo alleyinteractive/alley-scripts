@@ -16,6 +16,7 @@
     "noImplicitAny": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "outDir": "build",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "sourceMap": true,
