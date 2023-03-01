@@ -14,17 +14,60 @@ If you've installed `@alleyinteractive/tsconfig` locally within your project, ex
 
 ```json
 {
-  "extends": "@alleyinteractive/tsconfig/base.json",
-
-  // ...
+  "extends": "@alleyinteractive/tsconfig/base.json"
 }
 ```
 
-The configuration can be extended with any additional option, including overriding the base configuration.
+The configuration can be extended with any additional option, including
+overriding the base configuration. Out of the box, the configuration includes
+some common best practices for Typescript projects and projects in the monorepo,
+including:
 
-## Dependencies
+* `allowJs`: `false` - Does not allow JavaScript files to be included in the
+  project by default.
+* `declaration`: `true` - Generates `.d.ts` files for each `.ts` file.
+* `declarationMap`: `true` - Generates `.d.ts.map` files for each `.d.ts` file.
+* `esModuleInterop`: `true` - Allows interoperability between CommonJS and ES
+  modules.
+* `forceConsistentCasingInFileNames`: `true` - Ensures that all file names are
+  consistent.
+* `inlineSources`: `true` - Includes the source code in the source map.
+* `isolatedModules`: `true` - Ensures that each file can be safely transpiled
+  without relying on other imports.
+* `jsx`: `react-jsx` - Emit `.js` files with the JSX changed to `_jsx` calls
+* `module`: `esnext` - See [module](https://www.typescriptlang.org/tsconfig#module)
+  for more information.
+* `moduleResolution`: `node` - See
+  [moduleResolution](https://www.typescriptlang.org/tsconfig#moduleResolution)
+  for more information.
+* `noImplicitAny`: `true` - Ensures that all variables have an explicit type.
+* `noUnusedLocals`: `true` - Ensures that all variables are used.
+* `noUnusedParameters`: `true` - Ensures that all parameters are used.
+* `outDir`: `build` - The output directory for the transpiled files.
+* `preserveWatchOutput`: `true` - Ensures that the output is cleared before
+  each build.
+* `skipLibCheck`: `true` - Skips type checking of `.d.ts` files.
+* `sourceMap`: `true` - Generates source maps for the transpiled files.
+* `strict`: `true` - Enables all strict type checking options.
+* `target`: `esnext` - See [target](https://www.typescriptlang.org/tsconfig#target)
+  for more information.
 
-This configuration has peer dependencies of any version of Typescript.
+Read more about the [TSConfig.json file here](https://www.typescriptlang.org/tsconfig).
+
+### Extending the Configuration
+
+You can extend the configuration with any additional options. For example, if
+you want to allow JavaScript files in your project, you can add the following
+to your `tsconfig.json` file:
+
+```json
+{
+  "extends": "@alleyinteractive/tsconfig/base.json",
+  "compilerOptions": {
+	"allowJs": true
+  }
+}
+```
 
 ## Changelog
 
