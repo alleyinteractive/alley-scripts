@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "allowJs": false,
+    "allowJs": true,
     "composite": false,
     "declaration": true,
     "declarationMap": true,

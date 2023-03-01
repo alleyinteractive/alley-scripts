@@ -23,8 +23,8 @@ overriding the base configuration. Out of the box, the configuration includes
 some common best practices for Typescript projects and projects in the monorepo,
 including:
 
-* `allowJs`: `false` - Does not allow JavaScript files to be included in the
-  project by default.
+* `allowJs`: `true` - Allows JavaScript files to be included in the project by
+  default.
 * `declaration`: `true` - Generates `.d.ts` files for each `.ts` file.
 * `declarationMap`: `true` - Generates `.d.ts.map` files for each `.d.ts` file.
 * `esModuleInterop`: `true` - Allows interoperability between CommonJS and ES
@@ -57,14 +57,14 @@ Read more about the [TSConfig.json file here](https://www.typescriptlang.org/tsc
 ### Extending the Configuration
 
 You can extend the configuration with any additional options. For example, if
-you want to allow JavaScript files in your project, you can add the following
+you want to disallow JavaScript files in your project, you can add the following
 to your `tsconfig.json` file:
 
 ```json
 {
   "extends": "@alleyinteractive/tsconfig/base.json",
   "compilerOptions": {
-	"allowJs": true
+	"allowJs": false
   }
 }
 ```
