@@ -16,6 +16,8 @@
     "prepublish-packages": "check-node-version --package",
     "publish-packages": "turbo run build lint test --cache-dir=.turbo && changeset version && changeset publish",
     "pretest": "check-node-version --package",
+    "prerelease": "check-node-version --package",
+    "release": "turbo run build lint test --cache-dir=.turbo && changeset publish",
     "test": "turbo run test --cache-dir=.turbo"
   },
   "workspaces": [
