@@ -23,9 +23,9 @@
     "predev": "check-node-version --package",
     "dev": "webpack --mode=development --watch",
     "prelint:fix": "check-node-version --package",
-    "lint:fix": "eslint --ext .jsx --ext .js . --fix",
+    "lint:fix": "eslint --ext .jsx --ext .js . --ext .tsx --ext .ts . --fix",
     "prelint": "check-node-version --package",
-    "lint": "eslint --ext .jsx --ext .js .",
+    "lint": "eslint --ext .jsx --ext .js . --ext .tsx --ext .ts .",
     "pretest": "check-node-version --package",
     "test:watch": "jest --watch",
     "test": "jest --passWithNoTests"
