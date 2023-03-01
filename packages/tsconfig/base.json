@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "allowJs": false,
+    "allowJs": true,
     "composite": false,
     "declaration": true,
     "declarationMap": true,
@@ -11,7 +11,7 @@
     "inlineSources": false,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": false,
@@ -21,7 +21,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2020"
+    "target": "esnext"
   },
   "exclude": [
     "build",
