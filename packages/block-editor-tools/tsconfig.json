@@ -1,7 +1,6 @@
 {
   "extends": "@alleyinteractive/tsconfig/base.json",
   "compilerOptions": {
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "outDir": "build",
@@ -9,13 +8,7 @@
       "@/*": ["*"]
     }
   },
-  "exclude": [
-    "jest.config.js",
-    "lib",
-    "build",
-    "node_modules",
-    "tests",
-    "vendor",
-    "webpack.config.js"
+  "include": [
+    "src/**/*"
   ]
 }
