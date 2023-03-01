@@ -4,20 +4,26 @@
   "version": "0.1.0",
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
-  "scripts": {},
+  "engines": {
+    "node": "18",
+    "npm": "9"
+  },
+  "scripts": {
+    "prebuild": "check-node-version --package",
+    "build": "turbo run build --cache-dir=.turbo",
+    "prelint": "check-node-version --package",
+    "lint": "turbo run lint --cache-dir=.turbo",
+    "prepublish-packages": "check-node-version --package",
+    "publish-packages": "turbo run build lint test --cache-dir=.turbo && changeset version && changeset publish",
+    "pretest": "check-node-version --package",
+    "test": "turbo run test --cache-dir=.turbo"
+  },
   "workspaces": [
     "packages/block-editor-tools",
     "packages/scaffold",
     "packages/tsconfig"
   ],
   "devDependencies": {
-    "eslint": "^8.22.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-import-resolver-webpack": "^0.13.2",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.30.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "lerna": "^6.5.1"
+    "turbo": "^1.8.2"
   }
 }

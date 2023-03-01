@@ -4,7 +4,9 @@
   "description": "Shared Typescript Configuration",
   "main": "base.json",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "",
+    "lint": "",
+    "test": ""
   },
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
