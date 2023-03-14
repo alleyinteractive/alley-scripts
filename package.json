@@ -23,6 +23,7 @@
   "workspaces": [
     "packages/block-editor-tools",
     "packages/scaffold",
+    "packages/stylelint-config",
     "packages/tsconfig"
   ],
   "devDependencies": {
