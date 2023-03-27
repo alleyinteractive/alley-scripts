@@ -11,6 +11,7 @@
   "scripts": {
     "prebuild": "check-node-version --package",
     "build": "turbo run build --cache-dir=.turbo",
+    "preinstall": "check-node-version --package",
     "prelint": "check-node-version --package",
     "lint": "turbo run lint --cache-dir=.turbo",
     "prepublish-packages": "check-node-version --package",
