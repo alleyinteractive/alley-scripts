@@ -1,6 +1,7 @@
 # System/hidden files
 .DS_Store
 .thumbsdb
+.idea
 .vscode
 *.code-workspace
 .turbo
