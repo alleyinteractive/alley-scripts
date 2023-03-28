@@ -31,11 +31,11 @@
     "index.js",
     "LICENSE",
     "README.md",
-    "base/**/*.js",
-    "configs/**/*.js",
-    "parsers/**/*.js",
-    "typescript/**/*.js",
-    "typescript-react/**/*.js"
+    "base",
+    "configs",
+    "parsers",
+    "typescript",
+    "typescript-react"
   ],
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "keywords": [
