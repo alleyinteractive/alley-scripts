@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@alleyinteractive/block-editor-tools": "^0.1.0",
-    "@alleyinteractive/eslint-config": "^0.0.1",
+    "@alleyinteractive/eslint-config": "^0.0.2",
     "@alleyinteractive/tsconfig": "^0.1.0",
     "@types/jest": "^29.4.0",
     "@types/wordpress__block-editor": "^7.0.0",
