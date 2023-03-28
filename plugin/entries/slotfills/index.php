@@ -38,16 +38,14 @@ function register_example_slotfills_scripts() {
 	// Automatically load dependencies and version.
 	$asset_file = include __DIR__ . '/index.asset.php';
 
-	/* phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-	 * wp_register_script(
-	 *     'alley-scripts-demo-plugin-example_slotfills',
-	 *     plugins_url( 'index.js', __FILE__ ),
-	 *     $asset_file['dependencies'],
-	 *     $asset_file['version'],
-	 *     true
-	 * );
-	 * wp_set_script_translations( 'alley-scripts-demo-plugin-example_slotfills', 'alley-scripts-demo-plugin' );
-	 */
+	wp_register_script(
+		'alley-scripts-plugin-slotfills',
+		plugins_url( 'index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+	wp_set_script_translations( 'alley-scripts-plugin-slotfills', 'alley-scripts-demo-plugin' );
 }
 add_action( 'init', __NAMESPACE__ . '\register_example_slotfills_scripts' );
 

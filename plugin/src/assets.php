@@ -8,65 +8,7 @@
 namespace Alley_Scripts_Demo_Plugin;
 
 // Register and enqueue assets.
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\action_wp_enqueue_scripts' );
-add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\action_admin_enqueue_scripts' );
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\action_enqueue_block_editor_assets' );
-
-/**
- * A callback for the wp_enqueue_scripts hook.
- */
-function action_wp_enqueue_scripts() {
-	/*
-	|--------------------------------------------------------------------------
-	| Enqueue site assets using the asset/entry helper functions.
-	|--------------------------------------------------------------------------
-	|
-	| This function is called by the enqueue_block_editor_assets hook. Use it to
-	| enqueue assets that are loaded across your site.
-	|
-	| For more advanced usage, check out the WordPress Asset Manager plugin by Alley.
-	|
-	|     https://github.com/alleyinteractive/wp-asset-manager
-	|
-	*/
-
-	/* phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-	 * wp_enqueue_script(
-	 *     'alley-scripts-demo-plugin-example-entry',
-	 *     get_entry_asset_url( 'example-entry' ),
-	 *     get_asset_dependency_array( 'example-entry' ),
-	 *     get_asset_version( 'example-entry' ),
-	 *     true
-	 * );
-	 * wp_set_script_translations( 'alley-scripts-demo-plugin-example-entry', 'alley-scripts-demo-plugin' );
-	 */
-}
-
-/**
- * A callback for the admin_enqueue_scripts hook.
- */
-function action_admin_enqueue_scripts() {
-	/*
-	|--------------------------------------------------------------------------
-	| Enqueue admin assets using the asset/entry helper functions.
-	|--------------------------------------------------------------------------
-	|
-	| This function is called by the admin_enqueue_scripts hook. Use it to enqueue
-	| assets that are loaded only in the WordPress admin.
-	|
-	*/
-
-	/* phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-	 * wp_enqueue_script(
-	 *     'alley-scripts-demo-plugin-admin-handle',
-	 *     get_entry_asset_url( 'admin-handle' ),
-	 *     get_asset_dependency_array( 'admin-handle' ),
-	 *     get_asset_version( 'admin-handle' ),
-	 *     true
-	 * );
-	 * wp_set_script_translations( 'alley-scripts-demo-plugin-admin-handle', 'alley-scripts-demo-plugin' );
-	 */
-}
 
 /**
  * A callback for the enqueue_block_editor_assets hook.
@@ -81,17 +23,7 @@ function action_enqueue_block_editor_assets() {
 	| enqueue assets that are loaded in the block editor.
 	|
 	*/
-
-	/* phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-	 * wp_enqueue_script(
-	 *     'alley-scripts-demo-plugin-slotfills',
-	 *     get_entry_asset_url( 'slotfills' ),
-	 *     get_asset_dependency_array( 'slotfills' ),
-	 *     get_asset_version( 'slotfills' ),
-	 *     true
-	 * );
-	 * wp_set_script_translations( 'alley-scripts-demo-plugin-slotfills', 'alley-scripts-demo-plugin' );
-	 */
+	wp_enqueue_script( 'alley-scripts-plugin-slotfills' );
 }
 
 /**
