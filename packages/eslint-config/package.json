@@ -30,7 +30,12 @@
   "files": [
     "index.js",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "./base/**/*.js",
+    "./configs/**/*.js",
+    "./parsers/**/*.js",
+    "./typescript/**/*.js",
+    "./typescript-react/**/*.js"
   ],
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "keywords": [
