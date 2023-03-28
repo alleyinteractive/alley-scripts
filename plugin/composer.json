@@ -14,24 +14,19 @@
         "php": "^8.0"
     },
     "require-dev": {
-        "alleyinteractive/alley-coding-standards": "^1.0",
-        "mantle-framework/testkit": "^0.9",
-        "nunomaduro/collision": "^5.0"
+        "alleyinteractive/alley-coding-standards": "^1.0"
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
-            "alleyinteractive/composer-wordpress-autoloader": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "pestphp/pest-plugin": true
-        },
-        "sort-packages": true
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
         "phpcbf": "phpcbf .",
         "phpcs": "phpcs .",
-        "phpunit": "phpunit",
         "test": [
             "@phpcs"
         ]
