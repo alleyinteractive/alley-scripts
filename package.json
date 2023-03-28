@@ -22,12 +22,13 @@
   },
   "workspaces": [
     "packages/block-editor-tools",
+    "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",
     "packages/tsconfig"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "turbo": "^1.8.3"
+    "turbo": "^1.8.6"
   }
 }
