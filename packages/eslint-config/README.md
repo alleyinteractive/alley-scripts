@@ -31,20 +31,29 @@ without supporting React plugins.
 Then create an `.eslintrc.json` file in your project that extends the configuration:
 
 ```json
-{
-	"extends": ["@alleyinteractive/eslint-config"]
-}
+  {
+    "extends": ["@alleyinteractive/eslint-config"]
+  }
 ```
 
 Finally, add `lint` commands to your `package.json`:
 
 ```json
 {
-	"scripts": {
-		"lint": "eslint --ext .ts,.tsx,.js,.jsx .",
-		"lint:fix": "eslint --ext .ts,.tsx,.js,.jsx --fix ."
-	}
+  "scripts": {
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx .",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx --fix ."
+  }
 }
+```
+
+If you are resolving your modules with a Webpack resolver configuration add the following to the
+projects `.eslintrc.json` file:
+
+```json
+  "settings": {
+    "import/resolver": "webpack"
+  },
 ```
 
 ### From Source
@@ -61,9 +70,9 @@ In order to test the config with another project, you will need to point to this
 
 ```json
 {
-	"devDependences": {
-		"@alleyinteractive/eslint-config": "file:../path/to/alley-scripts/packages/eslint-config"
-	}
+  "devDependences": {
+    "@alleyinteractive/eslint-config": "file:../path/to/alley-scripts/packages/eslint-config"
+  }
 }
 ```
 
