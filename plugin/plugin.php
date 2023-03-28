@@ -88,8 +88,8 @@ function sanitize_csv_data( $meta_value ) : string {
 	$sanitized_meta_value = [];
 	foreach ( $raw_meta_value as $row ) {
 		$sanitized_meta_value[] = [
-			'title' => sanitize_text_field( $row['title'] ?? '' ),
-			'slug' => sanitize_title( $row['slug'] ?? '' ),
+			'title'       => sanitize_text_field( $row['title'] ?? '' ),
+			'slug'        => sanitize_title( $row['slug'] ?? '' ),
 			'description' => sanitize_text_field( $row['description'] ?? '' ),
 		];
 	}
