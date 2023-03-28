@@ -1,15 +1,14 @@
 /**
- * Base Typescript configuration using Airbnb's base config without React.
+ * Typescript configuration using AirBnBs ESLint config and Airbnb Typescript.
  */
 const packageConfigs = [
-  '../configs/env',
+  '../configs/react',
   '../parsers/typescript',
 ].map(require.resolve);
 
 module.exports = {
   extends: [
-    'airbnb/base',
-    'airbnb-typescript/base',
+    'airbnb-typescript',
     ...packageConfigs,
   ],
 };

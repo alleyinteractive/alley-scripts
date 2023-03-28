@@ -4,18 +4,13 @@
 
 Alley's standard ESLint configuration, which includes support for React, React Hooks, and TypeScript.
 
-
 ## Background
 
-This package makes it easy to configure JavaScript linting for projects that might also include React and TypeScript. It
-handles dependency management and configuration for you, so you can include the package with a minimum of configuration
-and easily update it when new versions are released.
-
+This package leverages [Airbnb's ESLint config](https://www.npmjs.com/package/eslint-config-airbnb) and [Airbnb Typescript](https://www.npmjs.com/package/eslint-config-airbnb-typescript) along with Babel and Typescript ESLint parsers making it easy to configure JavaScript linting for projects that might also include React and TypeScript.
 
 ## Releases
 
 This package adheres to semantic versioning and is released on https://www.npmjs.com/.
-
 
 ### Use
 
@@ -24,8 +19,22 @@ First, install the package from npm:
 ```sh
 npm install --save-dev @alleyinteractive/eslint-config
 ```
+Next, choose a configuration from the available ESLint configurations.
 
-Then create an `.eslintrc.json` file in your project that extends this config:
+This package exports four ESLint configurations for usage.
+1. `@alleyinteractive/eslint-config` - Default configuration that supports React.
+2. `@alleyinteractive/eslint-config/base` - Base configuration similar to Airbnb's base configuration 
+without supporting React plugins.
+3. `@alleyinteractive/eslint-config/typescript` - Typescript support without React plugin support.
+4. `@alleyinteractive/eslint-config/typescript-react` - Typescript and React support.
+
+Each configuration has required dependencies. You will need to install the peer dependencies using this shortcut:
+
+```sh
+npx install-peerdeps --dev @alleyinteractive/eslint-config
+```
+
+Then create an `.eslintrc.json` file in your project that extends the configuration:
 
 ```json
 {
@@ -43,7 +52,6 @@ Finally, add `lint` commands to your `package.json`:
 	}
 }
 ```
-
 
 ### From Source
 
