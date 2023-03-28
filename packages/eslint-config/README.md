@@ -28,12 +28,6 @@ without supporting React plugins.
 3. `@alleyinteractive/eslint-config/typescript` - Typescript support without React plugin support.
 4. `@alleyinteractive/eslint-config/typescript-react` - Typescript and React support.
 
-Each configuration has required dependencies. You will need to install the peer dependencies using this shortcut:
-
-```sh
-npx install-peerdeps --dev @alleyinteractive/eslint-config
-```
-
 Then create an `.eslintrc.json` file in your project that extends the configuration:
 
 ```json
