@@ -1,3 +1,6 @@
 {
-  "extends": ["@alleyinteractive/eslint-config/typescript-react"]
+  "extends": ["@alleyinteractive/eslint-config/typescript-react"],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }]
+  }
 }
