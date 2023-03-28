@@ -12,7 +12,7 @@ module.exports = {
     ...packageConfigs,
   ],
   rules: {
-    'react/jsx-filename-extension': ['error', {extensions: ['.jsx', '.tsx']}],
+    'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     'react/require-default-props': 'off',
   },
 };
