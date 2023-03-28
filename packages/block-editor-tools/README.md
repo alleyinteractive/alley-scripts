@@ -48,7 +48,16 @@ const MyComponent = () => {
 
 ## Changelog
 
-0.0.1 – Initial release
+### 0.1.0
+
+- Addition of Eslint configuration and rules.
+- Make peer dependency requirements lenient.
+- Add Styleint config.
+- Include Typescript types.
+
+### 0.0.1
+
+– Initial release
 
 ## Development Process
 
@@ -65,15 +74,12 @@ You can contribute to this project in several ways:
 
 This project adheres to the [Semantic Versioning 2.0.0](https://semver.org/) specification. All major, minor, and patch releases are published to npm and tagged in the repo. We will maintain separate branches for each minor release (e.g. block-editor-tools/0.1) to manage patch releases while keeping future development in the `main` branch.
 
-We recommend using [np](https://www.npmjs.com/package/np) to handle publishing releases and generating git tags.
-
 ## Maintainers
 
-This project is actively maintained by [Alley Interactive](https://github.com/alleyinteractive). Like what you see? [Come work with us](https://alley.co/careers/).
+This project is actively maintained by [Alley Interactive](https://github.com/alleyinteractive). Like what you see? [Come work with us](https://alley.com/careers/).
 
 ![Alley logo](https://avatars.githubusercontent.com/u/1733454?s=200&v=4)
 
 ## License
 
 This software is released under the terms of the GNU General Public License version 2 or any later version.
-

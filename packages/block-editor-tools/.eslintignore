@@ -1,0 +1,6 @@
+build
+vendor
+
+# Ignore development files
+webpack.config.js
+jest.config.js

@@ -110,18 +110,16 @@ const MediaPicker = ({
   }
 
   return (
-    <>
-      <Container className={className}>
-        <MediaPlaceholder
-          allowedTypes={allowedTypes}
-          disableMediaButtons={!!valueURL}
-          icon={<BlockIcon icon={icon} />}
-          onSelect={onUpdate}
-          onSelectURL={onUpdateURL}
-          value={{ id: value, src }}
-        />
-      </Container>
-    </>
+    <Container className={className}>
+      <MediaPlaceholder
+        allowedTypes={allowedTypes}
+        disableMediaButtons={!!valueURL}
+        icon={<BlockIcon icon={icon} />}
+        onSelect={onUpdate}
+        onSelectURL={onUpdateURL}
+        value={{ id: value, src }}
+      />
+    </Container>
   );
 };
 

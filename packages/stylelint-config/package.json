@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/stylelint-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Alley's sharable stylelint config",
   "main": "index.js",
   "engines": {
@@ -32,7 +32,8 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/stylelint-config",
   "peerDependencies": {
-    "stylelint": ">= 14.0.1",
-    "stylelint-config-sass-guidelines": ">= 9.0.1"
-  }
+    "stylelint": "^14.2",
+    "stylelint-config-sass-guidelines": "^9.0.1"
+  },
+  "gitHead": "abe033f8252856538f78a70f24d827969bc7367d"
 }
