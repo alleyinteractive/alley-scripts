@@ -16,5 +16,7 @@ module.exports = {
         selector: ":matches(JSXElement, JSXFragment) > JSXExpressionContainer > LogicalExpression[operator='||']",
       },
     ],
+    'react/jsx-props-no-spreading': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
 };

@@ -11,4 +11,7 @@ module.exports = {
     'airbnb-typescript',
     ...packageConfigs,
   ],
+  rules: {
+    'react/require-default-props': 'off',
+  },
 };
