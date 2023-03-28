@@ -25,7 +25,8 @@
     "packages/block-editor-tools",
     "packages/scaffold",
     "packages/stylelint-config",
-    "packages/tsconfig"
+    "packages/tsconfig",
+    "plugin"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.1",

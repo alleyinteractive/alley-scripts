@@ -14,3 +14,6 @@
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
+
+// Load the plugin.
+require_once __DIR__ . '/plugin/plugin.php';
