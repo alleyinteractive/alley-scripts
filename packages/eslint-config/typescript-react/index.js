@@ -8,8 +8,8 @@ const packageConfigs = [
 
 module.exports = {
   extends: [
-    'airbnb-typescript',
     ...packageConfigs,
+    'airbnb-typescript',
   ],
   rules: {
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
