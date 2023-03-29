@@ -11,6 +11,6 @@ on:
 
 jobs:
   coding-standards:
-    uses: alleyinteractive/.github/.github/workflows/php-coding-standards.yml@working-directory
+    uses: alleyinteractive/.github/.github/workflows/php-coding-standards.yml@main
     with:
       working-directory: plugin
