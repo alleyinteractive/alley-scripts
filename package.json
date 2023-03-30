@@ -11,6 +11,7 @@
   "scripts": {
     "prebuild": "check-node-version --package",
     "build": "turbo run build --cache-dir=.turbo",
+    "preinstall": "check-node-version --package",
     "prelint": "check-node-version --package",
     "lint": "turbo run lint --cache-dir=.turbo",
     "prepublish-packages": "check-node-version --package",
@@ -25,10 +26,11 @@
     "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",
-    "packages/tsconfig"
+    "packages/tsconfig",
+    "plugin"
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "turbo": "^1.8.6"
+    "turbo": "^1.8.7"
   }
 }

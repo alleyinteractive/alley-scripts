@@ -1,0 +1,3 @@
+{
+  "extends": "@alleyinteractive/tsconfig/base.json"
+}

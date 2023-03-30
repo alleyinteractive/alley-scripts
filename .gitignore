@@ -16,3 +16,5 @@ vendor
 
 # Build files
 dist
+build
+.phpcs/*.json
