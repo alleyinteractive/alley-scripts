@@ -4,16 +4,38 @@
   "version": "0.1.0",
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
+  "engines": {
+    "node": "18",
+    "npm": "9"
+  },
   "scripts": {
+    "prebuild-storybook": "check-node-version --package",
+    "build-storybook": "build-storybook",
+    "prebuild": "check-node-version --package",
+    "build": "turbo run build --cache-dir=.turbo",
+    "preinstall": "check-node-version --package",
+    "prelint": "check-node-version --package",
+    "lint": "turbo run lint --cache-dir=.turbo",
+    "prepublish-packages": "check-node-version --package",
+    "publish-packages": "turbo run build lint test --cache-dir=.turbo && changeset version && changeset publish",
+    "pretest": "check-node-version --package",
+    "prerelease": "check-node-version --package",
+    "prestorybook": "check-node-version --package",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "release": "turbo run build lint test --cache-dir=.turbo && changeset publish",
+    "test": "turbo run test --cache-dir=.turbo"
   },
   "workspaces": [
+    "packages/block-editor-tools",
+    "packages/eslint-config",
     "packages/scaffold",
-    "packages/block-editor-tools"
+    "packages/stylelint-config",
+    "packages/tsconfig",
+    "plugin"
   ],
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "@changesets/cli": "^2.26.1",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-docs": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
@@ -40,6 +62,7 @@
     "lerna": "^6.5.1",
     "sass-loader": "^13.2.0",
     "storybook-addon-turbo-build": "^1.1.0",
-    "style-loader": "^3.3.1"
+    "style-loader": "^3.3.1",
+    "turbo": "^1.8.7"
   }
 }
