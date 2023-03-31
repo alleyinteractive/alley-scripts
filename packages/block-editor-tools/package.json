@@ -10,8 +10,8 @@
     "README.md"
   ],
   "engines": {
-    "node": "18",
-    "npm": "9"
+    "node": ">=16.0.0 <19.0.0",
+    "npm": ">=8.0.0 <10.0.0"
   },
   "scripts": {
     "prebuild-types": "check-node-version --package",
