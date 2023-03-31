@@ -12,6 +12,7 @@ export default {
 const Template = (args: object) => <CSVUploader {...args} />;
 
 export const Default = Template.bind({});
+// @ts-expect-error CSVUploader is not a valid component.
 Default.args = {
   attributeName: 'attribute-name',
   setAttributes: () => {},

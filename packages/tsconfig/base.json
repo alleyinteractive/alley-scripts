@@ -29,6 +29,7 @@
     "node_modules",
     "tests",
     "webpack.config.js",
-    "vendor"
+    "vendor",
+    "vendor/**"
   ]
 }

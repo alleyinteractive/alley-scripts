@@ -34,14 +34,10 @@ jobs:
             node-version: 18
             cache: 'npm'
 
-        - name: Install dependencies
-          run: npm install
+        - run: npm ci
 
-        - name: Build
-          run: npm run build
+        - run: npm run build
 
-        - name: Test
-          run: npm run test
+        - run: npm run test
 
-        - name: Lint
-          run: npm run lint
+        - run: npm run lint
