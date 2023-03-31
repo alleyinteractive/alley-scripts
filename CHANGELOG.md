@@ -2,6 +2,12 @@
 
 All notable changes to the Alley Scripts monorepo will be documented in this file.
 
+## v0.1.2 - @alleyinteractive/block-editor-tools
+
+### Changed
+
+- Added Node 16 support back.
+
 ## v0.3.0
 
 ### Added

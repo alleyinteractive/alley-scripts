@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/block-editor-tools",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
   "types": "./build/index.d.ts",
@@ -130,6 +130,5 @@
     "typescript": "^5.0.2",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1"
-  },
-  "gitHead": "abe033f8252856538f78a70f24d827969bc7367d"
+  }
 }
