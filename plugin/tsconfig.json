@@ -1,3 +1,6 @@
 {
-  "extends": "@alleyinteractive/tsconfig/base.json"
+  "extends": "@alleyinteractive/tsconfig/base.json",
+  "exclude": [
+    "vendor"
+  ]
 }
