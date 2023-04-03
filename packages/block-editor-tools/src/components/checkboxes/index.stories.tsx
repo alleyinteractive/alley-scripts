@@ -26,7 +26,7 @@ const options = [
   },
 ];
 
-const DefaultTemplate: StoryFn<typeof Checkboxes> = ({onChange, ...args }) => {
+const DefaultTemplate: StoryFn<typeof Checkboxes> = ({ onChange, ...args }) => { // eslint-disable-line react/prop-types, max-len
   const [checked, setChecked] = useState(args.value || []);
 
   return (
