@@ -1,5 +1,7 @@
-/** @type { import('@storybook/react-vite').StorybookConfig } */
-const config = {
+
+import { StorybookConfig } from '@storybook/react-vite';
+
+const config: StorybookConfig = {
   stories: [
     '../stories/**/*.stories.mdx',
     '../packages/block-editor-tools/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
@@ -8,6 +10,7 @@ const config = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
+    "@storybook/preset-scss",
   ],
   framework: {
     name: "@storybook/react-vite",
@@ -18,4 +21,5 @@ const config = {
     defaultName: 'Documentation',
   },
 };
+
 export default config;

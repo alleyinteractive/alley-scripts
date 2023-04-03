@@ -1,5 +1,10 @@
-/** @type { import('@storybook/react').Preview } */
-const preview = {
+import { Preview } from "@storybook/react";
+import { WithStyles } from "./decorators/with-styles";
+
+const preview: Preview = {
+  decorators: [
+    WithStyles,
+  ],
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
