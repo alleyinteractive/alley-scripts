@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Decorator } from '@storybook/react';
 
-// import '../styles/global.scss';
+import '../styles/global.css';
 
 /**
  * Global Styles Decorator
