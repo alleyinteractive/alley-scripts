@@ -30,6 +30,9 @@ const DefaultPreview = styled.div`
   padding: 1em;
 `;
 
+/**
+ * Allows for a simple media upload/replace/remove feature for media for blocks.
+ */
 const MediaPicker = ({
   allowedTypes,
   className,

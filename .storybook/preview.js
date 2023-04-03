@@ -1,14 +1,20 @@
-/** @type { import('@storybook/react').Preview } */
-const preview = {
-  parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/,
-      },
+import { addParameters } from '@storybook/client-api';
+import { WithStyles } from './decorators/with-styles';
+
+export const parameters = {
+  actions: { argTypesRegex: "^on[A-Z].*" },
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/,
     },
   },
-};
+}
 
-export default preview;
+export const decorators = [
+  WithStyles,
+];
+
+addParameters({
+  viewMode: 'docs',
+});
