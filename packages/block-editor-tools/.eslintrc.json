@@ -1,5 +1,5 @@
 {
-  "extends": ["@alleyinteractive/eslint-config/typescript"],
+  "extends": ["@alleyinteractive/eslint-config/typescript-react"],
   "rules": {
     "import/no-cycle": "off",
     "react/jsx-props-no-spreading": "off",

@@ -34,6 +34,12 @@ Preview.propTypes = {
   src: PropTypes.string.isRequired,
 };
 
+/**
+ * Allows a user to select or remove an image using the media modal or via
+ * direct URL entry. This component is a thin wrapper around `MediaPicker` and
+ * sets the allowed types for the `MediaPicker` to `image` as well as provides a
+ * custom preview component that embeds the selected image in the editor.
+ */
 const ImagePicker = ({
   className,
   imageSize,
@@ -68,13 +74,38 @@ ImagePicker.defaultProps = {
 };
 
 ImagePicker.propTypes = {
+  /**
+   * Class name for the media picker container.
+   */
   className: PropTypes.string,
+  /**
+   * The size to display in the preview. Defaults to `thumbnail`.
+   */
   imageSize: PropTypes.string,
+  /**
+   * Determines if controls should render in the block toolbar.
+   */
   displayControlsInToolbar: PropTypes.bool,
+  /**
+   * Function to reset the image ID to 0 and/or the image URL to an empty string.
+   */
   onReset: PropTypes.func.isRequired,
+  /**
+   * Function to set the image ID on image selection/upload.
+   */
   onUpdate: PropTypes.func.isRequired,
+  /**
+   * Function to set the image URL on entry. If not set, the button to enter a
+   * URL manually will not display.
+   */
   onUpdateURL: PropTypes.func,
+  /**
+   * The ID of the selected image. 0 represents no selection.
+   */
   value: PropTypes.number.isRequired,
+  /**
+   * The URL of the image. An empty string represents no selection.
+   */
   valueURL: PropTypes.string,
 };
 
