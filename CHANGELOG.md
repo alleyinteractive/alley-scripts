@@ -2,6 +2,12 @@
 
 All notable changes to the Alley Scripts monorepo will be documented in this file.
 
+## v0.2.0 - @alleyinteractive/block-editor-tools
+
+### Changed
+
+- Upgraded to WordPress 6.2
+
 ## v0.1.2 - @alleyinteractive/block-editor-tools
 
 ### Changed
