@@ -1,0 +1,70 @@
+{{#hasEnqueue}}
+<?php
+/**
+ * {{slug}} slotfill script registration and enqueue.
+ *
+ * This file will be copied to the assets build directory
+ * and will be loaded from there.
+ *
+ * @package create-wordpress-plugin
+ */
+
+namespace Create_WordPress_Plugin;
+
+/**
+ * Registers all slotfill assets so that they can be enqueued through Gutenberg in
+ * the corresponding context.
+ */
+function register_{{slugUnderscore}}_scripts() {
+	/*
+	|--------------------------------------------------------------------------
+	| Register slotfills assets from entry.
+	|--------------------------------------------------------------------------
+	|
+	| In the code below we can use the __FILE__ path to find the asset and enqueue
+	| under any condition. This file, index.php, will be required from the  `load_scripts()`
+	| function.
+	|
+	| Registering or enqueuing from the entry directory allows a developer to enqueue assets
+	| within the context of an entry point.
+	|
+	*/
+	// Automatically load dependencies and version.
+	$asset_file = include __DIR__ . '/index.asset.php';
+
+	// Register the {{slug}} script.
+	wp_register_script(
+		'{{prefixNameSpace}}-{{slug}}-js',
+		plugins_url( 'index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+	wp_set_script_translations( '{{prefixNameSpace}}-{{slug}}-js', 'create-wordpress-plugin' );
+	{{#hasStyles}}
+
+	// Register the {{slug}} style.
+	wp_register_style(
+		'{{prefixNameSpace}}-{{slug}}-css',
+		plugins_url( 'index.css', __FILE__ ),
+		[],
+		$asset_file['version'],
+	);
+	{{/hasStyles}}
+}
+add_action( 'init', __NAMESPACE__ . '\register_{{slugUnderscore}}_scripts' );
+
+/**
+ * Enqueue block editor assets for this slotfill.
+ *
+ * This function is called by the enqueue_block_editor_assets hook. Use it to
+ * enqueue assets that are loaded in the block editor.
+ */
+function action_enqueue_{{slugUnderscore}}_assets() {
+	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
+	{{#hasStyles}}
+	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
+	{{/hasStyles}}
+}
+add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\action_enqueue_{{slugUnderscore}}_assets' );
+{{/hasEnqueue}}

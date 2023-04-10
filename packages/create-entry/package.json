@@ -1,0 +1,7 @@
+{
+  "author": "Alley <info@alley.com> (https://alley.com)",
+  "description": "Alley's script for scaffolding entry points for projects that use @wordpress/scripts",
+  "license": "GPL-2.0-or-later",
+  "name": "@alleyinteractive/create-entry",
+  "version": "0.0.1"
+}
