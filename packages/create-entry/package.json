@@ -7,6 +7,7 @@
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
+    "@jest/globals": "^29.5.0",
     "@types/jest": "^29.5.0",
     "@types/mustache": "^4.2.2",
     "@types/node": "^18.15.11",
@@ -28,6 +29,8 @@
     "templates"
   ],
   "scripts": {
-    "test": "jest"
-  }
+    "test": "jest",
+    "build": "tsc"
+  },
+  "type": "module"
 }

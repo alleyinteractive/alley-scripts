@@ -1,6 +1,6 @@
 import prompts from 'prompts';
-import formatSlug from './formatSlug';
-import validateSlug from './validateSlug';
+import formatSlug from './formatSlug.js';
+import validateSlug from './validateSlug.js';
 
 /**
  * Prompts the user to select an entry point type and returns the selected options.

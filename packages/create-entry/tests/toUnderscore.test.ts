@@ -1,3 +1,4 @@
+import { describe, expect, test } from '@jest/globals';
 import toUnderscore from '../src/toUnderscore';
 
 describe('toUnderscore', () => {

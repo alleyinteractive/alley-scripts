@@ -2,10 +2,11 @@
   "extends": "@alleyinteractive/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "build",
+    "outDir": "dist",
+    "moduleResolution": "nodenext"
   },
   "exclude": [
-    "build",
+    "dist",
     "jest.config.js",
     "node_modules",
     "tests",

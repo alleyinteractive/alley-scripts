@@ -3,17 +3,24 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { glob } from 'glob';
 import mustache from 'mustache';
 
 // Internal functions.
-import directoryExists from './src/directoryExists';
-import toUnderscore from './src/toUnderscore';
-
-import { promptForEntryPoint, promptForNamespace } from './src/prompts';
+import directoryExists from './src/directoryExists.js';
+import toUnderscore from './src/toUnderscore.js';
+import { promptForEntryPoint, promptForNamespace } from './src/prompts.js';
 
 // The directory where the entry points will be written relative to the current working directory.
 const ENTRIES_DIR = 'entries';
+
+/**
+ * __filename and __dirname are not available in ES Modules.
+ * See: https://nodejs.org/api/esm.html#no-__filename-or-__dirname
+ */
+const __filename = fileURLToPath( import.meta.url );
+const __dirname = path.dirname(__filename);
 
 /**
  * Prompts the user to select an entry point type.
