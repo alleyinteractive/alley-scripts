@@ -1,5 +1,5 @@
-const fs = require('fs');
-const directoryExists = require('./directoryExists');
+import fs from 'fs';
+import directoryExists  from '../src/directoryExists';
 
 describe('directoryExists', () => {
   it('should return true if directory exists', async () => {

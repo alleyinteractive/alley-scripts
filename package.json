@@ -25,6 +25,7 @@
   },
   "workspaces": [
     "packages/block-editor-tools",
+    "packages/create-entry",
     "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",

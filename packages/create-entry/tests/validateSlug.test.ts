@@ -1,4 +1,4 @@
-const validateSlug = require('./validateSlug');
+import validateSlug from '../src/validateSlug';
 
 describe('validateSlug', () => {
   test('should return true for a valid slug', () => {

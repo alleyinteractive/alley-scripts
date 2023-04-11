@@ -1,4 +1,4 @@
-import formatSlug from './formatSlug';
+import formatSlug from '../src/formatSlug';
 
 describe('formatSlug', () => {
   test('should format string to lowercase with hyphens', () => {

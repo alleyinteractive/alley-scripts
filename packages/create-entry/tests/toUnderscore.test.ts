@@ -1,4 +1,4 @@
-import toUnderscore from './toUnderscore';
+import toUnderscore from '../src/toUnderscore';
 
 describe('toUnderscore', () => {
   test('replaces hyphens with underscores', () => {
