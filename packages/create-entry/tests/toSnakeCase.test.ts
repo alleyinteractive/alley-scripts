@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
  // @ts-ignore
-import { toSnakeCase } from '../src/formatting.js';
+import { toSnakeCase } from '../src/formatting.ts';
 
 describe('toSnakeCase', () => {
   test('replaces hyphens with underscores', () => {
