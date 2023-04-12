@@ -31,6 +31,9 @@
 	"bin": {
 		"create-entry": "./dist/index.js"
 	},
+  "peerDependencies": {
+    "@wordpress/scripts": "*"
+  },
   "scripts": {
     "test": "jest",
     "build": "tsc",

@@ -8,11 +8,15 @@ import { glob } from 'glob';
 import mustache from 'mustache';
 
 // Internal functions.
-import directoryExists from './src/directoryExists.js';
+import { directoryExists } from './src/validation.js';
 import { toSnakeCase } from './src/formatting.js';
 import { promptForEntryPoint } from './src/prompts.js';
-import { hasArgInCLI, getInitialOptionForArg } from './src/cli.js';
-import { getNameSpace, getTextDomain } from './src/options.js';
+import { hasArgInCLI } from './src/cli.js';
+import {
+  getInitialOptionForArg,
+  getNameSpace,
+  getTextDomain,
+} from './src/options.js';
 
 /**
  * __filename and __dirname are not available in ES Modules.
@@ -76,7 +80,6 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
     await fs.promises.mkdir(slug);
 
     const prefixNameSpace = await getNameSpace(hasEnqueue);
-
     const textdomain = getTextDomain();
 
     // Loop through the template files and render them with the provided data.

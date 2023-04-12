@@ -21,7 +21,8 @@ async function promptForEntryPoint(): Promise<{
       type: 'text',
       name: 'slug',
       message: 'The entry point slug used for identification (also the output folder name):',
-      validate: validateSlug,
+      validate: (value) => validateSlug(value)
+        || 'Please enter a valid slug (lowercase, no spaces, only hyphens)',
       format: formatSlug,
     },
     {
@@ -57,7 +58,8 @@ async function promptForNamespace(initial: string = 'create-entry'): Promise<str
       type: 'text',
       name: 'nameSpace',
       message: 'The internal namespace or prefix for the entry:',
-      validate: validateSlug,
+      validate: (value) => validateSlug(value)
+        || 'Please enter a valid namespace (lowercase, no spaces, only hyphens)',
       format: formatSlug,
       initial,
     },

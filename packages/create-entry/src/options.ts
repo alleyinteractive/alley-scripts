@@ -1,7 +1,32 @@
-import { hasArgInCLI, getArgFromCLI } from './cli.js';
 import { validateSlug } from './validation.js';
 import { formatSlug } from './formatting.js';
 import { promptForNamespace } from './prompts.js';
+import { getArgFromCLI, hasArgInCLI } from './cli.js';
+
+/**
+ * Get an initial valid argument from the CLI arguments. Allow for setting a default value.
+ *
+ * @param initial The default value to use if the argument is not present in the CLI.
+ * @param arg     The argument to get the value for. Must include the leading '--'.
+ * @returns       A valid string
+ */
+export function getInitialOptionForArg(initial: string, arg: string): string {
+  let initialOption = initial;
+
+  if (hasArgInCLI(arg)) {
+    initialOption = getArgFromCLI(arg) || initialOption;
+  }
+
+  if (validateSlug(initialOption) !== true) {
+    // eslint-disable-next-line no-console
+    console.error(
+      `Invalid value for ${arg}. Please enter a valid string (lowercase, no spaces, only hyphens)`,
+    );
+    process.exit(1);
+  }
+
+  return formatSlug(initialOption);
+}
 
 /**
  * Get the text domain from the CLI arguments. (default empty string)
@@ -11,12 +36,14 @@ import { promptForNamespace } from './prompts.js';
 export function getTextDomain(): string {
   let textDomain = '';
 
-  if (hasArgInCLI('--textdomain') && getArgFromCLI('--textdomain') !== null) {
+  if (hasArgInCLI('--textdomain')) {
     textDomain = getArgFromCLI('--textdomain') || '';
 
     if (validateSlug(textDomain) !== true) {
       // eslint-disable-next-line no-console
-      console.error('Invalid value for --textdomain. Please enter a valid string (lowercase, no spaces, only hyphens)');
+      console.error(
+        'Invalid value for --textdomain. Please enter a valid string (lowercase, no spaces, only hyphens)',
+      );
       process.exit(1);
     }
   }
@@ -34,7 +61,7 @@ export async function getNameSpace(hasEnqueue: boolean): Promise<string> {
   // The initial namespace.
   let nameSpace = 'create-entry';
 
-  if (hasArgInCLI('--namespace') && getArgFromCLI('--namespace') !== null) {
+  if (hasArgInCLI('--namespace')) {
     nameSpace = getArgFromCLI('--namespace') || nameSpace;
   } else {
     nameSpace = hasEnqueue ? await promptForNamespace(nameSpace) : nameSpace;
@@ -42,7 +69,9 @@ export async function getNameSpace(hasEnqueue: boolean): Promise<string> {
 
   if (validateSlug(nameSpace) !== true) {
     // eslint-disable-next-line no-console
-    console.error('Invalid namespace. Please enter a valid namespace (lowercase, no spaces, only hyphens)');
+    console.error(
+      'Invalid namespace. Please enter a valid namespace (lowercase, no spaces, only hyphens)',
+    );
     process.exit(1);
   }
 

@@ -8,8 +8,8 @@ describe('validateSlug', () => {
     expect(validateSlug(slug)).toBe(true);
   });
 
-  test('should return an error message for an invalid slug', () => {
+  test('should return false for an invalid slug', () => {
     const slug = 'my invalid_slug';
-    expect(validateSlug(slug)).toBe('Please enter a valid slug (lowercase, no spaces, only hyphens)');
+    expect(validateSlug(slug)).toBe(false);
   });
 });
