@@ -5,17 +5,13 @@
  *
  * This file will be copied to the assets build directory
  * and will be loaded from there.
- *
- * @package create-wordpress-plugin
  */
-
-namespace Create_WordPress_Plugin;
 
 /**
  * Registers all slotfill assets so that they can be enqueued through Gutenberg in
  * the corresponding context.
  */
-function register_{{slugUnderscore}}_scripts() {
+function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
 	/*
 	|--------------------------------------------------------------------------
 	| Register slotfills assets from entry.
@@ -38,9 +34,9 @@ function register_{{slugUnderscore}}_scripts() {
 		plugins_url( 'index.js', __FILE__ ),
 		$asset_file['dependencies'],
 		$asset_file['version'],
-		true
+		trues
 	);
-	wp_set_script_translations( '{{prefixNameSpace}}-{{slug}}-js', 'create-wordpress-plugin' );
+	wp_set_script_translations( '{{prefixNameSpace}}-{{slug}}-js'{{#textdomain}}, '{{textdomain}}'{{/textdomain}} );
 	{{#hasStyles}}
 
 	// Register the {{slug}} style.
@@ -52,7 +48,7 @@ function register_{{slugUnderscore}}_scripts() {
 	);
 	{{/hasStyles}}
 }
-add_action( 'init', __NAMESPACE__ . '\register_{{slugUnderscore}}_scripts' );
+add_action( 'init', 'register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
 
 /**
  * Enqueue block editor assets for this slotfill.
@@ -60,11 +56,11 @@ add_action( 'init', __NAMESPACE__ . '\register_{{slugUnderscore}}_scripts' );
  * This function is called by the enqueue_block_editor_assets hook. Use it to
  * enqueue assets that are loaded in the block editor.
  */
-function action_enqueue_{{slugUnderscore}}_assets() {
+function action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_assets() {
 	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
 	{{#hasStyles}}
 	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
 	{{/hasStyles}}
 }
-add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\action_enqueue_{{slugUnderscore}}_assets' );
+add_action( 'enqueue_block_editor_assets', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_assets' );
 {{/hasEnqueue}}

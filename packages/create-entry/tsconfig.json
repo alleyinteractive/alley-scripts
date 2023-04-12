@@ -7,8 +7,12 @@
   },
   "exclude": [
     "dist",
-    "jest.config.js",
     "node_modules",
     "tests",
+    "jest.config.ts",
+  ],
+  "include": [
+    "src/**/*",
+    "index.ts"
   ]
 }

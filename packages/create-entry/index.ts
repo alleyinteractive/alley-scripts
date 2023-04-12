@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node
 /* eslint-disable no-console */
 
 import fs from 'fs';
@@ -9,29 +9,39 @@ import mustache from 'mustache';
 
 // Internal functions.
 import directoryExists from './src/directoryExists.js';
-import toUnderscore from './src/toUnderscore.js';
-import { promptForEntryPoint, promptForNamespace } from './src/prompts.js';
-
-// The directory where the entry points will be written relative to the current working directory.
-const ENTRIES_DIR = 'entries';
+import { toSnakeCase } from './src/formatting.js';
+import { promptForEntryPoint } from './src/prompts.js';
+import { hasArgInCLI, getInitialOptionForArg } from './src/cli.js';
+import { getNameSpace, getTextDomain } from './src/options.js';
 
 /**
  * __filename and __dirname are not available in ES Modules.
  * See: https://nodejs.org/api/esm.html#no-__filename-or-__dirname
  */
-const __filename = fileURLToPath( import.meta.url );
-const __dirname = path.dirname(__filename);
+const fileName = fileURLToPath(import.meta.url);
+const dirName = path.dirname(fileName);
+
+// The path to the templates directory relative to the dist directory.
+const TEMPLATE_PATH = path.join(dirName, '../templates');
 
 /**
  * Prompts the user to select an entry point type.
  */
 (async () => {
+  // The directory where the entry points will be written
+  // relative to the current working directory.
+  const ENTRIES_DIR = getInitialOptionForArg(
+    'entries',
+    '--src-dir',
+  );
+
   const {
-    entryType,
     slug,
     hasStyles,
     hasEnqueue,
   } = await promptForEntryPoint();
+
+  const entryType = hasArgInCLI('--slotfill') ? 'slotfill' : 'entry';
 
   // set the entry type and slug as environment variables.
   if (!entryType || !slug) {
@@ -39,11 +49,8 @@ const __dirname = path.dirname(__filename);
     process.exit(1);
   }
 
-  const prefixNameSpace = promptForNamespace(hasEnqueue);
-
   if (!(await directoryExists(ENTRIES_DIR))) {
     await fs.promises.mkdir(ENTRIES_DIR);
-    console.log(`Directory '${ENTRIES_DIR}' created successfully!`);
   }
 
   // Navigate to the directory to create the entry point.
@@ -56,7 +63,7 @@ const __dirname = path.dirname(__filename);
     }
 
     const templateFiles = await glob('*.mustache', {
-      cwd: path.join(__dirname, `templates/${entryType}`),
+      cwd: path.join(TEMPLATE_PATH, entryType),
       dot: true,
     });
 
@@ -68,10 +75,14 @@ const __dirname = path.dirname(__filename);
     // create the directory for the entry point.
     await fs.promises.mkdir(slug);
 
+    const prefixNameSpace = await getNameSpace(hasEnqueue);
+
+    const textdomain = getTextDomain();
+
     // Loop through the template files and render them with the provided data.
     await Promise.all(templateFiles.map(async (inputFile: string) => {
       const fileContents = await fs.promises.readFile(
-        path.join(__dirname, `templates/${entryType}/${inputFile}`),
+        path.join(TEMPLATE_PATH, `${entryType}/${inputFile}`),
         'utf8',
       );
 
@@ -81,7 +92,9 @@ const __dirname = path.dirname(__filename);
         hasStyles,
         hasEnqueue,
         prefixNameSpace,
-        slugUnderscore: toUnderscore(slug),
+        nameSpaceSnakeCase: toSnakeCase(prefixNameSpace),
+        slugUnderscore: toSnakeCase(slug),
+        textdomain,
       }, { slug });
 
       if (render) {

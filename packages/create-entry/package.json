@@ -1,6 +1,6 @@
 {
   "author": "Alley <info@alley.com> (https://alley.com)",
-  "description": "Alley's script for scaffolding entry points for projects that use @wordpress/scripts",
+  "description": "Alley's script for scaffolding code for entry points in projects that use @wordpress/scripts",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/create-entry",
   "version": "0.0.1",
@@ -23,14 +23,19 @@
     "typescript": "^5.0.4"
   },
   "files": [
-    "index.js",
+    "dist",
     "LICENSE",
     "README.md",
     "templates"
   ],
+	"bin": {
+		"create-entry": "./dist/index.js"
+	},
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint .",
+    "prepublish": "npm run build"
   },
   "type": "module"
 }

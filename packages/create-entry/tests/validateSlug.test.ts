@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import validateSlug from '../src/validateSlug';
+ // @ts-ignore
+import { validateSlug } from '../src/validation.ts';
 
 describe('validateSlug', () => {
   test('should return true for a valid slug', () => {

@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import formatSlug from '../src/formatSlug';
+ // @ts-ignore
+import { formatSlug } from '../src/formatting.ts';
 
 describe('formatSlug', () => {
   test('should format string to lowercase with hyphens', () => {

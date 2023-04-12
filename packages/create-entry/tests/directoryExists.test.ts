@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { describe, expect, it } from '@jest/globals';
-import directoryExists  from '../src/directoryExists';
+ // @ts-ignore
+import directoryExists from '../src/directoryExists.ts';
 
 describe('directoryExists', () => {
   it('should return true if directory exists', async () => {
