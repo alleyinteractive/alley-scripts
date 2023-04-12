@@ -37,8 +37,16 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "lint": "eslint .",
+    "lint": "eslint index.ts src",
     "prepublish": "npm run build"
   },
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme"
 }
