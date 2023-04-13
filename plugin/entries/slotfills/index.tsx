@@ -16,6 +16,7 @@ import {
   CSVUploader,
   ImagePicker,
   MediaPicker,
+  PostPicker,
   PostSelector,
   TermSelector,
   usePostMeta,
@@ -83,6 +84,11 @@ registerPlugin('alley-scripts-plugin-sidebar', {
               // @ts-ignore Handle error with PostSelector not working in Typescript */}
             <PostSelector
               multiple={false}
+              onSelect={(value: any) => console.log('PostSelector onSelect', value)} // eslint-disable-line no-console
+            />
+          </PanelBody>
+          <PanelBody initialOpen title={__('Post Picker', 'alley-scripts')}>
+            <PostPicker
               onSelect={(value: any) => console.log('PostSelector onSelect', value)} // eslint-disable-line no-console
             />
           </PanelBody>
