@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import apiFetch from '@wordpress/api-fetch';
@@ -11,6 +11,8 @@ import {
 import { __, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 import type { WP_REST_API_Search_Results } from 'wp-types';
+
+import { usePostById } from '../../hooks';
 
 import MediaModal from './media-modal';
 
@@ -54,6 +56,7 @@ const PostPicker = ({
 }: PostPickerProps) => {
   const [showModal, setShowModal] = useState(false);
   const [post, setPost] = useState<Post | null>(null);
+  const [postSubtype, setPostSubtype] = useState<string | null>(null);
 
   const baseUrl = addQueryArgs(
     endPoint,
@@ -63,14 +66,9 @@ const PostPicker = ({
     },
   );
 
-  // Get the post object, if given the post ID.
-  const path = addQueryArgs(endPoint, { include: value });
-  apiFetch({ path }).then((result) => {
-    const posts = result as any as WP_REST_API_Search_Results;
-    if (posts.length > 0) {
-      setPost(posts[0] as Post);
-    }
-  });
+  const fullPost = usePostById(value) as any as Post;
+  console.log('fullPost', fullPost);
+  setPost(fullPost);
 
   // getEntityRecord returns `null` if the load is in progress.
   if (value !== 0 && post === null) {
