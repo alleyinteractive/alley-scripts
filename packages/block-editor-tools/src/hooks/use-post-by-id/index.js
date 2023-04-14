@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useSelect } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
@@ -10,17 +11,18 @@ import usePost from '../use-post';
  *                   and the returned post object.
  */
 const usePostById = (postId) => {
-  let postType = 'post';
-  // const path = addQueryArgs('/wp/v2/search', { include: postId });
-  // apiFetch({ path }).then((result) => {
-  //   if (result.length > 0) {
-  //     postType = result[0].subtype;
-  //   }
-  //   return null;
-  // });
-  console.log('postType', postType);
-  console.log('postId', postId);
-  return usePost(postId, postType);
+  const [post, setPost] = useState(null);
+  useEffect(() => {
+    if (!postId) {
+      return;
+    }
+    (async () => {
+      const path = addQueryArgs('/wp/v2/search', { include: postId });
+      const newPost = await apiFetch({ path });
+      setPost(newPost);
+    })();
+  }, [postId]);
+  return post;
 };
 
 export default usePostById;
