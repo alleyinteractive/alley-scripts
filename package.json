@@ -46,5 +46,10 @@
     "react-dom": "^18.2.0",
     "storybook": "^7.0.2",
     "turbo": "^1.8.8"
+  },
+  "dependencies": {
+    "classnames": "^2.3.2",
+    "ts-loader": "^9.4.2",
+    "wp-types": "^3.62.3"
   }
 }

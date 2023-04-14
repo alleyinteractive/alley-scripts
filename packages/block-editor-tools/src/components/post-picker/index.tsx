@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -7,12 +7,15 @@ import {
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+import { addQueryArgs } from '@wordpress/url';
+import MediaModal from './media-modal';
 
 interface PostPickerProps {
-  allowedTypes: string[];
-  className: string;
-  icon: string;
-  onReset: () => void;
+  allowedTypes?: string[];
+  className?: string;
+  endPoint?: string;
+  // icon: string;
+  onReset?: () => void;
   onUpdate: (id: number) => void;
   value: number;
 }
@@ -26,17 +29,28 @@ const Container = styled.div`
 const PostPicker = ({
   allowedTypes,
   className,
-  icon,
+  endPoint = '/wp/v2/search',
+  // icon,
   onReset,
   onUpdate,
-  value,
+  value = 0,
 }: PostPickerProps) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const baseUrl = addQueryArgs(
+    endPoint,
+    {
+      type: 'post',
+      subtype: allowedTypes,
+    },
+  );
+
   // Get the post object, if given the post ID.
   const {
     post = null,
   } = useSelect((select) => ({
     // @ts-ignore
-    post: value ? select('core').getEntityRecord(value) : null,
+    post: value ? select('core').getEntityRecord('postType', 'post', value) : null,
   }), [value]);
 
   // getEntityRecord returns `null` if the load is in progress.
@@ -46,15 +60,21 @@ const PostPicker = ({
     );
   }
 
-  const controls = () => {
-    return (
-      <Button
-        variant="primary"
-        onClick={onReset}
-      >
-        {__('Replace', 'alley-scripts')}
-      </Button>
-    );
+  const controls = () => (
+    <Button
+      variant="primary"
+      onClick={onReset}
+    >
+      {__('Replace', 'alley-scripts')}
+    </Button>
+  );
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   if (value) {
@@ -67,24 +87,34 @@ const PostPicker = ({
 
   return (
     <Container className={className}>
-      test
+      {value ? (
+        <>
+          <p>preview or custom preview</p>
+          <Button
+            variant="secondary"
+            onClick={onReset}
+          >
+            {__('Replace', 'alley-scripts')}
+          </Button>
+        </>
+      ) : (
+        <Button
+          onClick={openModal}
+          variant="secondary"
+        >
+          {__('Select', 'alley-scripts')}
+        </Button>
+      )}
+      {showModal ? (
+        <MediaModal
+          closeModal={closeModal}
+          baseUrl={baseUrl}
+          onUpdate={onUpdate}
+          // value={value}
+        />
+      ) : null}
     </Container>
   );
-};
-
-PostPicker.defaultProps = {
-  allowedTypes: [],
-  className: '',
-  icon: 'format-aside',
-};
-
-PostPicker.propTypes = {
-  allowedTypes: PropTypes.arrayOf(PropTypes.string),
-  className: PropTypes.string,
-  icon: PropTypes.string,
-  onReset: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  value: PropTypes.number.isRequired,
 };
 
 export default PostPicker;
