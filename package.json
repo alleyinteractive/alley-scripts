@@ -48,6 +48,7 @@
     "turbo": "^1.8.8"
   },
   "dependencies": {
+    "@wordpress/element": "^5.8.0",
     "classnames": "^2.3.2",
     "ts-loader": "^9.4.2",
     "wp-types": "^3.62.3"

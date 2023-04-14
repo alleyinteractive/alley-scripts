@@ -1,8 +1,6 @@
 /* eslint-disable react/jsx-no-bind */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
-import apiFetch from '@wordpress/api-fetch';
 
 import {
   Button,
@@ -10,19 +8,21 @@ import {
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
-import type { WP_REST_API_Search_Results } from 'wp-types';
+import type { WP_REST_API_Post, WP_REST_API_Attachment } from 'wp-types';
 
-import { usePostById } from '../../hooks';
+import { useMedia, usePostById } from '../../hooks';
 
 import MediaModal from './media-modal';
 
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
-  endPoint?: string;
-  // icon: string;
+  getPost?: (id: number) => object | WP_REST_API_Post;
   onReset?: () => void;
   onUpdate: (id: number) => void;
+  params?: object;
+  previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
+  searchRender?: (post: object) => JSX.Element;
   value: number;
 }
 
@@ -34,41 +34,53 @@ const Container = styled.div`
 
 const Preview = styled.div`
   border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
   margin: 5px 0;
   padding: 0.5rem 0.75rem;
   text-align: center;
 `;
 
-interface Post {
-  id: number;
-  title: string;
-  subtype: string;
-}
-
 const PostPicker = ({
   allowedTypes,
   className,
-  endPoint = '/wp/v2/search',
-  // icon,
+  getPost,
   onReset,
   onUpdate,
+  params = {},
+  previewRender,
+  searchRender,
   value = 0,
 }: PostPickerProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [post, setPost] = useState<Post | null>(null);
-  const [postSubtype, setPostSubtype] = useState<string | null>(null);
 
+  const endPoint = '/wp/v2/search';
   const baseUrl = addQueryArgs(
     endPoint,
     {
       type: 'post',
       subtype: allowedTypes,
+      ...params,
     },
   );
 
-  const fullPost = usePostById(value) as any as Post;
-  console.log('fullPost', fullPost);
-  setPost(fullPost);
+  // Note: 'usePostById' is a hook, so it can't be called conditionally.
+  let post = usePostById(value) as any as WP_REST_API_Post;
+  if (getPost !== undefined) {
+    post = getPost(value) as any as WP_REST_API_Post;
+  }
+
+  const {
+    featured_media: featuredMediaId,
+    title: {
+      rendered: title = '',
+    } = {},
+    type = '',
+  } = post || {};
+
+  const media = useMedia(featuredMediaId) as any as WP_REST_API_Attachment;
+
+  const postImage = media ? media.source_url : '';
 
   // getEntityRecord returns `null` if the load is in progress.
   if (value !== 0 && post === null) {
@@ -81,7 +93,6 @@ const PostPicker = ({
     if (onReset !== undefined) {
       onReset();
     }
-    setPost(null);
   };
 
   const controls = () => (
@@ -105,15 +116,22 @@ const PostPicker = ({
     <Container className={className}>
       {value !== 0 && post !== null ? (
         <>
-          <Preview>
-            <strong>
-              {post.title}
-            </strong>
-            {sprintf(
-              ' (%s)',
-              post.subtype,
-            )}
-          </Preview>
+          {previewRender !== undefined ? (
+            previewRender(post)
+          ) : (
+            <Preview>
+              {postImage ? (
+                <img src={postImage} alt="{title}" />
+              ) : null}
+              <strong>
+                {title}
+              </strong>
+              {sprintf(
+                ' (%s)',
+                type,
+              )}
+            </Preview>
+          )}
           {controls()}
         </>
       ) : (
@@ -129,7 +147,7 @@ const PostPicker = ({
           closeModal={closeModal}
           baseUrl={baseUrl}
           onUpdate={onUpdate}
-          // value={value}
+          searchRender={searchRender}
         />
       ) : null}
     </Container>

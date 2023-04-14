@@ -16,12 +16,14 @@ interface MediaModalProps {
   baseUrl: string;
   closeModal: () => void;
   onUpdate: (id: number) => void;
+  searchRender?: (post: object) => JSX.Element;
 }
 
 const MediaModal = ({
   baseUrl,
   closeModal,
   onUpdate,
+  searchRender,
 }: MediaModalProps) => {
   const [selected, setSelected] = useState<string | number>();
 
@@ -44,6 +46,7 @@ const MediaModal = ({
         baseUrl={baseUrl}
         selected={selected}
         setSelected={setSelected}
+        searchRender={searchRender}
       />
       <div className="alley-scripts-post-picker__buttons">
         <Button

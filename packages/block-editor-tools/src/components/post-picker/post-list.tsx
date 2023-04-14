@@ -11,6 +11,7 @@ import './post-list.scss';
 
 interface PostListProps {
   baseUrl: string;
+  searchRender?: (post: object) => JSX.Element;
   selected?: string | number;
   setSelected: (id: string | number) => void;
 }
@@ -27,6 +28,7 @@ interface Params {
  */
 const PostList = ({
   baseUrl,
+  searchRender,
   selected,
   setSelected,
 }: PostListProps) => {
@@ -166,15 +168,19 @@ const PostList = ({
               })}
               onClick={() => setSelected(t.id)}
             >
-              <div>
-                <strong>
-                  {t.title}
-                </strong>
-                {sprintf(
-                  ' (%s)',
-                  t.subtype,
-                )}
-              </div>
+              {searchRender ? (
+                searchRender(t)
+              ) : (
+                <div>
+                  <strong>
+                    {t.title}
+                  </strong>
+                  {sprintf(
+                    ' (%s)',
+                    t.subtype,
+                  )}
+                </div>
+              )}
             </Button>
           ))
         ) : null}
