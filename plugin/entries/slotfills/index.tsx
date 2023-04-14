@@ -90,8 +90,8 @@ registerPlugin('alley-scripts-plugin-sidebar', {
           </PanelBody>
           <PanelBody initialOpen title={__('Post Picker', 'alley-scripts')}>
             <PostPicker
-              onUpdate={(value: any) => console.log('PostSelector onSelect', value)} // eslint-disable-line no-console
               onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_id: id })}
+              onReset={() => setMeta({ alley_scripts_post_picker_id: 0 })}
               value={postId}
             />
           </PanelBody>

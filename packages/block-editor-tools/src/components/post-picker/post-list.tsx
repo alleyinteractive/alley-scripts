@@ -4,7 +4,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, Spinner } from '@wordpress/components';
-import classNames from 'classnames'
+import classNames from 'classnames';
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
 import './post-list.scss';
@@ -145,7 +145,6 @@ const PostList = ({
     };
   }, [getPosts, initialLoad, pathParams]);
 
-  console.log('totalPages', totalPages);
   return (
     <>
       <input
