@@ -23,6 +23,7 @@ interface PostPickerProps {
   params?: object;
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
   searchRender?: (post: object) => JSX.Element;
+  title?: string;
   value: number;
 }
 
@@ -50,6 +51,7 @@ const PostPicker = ({
   params = {},
   previewRender,
   searchRender,
+  title: pickerTitle = '',
   value = 0,
 }: PostPickerProps) => {
   const [showModal, setShowModal] = useState(false);
@@ -114,6 +116,11 @@ const PostPicker = ({
 
   return (
     <Container className={className}>
+      {pickerTitle ? (
+        <h4>
+          {pickerTitle}
+        </h4>
+      ) : null}
       {value !== 0 && post !== null ? (
         <>
           {previewRender !== undefined ? (
