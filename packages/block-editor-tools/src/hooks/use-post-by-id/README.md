@@ -1,4 +1,4 @@
-# Custom Hooks: usePost
+# Custom Hooks: usePostById
 
 A custom React hook to retrieve post data given only a post ID.
 If you have the post type, use `usePost`
