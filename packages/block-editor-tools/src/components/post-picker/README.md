@@ -23,8 +23,8 @@ results, and a custom function for fetching post data given a post ID.
 
 | Prop           | Default        | Required | Type     | Description                                                                                                     |
 |----------------|----------------|----------|----------|-----------------------------------------------------------------------------------------------------------------|
-| allowedTypes   | []             | No       | array    | Array with the post types to select from. Defaults to empty array (all types). |
-| className      | ''             | No       | string   | Class name for the post picker container.                                                                      |
+| allowedTypes   | `[]`         | No       | array    | Array with the post types to select from. Defaults to empty array (all types). |
+| className      | `''`           | No       | string   | Class name for the post picker container.                                                                      |
 | getPost        |                | No       | function | Function to retrieve the post data for a post ID. Defaults to using getPostById. |
 | onReset        |                | Yes      | function | Function to reset the post ID to 0.                          |
 | onUpdate       |                | Yes      | function | Function to set the post ID on post selection.                                               |
