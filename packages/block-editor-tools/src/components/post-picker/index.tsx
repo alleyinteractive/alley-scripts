@@ -22,6 +22,7 @@ interface PostPickerProps {
   onUpdate: (id: number) => void;
   params?: object;
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
+  searchEndpoint?: string;
   searchRender?: (post: object) => JSX.Element;
   title?: string;
   value: number;
@@ -50,15 +51,15 @@ const PostPicker = ({
   onUpdate,
   params = {},
   previewRender,
+  searchEndpoint = '/wp/v2/search',
   searchRender,
   title: pickerTitle = '',
   value = 0,
 }: PostPickerProps) => {
   const [showModal, setShowModal] = useState(false);
-
-  const endPoint = '/wp/v2/search';
+  console.log('searchEndpoint', searchEndpoint);
   const baseUrl = addQueryArgs(
-    endPoint,
+    searchEndpoint,
     {
       type: 'post',
       subtype: allowedTypes,
