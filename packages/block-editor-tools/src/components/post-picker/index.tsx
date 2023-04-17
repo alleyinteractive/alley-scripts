@@ -62,7 +62,7 @@ const PostPicker = ({
     searchEndpoint,
     {
       type: 'post',
-      subtype: allowedTypes,
+      subtype: allowedTypes ?? 'any',
       ...params,
     },
   );
