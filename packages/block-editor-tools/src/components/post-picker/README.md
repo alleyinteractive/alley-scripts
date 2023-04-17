@@ -30,7 +30,7 @@ results, and a custom function for fetching post data given a post ID.
 | onUpdate       |                | Yes      | function | Function to set the post ID on post selection.                                               |
 | params         | `{}`           | No       | object   | Optional key value pairs to append to the search request. Ex: `{ per_page: 20 }`.                     |
 | previewRender  |                | No       | function | Optional component to render the preview of the selected post. Must recieve an object similar to what is returned from the `/wp/v2/posts/<ID>` endpoint. |
-| searchEndpoint | `/vp/v2/search` | No | Optional search endpoint. |
+| searchEndpoint | `/wp/v2/search` | No | string | Optional search endpoint. |
 | searchRender   |                | No       | function | Optional component to render the preview of posts in the modal window. Must recieve an object similar to what is returned from the `/wp/v2/search` endpoint. |
 | title          |                | No       | string   | Optional title for the component. |
 | value          |                | Yes      | integer  | The ID of the selected post. 0 represents no selection.                                                   |
