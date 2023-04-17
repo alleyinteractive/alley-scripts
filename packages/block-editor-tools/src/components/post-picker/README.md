@@ -28,7 +28,7 @@ results, and a custom function for fetching post data given a post ID.
 | getPost        |                | No       | function | Function to retrieve the post data for a post ID. Defaults to using getPostById. |
 | onReset        |                | Yes      | function | Function to reset the post ID to 0.                          |
 | onUpdate       |                | Yes      | function | Function to set the post ID on post selection.                                               |
-| params         |                | No       | object   | Optional key value pairs to append to the search request. Ex: `{ per_page: 20 }`.                     |
+| params         | `{}`           | No       | object   | Optional key value pairs to append to the search request. Ex: `{ per_page: 20 }`.                     |
 | previewRender  |                | No       | function | Optional component to render the preview of the selected post. Must recieve an object similar to what is returned from the `/wp/v2/posts/<ID>` endpoint. |
 | searchEndpoint | `/vp/v2/search` | No | Optional search endpoint. |
 | searchRender   |                | No       | function | Optional component to render the preview of posts in the modal window. Must recieve an object similar to what is returned from the `/wp/v2/search` endpoint. |
