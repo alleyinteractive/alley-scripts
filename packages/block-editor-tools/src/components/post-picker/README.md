@@ -1,6 +1,6 @@
 # PostPicker
 
-Allows for a simple post upload/replace/remove feature for post for blocks.
+Allows for a simple post select/replace/remove feature, similar to selecting an item from the media library.
 
 ## Usage
 
