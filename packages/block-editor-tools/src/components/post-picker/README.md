@@ -14,9 +14,6 @@ Allows for a simple post select/replace/remove feature, similar to selecting an 
 />
 ```
 
-The value of `postId` is the ID of the post element, and is destructured from
-`props.attributes`.
-
 There are additional options for the PostPicker that can be configured via the
 props listed below. For example, the PostPicker also supports URL entry as well
 as custom preview components, which is useful when you want to render an image
