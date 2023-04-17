@@ -57,7 +57,7 @@ const PostPicker = ({
   value = 0,
 }: PostPickerProps) => {
   const [showModal, setShowModal] = useState(false);
-  console.log('searchEndpoint', searchEndpoint);
+
   const baseUrl = addQueryArgs(
     searchEndpoint,
     {
