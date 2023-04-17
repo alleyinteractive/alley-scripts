@@ -12,8 +12,8 @@ import './post-list.scss';
 interface PostListProps {
   baseUrl: string;
   searchRender?: (post: object) => JSX.Element;
-  selected?: string | number;
-  setSelected: (id: string | number) => void;
+  selected?: number;
+  setSelected: (id: number) => void;
 }
 
 interface Params {
