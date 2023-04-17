@@ -15,9 +15,9 @@ Allows for a simple post select/replace/remove feature, similar to selecting an 
 ```
 
 There are additional options for the PostPicker that can be configured via the
-props listed below. For example, the PostPicker also supports URL entry as well
-as custom preview components, which is useful when you want to render an image
-or an embed instead of just a text link to the selected asset.
+props listed below. For example, the PostPicker also supports customizing the arguments
+sent to the search endpoint, a custom renderer for previews, a custom renderer for search
+results, and a custom function for fetching post data given a post ID.
 
 ## Props
 
