@@ -166,7 +166,7 @@ const PostList = ({
                 'alley-scripts-post-picker__post': true,
                 'is-selected': t.id === selected,
               })}
-              onClick={() => setSelected(t.id)}
+              onClick={() => setSelected(parseInt(t.id, 10))}
             >
               {searchRender ? (
                 searchRender(t)
