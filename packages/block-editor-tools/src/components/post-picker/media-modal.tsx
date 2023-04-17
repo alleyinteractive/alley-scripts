@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// import apiFetch from '@wordpress/api-fetch';
 import {
   Button,
   Modal,
