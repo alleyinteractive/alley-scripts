@@ -16,36 +16,28 @@ const usePostById = (postId, getPost = null) => {
   const [resultCache, setResultCache] = useState({});
 
   useEffect(() => {
-    if (resultCache[postId]) {
-      return;
+    if (postId && !resultCache[postId]) {
+      (async () => {
+        if (getPost) {
+          const result = await getPost(postId);
+          if (!result) {
+            console.error(`Custom function to get post with ID ${postId} failed.`);
+          } else if (!result.subtype) {
+            console.error(`Custom function for getting post with ID ${postId} did not include required subtype property.`);
+          } else {
+            setPostTypeCache((prev) => ({ ...prev, [postId]: result.subtype }));
+          }
+        } else {
+          const path = addQueryArgs('/wp/v2/search', { include: postId });
+          const newPost = await apiFetch({ path });
+          // TODO: What if the lookup fails? Should handle error state in some way.
+          setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0].subtype }));
+        }
+      })();
     }
-
-    if (!postId) {
-      return;
-    }
-    if (postTypeCache[postId]) {
-      return;
-    }
-    (async () => {
-      const path = addQueryArgs('/wp/v2/search', { include: postId });
-      const newPost = await apiFetch({ path });
-      setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0].subtype }));
-    })();
-  }, [postId, postTypeCache, resultCache]);
-  if (resultCache[postId]) {
-    console.log('using cache');
-    return resultCache[postId];
-  }
-
-  const postType = postTypeCache[postId];
-  let result = {};
-  if (getPost) {
-    result = getPost(postId);
-  }
-
-  result = usePost(postId, postType) ?? null; // eslint-disable-line react-hooks/rules-of-hooks
-  setResultCache((prev) => ({ ...prev, [postId]: result }));
-  return result;
+  }, [postId]); // TODO: Add eslint-ignore here, we only want this to fire when the post ID changes, the other deps are objects and can result in a render loop when they update
+  // TODO: See what happens if you pass usePost an empty post type. Does getEntityRecord fail gracefully? Does it result in a REST API request? If it's smart and bails early, great. If not, modify usePost to bail early if post type is empty. That way the hook can be consistently called even if we don't know the post type yet.
+  return usePost(postId, postTypeCache[postId] ?? '')
 };
 
 export default usePostById;
