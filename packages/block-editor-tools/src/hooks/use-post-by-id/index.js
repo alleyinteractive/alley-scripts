@@ -13,16 +13,17 @@ import usePost from '../use-post';
  */
 const usePostById = (postId, getPost = null) => {
   const [postTypeCache, setPostTypeCache] = useState({});
-  const [resultCache, setResultCache] = useState({});
 
   useEffect(() => {
-    if (postId && !resultCache[postId]) {
+    if (postId && !postTypeCache[postId]) {
       (async () => {
         if (getPost) {
           const result = await getPost(postId);
           if (!result) {
+            // eslint-disable-next-line no-console
             console.error(`Custom function to get post with ID ${postId} failed.`);
           } else if (!result.subtype) {
+            // eslint-disable-next-line no-console
             console.error(`Custom function for getting post with ID ${postId} did not include required subtype property.`);
           } else {
             setPostTypeCache((prev) => ({ ...prev, [postId]: result.subtype }));
@@ -35,9 +36,9 @@ const usePostById = (postId, getPost = null) => {
         }
       })();
     }
-  }, [postId]); // TODO: Add eslint-ignore here, we only want this to fire when the post ID changes, the other deps are objects and can result in a render loop when they update
-  // TODO: See what happens if you pass usePost an empty post type. Does getEntityRecord fail gracefully? Does it result in a REST API request? If it's smart and bails early, great. If not, modify usePost to bail early if post type is empty. That way the hook can be consistently called even if we don't know the post type yet.
-  return usePost(postId, postTypeCache[postId] ?? '')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postId]);
+  return usePost(postId, postTypeCache[postId] ?? '');
 };
 
 export default usePostById;

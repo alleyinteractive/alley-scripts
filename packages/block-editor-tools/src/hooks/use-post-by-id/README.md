@@ -16,3 +16,20 @@ const MyBlock = ({
   }
 };
 ```
+
+You can also pass a function to lookup the post type when passed the post id.
+```jsx
+const MyBlock = ({
+	postID,
+}) => {
+  const myCustomPostTypeLookup = (id) => (
+    myCustomPostTypeMap[id]
+  );
+
+  const post = usePostById(postID, myCustomPostTypeLookup);
+
+  if (post) {
+    ...
+  }
+};
+```
