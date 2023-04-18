@@ -1,9 +1,8 @@
-/* eslint-disable react/jsx-no-bind */
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __, sprintf } from '@wordpress/i18n';
-import { Button, Spinner } from '@wordpress/components';
+import { Button, TextControl, Spinner } from '@wordpress/components';
 import classNames from 'classnames';
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
@@ -48,7 +47,7 @@ const PostList = ({
    * @param {bool} cancelled Whether the useEffect has been cancelled.
    * @param {bool} overrideCache Whether we should override the cache.
    */
-  const getPosts = useCallback((params: Params, cancelled: Boolean = false) => {
+  const getPosts = useCallback(async (params: Params, cancelled: Boolean = false) => {
     /**
      * Gets the api path.
      *
@@ -77,48 +76,46 @@ const PostList = ({
     }
     const path = getPath();
     setIsUpdating(true);
-    apiFetch({ path, parse: false }).then((response) => {
-      setTotalPages(parseInt(
-        // @ts-ignore
-        response.headers.get('X-WP-TotalPages'),
-        10,
-      ));
+    const response = await apiFetch({ path, parse: false });
+    setTotalPages(parseInt(
       // @ts-ignore
-      return response.json();
-    }).then((result) => {
-      let posts = result as any as WP_REST_API_Search_Results;
-      if (params.page > 1) {
-        posts = [
-          ...listposts,
-          ...result as any as WP_REST_API_Search_Results,
-        ];
-      }
-      if (cancelled) {
-        return;
-      }
-      // @ts-ignore
-      setListposts(posts as any as WP_REST_API_Search_Results);
-      setIsUpdating(false);
-    });
+      response.headers.get('X-WP-TotalPages'),
+      10,
+    ));
+    // @ts-ignore
+    const result = response.json();
+    let posts = result as any as WP_REST_API_Search_Results;
+    if (params.page > 1) {
+      posts = [
+        ...listposts,
+        ...result as any as WP_REST_API_Search_Results,
+      ];
+    }
+    if (cancelled) {
+      return;
+    }
+    // @ts-ignore
+    setListposts(posts as any as WP_REST_API_Search_Results);
+    setIsUpdating(false);
   }, [listposts, baseUrl]);
 
   /**
    * Loads more posts.
    */
-  function loadMore() {
+  const loadMore = () => {
     const newParams = {
       ...pathParams,
       page: pathParams.page + 1,
     };
     setPathParams(newParams);
     getPosts(newParams);
-  }
+  };
 
   /**
    * Handles a change to the search text string.
    * @param {event} event - The event from typing in the text box.
    */
-  function handleSearchTextChange(event: Event) {
+  const handleSearchTextChange = (event: Event) => {
     const {
       target: {
         // @ts-ignore
@@ -133,7 +130,7 @@ const PostList = ({
     };
     setPathParams(newParams);
     getPosts(newParams);
-  }
+  };
 
   // Load posts on page load.
   useEffect(() => {
@@ -149,8 +146,7 @@ const PostList = ({
 
   return (
     <>
-      <input
-        type="text"
+      <TextControl
         value={pathParams.searchValue}
         placeholder={__('Search...', 'alley-scripts')}
         label={__('Search', 'alley-scripts')}
@@ -166,7 +162,7 @@ const PostList = ({
                 'alley-scripts-post-picker__post': true,
                 'is-selected': t.id === selected,
               })}
-              onClick={() => setSelected(parseInt(t.id, 10))}
+              onClick={() => setSelected(t.id as number)}
             >
               {searchRender ? (
                 searchRender(t)

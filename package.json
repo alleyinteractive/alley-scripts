@@ -1,7 +1,7 @@
 {
   "name": "@alleyinteractive/alley-scripts",
   "description": "Shared packages from Alley Interactive.",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "engines": {
@@ -40,17 +40,11 @@
     "@storybook/react": "^7.0.2",
     "@storybook/react-vite": "^7.0.2",
     "@storybook/testing-library": "^0.1.0",
-    "@types/styled-components": "^5.1.26",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.0.2",
     "turbo": "^1.8.8"
   },
-  "dependencies": {
-    "@wordpress/element": "^5.8.0",
-    "classnames": "^2.3.2",
-    "ts-loader": "^9.4.2",
-    "wp-types": "^3.62.3"
-  }
+  "peerDependencies": {}
 }

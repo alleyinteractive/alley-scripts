@@ -48,7 +48,7 @@ const MyComponent = () => {
 
 ## Changelog
 
-### 0.1.1
+### 0.3.0
 
 - Addition of `<PostPicker>` component.
 - Addition of `usePostById` hook.

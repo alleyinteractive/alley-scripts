@@ -2,7 +2,7 @@
 
 All notable changes to the Alley Scripts monorepo will be documented in this file.
 
-## v0.2.1 -- @alleyinteractive/block-editor-tools
+## v0.3.0 -- @alleyinteractive/block-editor-tools
 
 - added `<PostPicker>` component and `usePostById` hook.
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from '@wordpress/element';
 
 import {
   Button,
@@ -7,23 +7,23 @@ import {
 
 import { __ } from '@wordpress/i18n';
 
-import './media-modal.scss';
+import './search-modal.scss';
 import PostList from './post-list';
 
-interface MediaModalProps {
+interface SearchModalProps {
   baseUrl: string;
   closeModal: () => void;
   onUpdate: (id: number) => void;
   searchRender?: (post: object) => JSX.Element;
 }
 
-const MediaModal = ({
+const SearchModal = ({
   baseUrl,
   closeModal,
   onUpdate,
   searchRender,
-}: MediaModalProps) => {
-  const [selected, setSelected] = useState<string | number>();
+}: SearchModalProps) => {
+  const [selected, setSelected] = useState<number>();
 
   const doSelect = () => {
     if (!selected) {
@@ -42,7 +42,7 @@ const MediaModal = ({
     >
       <PostList
         baseUrl={baseUrl}
-        selected={selected}
+        selected={selected ?? 0}
         setSelected={setSelected}
         searchRender={searchRender}
       />
@@ -51,18 +51,18 @@ const MediaModal = ({
           variant="secondary"
           onClick={closeModal}
         >
-          {__('Cancel', 'alley-careers')}
+          {__('Cancel', 'alley-scripts')}
         </Button>
         <Button
           variant="primary"
           onClick={doSelect}
           disabled={!selected}
         >
-          {__('Select', 'alley-careers')}
+          {__('Select', 'alley-scripts')}
         </Button>
       </div>
     </Modal>
   );
 };
 
-export default MediaModal;
+export default SearchModal;

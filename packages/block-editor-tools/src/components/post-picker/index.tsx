@@ -1,5 +1,4 @@
-/* eslint-disable react/jsx-no-bind */
-import React, { useState } from 'react';
+import { useState } from '@wordpress/element';
 import styled from 'styled-components';
 
 import {
@@ -12,13 +11,13 @@ import type { WP_REST_API_Post, WP_REST_API_Attachment } from 'wp-types';
 
 import { useMedia, usePostById } from '../../hooks';
 
-import MediaModal from './media-modal';
+import SearchModal from './search-modal';
 
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
   getPost?: (id: number) => object | WP_REST_API_Post;
-  onReset?: () => void;
+  onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
@@ -85,23 +84,10 @@ const PostPicker = ({
 
   const postImage = media ? media.source_url : '';
 
-  // getEntityRecord returns `null` if the load is in progress.
-  if (value !== 0 && post === null) {
-    return (
-      <Spinner />
-    );
-  }
-
-  const doReset = () => {
-    if (onReset !== undefined) {
-      onReset();
-    }
-  };
-
   const controls = () => (
     <Button
       variant="primary"
-      onClick={doReset}
+      onClick={onReset}
     >
       {__('Replace', 'alley-scripts')}
     </Button>
@@ -114,6 +100,13 @@ const PostPicker = ({
   const closeModal = () => {
     setShowModal(false);
   };
+
+  // getEntityRecord returns `null` if the load is in progress.
+  if (value !== 0 && post === null) {
+    return (
+      <Spinner />
+    );
+  }
 
   return (
     <Container className={className}>
@@ -129,7 +122,7 @@ const PostPicker = ({
           ) : (
             <Preview>
               {postImage ? (
-                <img src={postImage} alt="{title}" />
+                <img src={postImage} alt="" />
               ) : null}
               <strong>
                 {title}
@@ -151,7 +144,7 @@ const PostPicker = ({
         </Button>
       )}
       {showModal ? (
-        <MediaModal
+        <SearchModal
           closeModal={closeModal}
           baseUrl={baseUrl}
           onUpdate={onUpdate}
