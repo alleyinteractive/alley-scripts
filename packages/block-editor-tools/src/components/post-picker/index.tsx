@@ -66,11 +66,8 @@ const PostPicker = ({
     },
   );
 
-  // Note: 'usePostById' is a hook, so it can't be called conditionally.
-  let post = usePostById(value) as any as WP_REST_API_Post;
-  if (getPost !== undefined) {
-    post = getPost(value) as any as WP_REST_API_Post;
-  }
+  // @ts-ignore
+  const post = usePostById(value, getPost) as any as WP_REST_API_Post;
 
   const {
     featured_media: featuredMediaId,

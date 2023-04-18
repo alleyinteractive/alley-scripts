@@ -7,13 +7,19 @@ import usePost from '../use-post';
  * looked up from the search endpoint, cached, and then passed to usePost.
  *
  * @param int    postId   The ID for the post to return.
+ * @param function getPost Optional custom function that returns a post object.
  * @returns {object} An object containing a hasResolved property
  *                   and the returned post object.
  */
-const usePostById = (postId) => {
+const usePostById = (postId, getPost = null) => {
   const [postTypeCache, setPostTypeCache] = useState({});
+  const [resultCache, setResultCache] = useState({});
 
   useEffect(() => {
+    if (resultCache[postId]) {
+      return;
+    }
+
     if (!postId) {
       return;
     }
@@ -25,9 +31,21 @@ const usePostById = (postId) => {
       const newPost = await apiFetch({ path });
       setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0].subtype }));
     })();
-  }, [postId, postTypeCache]);
+  }, [postId, postTypeCache, resultCache]);
+  if (resultCache[postId]) {
+    console.log('using cache');
+    return resultCache[postId];
+  }
+
   const postType = postTypeCache[postId];
-  return usePost(postId, postType) ?? null;
+  let result = {};
+  if (getPost) {
+    result = getPost(postId);
+  }
+
+  result = usePost(postId, postType) ?? null; // eslint-disable-line react-hooks/rules-of-hooks
+  setResultCache((prev) => ({ ...prev, [postId]: result }));
+  return result;
 };
 
 export default usePostById;
