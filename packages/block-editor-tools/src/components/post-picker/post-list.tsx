@@ -83,7 +83,7 @@ const PostList = ({
       10,
     ));
     // @ts-ignore
-    const result = response.json();
+    const result = await response.json();
     let posts = result as any as WP_REST_API_Search_Results;
     if (params.page > 1) {
       posts = [
@@ -115,14 +115,7 @@ const PostList = ({
    * Handles a change to the search text string.
    * @param {event} event - The event from typing in the text box.
    */
-  const handleSearchTextChange = (event: Event) => {
-    const {
-      target: {
-        // @ts-ignore
-        value = '',
-      } = {},
-    } = event;
-
+  const handleSearchTextChange = (value: string) => {
     const newParams = {
       ...pathParams,
       searchValue: value,
