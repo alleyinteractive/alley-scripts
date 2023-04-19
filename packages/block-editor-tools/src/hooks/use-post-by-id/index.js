@@ -7,18 +7,19 @@ import usePost from '../use-post';
  * looked up from the search endpoint, cached, and then passed to usePost.
  *
  * @param int    postId   The ID for the post to return.
- * @param function getPost Optional custom function that returns a post object.
+ * @param function getPostType Optional custom function that returns a post object.
+ *                             This object must contain a subtype property.
  * @returns {object} An object containing a hasResolved property
  *                   and the returned post object.
  */
-const usePostById = (postId, getPost = null) => {
+const usePostById = (postId, getPostType = null) => {
   const [postTypeCache, setPostTypeCache] = useState({});
 
   useEffect(() => {
     if (postId && !postTypeCache[postId]) {
       (async () => {
-        if (getPost) {
-          const result = await getPost(postId);
+        if (getPostType) {
+          const result = await getPostType(postId);
           if (!result) {
             // eslint-disable-next-line no-console
             console.error(`Custom function to get post with ID ${postId} failed.`);

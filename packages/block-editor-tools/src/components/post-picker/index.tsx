@@ -16,7 +16,7 @@ import SearchModal from './search-modal';
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
-  getPost?: (id: number) => object | WP_REST_API_Post;
+  getPostType?: (id: number) => object | WP_REST_API_Post;
   onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;
@@ -45,7 +45,7 @@ const Preview = styled.div`
 const PostPicker = ({
   allowedTypes,
   className,
-  getPost,
+  getPostType,
   onReset,
   onUpdate,
   params = {},
@@ -67,7 +67,7 @@ const PostPicker = ({
   );
 
   // @ts-ignore
-  const post = usePostById(value, getPost) as any as WP_REST_API_Post;
+  const post = usePostById(value, getPostType) as any as WP_REST_API_Post;
 
   const {
     featured_media: featuredMediaId,
