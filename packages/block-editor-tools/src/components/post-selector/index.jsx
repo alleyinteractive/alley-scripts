@@ -6,6 +6,7 @@ import { Selector } from '..';
 
 /**
  * Render post selector component.
+ * @deprecated since version 0.3.0
  */
 const PostSelector = ({
   className,

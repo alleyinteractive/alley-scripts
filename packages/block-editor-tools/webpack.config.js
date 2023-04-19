@@ -22,12 +22,9 @@ module.exports = (env, { mode }) => ({
     rules: [
       {
         exclude: /node_modules/,
-        test: /.jsx?$/,
+        test: /\.(j|t)sx?$/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-          },
+          loader: 'ts-loader',
         },
       },
       {

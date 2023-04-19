@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/block-editor-tools",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
   "types": "./build/index.d.ts",
@@ -106,13 +106,16 @@
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "styled-components": "^5.3.5",
-    "uuid": "^9.0.0"
+    "ts-loader": "^9.4.2",
+    "uuid": "^9.0.0",
+    "wp-types": "^3.62.3"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.18.6",
+    "@types/styled-components": "^5.1.26",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.13.0",
     "autoprefixer": "^10.4.14",
     "babel-jest": "^29.5.0",
