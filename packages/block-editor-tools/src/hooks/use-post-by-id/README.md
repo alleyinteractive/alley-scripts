@@ -34,4 +34,4 @@ const MyBlock = ({
 };
 ```
 
-This function must return an object which contains a string named `subtype` that is the post type.
+This function must return a string that is the post type.

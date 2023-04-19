@@ -7,8 +7,7 @@ import usePost from '../use-post';
  * looked up from the search endpoint, cached, and then passed to usePost.
  *
  * @param int    postId   The ID for the post to return.
- * @param function getPostType Optional custom function that returns a post object.
- *                             This object must contain a subtype property.
+ * @param function getPostType Optional custom function that returns a post type string.
  * @returns {object} An object containing a hasResolved property
  *                   and the returned post object.
  */
@@ -23,11 +22,8 @@ const usePostById = (postId, getPostType = null) => {
           if (!result) {
             // eslint-disable-next-line no-console
             console.error(`Custom function to get post with ID ${postId} failed.`);
-          } else if (!result.subtype) {
-            // eslint-disable-next-line no-console
-            console.error(`Custom function for getting post with ID ${postId} did not include required subtype property.`);
           } else {
-            setPostTypeCache((prev) => ({ ...prev, [postId]: result.subtype }));
+            setPostTypeCache((prev) => ({ ...prev, [postId]: result }));
           }
         } else {
           const path = addQueryArgs('/wp/v2/search', { include: postId });

@@ -16,7 +16,7 @@ import SearchModal from './search-modal';
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
-  getPostType?: (id: number) => object | WP_REST_API_Post;
+  getPostType?: (id: number) => string;
   onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;

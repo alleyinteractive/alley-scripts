@@ -25,7 +25,7 @@ results, and a custom function for fetching post data given a post ID.
 |----------------|----------------|----------|----------|-----------------------------------------------------------------------------------------------------------------|
 | allowedTypes   | `[]`         | No       | array    | Array with the post types to select from. Defaults to empty array (all types). |
 | className      | `''`           | No       | string   | Class name for the post picker container.                                                                      |
-| getPostType    |                | No       | function | Function to retrieve the post type for a post ID. This function must return an object containing a string named `subtype` that is the post type. |
+| getPostType    |                | No       | function | Function to retrieve the post type for a post ID. This function must return a string. |
 | onReset        |                | Yes      | function | Function to reset the post ID to 0.                          |
 | onUpdate       |                | Yes      | function | Function to set the post ID on post selection.                                               |
 | params         | `{}`           | No       | object   | Optional key value pairs to append to the search request. Ex: `{ per_page: 20 }`.                     |
