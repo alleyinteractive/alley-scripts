@@ -7,7 +7,7 @@
     "@babel/core": ">= 7",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/preset-env": "^7.21.4",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "eslint": ">= 8",
     "eslint-config-airbnb": "^19.0.4",
@@ -47,7 +47,7 @@
   "name": "@alleyinteractive/eslint-config",
   "peerDependencies": {
     "@babel/core": ">= 7",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
     "eslint": ">= 8",
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-import": "^2.27.5",
