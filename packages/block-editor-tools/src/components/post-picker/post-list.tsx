@@ -1,18 +1,25 @@
 import { useCallback, useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { Button, TextControl, Spinner } from '@wordpress/components';
+
 import classNames from 'classnames';
+
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
 import './post-list.scss';
+
+interface TypeLabels {
+  [key: string]: string;
+}
 
 interface PostListProps {
   baseUrl: string;
   searchRender?: (post: object) => JSX.Element;
   selected?: number;
   setSelected: (id: number) => void;
+  typeLabels: TypeLabels;
 }
 
 interface Params {
@@ -30,6 +37,7 @@ const PostList = ({
   searchRender,
   selected,
   setSelected,
+  typeLabels,
 }: PostListProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [listposts, setListposts] = useState<WP_REST_API_Search_Results>([]);
@@ -164,10 +172,9 @@ const PostList = ({
                   <strong>
                     {t.title}
                   </strong>
-                  {sprintf(
-                    ' (%s)',
-                    t.subtype,
-                  )}
+                  <p className="alley-scripts-post-picker__post-type">
+                    {typeLabels[t.subtype] ?? ''}
+                  </p>
                 </div>
               )}
             </Button>

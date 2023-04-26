@@ -1,12 +1,15 @@
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import styled from 'styled-components';
 
 import {
   Button,
   Spinner,
 } from '@wordpress/components';
-import { __, sprintf } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
+import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
+import pluralize from 'pluralize-esm';
+
 import type { WP_REST_API_Post, WP_REST_API_Attachment } from 'wp-types';
 
 import { useMedia, usePostById } from '../../hooks';
@@ -25,6 +28,16 @@ interface PostPickerProps {
   searchRender?: (post: object) => JSX.Element;
   title?: string;
   value: number;
+}
+
+interface TypesCache {
+  [key: string]: string;
+}
+
+interface RawTypes {
+  [key: string]: {
+    name: string;
+  };
 }
 
 // Styled components.
@@ -56,6 +69,20 @@ const PostPicker = ({
   value = 0,
 }: PostPickerProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [typesCache, setTypesCache] = useState<TypesCache>({});
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      const types = await apiFetch({ path: '/wp/v2/types' }) as RawTypes;
+      const newTypes = {} as TypesCache;
+      Object.keys(types).forEach((type) => {
+        newTypes[type] = pluralize.singular(types[type].name);
+      });
+
+      setTypesCache(newTypes);
+    };
+    fetchTypes();
+  }, [setTypesCache]);
 
   const baseUrl = addQueryArgs(
     searchEndpoint,
@@ -124,10 +151,7 @@ const PostPicker = ({
               <strong>
                 {title}
               </strong>
-              {sprintf(
-                ' (%s)',
-                type,
-              )}
+              {typesCache[type]}
             </Preview>
           )}
           {controls()}
@@ -146,6 +170,7 @@ const PostPicker = ({
           baseUrl={baseUrl}
           onUpdate={onUpdate}
           searchRender={searchRender}
+          typeLabels={typesCache}
         />
       ) : null}
     </Container>

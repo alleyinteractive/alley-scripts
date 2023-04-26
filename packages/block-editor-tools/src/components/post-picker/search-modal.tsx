@@ -15,6 +15,9 @@ interface SearchModalProps {
   closeModal: () => void;
   onUpdate: (id: number) => void;
   searchRender?: (post: object) => JSX.Element;
+  typeLabels: {
+    [key: string]: string;
+  };
 }
 
 const SearchModal = ({
@@ -22,6 +25,7 @@ const SearchModal = ({
   closeModal,
   onUpdate,
   searchRender,
+  typeLabels,
 }: SearchModalProps) => {
   const [selected, setSelected] = useState<number>();
 
@@ -35,6 +39,7 @@ const SearchModal = ({
 
   return (
     <Modal
+      className="alley-scripts-post-picker__modal"
       isDismissible
       title={__('Select Post', 'alley-scripts')}
       onRequestClose={closeModal}
@@ -45,6 +50,7 @@ const SearchModal = ({
         selected={selected ?? 0}
         setSelected={setSelected}
         searchRender={searchRender}
+        typeLabels={typeLabels}
       />
       <div className="alley-scripts-post-picker__buttons">
         <Button
