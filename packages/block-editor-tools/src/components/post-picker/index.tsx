@@ -89,6 +89,7 @@ const PostPicker = ({
     {
       type: 'post',
       subtype: allowedTypes ?? 'any',
+      _embed: true,
       ...params,
     },
   );
