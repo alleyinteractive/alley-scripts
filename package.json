@@ -33,7 +33,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "@storybook/addon-essentials": "^7.0.7",
+    "@storybook/addon-essentials": "^7.0.9",
     "@storybook/addon-interactions": "^7.0.9",
     "@storybook/addon-links": "^7.0.5",
     "@storybook/blocks": "^7.0.2",
