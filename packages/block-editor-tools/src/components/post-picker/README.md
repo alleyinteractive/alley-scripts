@@ -9,7 +9,7 @@ Allows for a simple post select/replace/remove feature, similar to selecting an 
   allowedTypes={['post']}
   className="post-picker"
   onReset={() => setAttributes({ postId: 0 })}
-  onUpdate={({ id }) => setAttributes({ postId: id })}
+  onUpdate={( id ) => setAttributes({ postId: id })}
   value={postId}
 />
 ```
