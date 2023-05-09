@@ -3,27 +3,18 @@
 /**
  * {{slug}} entry script registration and enqueue.
  *
- * This file will be copied to the assets build directory
+ * This file will be copied to the assets output directory
+ * with Webpack using wp-scripts build. The build command must
+ * be run before this file will be available.
+ *
+ * This file must be included from the build output directory in a project.
  * and will be loaded from there.
  */
 
 /**
- * Register all entry point assets so that they can be enqueued.
+ * Register the {{slug}} entry point assets so that they can be enqueued.
  */
 function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
-	/*
-	|--------------------------------------------------------------------------
-	| Register assets from entry.
-	|--------------------------------------------------------------------------
-	|
-	| In the code below we can use the __FILE__ path to find the asset and enqueue
-	| under any condition. This file, index.php, will be required from the  `load_scripts()`
-	| function.
-	|
-	| Registering or enqueuing from the entry directory allows a developer to enqueue assets
-	| within the context of an entry point.
-	|
-	*/
 	// Automatically load dependencies and version.
 	$asset_file = include __DIR__ . '/index.asset.php';
 
@@ -55,7 +46,7 @@ add_action( 'init', 'register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts'
 function action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
 	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
 }
-add_action( 'wp_enqueue_scripts', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
+add_action( '{{enqueueHook}}', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
 
 {{#hasStyles}}
 /**
@@ -64,6 +55,6 @@ add_action( 'wp_enqueue_scripts', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugU
 function action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_styles() {
 	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
 }
-add_action( 'wp_enqueue_styles', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_styles' );
+add_action( '{{enqueueStyleHook}}', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_styles' );
 {{/hasStyles}}
 {{/hasEnqueue}}

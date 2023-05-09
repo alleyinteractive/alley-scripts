@@ -12,6 +12,16 @@ export function validateSlug(slug: string): boolean {
 }
 
 /**
+ * Validate a function name to ensure it is all lowercase and contains only underscores.
+ * @param functionName - A string to validate.
+ */
+export function validateFunctionName(functionName: string): boolean {
+  // Check if string is all lowercase and contains only underscores
+  const regex = /^[a-z_]+$/;
+  return regex.test(functionName);
+}
+
+/**
  * Check for a directory's existence.
  *
  * @param directory - The directory to check for its existence.

@@ -1,6 +1,9 @@
 import prompts from 'prompts';
 import { formatSlug } from './formatting.js';
-import { validateSlug } from './validation.js';
+import {
+  validateFunctionName,
+  validateSlug,
+} from './validation.js';
 
 /**
  * Prompts the user to select an entry point type and returns the selected options.
@@ -69,7 +72,49 @@ async function promptForNamespace(initial: string = 'create-entry'): Promise<str
   return nameSpace;
 }
 
+/**
+ * Prompts for setting an action hook to use for enqueueing the entry.
+ *
+ * @returns - The selected action hook.
+ */
+async function promptForEnqueueHook(): Promise<string> {
+  const { enqueueHook } = await prompts([
+    {
+      type: 'text',
+      name: 'enqueueHook',
+      message: 'The hook to use for enqueueing the entry:',
+      validate: (value) => validateFunctionName(value)
+        || 'Please enter a valid function name (lowercase, no spaces, only underscores)',
+      initial: 'wp_enqueue_scripts',
+    },
+  ]);
+
+  return enqueueHook;
+}
+
+/**
+ * Prompts for setting an action hook to use for enqueueing the style.
+ *
+ * @returns - The selected action hook.
+ */
+async function promptForEnqueueStyleHook(): Promise<string> {
+  const { enqueueStyleHook } = await prompts([
+    {
+      type: 'text',
+      name: 'enqueueStyleHook',
+      message: 'The hook to use for enqueueing the entry styles:',
+      validate: (value) => validateFunctionName(value)
+        || 'Please enter a valid function name (lowercase, no spaces, only underscores)',
+      initial: 'wp_enqueue_styles',
+    },
+  ]);
+
+  return enqueueStyleHook;
+}
+
 export {
   promptForEntryPoint,
   promptForNamespace,
+  promptForEnqueueHook,
+  promptForEnqueueStyleHook,
 };

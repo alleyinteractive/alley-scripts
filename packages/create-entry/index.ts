@@ -10,7 +10,11 @@ import mustache from 'mustache';
 // Internal functions.
 import { directoryExists } from './src/validation.js';
 import { toSnakeCase } from './src/formatting.js';
-import { promptForEntryPoint } from './src/prompts.js';
+import {
+  promptForEntryPoint,
+  promptForEnqueueHook,
+  promptForEnqueueStyleHook,
+} from './src/prompts.js';
 import { hasArgInCLI } from './src/cli.js';
 import {
   getInitialOptionForArg,
@@ -32,6 +36,9 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
  * Prompts the user to select an entry point type.
  */
 (async () => {
+  let enqueueHook: string = '';
+  let enqueueStyleHook: string = '';
+
   // The directory where the entry points will be written
   // relative to the current working directory.
   const ENTRIES_DIR = getInitialOptionForArg(
@@ -66,7 +73,7 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
       process.exit(1);
     }
 
-    const templateFiles = await glob('*.mustache', {
+    const templateFiles: string[] = await glob('*.mustache', {
       cwd: path.join(TEMPLATE_PATH, entryType),
       dot: true,
     });
@@ -76,11 +83,18 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
       process.exit(1);
     }
 
-    // create the directory for the entry point.
-    await fs.promises.mkdir(slug);
-
     const prefixNameSpace = await getNameSpace(hasEnqueue);
     const textdomain = getTextDomain();
+
+    if (entryType !== 'slotfill') {
+      // If there is an enqueue file, prompt for the enqueue hook names and set the hook names.
+      enqueueHook = hasEnqueue ? await promptForEnqueueHook() : '';
+      enqueueStyleHook = hasEnqueue && hasStyles
+        ? await promptForEnqueueStyleHook() : '';
+    }
+
+    // Create the directory for the entry point.
+    await fs.promises.mkdir(slug);
 
     // Loop through the template files and render them with the provided data.
     await Promise.all(templateFiles.map(async (inputFile: string) => {
@@ -94,6 +108,8 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
         slug,
         hasStyles,
         hasEnqueue,
+        enqueueHook,
+        enqueueStyleHook,
         prefixNameSpace,
         nameSpaceSnakeCase: toSnakeCase(prefixNameSpace),
         slugUnderscore: toSnakeCase(slug),

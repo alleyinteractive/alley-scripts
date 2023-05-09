@@ -26,7 +26,10 @@ export function getArgFromCLI(arg: string): string | null {
  * @param arg The argument to check for. Must include the leading '--'.
  * @returns Boolean - Whether the argument is present in the CLI.
  */
-const hasArgInCLI = (arg: string): boolean => getArgFromCLI(arg) !== null;
+const hasArgInCLI = (arg: string): boolean => {
+  const args = getArgsFromCLI();
+  return args.includes(arg);
+};
 
 export {
   getArgsFromCLI,
