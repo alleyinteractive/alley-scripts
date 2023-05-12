@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/block-editor-tools",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
   "types": "./build/index.d.ts",
@@ -100,19 +100,22 @@
     "@wordpress/widgets": "^3.7.0",
     "@wordpress/wordcount": "^3.30.0",
     "classnames": "^2.3.2",
-    "dompurify": "^3.0.1",
+    "dompurify": "^3.0.2",
     "lodash": "^4.17.21",
     "papaparse": "^5.4.0",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "styled-components": "^5.3.5",
-    "uuid": "^9.0.0"
+    "ts-loader": "^9.4.2",
+    "uuid": "^9.0.0",
+    "wp-types": "^3.62.3"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@babel/core": "^7.21.3",
-    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-env": "^7.21.5",
     "@babel/preset-react": "^7.18.6",
+    "@types/styled-components": "^5.1.26",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.13.0",
     "autoprefixer": "^10.4.14",
     "babel-jest": "^29.5.0",
@@ -126,9 +129,9 @@
     "sass": "^1.60.0",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.2",
-    "ts-jest": "^29.0.5",
+    "ts-jest": "^29.1.0",
     "typescript": "^5.0.4",
-    "webpack": "^5.77.0",
-    "webpack-cli": "^5.0.1"
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.2"
   }
 }
