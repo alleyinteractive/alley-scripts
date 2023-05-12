@@ -37,6 +37,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
+    "watch": "tsc -w",
     "lint": "eslint index.ts src",
     "prepublish": "npm run build"
   },
