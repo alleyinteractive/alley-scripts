@@ -15,7 +15,7 @@
     "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
   },
   "bin": {
-    "create-block": "./dist/index.js"
+    "@alleyinteractive/create-block": "./dist/index.js"
   },
   "keywords": [
     "create-block",
@@ -31,6 +31,8 @@
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
     "@wordpress/create-block": "^4.17.0",
+    "command-line-args": "^5.2.1",
+    "command-line-usage": "^7.0.1",
     "cross-spawn": "^7.0.3",
     "prompts": "^2.4.2",
     "ts-node": "^10.9.1",

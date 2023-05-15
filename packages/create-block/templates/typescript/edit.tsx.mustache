@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 
 /**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Import CSS to let webpack process the CSS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
@@ -32,7 +32,7 @@ import './index.scss';
 export default function Edit() {
   return (
     <p {...useBlockProps()}>
-      { __('Block Title - hello from the editor!', 'create-wordpress-plugin') }
+      { __('Block Title - hello from the editor!') }
     </p>
   );
 }

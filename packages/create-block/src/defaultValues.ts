@@ -3,8 +3,7 @@
  *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/create-block/docs/external-template.md#defaultvalues
  */
-export default {
-  namespace: 'create-wordpress-plugin',
+module.exports = {
   plugin: false,
   description: '',
   dashicon: 'palmtree',

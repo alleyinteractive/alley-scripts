@@ -1,17 +1,11 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import defaultValues from './defaultValues.js';
-
-/**
- * __filename and __dirname are not available in ES Modules.
- * See: https://nodejs.org/api/esm.html#no-__filename-or-__dirname
- */
-const dirName = path.dirname(fileURLToPath(import.meta.url));
+// @ts-ignore
+const path = require('path');
+const defaultValues = require('./defaultValues.js');
 
 const blockLanguage = process.env.blockLanguage || 'typescript';
 
 // This path should be relative to the dist folder.
-const blockTemplatesPath = path.join(dirName, '../../templates', blockLanguage);
+const blockTemplatesPath = path.join(__dirname, '../../templates', blockLanguage);
 
 /**
  * Custom variants for scaffolding blocks.
@@ -24,7 +18,7 @@ const blockTemplatesPath = path.join(dirName, '../../templates', blockLanguage);
  *
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/create-block/docs/external-template.md#external-project-templates
  */
-export default {
+module.exports = {
   defaultValues,
   variants: {
     static: {

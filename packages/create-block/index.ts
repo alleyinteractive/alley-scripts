@@ -1,31 +1,74 @@
 #!/usr/bin/env node
-
-import prompts from 'prompts';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import spawn from 'cross-spawn';
-
-import fs from 'fs';
+const fs = require('fs');
+const prompts = require('prompts');
+// @ts-ignore
+const path = require('path');
+const spawn = require('cross-spawn');
+const commandLineArgs = require("command-line-args");
+const commandLineUsage = require('command-line-usage');
 
 /**
- * __filename and __dirname are not available in ES Modules.
- * See: https://nodejs.org/api/esm.html#no-__filename-or-__dirname
+ * Define the command line options.
  */
-const dirName = path.dirname(fileURLToPath(import.meta.url));
+const options = [
+  {
+    name: 'namespace',
+    alias: 'n',
+    type: String,
+    defaultValue: 'create-block',
+    defaultOption: 'create-block',
+    description: 'The namespace for the block. (default: create-block)',
+  },
+  {
+    name: 'blocksDir',
+    alias: 'b',
+    description: 'The directory where the blocks will be created relative to the current working directory. (default: blocks)',
+    type: String,
+    defaultValue: 'blocks',
+    defaultOption: 'blocks',
+  },
+  {
+    name: 'help',
+    alias: 'h',
+    description: 'Display this usage guide.',
+    type: Boolean,
+  }
+];
 
-// The directory where the blocks will be created relative to the current working directory.
-// @TODO - Make this a command line argument.
-const directoryName = 'blocks';
+// Get the options from the command line.
+const {
+  namespace,
+  blocksDir: blocksDirectory,
+  help,
+} = commandLineArgs(options);
+
+// Display the help text if the --help option is used.
+const usage = commandLineUsage([
+  {
+    header: 'Alley Create Block',
+    content: 'Alley Create Block is a wrapper for @wordpress/create-block with set configurations defined for scaffolding a WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).'
+  },
+  {
+    header: 'Options',
+    optionList: options
+  }
+]);
+
+if (help) {
+  // Display the help text.
+  console.log(usage);
+  process.exit(1);
+}
 
 // Create the directory if it doesn't exist.
-if (!fs.existsSync(directoryName)) {
-  fs.mkdirSync(directoryName);
+if (!fs.existsSync(blocksDirectory)) {
+  fs.mkdirSync(blocksDirectory);
   // eslint-disable-next-line no-console
-  console.log(`Directory '${directoryName}' created successfully!`);
+  console.log(`Directory '${blocksDirectory}' created successfully!`);
   // Navigate to the directory to create the block.
-  process.chdir(directoryName);
+  process.chdir(blocksDirectory);
 } else {
-  process.chdir(directoryName);
+  process.chdir(blocksDirectory);
 }
 
 /**
@@ -52,17 +95,19 @@ if (!fs.existsSync(directoryName)) {
     process.env.blockLanguage = language;
 
     // Create a block using the @wordpress/create-block package.
-    const result = spawn.sync(
+    spawn.sync(
       'npx',
       [
         '@wordpress/create-block',
+        '--namespace',
+        namespace,
         /**
          * This argument specifies an external npm package as a template.
          * In this case, the selectTemplates.js file is used as a the entry for the template.
          * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
          */
         '--template',
-        path.join(dirName, 'src/selectTemplates.js'),
+        path.join(__dirname, 'src/selectTemplates.js'),
         /**
          * With this argument, the create-block package runs in
          * "No plugin mode" which only scaffolds block files into the current directory.
