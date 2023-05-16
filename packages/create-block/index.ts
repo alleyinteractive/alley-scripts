@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const prompts = require('prompts');
-// @ts-ignore
 const path = require('path');
 const spawn = require('cross-spawn');
 const commandLineArgs = require('command-line-args');
@@ -69,7 +68,7 @@ const {
 const usage = commandLineUsage([
   {
     header: 'Alley Create Block',
-    content: 'Alley Create Block is a wrapper for @wordpress/create-block with set configurations defined for scaffolding a WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).',
+    content: 'Alley Create Block is an external template for @wordpress/create-block with set configurations defined for scaffolding a WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).',
   },
   {
     header: 'Options',

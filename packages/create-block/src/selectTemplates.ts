@@ -1,5 +1,3 @@
-// @ts-ignore
-const path = require('path');
 const defaultValues = require('./defaultValues.js');
 
 const templateDirectory = process.env.blockLanguage || 'typescript';
