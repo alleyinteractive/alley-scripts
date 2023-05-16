@@ -2,10 +2,10 @@
 const path = require('path');
 const defaultValues = require('./defaultValues.js');
 
-const blockLanguage = process.env.blockLanguage || 'typescript';
+const templateDirectory = process.env.blockLanguage || 'typescript';
 
 // This path should be relative to the dist folder.
-const blockTemplatesPath = path.join(__dirname, '../../templates', blockLanguage);
+const blockTemplatesPath: string = path.join(__dirname, '../../templates', templateDirectory);
 
 /**
  * Custom variants for scaffolding blocks.
