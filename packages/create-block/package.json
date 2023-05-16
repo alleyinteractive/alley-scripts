@@ -4,7 +4,6 @@
   "description": "Alley's custom block scaffolding variation for the @wordpress/create-block script.",
   "main": "index.js",
   "scripts": {
-    "test": "test",
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint index.ts src",
