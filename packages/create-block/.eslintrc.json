@@ -1,0 +1,9 @@
+{
+  "extends": ["@alleyinteractive/eslint-config/typescript"],
+  "overrides": [
+    {
+      "parserOptions": { "project": null },
+      "files": ["tests/*.ts"]
+    }
+  ]
+}

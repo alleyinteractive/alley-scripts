@@ -4,7 +4,7 @@ const prompts = require('prompts');
 // @ts-ignore
 const path = require('path');
 const spawn = require('cross-spawn');
-const commandLineArgs = require("command-line-args");
+const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
 
 /**
@@ -32,7 +32,7 @@ const options = [
     alias: 'h',
     description: 'Display this usage guide.',
     type: Boolean,
-  }
+  },
 ];
 
 // Get the options from the command line.
@@ -46,16 +46,17 @@ const {
 const usage = commandLineUsage([
   {
     header: 'Alley Create Block',
-    content: 'Alley Create Block is a wrapper for @wordpress/create-block with set configurations defined for scaffolding a WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).'
+    content: 'Alley Create Block is a wrapper for @wordpress/create-block with set configurations defined for scaffolding a WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).',
   },
   {
     header: 'Options',
-    optionList: options
-  }
+    optionList: options,
+  },
 ]);
 
+// Display the help text if the --help option is used.
 if (help) {
-  // Display the help text.
+  // eslint-disable-next-line no-console
   console.log(usage);
   process.exit(1);
 }

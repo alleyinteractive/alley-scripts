@@ -17,6 +17,9 @@
   "bin": {
     "@alleyinteractive/create-block": "./dist/index.js"
   },
+  "peerDependencies": {
+    "@wordpress/scripts": "*"
+  },
   "keywords": [
     "create-block",
     "@wordpress/create-block",
@@ -39,7 +42,7 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "*",
+    "@alleyinteractive/eslint-config": "^0.1.0",
     "@alleyinteractive/tsconfig": "*",
     "@types/cross-spawn": "^6.0.2",
     "@types/node": "^20.1.3",

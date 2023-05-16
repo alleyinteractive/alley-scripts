@@ -22,7 +22,6 @@ module.exports = {
   defaultValues,
   variants: {
     static: {
-      
       blockTemplatesPath,
     },
     dynamic: {
