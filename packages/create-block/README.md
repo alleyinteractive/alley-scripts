@@ -96,7 +96,6 @@ contribute to this open source project.
 
 This is an npm package that is published to https://www.npmjs.com/. Dependencies are defined in `package.json` and the
 ESLint configuration is found in `.eslintrc.json`.
-Jest configuration is found in `jest.config.js`.
 Typescript configuration is found in `tsconfig.json`.
 
 
