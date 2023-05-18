@@ -15,11 +15,11 @@ import {
   promptForEnqueueHook,
   promptForEnqueueStyleHook,
 } from './src/prompts.js';
-import { hasArgInCLI } from './src/cli.js';
+import createEntryArgs from './src/createEntryArgs.js';
 import {
-  getInitialOptionForArg,
   getNameSpace,
   getTextDomain,
+  getEntryType,
 } from './src/options.js';
 
 /**
@@ -36,15 +36,18 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
  * Prompts the user to select an entry point type.
  */
 (async () => {
-  let enqueueHook: string = '';
-  let enqueueStyleHook: string = '';
+  let enqueueHook = '';
+  let enqueueStyleHook = '';
+
+  // Get the arguments passed to the CLI.
+  const {
+    'src-dir': srcDir,
+  } = createEntryArgs;
 
   // The directory where the entry points will be written
   // relative to the current working directory.
-  const ENTRIES_DIR = getInitialOptionForArg(
-    'entries',
-    '--src-dir',
-  );
+  const ENTRIES_DIR: string | 'entries' = srcDir || 'entries';
+  const entryType = getEntryType();
 
   const {
     slug,
@@ -52,11 +55,9 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
     hasEnqueue,
   } = await promptForEntryPoint();
 
-  const entryType = hasArgInCLI('--slotfill') ? 'slotfill' : 'entry';
-
-  // set the entry type and slug as environment variables.
-  if (!entryType || !slug) {
-    console.error('Invalid entry type or slug. Exiting...');
+  // check if the slug is valid.
+  if (!slug) {
+    console.error('Invalid slug. Exiting...');
     process.exit(1);
   }
 
@@ -83,6 +84,7 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
       process.exit(1);
     }
 
+    // Call these functions here so that the prompts called and the data is defined.
     const prefixNameSpace = await getNameSpace(hasEnqueue);
     const textdomain = getTextDomain();
 

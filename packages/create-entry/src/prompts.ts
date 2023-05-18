@@ -4,6 +4,10 @@ import {
   validateFunctionName,
   validateSlug,
 } from './validation.js';
+import {
+  getEntryType,
+  type EntryType,
+} from './options.js';
 
 /**
  * Prompts the user to select an entry point type and returns the selected options.
@@ -15,6 +19,8 @@ async function promptForEntryPoint(): Promise<{
   hasStyles: boolean,
   hasEnqueue: boolean
 }> {
+  const entryType: EntryType = getEntryType();
+
   const {
     slug,
     hasStyles,
@@ -23,7 +29,7 @@ async function promptForEntryPoint(): Promise<{
     {
       type: 'text',
       name: 'slug',
-      message: 'The entry point slug used for identification (also the output folder name):',
+      message: `The ${entryType} slug used for identification (also the output folder name):`,
       validate: (value) => validateSlug(value)
         || 'Please enter a valid slug (lowercase, no spaces, only hyphens)',
       format: formatSlug,
@@ -31,13 +37,13 @@ async function promptForEntryPoint(): Promise<{
     {
       type: 'confirm',
       name: 'hasStyles',
-      message: 'Include a stylesheet for this entry? (default false)',
+      message: `Include a stylesheet for this ${entryType}? (default false)`,
       initial: false,
     },
     {
       type: 'confirm',
       name: 'hasEnqueue',
-      message: 'Include a PHP file for enqueueing the entry? (default true)',
+      message: `Include a PHP file for enqueueing the ${entryType}? (default true)`,
       initial: true,
     },
   ]);
@@ -56,11 +62,12 @@ async function promptForEntryPoint(): Promise<{
  * @returns          - The selected namespace or an empty string.
  */
 async function promptForNamespace(initial: string = 'create-entry'): Promise<string> {
+  const entryType: EntryType = getEntryType();
   const { nameSpace } = await prompts([
     {
       type: 'text',
       name: 'nameSpace',
-      message: 'The internal namespace or prefix for the entry:',
+      message: `The internal namespace or prefix for the ${entryType}:`,
       validate: (value) => validateSlug(value)
         || 'Please enter a valid namespace (lowercase, no spaces, only hyphens)',
       format: formatSlug,
