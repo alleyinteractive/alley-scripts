@@ -28,11 +28,17 @@ Without providing any options the tool will prompt the user through several opti
 ### `CLI options`
 
 
-```bash
---slotfill                   Scaffold a slotfill type entry point.
---src-dir=<value>            Directory in which the entry point will be scaffolded. (default is 'entries')
---namespace=<value>          Internal namespace for the entry point. (default is 'create-entry')
---textdomain=<value>         Text domain for setting translated strings for a script. (default is empty or 'default')
+```
+
+  --src-dir string          The directory where the entry points will be written relative to  
+                            the current working directory. (default is "entries")             
+  -h, --help                Prints this usage guide                                           
+  -n, --namespace string    Internal namespace for the entry point. (default is "create-      
+                            entry")                                                           
+  -s, --slotfill            Text domain for setting translated strings for a script. (default 
+                            is empty or "default")                                            
+  -t, --textdomain string   Text domain for setting translated strings for a script. (default 
+                            is empty or "default")    
 ```
 
 ### Prompt options
