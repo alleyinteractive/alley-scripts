@@ -3,6 +3,7 @@ const fs = require('fs');
 const prompts = require('prompts');
 const path = require('path');
 const spawn = require('cross-spawn');
+const chalk = require('chalk');
 const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
 
@@ -40,7 +41,7 @@ const options: Options[] = [
   {
     name: 'blockLanguage',
     alias: 'l',
-    description: 'The language for the block. Accepts `typescript` or `javascript`. (default: typescript)',
+    description: 'The language for the block. Accepts `typescript` or `javascript`',
     type: String,
   },
   {
@@ -50,6 +51,25 @@ const options: Options[] = [
     type: Boolean,
   },
 ];
+
+/**
+ * Validate the block language.
+ *
+ * @param value - The block language.
+ * @return      - The block language if it is valid.
+ *
+ * @throws {Error} If the block language is not one of the accepted values.
+ */
+function validateBlockLanguage(value: string) {
+  if (value !== 'typescript' && value !== 'javascript') {
+    throw new Error(
+      chalk.red(
+        'The block language must be one of \'typescript\' or \'javascript\'\n',
+      ),
+    );
+  }
+  return value;
+}
 
 // Get the options from the command line.
 const {
@@ -99,8 +119,6 @@ if (!fs.existsSync(blocksDirectory)) {
  * and then create a block using the @wordpress/create-block package.
  */
 (async () => {
-  let language: LanguageType | null = 'typescript';
-
   // If there is no command line argument for the block language,
   // allow the user to select one with a prompt.
   if (!blockLanguage) {
@@ -116,41 +134,33 @@ if (!fs.existsSync(blocksDirectory)) {
       ],
       initial: 0,
     });
-    language = blockLanguagePrompt;
+    process.env.blockLanguage = validateBlockLanguage(blockLanguagePrompt);
   } else {
-    language = blockLanguage;
+    process.env.blockLanguage = validateBlockLanguage(blockLanguage);
   }
 
   // Assign the namespace as an environment variable if there is one.
   process.env.namespace = namespace;
 
-  if (language) {
-    // Set the block language as an environment variable
-    // so it can be used in the selectTemplates.js file.
-    process.env.blockLanguage = language;
-
-    // Create a block using the @wordpress/create-block package.
-    spawn.sync(
-      'npx',
-      [
-        '@wordpress/create-block',
-        /**
+  // Create a block using the @wordpress/create-block package.
+  spawn.sync(
+    'npx',
+    [
+      '@wordpress/create-block',
+      /**
          * This argument specifies an external npm package as a template.
          * In this case, the selectTemplates.js file is used as a the entry for the template.
          * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
          */
-        '--template',
-        path.join(__dirname, 'src/selectTemplates.js'),
-        /**
+      '--template',
+      path.join(__dirname, 'src/selectTemplates.js'),
+      /**
          * With this argument, the create-block package runs in
          * "No plugin mode" which only scaffolds block files into the current directory.
          * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#no-plugin
          */
-        '--no-plugin',
-      ],
-      { stdio: 'inherit' },
-    );
-  } else {
-    process.exit(1);
-  }
+      '--no-plugin',
+    ],
+    { stdio: 'inherit' },
+  );
 })();
