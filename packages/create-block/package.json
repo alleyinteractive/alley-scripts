@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
-    "@wordpress/create-block": "^4.17.0",
     "chalk": "^4.1.2",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^7.0.1",
@@ -42,7 +41,7 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "^0.1.0",
+    "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
     "@types/cross-spawn": "^6.0.2",
     "@types/node": "^20.2.3",
