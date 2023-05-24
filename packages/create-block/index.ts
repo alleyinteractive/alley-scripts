@@ -89,7 +89,7 @@ const {
 const usage = commandLineUsage([
   {
     header: 'Alley Create Block',
-    content: 'Alley Create Block is an external template for @wordpress/create-block with set configurations defined for scaffolding a WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).',
+    content: 'Alley Create Block is an external template for @wordpress/create-block with set configurations defined for scaffolding a dynamic WordPress block into an existing project that uses WP Scripts (@wordpress/scripts).',
   },
   {
     header: 'Options',
@@ -151,18 +151,24 @@ if (help) {
     [
       '@wordpress/create-block',
       /**
-         * This argument specifies an external npm package as a template.
-         * In this case, the selectTemplates.js file is used as a the entry for the template.
-         * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
-         */
+       * This argument specifies an external npm package as a template.
+       * In this case, the selectTemplates.js file is used as a the entry for the template.
+       * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
+       */
       '--template',
       path.join(__dirname, 'src/selectTemplates.js'),
       /**
-         * With this argument, the create-block package runs in
-         * "No plugin mode" which only scaffolds block files into the current directory.
-         * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#no-plugin
-         */
+       * With this argument, the create-block package runs in
+       * "No plugin mode" which only scaffolds block files into the current directory.
+       * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#no-plugin
+       */
       '--no-plugin',
+      /**
+       * Set the block variant as dynamic, the only variant that is supported in this script
+       * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#variant
+       */
+      '--variant',
+      'dynamic',
     ],
     { stdio: 'inherit' },
   );

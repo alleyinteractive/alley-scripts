@@ -1,9 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 
 import edit from './edit';
-{{#isStaticVariant}}
-import save from './save';
-{{/isStaticVariant}}
 import metadata from './block.json';
 
 import './style.scss';
@@ -14,9 +11,6 @@ registerBlockType(
   {
     apiVersion: 2,
     edit,
-    {{#isStaticVariant}}
-    save,
-    {{/isStaticVariant}}
     title: metadata.title,
   },
 );
