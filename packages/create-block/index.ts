@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 const fs = require('fs');
 const prompts = require('prompts');
 const path = require('path');
@@ -98,20 +99,8 @@ const usage = commandLineUsage([
 
 // Display the help text if the --help option is used.
 if (help) {
-  // eslint-disable-next-line no-console
   console.log(usage);
   process.exit(1);
-}
-
-// Create the directory if it doesn't exist.
-if (!fs.existsSync(blocksDirectory)) {
-  fs.mkdirSync(blocksDirectory);
-  // eslint-disable-next-line no-console
-  console.log(`Directory '${blocksDirectory}' created successfully!\n`);
-  // Navigate to the directory to create the block.
-  process.chdir(blocksDirectory);
-} else {
-  process.chdir(blocksDirectory);
 }
 
 /**
@@ -141,6 +130,20 @@ if (!fs.existsSync(blocksDirectory)) {
 
   // Assign the namespace as an environment variable if there is one.
   process.env.namespace = namespace;
+
+  // Create the directory if it doesn't exist.
+  if (!fs.existsSync(blocksDirectory)) {
+    try {
+      fs.mkdirSync(blocksDirectory);
+      console.log(chalk.cyan(`Directory '${blocksDirectory}' created successfully!\n`));
+    } catch (error: any) {
+      console.error(chalk.red(`Failed to create directory '${blocksDirectory}'`), error);
+      process.exit(1); // Exit the script with an error status code
+    }
+  }
+
+  // Navigate to the directory to create the block.
+  process.chdir(blocksDirectory);
 
   // Create a block using the @wordpress/create-block package.
   spawn.sync(
