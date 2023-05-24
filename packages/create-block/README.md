@@ -12,12 +12,6 @@ This script was written to pair with the [Create WordPress Plugin](https://githu
 
 ### Use
 
-Install the package from npm:
-
-```sh
-npm install --save-dev @alleyinteractive/create-block
-```
-
 Run the script to generate a block:
 
 ```sh
@@ -47,10 +41,10 @@ The script will run and will start prompting for the input required to scaffold 
 Example in `package.json`:
 ```json
 "scripts": {
-    "create-block": "@alleyinteractive/create-block --n create-wordpress-plugin --l typescript",
+    "create-block": "npx @alleyinteractive/create-block -n my-projects-namespace -l typescript",
 }
 ```
-The example above will scaffold blocks in the default "blocks" directory in a project using the namespace of "create-wordpress-plugin" and using typescript as the block language.
+The example above will scaffold blocks in the default "blocks" directory in a project using the namespace of "my-projects-namespace" and using typescript as the block language.
 
 ### From Source
 
