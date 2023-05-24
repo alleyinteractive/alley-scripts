@@ -100,7 +100,7 @@ const usage = commandLineUsage([
 // Display the help text if the --help option is used.
 if (help) {
   console.log(usage);
-  process.exit(1);
+  process.exit(0);
 }
 
 /**
