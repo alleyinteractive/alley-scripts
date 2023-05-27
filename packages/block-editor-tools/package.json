@@ -127,7 +127,7 @@
     "postcss-loader": "^7.3.0",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.62.1",
-    "sass-loader": "^13.2.0",
+    "sass-loader": "^13.3.0",
     "style-loader": "^3.3.3",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4",
