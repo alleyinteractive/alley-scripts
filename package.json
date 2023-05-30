@@ -25,6 +25,7 @@
   },
   "workspaces": [
     "packages/block-editor-tools",
+    "packages/create-block",
     "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",
@@ -44,7 +45,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "storybook": "^7.0.12",
-    "turbo": "^1.8.8"
-  },
-  "peerDependencies": {}
+    "turbo": "^1.9.9"
+  }
 }
