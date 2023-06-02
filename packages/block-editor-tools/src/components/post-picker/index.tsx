@@ -105,7 +105,7 @@ const PostPicker = ({
         variant="primary"
         onClick={openModal}
         style={{
-          margin: '0 4px'
+          margin: '0 4px',
         }}
       >
         {__('Replace', 'alley-scripts')}
