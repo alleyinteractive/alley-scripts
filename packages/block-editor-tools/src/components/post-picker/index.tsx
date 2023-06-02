@@ -93,7 +93,7 @@ const PostPicker = ({
   const controls = () => (
     <ButtonGroup>
       <Button
-        variant="primary"
+        variant="secondary"
         onClick={onReset}
         style={{
           margin: '0 4px',
@@ -102,7 +102,7 @@ const PostPicker = ({
         {__('Reset', 'alley-scripts')}
       </Button>
       <Button
-        variant="primary"
+        variant="secondary"
         onClick={openModal}
         style={{
           margin: '0 4px',
