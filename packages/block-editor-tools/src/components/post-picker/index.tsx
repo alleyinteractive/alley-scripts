@@ -93,7 +93,7 @@ const PostPicker = ({
   const controls = () => (
     <ButtonGroup>
       <Button
-        variant="primary"
+        variant="secondary"
         onClick={onReset}
         style={{
           margin: '0 4px',
