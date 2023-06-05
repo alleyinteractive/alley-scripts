@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
 import './post-list.scss';
-import PostListPost from './post-list-post';
+import Post from './post';
 
 interface PostListProps {
   baseUrl: string;
@@ -162,11 +162,11 @@ const PostList = ({
               {searchRender ? (
                 searchRender(t)
               ) : (
-                <PostListPost
+                <Post
                   title={t.title}
                   postType={t.subtype}
                     // eslint-disable-next-line no-underscore-dangle
-                  featuredImgID={t?._embedded?.self[0]?.featured_media}
+                  attachmentID={t?._embedded?.self[0]?.featured_media}
                 />
               )}
             </Button>
