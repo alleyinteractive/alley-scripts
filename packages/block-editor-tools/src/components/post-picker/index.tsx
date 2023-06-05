@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import {
   Button,
+  ButtonGroup,
   Spinner,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -78,6 +79,7 @@ const PostPicker = ({
     type = '',
   } = post || {};
 
+<<<<<<< HEAD
   const controls = () => (
     <Button
       variant="primary"
@@ -86,6 +88,11 @@ const PostPicker = ({
       {__('Replace', 'alley-scripts')}
     </Button>
   );
+=======
+  const media = useMedia(featuredMediaId) as any as WP_REST_API_Attachment;
+
+  const postImage = media ? media.source_url : '';
+>>>>>>> origin/main
 
   const openModal = () => {
     setShowModal(true);
@@ -94,6 +101,29 @@ const PostPicker = ({
   const closeModal = () => {
     setShowModal(false);
   };
+
+  const controls = () => (
+    <ButtonGroup>
+      <Button
+        variant="secondary"
+        onClick={onReset}
+        style={{
+          margin: '0 4px',
+        }}
+      >
+        {__('Reset', 'alley-scripts')}
+      </Button>
+      <Button
+        variant="secondary"
+        onClick={openModal}
+        style={{
+          margin: '0 4px',
+        }}
+      >
+        {__('Replace', 'alley-scripts')}
+      </Button>
+    </ButtonGroup>
+  );
 
   // getEntityRecord returns `null` if the load is in progress.
   if (value !== 0 && post === null) {
