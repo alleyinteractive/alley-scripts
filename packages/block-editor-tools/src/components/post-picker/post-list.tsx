@@ -58,6 +58,7 @@ const PostList = ({
         baseUrl,
         {
           page: params.page,
+          _embed: 1,
         },
       );
       if (params.searchValue && params.searchValue.length > 2) {
