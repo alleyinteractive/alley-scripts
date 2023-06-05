@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { Button, TextControl, Spinner } from '@wordpress/components';
 import classNames from 'classnames';
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
 import './post-list.scss';
+import PostListPost from './post-list-post';
 
 interface PostListProps {
   baseUrl: string;
@@ -161,15 +162,12 @@ const PostList = ({
               {searchRender ? (
                 searchRender(t)
               ) : (
-                <div>
-                  <strong>
-                    {t.title}
-                  </strong>
-                  {sprintf(
-                    ' (%s)',
-                    t.subtype,
-                  )}
-                </div>
+                <PostListPost
+                  title={t.title}
+                  postType={t.subtype}
+                    // eslint-disable-next-line no-underscore-dangle
+                  featuredImgID={t?._embedded?.self[0]?.featured_media}
+                />
               )}
             </Button>
           ))
