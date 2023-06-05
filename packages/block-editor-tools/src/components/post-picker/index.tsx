@@ -79,21 +79,6 @@ const PostPicker = ({
     type = '',
   } = post || {};
 
-<<<<<<< HEAD
-  const controls = () => (
-    <Button
-      variant="primary"
-      onClick={onReset}
-    >
-      {__('Replace', 'alley-scripts')}
-    </Button>
-  );
-=======
-  const media = useMedia(featuredMediaId) as any as WP_REST_API_Attachment;
-
-  const postImage = media ? media.source_url : '';
->>>>>>> origin/main
-
   const openModal = () => {
     setShowModal(true);
   };
