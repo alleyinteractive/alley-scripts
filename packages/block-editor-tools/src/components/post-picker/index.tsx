@@ -6,13 +6,14 @@ import {
   ButtonGroup,
   Spinner,
 } from '@wordpress/components';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
-import type { WP_REST_API_Post, WP_REST_API_Attachment } from 'wp-types';
+import type { WP_REST_API_Post } from 'wp-types';
 
-import { useMedia, usePostById } from '../../hooks';
+import { usePostById } from '../../hooks';
 
 import SearchModal from './search-modal';
+import Post from './post';
 
 interface PostPickerProps {
   allowedTypes?: string[];
@@ -78,10 +79,6 @@ const PostPicker = ({
     type = '',
   } = post || {};
 
-  const media = useMedia(featuredMediaId) as any as WP_REST_API_Attachment;
-
-  const postImage = media ? media.source_url : '';
-
   const openModal = () => {
     setShowModal(true);
   };
@@ -133,16 +130,11 @@ const PostPicker = ({
             previewRender(post)
           ) : (
             <Preview>
-              {postImage ? (
-                <img src={postImage} alt="" />
-              ) : null}
-              <strong>
-                {title}
-              </strong>
-              {sprintf(
-                ' (%s)',
-                type,
-              )}
+              <Post
+                title={title}
+                postType={type}
+                attachmentID={featuredMediaId}
+              />
             </Preview>
           )}
           {controls()}
