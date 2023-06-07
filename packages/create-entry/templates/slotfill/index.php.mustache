@@ -9,10 +9,12 @@
  *
  * This file must be included from the build output directory in a project.
  * and will be loaded from there.
+ *
+ * @package {{prefixNameSpace}}
  */
 
 /**
- * Registers all slotfill assets so that they can be enqueued through Gutenberg in
+ * Registers all {{slug}} slotfill assets so that they can be enqueued in
  * the corresponding context.
  */
 function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
@@ -42,7 +44,7 @@ function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
 add_action( 'init', 'register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
 
 /**
- * Enqueue block editor assets for this slotfill.
+ * Enqueue block editor assets for the {{slug}} slotfill.
  *
  * This function is called by the enqueue_block_editor_assets hook. Use it to
  * enqueue assets that are loaded in the block editor.

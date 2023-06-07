@@ -154,11 +154,14 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
     // Output the success message.
     console.log(
       chalk.green(
-        `\nThe ${entryType} "${chalk.cyan(slug)}" was successfully created in the "${chalk.cyan(srcDir)}" directory with the following files:`,
+        `\nThe ${entryType} "${chalk.green.bold(slug)}" was created successfully!\n`,
       ),
     );
-    // Print each file generated to the console.
-    outputFiles.forEach((file) => console.log(` - ${chalk.cyan(file)}`));
+    if (outputFiles.length > 0) {
+      console.log('The following files have been scaffolded:');
+      // Print each file generated to the console.
+      outputFiles.forEach((file) => console.log(chalk.cyan(`./${srcDir}/${slug}/${file}`)));
+    }
   } catch (error) {
     console.error(chalk.red('Error creating entry.'), error);
   }

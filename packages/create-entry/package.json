@@ -26,7 +26,7 @@
     "templates"
   ],
   "bin": {
-    "create-entry": "./dist/index.js"
+    "@alleyinteractive/create-entry": "./dist/index.js"
   },
   "peerDependencies": {
     "@wordpress/scripts": "*"
