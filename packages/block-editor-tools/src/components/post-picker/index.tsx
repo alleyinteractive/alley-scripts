@@ -3,15 +3,17 @@ import styled from 'styled-components';
 
 import {
   Button,
+  ButtonGroup,
   Spinner,
 } from '@wordpress/components';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
-import type { WP_REST_API_Post, WP_REST_API_Attachment } from 'wp-types';
+import type { WP_REST_API_Post } from 'wp-types';
 
-import { useMedia, usePostById } from '../../hooks';
+import { usePostById } from '../../hooks';
 
 import SearchModal from './search-modal';
+import Post from './post';
 
 interface PostPickerProps {
   allowedTypes?: string[];
@@ -77,19 +79,6 @@ const PostPicker = ({
     type = '',
   } = post || {};
 
-  const media = useMedia(featuredMediaId) as any as WP_REST_API_Attachment;
-
-  const postImage = media ? media.source_url : '';
-
-  const controls = () => (
-    <Button
-      variant="primary"
-      onClick={onReset}
-    >
-      {__('Replace', 'alley-scripts')}
-    </Button>
-  );
-
   const openModal = () => {
     setShowModal(true);
   };
@@ -97,6 +86,29 @@ const PostPicker = ({
   const closeModal = () => {
     setShowModal(false);
   };
+
+  const controls = () => (
+    <ButtonGroup>
+      <Button
+        variant="secondary"
+        onClick={onReset}
+        style={{
+          margin: '0 4px',
+        }}
+      >
+        {__('Reset', 'alley-scripts')}
+      </Button>
+      <Button
+        variant="secondary"
+        onClick={openModal}
+        style={{
+          margin: '0 4px',
+        }}
+      >
+        {__('Replace', 'alley-scripts')}
+      </Button>
+    </ButtonGroup>
+  );
 
   // getEntityRecord returns `null` if the load is in progress.
   if (value !== 0 && post === null) {
@@ -118,16 +130,11 @@ const PostPicker = ({
             previewRender(post)
           ) : (
             <Preview>
-              {postImage ? (
-                <img src={postImage} alt="" />
-              ) : null}
-              <strong>
-                {title}
-              </strong>
-              {sprintf(
-                ' (%s)',
-                type,
-              )}
+              <Post
+                title={title}
+                postType={type}
+                attachmentID={featuredMediaId}
+              />
             </Preview>
           )}
           {controls()}
