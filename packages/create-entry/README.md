@@ -21,12 +21,11 @@ npm install --save-dev @alleyinteractive/create-entry
 Run the script to generate an entry point:
 
 ```sh
-$ npx create-entry [options]
+$ npx @alleyinteractive/create-entry [options]
 ```
 Without providing any options the tool will prompt the user through several options for creating an entry.
 
 ### `CLI options`
-
 
 ```
 
@@ -59,7 +58,7 @@ The default option is to include the PHP file for enqueueing the entry, this can
 If the PHP file is included an optional namespace prompt is provided if the user would like to customize the namespace. Default is 'create-entry'. If the CLI `--namespace` option is provided this prompt will not show as the namespace has already been set.
 
 ### Recommended Setup
-* Install `create-entry` as a dev dependency on a project.
+* Install `create-entry` as a dev dependency on a project. e.g. `npm install --save-dev @alleyinteractive/create-entry`
 * Add a `create-entry` script command in the projects `package.json` file to call the script.
 * Add project specific flags to the command setting `--src-dir`, `--namespace`, and `--textdomain` accordingly.
 * Add a separate `create-slotfill` script command in the projects `package.json` file with the necessary flags to scaffold a slotfill entry point.
@@ -68,8 +67,8 @@ Example:
 ```json
 // package.json
 "scripts": {
-    "create-entry": "create-entry --src-dir=src --namespace=create-wordpress-plugin --textdomain=mytextdomain",
-    "create-slotfill": "create-entry --slotfill --src-dir=src --namespace=create-wordpress-plugin --textdomain=mytextdomain",
+    "create-entry": "npx @alleyinteractive/create-entry --src-dir=src --namespace=create-wordpress-plugin --textdomain=mytextdomain",
+    "create-slotfill": "npx @alleyinteractive/create-entry --slotfill --src-dir=src --namespace=create-wordpress-plugin --textdomain=mytextdomain",
 }
 ```
 
