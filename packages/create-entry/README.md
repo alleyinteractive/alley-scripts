@@ -102,7 +102,7 @@ if ( ! empty( $files ) ) {
 
 ### From Source
 
-This project was written as a Node application with ESM and Typescript support. Tests are using Jest and Linting uses Alley's ESLint Typescript configuration that extends Airbnb's ESLint standards.
+This project was written as a Node application with ESM and Typescript support. This project uses Alley's ESLint Typescript configuration that extends Airbnb's ESLint standards.
 
 To work on this repository:
 
@@ -146,7 +146,6 @@ contribute to this open source project.
 
 This is an npm package that is published to https://www.npmjs.com/. Dependencies are defined in `package.json` and the
 ESLint configuration is found in `.eslintrc.json`.
-Jest configuration is found in `jest.config.js`.
 Typescript configuration is found in `tsconfig.json`.
 
 

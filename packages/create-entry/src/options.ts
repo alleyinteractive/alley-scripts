@@ -1,7 +1,7 @@
-import { validateSlug } from './validation.js';
+import { slugFormatError, validateSlug } from './validation.js';
 import { formatSlug } from './formatting.js';
 import { promptForNamespace } from './prompts.js';
-import createEntryArgs from './createEntryArgs.js';
+import entryArgs from './entryArgs.js';
 
 export type EntryType = 'slotfill' | 'entry';
 
@@ -15,17 +15,13 @@ export function getTextDomain(): string {
 
   const {
     textdomain: textDomainFromArgs,
-  } = createEntryArgs;
+  } = entryArgs;
 
   if (textDomainFromArgs) {
     textDomain = textDomainFromArgs || '';
 
     if (validateSlug(textDomain) !== true) {
-      // eslint-disable-next-line no-console
-      console.error(
-        'Invalid value for --textdomain. Please enter a valid string (lowercase, no spaces, only hyphens)',
-      );
-      process.exit(1);
+      slugFormatError('--textdomain');
     }
   }
 
@@ -44,7 +40,7 @@ export async function getNameSpace(hasEnqueue: boolean): Promise<string> {
 
   const {
     namespace: nameSpaceFromArgs,
-  } = createEntryArgs;
+  } = entryArgs;
 
   if (nameSpaceFromArgs) {
     nameSpace = nameSpaceFromArgs || nameSpace;
@@ -53,11 +49,7 @@ export async function getNameSpace(hasEnqueue: boolean): Promise<string> {
   }
 
   if (validateSlug(nameSpace) !== true) {
-    // eslint-disable-next-line no-console
-    console.error(
-      'Invalid namespace. Please enter a valid namespace (lowercase, no spaces, only hyphens)',
-    );
-    process.exit(1);
+    slugFormatError('namespace');
   }
 
   return formatSlug(nameSpace);
@@ -71,7 +63,7 @@ export async function getNameSpace(hasEnqueue: boolean): Promise<string> {
 export function getEntryType(): EntryType {
   const {
     slotfill,
-  } = createEntryArgs;
+  } = entryArgs;
 
   return slotfill ? 'slotfill' : 'entry';
 }

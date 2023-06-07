@@ -3,18 +3,18 @@ import { parse } from 'ts-command-line-args';
 /**
  * The command line argument types.
  */
-interface CreateEntryArgs {
+export type EntryArgs = {
   'src-dir'?: string;
   help?: boolean;
   namespace?: string;
   slotfill?: boolean;
   textdomain?: string;
-}
+};
 
 /**
  * Set the script arguments and defaults.
  */
-const createEntryArgs = parse<CreateEntryArgs>(
+const entryArgs = parse<EntryArgs>(
   {
     'src-dir': {
       type: String,
@@ -55,4 +55,4 @@ const createEntryArgs = parse<CreateEntryArgs>(
   },
 );
 
-export default createEntryArgs;
+export default entryArgs;

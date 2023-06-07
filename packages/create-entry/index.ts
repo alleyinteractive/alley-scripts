@@ -5,17 +5,22 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { glob } from 'glob';
+import chalk from 'chalk';
 import mustache from 'mustache';
 
 // Internal functions.
-import { directoryExists } from './src/validation.js';
+import {
+  directoryExists,
+  validateCLIargs,
+} from './src/validation.js';
 import { toSnakeCase } from './src/formatting.js';
 import {
+  promptForSlug,
   promptForEntryPoint,
   promptForEnqueueHook,
   promptForEnqueueStyleHook,
 } from './src/prompts.js';
-import createEntryArgs from './src/createEntryArgs.js';
+import entryArgs from './src/entryArgs.js';
 import {
   getNameSpace,
   getTextDomain,
@@ -33,46 +38,46 @@ const dirName = path.dirname(fileName);
 const TEMPLATE_PATH = path.join(dirName, '../templates');
 
 /**
- * Prompts the user to select an entry point type.
+ * Prompts the user to create an entry point.
  */
 (async () => {
   let enqueueHook = '';
   let enqueueStyleHook = '';
 
-  // Get the arguments passed to the CLI.
+  // Validate the CLI args if they exist first so that a user can fix flags if they are invalid.
+  validateCLIargs(
+    ['src-dir', 'namespace', 'textdomain'],
+    entryArgs,
+  );
+
+  /**
+   * Get the source directory argument passed to the CLI if there is one.
+   * If not use the default 'entries'. This is where the entry points will
+   * be written to relative to the current working directory.
+   */
   const {
-    'src-dir': srcDir,
-  } = createEntryArgs;
-
-  // The directory where the entry points will be written
-  // relative to the current working directory.
-  const ENTRIES_DIR: string | 'entries' = srcDir || 'entries';
-  const entryType = getEntryType();
-
-  const {
-    slug,
-    hasStyles,
-    hasEnqueue,
-  } = await promptForEntryPoint();
-
-  // check if the slug is valid.
-  if (!slug) {
-    console.error('Invalid slug. Exiting...');
-    process.exit(1);
-  }
-
-  if (!(await directoryExists(ENTRIES_DIR))) {
-    await fs.promises.mkdir(ENTRIES_DIR);
-  }
-
-  // Navigate to the directory to create the entry point.
-  process.chdir(ENTRIES_DIR);
+    'src-dir': srcDir = 'entries',
+  } = entryArgs;
 
   try {
-    if (await directoryExists(slug)) {
-      console.log(`Entry '${slug}' already exists! Choose a different slug. Exiting...`);
-      process.exit(1);
+    // Create the source directory for the entry points.
+    if (!(await directoryExists(srcDir))) {
+      await fs.promises.mkdir(srcDir);
     }
+
+    // Navigate to the directory to create the entry point.
+    process.chdir(srcDir);
+
+    // The entry type. Either 'entry' or 'slotfill'.
+    const entryType = getEntryType();
+
+    // Prompt for the slug. Will exit if no slug is provided.
+    const slug = await promptForSlug();
+
+    const {
+      hasStyles,
+      hasEnqueue,
+    } = await promptForEntryPoint();
 
     const templateFiles: string[] = await glob('*.mustache', {
       cwd: path.join(TEMPLATE_PATH, entryType),
@@ -80,13 +85,15 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
     });
 
     if (templateFiles.length === 0) {
-      console.log(`No templates found for ${entryType}. Exiting...`);
-      process.exit(1);
+      throw new Error(
+        chalk.red(
+          `No entry templates were found for ${chalk.red.bold(entryType)}. Exiting...`,
+        ),
+      );
     }
 
     // Call these functions here so that the prompts called and the data is defined.
     const prefixNameSpace = await getNameSpace(hasEnqueue);
-    const textdomain = getTextDomain();
 
     if (entryType !== 'slotfill') {
       // If there is an enqueue file, prompt for the enqueue hook names and set the hook names.
@@ -97,6 +104,9 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
 
     // Create the directory for the entry point.
     await fs.promises.mkdir(slug);
+
+    // Output files used to display the files generated for the entry.
+    let outputFiles: string[] = [];
 
     // Loop through the template files and render them with the provided data.
     await Promise.all(templateFiles.map(async (inputFile: string) => {
@@ -115,7 +125,7 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
         prefixNameSpace,
         nameSpaceSnakeCase: toSnakeCase(prefixNameSpace),
         slugUnderscore: toSnakeCase(slug),
-        textdomain,
+        textdomain: getTextDomain(),
       }, { slug });
 
       if (render) {
@@ -128,14 +138,28 @@ const TEMPLATE_PATH = path.join(dirName, '../templates');
             render,
             'utf8',
           );
+          // Add the output file to the list.
+          outputFiles = [...outputFiles, outputFile];
         } catch (error) {
-          console.error(`Failed to create file '${ENTRIES_DIR}/${slug}/${outputFile}':`, error);
+          console.error(
+            chalk.red(
+              `Failed to create file '${srcDir}/${slug}/${outputFile}':\n`,
+            ),
+            error,
+          );
         }
       }
     }));
 
-    console.log(`\nEntry '${slug}' was created successfully!`);
+    // Output the success message.
+    console.log(
+      chalk.green(
+        `\nThe ${entryType} "${chalk.cyan(slug)}" was successfully created in the "${chalk.cyan(srcDir)}" directory with the following files:`,
+      ),
+    );
+    // Print each file generated to the console.
+    outputFiles.forEach((file) => console.log(` - ${chalk.cyan(file)}`));
   } catch (error) {
-    console.error(`Error creating entry '${slug}'`, error);
+    console.error(chalk.red('Error creating entry.'), error);
   }
 })();

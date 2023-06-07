@@ -1,4 +1,5 @@
 import prompts from 'prompts';
+import fs from 'fs';
 import { formatSlug } from './formatting.js';
 import {
   validateFunctionName,
@@ -10,30 +11,54 @@ import {
 } from './options.js';
 
 /**
+ * Prompts the user to enter a slug and returns the slug.
+ *
+ * @returns - A slug as a string.
+ */
+async function promptForSlug(): Promise<string> {
+  const entryType: EntryType = getEntryType();
+
+  const { slug } = await prompts([
+    {
+      type: 'text',
+      name: 'slug',
+      message: `The ${entryType} slug used for identification (also the output folder name):`,
+      validate: (value) => {
+        if (fs.existsSync(value)) {
+          return 'A directory with this name already exists. Please choose another name.';
+        }
+
+        return validateSlug(value)
+          || 'Please enter a valid slug (lowercase, no spaces, only hyphens)';
+      },
+      format: formatSlug,
+    },
+  ]);
+
+  // If no slug is provided, exit the process to prevent the application flow from continuing.
+  if (!slug) {
+    console.log('A slug is required for scaffolding an entry point. Either the slug was empty or the slug directory already exists. Exiting...');
+    process.exit(0);
+  }
+
+  return slug;
+}
+
+/**
  * Prompts the user to select an entry point type and returns the selected options.
  *
  * @returns - An object containing the selected options.
  */
 async function promptForEntryPoint(): Promise<{
-  slug: string,
   hasStyles: boolean,
   hasEnqueue: boolean
 }> {
   const entryType: EntryType = getEntryType();
 
   const {
-    slug,
     hasStyles,
     hasEnqueue,
   } = await prompts([
-    {
-      type: 'text',
-      name: 'slug',
-      message: `The ${entryType} slug used for identification (also the output folder name):`,
-      validate: (value) => validateSlug(value)
-        || 'Please enter a valid slug (lowercase, no spaces, only hyphens)',
-      format: formatSlug,
-    },
     {
       type: 'confirm',
       name: 'hasStyles',
@@ -49,7 +74,6 @@ async function promptForEntryPoint(): Promise<{
   ]);
 
   return {
-    slug,
     hasStyles,
     hasEnqueue,
   };
@@ -58,8 +82,8 @@ async function promptForEntryPoint(): Promise<{
 /**
  * Prompts the user for a namespace or prefix to use and returns the selected option.
  *
- * @param initial    - The initial value for the namespace.
- * @returns          - The selected namespace or an empty string.
+ * @param initial - The initial value for the namespace.
+ * @returns       - The selected namespace or an empty string.
  */
 async function promptForNamespace(initial: string = 'create-entry'): Promise<string> {
   const entryType: EntryType = getEntryType();
@@ -120,6 +144,7 @@ async function promptForEnqueueStyleHook(): Promise<string> {
 }
 
 export {
+  promptForSlug,
   promptForEntryPoint,
   promptForNamespace,
   promptForEnqueueHook,
