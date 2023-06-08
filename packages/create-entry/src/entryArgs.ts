@@ -30,7 +30,7 @@ const entryArgs = parse<EntryArgs>(
     namespace: {
       type: String,
       alias: 'n',
-      description: 'Internal namespace for the entry point. (default is "create-entry")',
+      description: 'Internal namespace for the entry point. This should be the theme/plugin prefix. (default is "create-entry")',
       optional: true,
     },
     slotfill: {

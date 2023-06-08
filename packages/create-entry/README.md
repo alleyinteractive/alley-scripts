@@ -67,8 +67,8 @@ Example:
 ```json
 // package.json
 "scripts": {
-    "create-entry": "npx @alleyinteractive/create-entry --src-dir=src --namespace=create-wordpress-plugin --textdomain=mytextdomain",
-    "create-slotfill": "npx @alleyinteractive/create-entry --slotfill --src-dir=src --namespace=create-wordpress-plugin --textdomain=mytextdomain",
+    "create-entry": "npx @alleyinteractive/create-entry --src-dir=src --namespace=create-wordpress-plugin --textdomain=create-wordpress-plugin",
+    "create-slotfill": "npx @alleyinteractive/create-entry --slotfill --src-dir=src --namespace=create-wordpress-plugin --textdomain=create-wordpress-plugin",
 }
 ```
 

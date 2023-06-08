@@ -17,7 +17,7 @@
  * Registers all {{slug}} slotfill assets so that they can be enqueued in
  * the corresponding context.
  */
-function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
+function {{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts() {
 	// Automatically load dependencies and version.
 	$asset_file = include __DIR__ . '/index.asset.php';
 
@@ -41,7 +41,7 @@ function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
 	);
 	{{/hasStyles}}
 }
-add_action( 'init', 'register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
+add_action( 'init', '{{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts' );
 
 /**
  * Enqueue block editor assets for the {{slug}} slotfill.
@@ -49,11 +49,11 @@ add_action( 'init', 'register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts'
  * This function is called by the enqueue_block_editor_assets hook. Use it to
  * enqueue assets that are loaded in the block editor.
  */
-function action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_assets() {
+function {{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_assets() {
 	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
 	{{#hasStyles}}
 	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
 	{{/hasStyles}}
 }
-add_action( 'enqueue_block_editor_assets', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_assets' );
+add_action( 'enqueue_block_editor_assets', '{{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_assets' );
 {{/hasEnqueue}}

@@ -1,7 +1,7 @@
 {{#hasEnqueue}}
 <?php
 /**
- * {{slug}} entry script registration and enqueue.
+ * Entry point "{{slug}}" script registration and enqueue.
  *
  * This file will be copied to the assets output directory
  * with Webpack using wp-scripts build. The build command must
@@ -16,7 +16,7 @@
 /**
  * Register the {{slug}} entry point assets so that they can be enqueued.
  */
-function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
+function {{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts() {
 	// Automatically load dependencies and version.
 	$asset_file = include __DIR__ . '/index.asset.php';
 
@@ -40,23 +40,23 @@ function register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
 	);
 	{{/hasStyles}}
 }
-add_action( 'init', 'register_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
+add_action( 'init', '{{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts' );
 
 /**
  * Enqueue scripts for the {{slug}} entry point.
  */
-function action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts() {
+function {{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_scripts() {
 	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
 }
-add_action( '{{enqueueHook}}', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_scripts' );
+add_action( '{{enqueueHook}}', '{{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_scripts' );
 
 {{#hasStyles}}
 /**
  * Enqueue styles for the {{slug}} entry point.
  */
-function action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_styles() {
+function {{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_styles() {
 	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
 }
-add_action( '{{enqueueStyleHook}}', 'action_enqueue_{{nameSpaceSnakeCase}}_{{slugUnderscore}}_styles' );
+add_action( '{{enqueueStyleHook}}', '{{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_styles' );
 {{/hasStyles}}
 {{/hasEnqueue}}
