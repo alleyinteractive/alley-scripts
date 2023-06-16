@@ -34,8 +34,7 @@ Without providing any options the tool will prompt the user through several opti
   -h, --help                Prints this usage guide                                           
   -n, --namespace string    Internal namespace for the entry point. (default is "create-      
                             entry")                                                           
-  -s, --slotfill            Text domain for setting translated strings for a script. (default 
-                            is empty or "default")                                            
+  -s, --slotfill            Create a slotfill entry point.
   -t, --textdomain string   Text domain for setting translated strings for a script. (default 
                             is empty or "default")    
 ```
@@ -63,12 +62,11 @@ If the PHP file is included an optional namespace prompt is provided if the user
 * Add project specific flags to the command setting `--src-dir`, `--namespace`, and `--textdomain` accordingly.
 * Add a separate `create-slotfill` script command in the projects `package.json` file with the necessary flags to scaffold a slotfill entry point.
 
-Example: 
+Example in `package.json`: 
 ```json
-// package.json
 "scripts": {
-    "create-entry": "npx @alleyinteractive/create-entry --src-dir=src --namespace=create-wordpress-plugin --textdomain=create-wordpress-plugin",
-    "create-slotfill": "npx @alleyinteractive/create-entry --slotfill --src-dir=src --namespace=create-wordpress-plugin --textdomain=create-wordpress-plugin",
+    "create-entry": "npx @alleyinteractive/create-entry --src-dir src --namespace create-wordpress-plugin --textdomain create-wordpress-plugin",
+    "create-slotfill": "npx @alleyinteractive/create-entry --slotfill --src-dir src --namespace create-wordpress-plugin --textdomain create-wordpress-plugin",
 }
 ```
 
