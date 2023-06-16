@@ -1,0 +1,15 @@
+{
+  "extends": "@alleyinteractive/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+  ],
+  "include": [
+    "src/**/*",
+    "index.ts",
+  ]
+}

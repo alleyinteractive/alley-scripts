@@ -1,0 +1,62 @@
+{{#hasEnqueue}}
+<?php
+/**
+ * Entry point "{{slug}}" script registration and enqueue.
+ *
+ * This file will be copied to the assets output directory
+ * with Webpack using wp-scripts build. The build command must
+ * be run before this file will be available.
+ *
+ * This file must be included from the build output directory in a project.
+ * and will be loaded from there.
+ *
+ * @package {{prefixNameSpace}}
+ */
+
+/**
+ * Register the {{slug}} entry point assets so that they can be enqueued.
+ */
+function {{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts() {
+	// Automatically load dependencies and version.
+	$asset_file = include __DIR__ . '/index.asset.php';
+
+	// Register the {{slug}} script.
+	wp_register_script(
+		'{{prefixNameSpace}}-{{slug}}-js',
+		plugins_url( 'index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+	wp_set_script_translations( '{{prefixNameSpace}}-{{slug}}-js'{{#textdomain}}, '{{textdomain}}'{{/textdomain}} );
+	{{#hasStyles}}
+
+	// Register the {{slug}} style.
+	wp_register_style(
+		'{{prefixNameSpace}}-{{slug}}-css',
+		plugins_url( 'index.css', __FILE__ ),
+		[],
+		$asset_file['version'],
+	);
+	{{/hasStyles}}
+}
+add_action( 'init', '{{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts' );
+
+/**
+ * Enqueue scripts for the {{slug}} entry point.
+ */
+function {{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_scripts() {
+	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
+}
+add_action( '{{enqueueHook}}', '{{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_scripts' );
+
+{{#hasStyles}}
+/**
+ * Enqueue styles for the {{slug}} entry point.
+ */
+function {{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_styles() {
+	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
+}
+add_action( '{{enqueueStyleHook}}', '{{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_styles' );
+{{/hasStyles}}
+{{/hasEnqueue}}

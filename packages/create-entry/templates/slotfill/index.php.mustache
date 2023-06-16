@@ -1,0 +1,59 @@
+{{#hasEnqueue}}
+<?php
+/**
+ * {{slug}} slotfill script registration and enqueue.
+ *
+ * This file will be copied to the assets output directory
+ * with Webpack using wp-scripts build. The build command must
+ * be run before this file will be available.
+ *
+ * This file must be included from the build output directory in a project.
+ * and will be loaded from there.
+ *
+ * @package {{prefixNameSpace}}
+ */
+
+/**
+ * Registers all {{slug}} slotfill assets so that they can be enqueued in
+ * the corresponding context.
+ */
+function {{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts() {
+	// Automatically load dependencies and version.
+	$asset_file = include __DIR__ . '/index.asset.php';
+
+	// Register the {{slug}} script.
+	wp_register_script(
+		'{{prefixNameSpace}}-{{slug}}-js',
+		plugins_url( 'index.js', __FILE__ ),
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		trues
+	);
+	wp_set_script_translations( '{{prefixNameSpace}}-{{slug}}-js'{{#textdomain}}, '{{textdomain}}'{{/textdomain}} );
+	{{#hasStyles}}
+
+	// Register the {{slug}} style.
+	wp_register_style(
+		'{{prefixNameSpace}}-{{slug}}-css',
+		plugins_url( 'index.css', __FILE__ ),
+		[],
+		$asset_file['version'],
+	);
+	{{/hasStyles}}
+}
+add_action( 'init', '{{nameSpaceSnakeCase}}_register_{{slugUnderscore}}_scripts' );
+
+/**
+ * Enqueue block editor assets for the {{slug}} slotfill.
+ *
+ * This function is called by the enqueue_block_editor_assets hook. Use it to
+ * enqueue assets that are loaded in the block editor.
+ */
+function {{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_assets() {
+	wp_enqueue_script( '{{prefixNameSpace}}-{{slug}}-js' );
+	{{#hasStyles}}
+	wp_enqueue_style( '{{prefixNameSpace}}-{{slug}}-css' );
+	{{/hasStyles}}
+}
+add_action( 'enqueue_block_editor_assets', '{{nameSpaceSnakeCase}}_enqueue_{{slugUnderscore}}_assets' );
+{{/hasEnqueue}}
