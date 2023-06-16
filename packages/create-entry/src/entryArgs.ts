@@ -36,7 +36,7 @@ const entryArgs = parse<EntryArgs>(
     slotfill: {
       type: Boolean,
       alias: 's',
-      description: 'Text domain for setting translated strings for a script. (default is empty or "default")',
+      description: 'Create a slotfill entry point.',
       optional: true,
     },
     textdomain: {
