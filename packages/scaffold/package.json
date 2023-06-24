@@ -15,7 +15,7 @@
     "commander": "^10.0.0",
     "fast-glob": "^3.2.5",
     "lodash": "^4.17.21",
-    "make-dir": "^3.1.0",
+    "make-dir": "^4.0.0",
     "mustache": "^4.2.0"
   },
   "directories": {
