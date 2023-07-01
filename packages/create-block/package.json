@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
-    "chalk": "^4.1.2",
+    "chalk": "^5.3.0",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^7.0.1",
     "cross-spawn": "^7.0.3",
