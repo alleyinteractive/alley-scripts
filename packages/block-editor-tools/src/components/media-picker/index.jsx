@@ -64,8 +64,7 @@ const MediaPicker = ({
     if (!displayControlsInToolbar) {
       return (
         <Button
-          isLarge
-          isPrimary
+          variant="primary"
           onClick={onReset}
         >
           {__('Reset', 'alley-scripts')}
