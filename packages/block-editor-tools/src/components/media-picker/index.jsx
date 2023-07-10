@@ -68,7 +68,7 @@ const MediaPicker = ({
           isPrimary
           onClick={onReset}
         >
-          {__('Replace', 'alley-scripts')}
+          {__('Reset', 'alley-scripts')}
         </Button>
       );
     }
