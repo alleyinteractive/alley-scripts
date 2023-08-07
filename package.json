@@ -34,7 +34,7 @@
     "plugin"
   ],
   "devDependencies": {
-    "@changesets/cli": "^2.26.1",
+    "@changesets/cli": "^2.26.2",
     "@storybook/addon-essentials": "^7.0.26",
     "@storybook/addon-interactions": "^7.0.27",
     "@storybook/addon-links": "^7.0.24",
