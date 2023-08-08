@@ -1,4 +1,4 @@
-# Custom Hooks: useParentBlock
+# Custom Hooks: useBlockName
 
 A custom React hook that returns the name of a block.
 
