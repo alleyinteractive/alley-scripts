@@ -7,7 +7,7 @@ If you have the post type, use `usePost` instead.
 
 ```jsx
 const MyBlock = ({
-	postID,
+ postID,
 }) => {
   const post = usePostById(postID);
 
@@ -18,9 +18,10 @@ const MyBlock = ({
 ```
 
 You can also pass a function to lookup the post type when passed the post id.
+
 ```jsx
 const MyBlock = ({
-	postID,
+ postID,
 }) => {
   const myCustomPostTypeLookup = (id) => (
     myCustomPostTypeMap[id]

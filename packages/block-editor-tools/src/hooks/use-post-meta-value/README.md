@@ -19,7 +19,7 @@ const MyComponent = () => {
 
   return (
     <TextControl
-      label={__('My Meta Key', 'alley-scripts')}
+      label={__('My Meta Key')}
       onChange={setMyMetaKey}
       value={myMetaKey}
     />
@@ -38,7 +38,7 @@ const MyComponent = ({
 
   return (
     <TextControl
-      label={__('My Meta Key', 'alley-scripts')}
+      label={__('My Meta Key')}
       onChange={setMyMetaKey}
       value={myMetaKey}
     />

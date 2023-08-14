@@ -2,12 +2,13 @@ import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import usePost from '../use-post';
+
 /**
  * Gets post data for a specific post given its ID. The post type is
  * looked up from the search endpoint, cached, and then passed to usePost.
  *
- * @param int    postId   The ID for the post to return.
- * @param function getPostType Optional custom function that returns a post type string.
+ * @param {int}      postId   The ID for the post to return.
+ * @param {function} getPostType Optional custom function that returns a post type string.
  * @returns {object} An object containing a hasResolved property
  *                   and the returned post object.
  */
@@ -35,6 +36,7 @@ const usePostById = (postId, getPostType = null) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
+
   return usePost(postId, postTypeCache[postId] ?? '');
 };
 

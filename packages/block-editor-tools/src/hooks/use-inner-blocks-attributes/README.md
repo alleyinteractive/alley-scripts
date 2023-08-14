@@ -6,7 +6,7 @@ A custom React hook that returns the current blocks' inner block's attributes.
 
 ```jsx
 const MyBlock = ({
-	clientId
+ clientId
 }) => {
   const innerBlockAttributes = useInnerBlocksAttributes(clientId);
 
