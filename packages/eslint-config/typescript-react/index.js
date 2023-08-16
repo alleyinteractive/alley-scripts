@@ -13,6 +13,7 @@ module.exports = {
   ],
   rules: {
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
+    'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
     'react/require-default-props': 'off',
   },
 };
