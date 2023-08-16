@@ -5,15 +5,5 @@ import metadata from './block.json';
 
 import './style.scss';
 
-/**
- * Registration for the {{namespace}}/{{slug}} block.
- */
-registerBlockType(
-  /* @ts-expect-error Provided types are inaccurate to the actual plugin API. */
-  metadata,
-  {
-    apiVersion: 2,
-    edit,
-    title: metadata.title,
-  },
-);
+/* @ts-expect-error Provided types are inaccurate to the actual plugin API. */
+registerBlockType(metadata, { edit });
