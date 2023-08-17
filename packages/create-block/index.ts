@@ -4,7 +4,6 @@ const fs = require('fs');
 const prompts = require('prompts');
 const path = require('path');
 const spawn = require('cross-spawn');
-const chalk = require('chalk');
 const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
 
@@ -63,11 +62,7 @@ const options: Options[] = [
  */
 function validateBlockLanguage(value: string) {
   if (value !== 'typescript' && value !== 'javascript') {
-    throw new Error(
-      chalk.red(
-        'The block language must be one of \'typescript\' or \'javascript\'\n',
-      ),
-    );
+    throw new Error('The block language must be one of \'typescript\' or \'javascript\'\n');
   }
   return value;
 }
@@ -135,9 +130,9 @@ if (help) {
   if (!fs.existsSync(blocksDirectory)) {
     try {
       fs.mkdirSync(blocksDirectory);
-      console.log(chalk.cyan(`Directory '${blocksDirectory}' created successfully!\n`));
+      console.log(`Directory '${blocksDirectory}' created successfully!\n`);
     } catch (error: any) {
-      console.error(chalk.red(`Failed to create directory '${blocksDirectory}'`), error);
+      console.error(`Failed to create directory '${blocksDirectory}'`, error);
       process.exit(1); // Exit the script with an error status code
     }
   }
