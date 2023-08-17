@@ -6,7 +6,7 @@ A custom React hook that returns the current block's inner block count.
 
 ```jsx
 const MyBlock = ({
-	clientId
+ clientId
 }) => {
   const innerBlocksCount = useInnerBlocksCount(clientId);
 

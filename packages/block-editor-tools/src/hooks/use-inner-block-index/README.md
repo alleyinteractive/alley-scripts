@@ -7,7 +7,7 @@ within a parent block.
 
 ```jsx
 const MyBlock = ({
-	clientId
+ clientId
 }) => {
   const blockIndex = useInnerBlockIndex(clientId);
 

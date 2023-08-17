@@ -6,14 +6,14 @@ A custom React hook that determines if a block has inner blocks.
 
 ```jsx
 const MyBlock = ({
-	clientId
+ clientId
 }) => {
   const hasInnerBlocks = useHasInnerBlocks(clientId);
 
   if (hasInnerBlocks) {
-	  ...
+    ...
   } else {
-	  ...
+    ...
   }
 
   ...

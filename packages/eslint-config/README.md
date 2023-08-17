@@ -47,7 +47,12 @@ Finally, add `lint` commands to your `package.json`:
 }
 ```
 
-If you are resolving your modules with a Webpack resolver configuration add the following to the
+If you are resolving your modules with a Webpack resolver configuration you will need to include `eslint-import-resolver-webpack` in your project.
+```
+npm install --save-dev eslint-import-resolver-webpack
+```
+
+You will also need to add the following to the
 projects `.eslintrc.json` file:
 
 ```json

@@ -25,6 +25,8 @@
   },
   "workspaces": [
     "packages/block-editor-tools",
+    "packages/create-block",
+    "packages/create-entry",
     "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",
@@ -32,19 +34,18 @@
     "plugin"
   ],
   "devDependencies": {
-    "@changesets/cli": "^2.26.1",
-    "@storybook/addon-essentials": "^7.0.9",
-    "@storybook/addon-interactions": "^7.0.9",
-    "@storybook/addon-links": "^7.0.5",
-    "@storybook/blocks": "^7.0.2",
+    "@changesets/cli": "^2.26.2",
+    "@storybook/addon-essentials": "^7.0.26",
+    "@storybook/addon-interactions": "^7.0.27",
+    "@storybook/addon-links": "^7.0.24",
+    "@storybook/blocks": "^7.2.3",
     "@storybook/react": "^7.0.2",
-    "@storybook/react-vite": "^7.0.2",
-    "@storybook/testing-library": "^0.1.0",
+    "@storybook/react-vite": "^7.0.24",
+    "@storybook/testing-library": "^0.2.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "storybook": "^7.0.5",
-    "turbo": "^1.8.8"
-  },
-  "peerDependencies": {}
+    "storybook": "^7.0.27",
+    "turbo": "^1.10.3"
+  }
 }

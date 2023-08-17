@@ -6,9 +6,9 @@ A custom React hook that returns the current block's inner blocks.
 
 ```jsx
 const MyBlock = ({
-	clientId
+ clientId
 }) => {
-  const blocks = useInnerBlocks(clientId);
+  const innerBlocks = useInnerBlocks(clientId);
 
   ...
 };
