@@ -6,7 +6,7 @@ A custom React hook to retrieve multiple posts' data given an array of post IDs 
 
 ```jsx
 const MyBlock = ({
-	postIDs,
+ postIDs,
 }) => {
   const posts = usePosts(postIDs, postType);
 

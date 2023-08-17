@@ -1,6 +1,8 @@
-# Custom Hooks: usePostMeta
+# Custom Hooks: useDebounce
 
-A custom React hook that creates and returns a new debounced version of the passed value that will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked.
+A custom React hook that creates and returns a new debounced version of the passed value that will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked
+
+@see <https://github.com/alleyinteractive/alley-scripts/issues/250>
 
 ## Usage
 
@@ -17,7 +19,7 @@ const MyComponent = () => {
   return (
     <>
       <TextControl
-        label={__('Set Value', 'alley-scripts')}
+        label={__('Set Value', 'your-textdomain-here')}
         onChange={(next) => setValue(next)}
         value={value}
       />

@@ -5,7 +5,7 @@ import { useSelect } from '@wordpress/data';
  * Gets the parent block from a specific block.
  *
  * @param {string} clientId The block client ID.
- * @returns {Object} Parsed block object, otherwise null.
+ * @returns {object} Parsed block object, otherwise null.
  */
 const useParentBlock = (clientId) => useSelect(
   (select) => {
