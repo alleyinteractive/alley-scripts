@@ -19,7 +19,7 @@ const MyComponent = () => {
   return (
     <>
       <TextControl
-        label={__('Set Value')}
+        label={__('Set Value', 'your-textdomain-here')}
         onChange={(next) => setValue(next)}
         value={value}
       />

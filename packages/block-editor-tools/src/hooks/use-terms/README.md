@@ -20,7 +20,7 @@ const MyComponent = ({
 
   return (
     <SelectControl
-      label={__('My Terms')}
+      label={__('My Terms', 'your-textdomain-here')}
       multiple
       onChange={(next) => setTerms(next)}
       options={options}
@@ -42,7 +42,7 @@ const MyComponent = ({
 
   return (
     <SelectControl
-      label={__('My Terms')}
+      label={__('My Terms', 'your-textdomain-here')}
       multiple
       onChange={(next) => setTerms(next)}
       options={options}
