@@ -5,6 +5,8 @@ import { useState, useEffect } from '@wordpress/element';
  *
  * @param {string} value value to set at a delay
  * @param {int} delay delay in ms
+ *
+ * @deprecated Use the version from `@uidotdev/usehooks`.
  */
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
