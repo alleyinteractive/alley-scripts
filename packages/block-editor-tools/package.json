@@ -117,7 +117,7 @@
     "@babel/preset-react": "^7.22.5",
     "@types/styled-components": "^5.1.26",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.13.0",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.15",
     "babel-jest": "^29.6.2",
     "babel-loader": "^9.1.2",
     "babel-plugin-styled-components": "^2.1.4",
