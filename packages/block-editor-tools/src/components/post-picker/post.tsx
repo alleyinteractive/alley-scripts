@@ -2,6 +2,7 @@ import { sprintf } from '@wordpress/i18n';
 import type { WP_REST_API_Attachment } from 'wp-types';
 import styled from 'styled-components';
 import { useMedia } from '../../hooks';
+import SafeHTML from '../safe-html';
 
 interface PostInterface {
   title: string;
@@ -54,9 +55,11 @@ const Post = ({
           alt={thumbAlt}
         />
       ) : null}
-      <strong>
-        {title}
-      </strong>
+      <SafeHTML
+        html={title}
+        className="post-picker-result-title"
+        tag="strong"
+      />
       {sprintf(
         ' (%s)',
         postType,
