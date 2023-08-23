@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 import pluralize from 'pluralize-esm';
 
-import type { WP_REST_API_Post, WP_REST_API_Attachment } from 'wp-types';
+import type { WP_REST_API_Post } from 'wp-types';
 
 import { usePostById } from '../../hooks';
 

@@ -1,4 +1,3 @@
-import { sprintf } from '@wordpress/i18n';
 import type { WP_REST_API_Attachment } from 'wp-types';
 import styled from 'styled-components';
 import { useMedia } from '../../hooks';
