@@ -14,6 +14,7 @@ interface PostListProps {
   searchRender?: (post: object) => JSX.Element;
   selected?: number;
   setSelected: (id: number) => void;
+  suppressPostIds?: number[];
 }
 
 interface Params {
@@ -31,6 +32,7 @@ const PostList = ({
   searchRender,
   selected,
   setSelected,
+  suppressPostIds = [],
 }: PostListProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [listposts, setListposts] = useState<WP_REST_API_Search_Results>([]);
@@ -60,6 +62,7 @@ const PostList = ({
         {
           page: params.page,
           _embed: 1,
+          exclude: suppressPostIds.join(','),
         },
       );
       if (params.searchValue && params.searchValue.length > 2) {
@@ -99,7 +102,7 @@ const PostList = ({
     // @ts-ignore
     setListposts(posts as any as WP_REST_API_Search_Results);
     setIsUpdating(false);
-  }, [listposts, baseUrl]);
+  }, [listposts, baseUrl, suppressPostIds]);
 
   /**
    * Loads more posts.

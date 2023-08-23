@@ -15,6 +15,7 @@ interface SearchModalProps {
   closeModal: () => void;
   onUpdate: (id: number) => void;
   searchRender?: (post: object) => JSX.Element;
+  suppressPostIds?: number[];
 }
 
 const SearchModal = ({
@@ -22,6 +23,7 @@ const SearchModal = ({
   closeModal,
   onUpdate,
   searchRender,
+  suppressPostIds = [],
 }: SearchModalProps) => {
   const [selected, setSelected] = useState<number>();
 
@@ -45,6 +47,7 @@ const SearchModal = ({
         selected={selected ?? 0}
         setSelected={setSelected}
         searchRender={searchRender}
+        suppressPostIds={suppressPostIds}
       />
       <div className="alley-scripts-post-picker__buttons">
         <Button
