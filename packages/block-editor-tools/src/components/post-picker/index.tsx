@@ -25,6 +25,7 @@ interface PostPickerProps {
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
   searchEndpoint?: string;
   searchRender?: (post: object) => JSX.Element;
+  suppressPostIds?: number[];
   title?: string;
   value: number;
 }
@@ -54,6 +55,7 @@ const PostPicker = ({
   previewRender,
   searchEndpoint = '/wp/v2/search',
   searchRender,
+  suppressPostIds = [],
   title: pickerTitle = '',
   value = 0,
 }: PostPickerProps) => {
@@ -153,6 +155,7 @@ const PostPicker = ({
           baseUrl={baseUrl}
           onUpdate={onUpdate}
           searchRender={searchRender}
+          suppressPostIds={suppressPostIds}
         />
       ) : null}
     </Container>

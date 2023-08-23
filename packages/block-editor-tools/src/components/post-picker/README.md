@@ -32,5 +32,6 @@ results, and a custom function for fetching post data given a post ID.
 | previewRender  |                | No       | function | Optional component to render the preview of the selected post. Must recieve an object similar to what is returned from the `/wp/v2/posts/<ID>` endpoint. |
 | searchEndpoint | `/wp/v2/search` | No | string | Optional search endpoint. |
 | searchRender   |                | No       | function | Optional component to render the preview of posts in the modal window. Must recieve an object similar to what is returned from the `/wp/v2/search` endpoint. |
+| suppressPostIds |                | No       | array    | Array of post ids to not show in the results list. |
 | title          | `''`           | No       | string   | Optional title for the component. |
 | value          |                | Yes      | integer  | The ID of the selected post. 0 represents no selection.                                                   |

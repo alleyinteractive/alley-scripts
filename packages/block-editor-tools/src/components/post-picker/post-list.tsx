@@ -14,6 +14,7 @@ interface PostListProps {
   searchRender?: (post: object) => JSX.Element;
   selected?: number;
   setSelected: (id: number) => void;
+  suppressPostIds?: number[];
 }
 
 interface Params {
@@ -31,6 +32,7 @@ const PostList = ({
   searchRender,
   selected,
   setSelected,
+  suppressPostIds = [],
 }: PostListProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [listposts, setListposts] = useState<WP_REST_API_Search_Results>([]);
@@ -150,27 +152,32 @@ const PostList = ({
       />
       <div className="alley-scripts-post-picker__post-list">
         {listposts ? (
-          listposts.map((t) => (
-            <Button
-              key={t.id}
-              className={classNames({
-                'alley-scripts-post-picker__post': true,
-                'is-selected': t.id === selected,
-              })}
-              onClick={() => setSelected(t.id as number)}
-            >
-              {searchRender ? (
-                searchRender(t)
-              ) : (
-                <Post
-                  title={t.title}
-                  postType={t.subtype}
-                    // eslint-disable-next-line no-underscore-dangle
-                  attachmentID={t?._embedded?.self[0]?.featured_media}
-                />
-              )}
-            </Button>
-          ))
+          listposts.map((t) => {
+            if (suppressPostIds.includes(t.id as number)) {
+              return null;
+            }
+            return (
+              <Button
+                key={t.id}
+                className={classNames({
+                  'alley-scripts-post-picker__post': true,
+                  'is-selected': t.id === selected,
+                })}
+                onClick={() => setSelected(t.id as number)}
+              >
+                {searchRender ? (
+                  searchRender(t)
+                ) : (
+                  <Post
+                    title={t.title}
+                    postType={t.subtype}
+                      // eslint-disable-next-line no-underscore-dangle
+                    attachmentID={t?._embedded?.self[0]?.featured_media}
+                  />
+                )}
+              </Button>
+            );
+          })
         ) : null}
         {isUpdating ? (
           <Spinner />
