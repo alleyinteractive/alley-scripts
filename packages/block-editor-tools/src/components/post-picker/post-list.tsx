@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
 import './post-list.scss';
+import Post from './post';
 
 interface TypeLabels {
   [key: string]: string;
@@ -66,6 +67,7 @@ const PostList = ({
         baseUrl,
         {
           page: params.page,
+          _embed: 1,
         },
       );
       if (params.searchValue && params.searchValue.length > 2) {
@@ -168,14 +170,13 @@ const PostList = ({
               {searchRender ? (
                 searchRender(t)
               ) : (
-                <div>
-                  <strong>
-                    {t.title}
-                  </strong>
-                  <p className="alley-scripts-post-picker__post-type">
-                    {typeLabels[t.subtype] ?? ''}
-                  </p>
-                </div>
+                <Post
+                  title={t.title}
+                  postType={t.subtype}
+                    // eslint-disable-next-line no-underscore-dangle
+                  attachmentID={t?._embedded?.self[0]?.featured_media}
+                  typeLabels={typeLabels}
+                />
               )}
             </Button>
           ))

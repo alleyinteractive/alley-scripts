@@ -6,7 +6,7 @@ A custom React hook that returns the current block's parent block attributes.
 
 ```jsx
 const MyBlock = ({
-	clientId
+ clientId
 }) => {
   const parentBlockAttributes = useParentBlockAttributes(clientId);
 

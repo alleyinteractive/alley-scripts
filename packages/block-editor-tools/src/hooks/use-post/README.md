@@ -6,7 +6,7 @@ A custom React hook to retrieve post data given a post ID and post type.
 
 ```jsx
 const MyBlock = ({
-	postID,
+ postID,
 }) => {
   const post = usePost(postID, postType);
 

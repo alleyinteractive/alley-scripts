@@ -1,4 +1,4 @@
-# Custom Hooks: usePostMeta
+# Custom Hooks: useTerms
 
  A custom React hook that wraps useEntityProp for working with a post's terms.
  It returns an array that contains a copy of a post's terms assigned from a
@@ -10,7 +10,7 @@
 
 ## Usage
 
-### Editing the Current Post's Meta
+### Editing the Current Post's Terms
 
 ```jsx
 const MyComponent = ({
@@ -20,17 +20,17 @@ const MyComponent = ({
 
   return (
     <SelectControl
-      label={__('My Terms', 'board-connect')}
-	  multiple
+      label={__('My Terms', 'your-textdomain-here')}
+      multiple
       onChange={(next) => setTerms(next)}
-	  options={options}
+      options={options}
       value={terms}
     />
   );
 };
 ```
 
-### Editing Another Post's Meta
+### Editing Another Post's Terms
 
 ```jsx
 const MyComponent = ({
@@ -42,10 +42,10 @@ const MyComponent = ({
 
   return (
     <SelectControl
-      label={__('My Terms', 'board-connect')}
-	  multiple
+      label={__('My Terms', 'your-textdomain-here')}
+      multiple
       onChange={(next) => setTerms(next)}
-	  options={options}
+      options={options}
       value={terms}
     />
   );

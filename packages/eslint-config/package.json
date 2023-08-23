@@ -5,19 +5,19 @@
   },
   "dependencies": {
     "@babel/core": ">= 7",
-    "@babel/eslint-parser": "^7.21.3",
-    "@babel/preset-env": "^7.21.4",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.0",
+    "@babel/eslint-parser": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.1",
     "eslint": ">= 8",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-import-resolver-babel-module": "^5.3.2",
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "description": "Alley's ESLint configuration",
@@ -47,12 +47,10 @@
   "name": "@alleyinteractive/eslint-config",
   "peerDependencies": {
     "@babel/core": ">= 7",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
     "eslint": ">= 8",
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "repository": {
@@ -62,5 +60,5 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "version": "0.1.0"
+  "version": "0.1.2"
 }

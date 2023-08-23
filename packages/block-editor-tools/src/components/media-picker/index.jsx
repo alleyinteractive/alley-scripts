@@ -45,9 +45,9 @@ const MediaPicker = ({
 }) => {
   // Get the media object, if given the media ID.
   const {
-    media = null,
+    media = undefined,
   } = useSelect((select) => ({
-    media: value ? select('core').getMedia(value) : null,
+    media: value ? select('core').getMedia(value) : undefined,
   }), [value]);
 
   // getEntityRecord returns `null` if the load is in progress.
@@ -64,11 +64,10 @@ const MediaPicker = ({
     if (!displayControlsInToolbar) {
       return (
         <Button
-          isLarge
-          isPrimary
+          variant="primary"
           onClick={onReset}
         >
-          {__('Replace', 'alley-scripts')}
+          {__('Reset', 'alley-scripts')}
         </Button>
       );
     }
