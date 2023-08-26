@@ -112,7 +112,7 @@
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
-    "@babel/core": "^7.22.9",
+    "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.22.9",
     "@babel/preset-react": "^7.22.5",
     "@types/styled-components": "^5.1.26",
