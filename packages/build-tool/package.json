@@ -1,0 +1,27 @@
+{
+  "name": "@alleyinteractive/build-tool",
+  "version": "0.0.1-beta",
+  "description": "An opinionated set of build configurations for wp-scripts",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "keywords": [
+    "webpack",
+    "@wordpress/scripts",
+    "wp-scripts",
+    "WordPress",
+    "build"
+  ],
+  "author": "Alley Interactive",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme"
+}
