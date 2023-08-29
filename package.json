@@ -25,6 +25,7 @@
   },
   "workspaces": [
     "packages/block-editor-tools",
+    "packages/build-tool",
     "packages/create-block",
     "packages/create-entry",
     "packages/eslint-config",
