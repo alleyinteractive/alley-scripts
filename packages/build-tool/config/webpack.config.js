@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 /**
- * INPUT VARIABLES TO CUSOMIZE BUILD.
+ * INPUT VARIABLES TO CUSTOMIZE BUILD.
  * - All Webpack parameters.
  * - Options object ?
  * - BUILD DIRECTORY PATH
