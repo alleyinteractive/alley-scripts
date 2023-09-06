@@ -73,10 +73,52 @@ const getWebpackConfig = () => {
   return path.join(__dirname, '../config/webpack.config.js');
 };
 
+/**
+ * Get the default arguments to pass to wp-scripts.
+ *
+ * @returns {string[]}
+ */
+const getDefaultArgs = () => {
+  /**
+   * The default arguments to pass to wp-scripts.
+   *
+   * @type {string[]}
+   */
+  const defaultArgs = [];
+
+  /**
+   * If the `build` or `start` command is used, add the necessary wp-scripts args.
+   */
+  if (hasArgInCLI('build') || hasArgInCLI('start')) {
+    defaultArgs.push(`--config=${getWebpackConfig()}`);
+
+    // Include the --webpack-copy-php flag explicitly.
+    if (!hasArgInCLI('--webpack-copy-php')) {
+      defaultArgs.push('--webpack-copy-php');
+    }
+
+    /**
+   * The default directory where wp-scripts will detect block.json files.
+   * Explicitly set the webpack source directory to "blocks" unless specified.
+   *
+   * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#automatic-blockjson-detection-and-the-source-code-directory
+   *
+   * @type {string|undefined}
+   */
+    const webpackSrcDir = hasArgInCLI('--webpack-src-dir')
+      ? getArgFromCLI('--webpack-src-dir') : 'blocks';
+
+    defaultArgs.push(`--webpack-src-dir=${webpackSrcDir}`);
+  }
+
+  return defaultArgs;
+};
+
 module.exports = {
   fromProjectRoot,
   getArgFromCLI,
   getArgsFromCLI,
+  getDefaultArgs,
   getEntries,
   getWebpackConfig,
   hasArgInCLI,

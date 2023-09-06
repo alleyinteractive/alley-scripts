@@ -13,7 +13,9 @@
     "utils"
   ],
   "scripts": {
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:watch": "jest --watch",
+    "test": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
@@ -93,6 +95,9 @@
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
-    "@types/node": "^20.5.9"
+    "@types/jest": "^29.5.4",
+    "@types/node": "^20.5.9",
+    "jest": "^29.6.4",
+    "ts-jest": "^29.1.1"
   }
 }
