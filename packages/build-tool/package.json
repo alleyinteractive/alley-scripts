@@ -5,6 +5,12 @@
   "bin": {
     "@alleyinteractive/build-tool": "./index.js"
   },
+  "files": [
+    "config",
+    "index.js",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "test": "test"
   },
@@ -81,7 +87,8 @@
     "@wordpress/wordcount": "^3.30.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "mini-css-extract-plugin": "^2.7.6"
+    "mini-css-extract-plugin": "^2.7.6",
+    "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
