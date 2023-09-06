@@ -2,7 +2,11 @@
 const { spawn } = require('node:child_process');
 const { argv, cwd } = require('node:process');
 
-const { getArgFromCLI, getWebpackConfig, hasArgInCLI } = require('./utils');
+const {
+  getArgFromCLI,
+  getWebpackConfig,
+  hasArgInCLI,
+} = require('./utils');
 
 /**
  * The default arguments to pass to wp-scripts.
@@ -17,6 +21,7 @@ const defaultArgs = [];
 if (hasArgInCLI('build') || hasArgInCLI('start')) {
   defaultArgs.push(`--config=${getWebpackConfig()}`);
 
+  // Include the --webpack-copy-php flag explicitly.
   if (!hasArgInCLI('--webpack-copy-php')) {
     defaultArgs.push('--webpack-copy-php');
   }
@@ -27,7 +32,7 @@ if (hasArgInCLI('build') || hasArgInCLI('start')) {
    *
    * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#automatic-blockjson-detection-and-the-source-code-directory
    *
-   * @type {string|null}
+   * @type {string|undefined}
    */
   const webpackSrcDir = hasArgInCLI('--webpack-src-dir')
     ? getArgFromCLI('--webpack-src-dir') : 'blocks';
@@ -35,9 +40,18 @@ if (hasArgInCLI('build') || hasArgInCLI('start')) {
   defaultArgs.push(`--webpack-src-dir=${webpackSrcDir}`);
 }
 
+/**
+ * The default directory where wp-scripts will detect entry point directories
+ * that are not blocks. These entries can be slotfills or webpack entry points.
+ *
+ * @type {string|undefined}
+ */
+process.env.ENTRIES_DIRECTORY = hasArgInCLI('--webpack-entries-dir')
+  ? getArgFromCLI('--webpack-entries-dir') : 'entries';
+
+// Call wp-scripts with the default arguments.
 spawn(
   'wp-scripts',
-  // Pass all arguments after the first two `wp-scripts build` to wp-scripts.
   [
     ...argv.slice(2),
     ...defaultArgs,

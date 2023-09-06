@@ -35,10 +35,10 @@ const getArgsFromCLI = () => {
  * Get the value of an argument passed to the CLI.
  *
  * @param {string} arg - The argument to get the value of.
- * @returns {string|null}
+ * @returns {string|undefined}
  */
 const getArgFromCLI = (arg) => {
-  let argValue = null;
+  let argValue;
   for (const cliArg of process.argv.slice(2)) {
     const [name, value] = cliArg.split('=');
     if (name === arg) {
@@ -55,11 +55,11 @@ const getArgFromCLI = (arg) => {
  * @param {string} arg - The argument to check for.
  * @returns {boolean}
  */
-const hasArgInCLI = (arg) => getArgFromCLI(arg) !== null;
+const hasArgInCLI = (arg) => getArgFromCLI(arg) !== undefined;
 
 /**
  * Get the path to the webpack config file.
- * @returns {string|null}
+ * @returns {string|undefined}
  */
 const getWebpackConfig = () => {
   if (hasProjectFile('webpack.config.js')) {
@@ -70,7 +70,7 @@ const getWebpackConfig = () => {
     return getArgFromCLI('--config');
   }
 
-  return path.join(__dirname, '../../config/webpack.config.js');
+  return path.join(__dirname, '../config/webpack.config.js');
 };
 
 module.exports = {

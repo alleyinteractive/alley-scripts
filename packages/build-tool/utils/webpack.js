@@ -28,7 +28,7 @@ function getEntries(entryDirName) {
       }, {});
   }
   // eslint-disable-next-line no-console
-  console.log(`Directory "${entryDirName}" does not exist.`);
+  console.log(`Directory "${entryDirName}" does not exist.\n`);
   return {};
 }
 
@@ -52,6 +52,8 @@ function getEntries(entryDirName) {
  * @returns {string}                  The generated filename.
  */
 function processFilename(pathData, setAsIndex, ext, dirnameSource = 'name') {
+  const entriesDir = process.env.ENTRIES_DIRECTORY || 'entries';
+
   const dirname = dirnameSource === 'runtime'
     ? pathData.chunk.runtime : pathData.chunk.name;
 
@@ -60,12 +62,12 @@ function processFilename(pathData, setAsIndex, ext, dirnameSource = 'name') {
     filename = 'index';
   }
 
-  // Process all non-entries entries.
-  if (!dirname.includes('entries-')) {
+  // Process all block entries.
+  if (!dirname.includes(`${entriesDir}-`)) {
     return `[name].${ext}`;
   }
 
-  const srcDirname = dirname.replace('entries-', '');
+  const srcDirname = dirname.replace(`${entriesDir}-`, '');
   return `${srcDirname}/${filename}.${ext}`;
 }
 
