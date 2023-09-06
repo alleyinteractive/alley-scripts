@@ -38,7 +38,7 @@
     "@changesets/cli": "^2.26.2",
     "@storybook/addon-essentials": "^7.0.26",
     "@storybook/addon-interactions": "^7.0.27",
-    "@storybook/addon-links": "^7.0.24",
+    "@storybook/addon-links": "^7.4.0",
     "@storybook/blocks": "^7.3.2",
     "@storybook/react": "^7.0.2",
     "@storybook/react-vite": "^7.0.24",
