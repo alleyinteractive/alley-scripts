@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/build-tool",
-  "version": "0.0.2-beta",
+  "version": "0.1.0",
   "description": "An opinionated set of build configurations for wp-scripts",
   "bin": {
     "@alleyinteractive/build-tool": "./index.js"

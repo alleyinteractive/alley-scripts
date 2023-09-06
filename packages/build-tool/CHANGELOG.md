@@ -7,4 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.0.1-beta -- @alleyinteractive/build-tool
 
-- initial publication of Alley Build Tool.
+- initial beta publication of Alley Build Tool.
+
+## v0.0.2-beta -- @alleyinteractive/build-tool
+
+- Add utils to published files.
+
+## v0.1.0 -- @alleyinteractive/build-tool
+
+- initial stable publication of Alley Build Tool.
