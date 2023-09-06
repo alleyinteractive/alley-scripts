@@ -13,7 +13,7 @@
     "utils"
   ],
   "scripts": {
-    "test": "test"
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
