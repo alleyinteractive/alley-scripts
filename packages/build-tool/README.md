@@ -33,7 +33,7 @@ _Example:_
 }
 ```
 
-Because `wp-scripts` is a dependency of `@alleyinteractive/build-tool`, you can also run `wp-scripts` commands from the scripts configuration in your `package.json` file. Because `@alleyinteractive/build-tool` calls `wp-scripts` it can also run any `wp-scripts` command as a wrapper.
+Because `wp-scripts` is a dependency of `@alleyinteractive/build-tool`, you can also run `wp-scripts` commands such as [packages-update](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#packages-update) from the scripts configuration in your `package.json` file. Because `@alleyinteractive/build-tool` calls `wp-scripts` directly it can also run any `wp-scripts` command as a wrapper.
 
 _Example:_
 
@@ -48,8 +48,8 @@ or directly in the command line:
 ```sh
 npx alley-build packages-update --dist-tag=wp-6.3
 ```
-
-By default the following command options are applied:
+### Default options
+By default the following command options are applied when running the `build` and `start` commands:
 * `--webpack-copy-php` – enables copying all PHP files from the blocks directory and its subdirectories to the output directory.
 * `--webpack-src-dir` – Allows customization of the blocks source code directory. Default is `blocks`.
 
