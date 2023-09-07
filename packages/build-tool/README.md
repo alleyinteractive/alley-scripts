@@ -17,7 +17,7 @@ npm install @alleyinteractive/build-tool --save-dev
 
 ## Usage
 
-This package offers a command-line interface and exposes a binary, `@alleyinteractive/build-tool` so you can call it directly with npx – an npm package runner. However, this module is designed to be configured using the scripts section in the package.json file of your project.
+This package offers a command-line interface and exposes a binary, `alley-build` so you can call it directly with npx – an npm package runner. However, this module is designed to be configured using the scripts section in the package.json file of your project.
 
 The Alley Build Tool functions as a wrapper for `wp-scripts` and exposes all the possible commands that `wp-scripts` offers. The only difference is that the Alley Build Tool will run the `wp-scripts` command with the `--config` flag and point it to the Alley Build Tool's custom webpack configuration file when running the `build` and `start` commands.
 
@@ -26,17 +26,31 @@ _Example:_
 ```json
 {
   "scripts": {
-    "build": "@alleyinteractive/build-tool build",
-    "start": "@alleyinteractive/build-tool start",
-    "start:hot": "@alleyinteractive/build-tool start --hot"
+    "build": "alley-build build",
+    "start": "alley-build start",
+    "start:hot": "alley-build start --hot"
   }
 }
 ```
 
-Because `wp-scripts` is a dependency of `@alleyinteractive/build-tool`, you can also run `wp-scripts` commands directly from the command line and add any additional `wp-scripts` commands in the `package.json` scripts.
+Because `wp-scripts` is a dependency of `@alleyinteractive/build-tool`, you can also run `wp-scripts` commands from the scripts configuration in your `package.json` file. Because `@alleyinteractive/build-tool` calls `wp-scripts` it can also run any `wp-scripts` command as a wrapper.
+
+_Example:_
+
+```json
+{
+  "scripts": {
+    "packages-update": "alley-build packages-update --dist-tag=wp-6.3",
+  }
+}
+```
+or directly in the command line:
+```sh
+npx alley-build packages-update --dist-tag=wp-6.3
+```
 
 By default the following command options are applied:
-* `--webpack-copy-php` – enables copying all PHP files from the blocks directory and its subfolders to the output directory.
+* `--webpack-copy-php` – enables copying all PHP files from the blocks directory and its subdirectories to the output directory.
 * `--webpack-src-dir` – Allows customization of the blocks source code directory. Default is `blocks`.
 
 ### `Additional CLI options`
@@ -82,8 +96,8 @@ In order to test the build-tool with another project, you will need to point to 
 ```json
 {
   "scripts": {
-    "build": "@alleyinteractive/build-tool build",
-    "start": "@alleyinteractive/build-tool start"
+    "build": "alley-build build",
+    "start": "alley-build start"
   },
   "devDependences": {
     "@alleyinteractive/build-tool": "file:../path/to/alley-scripts/packages/build-tool/index.js"

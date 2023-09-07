@@ -22,7 +22,7 @@ describe('fromProjectRoot', () => {
 
 describe('hasProjectFile', () => {
   test('returns true if a file exists in the project root', () => {
-    const fileName = 'index.js';
+    const fileName = 'package.json';
     expect(hasProjectFile(fileName)).toBe(true);
   });
 

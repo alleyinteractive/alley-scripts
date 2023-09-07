@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "An opinionated set of build configurations for wp-scripts",
   "bin": {
-    "@alleyinteractive/build-tool": "./index.js"
+    "alley-build": "./bin/index.js"
   },
   "files": [
     "config",
-    "index.js",
+    "bin/index.js",
     "LICENSE",
     "README.md",
     "utils"

@@ -6,7 +6,7 @@ const {
   getArgFromCLI,
   getDefaultArgs,
   hasArgInCLI,
-} = require('./utils');
+} = require('../utils');
 
 /**
  * The default arguments to pass to wp-scripts.
