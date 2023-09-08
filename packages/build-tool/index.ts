@@ -20,7 +20,7 @@ process.env.ENTRIES_DIRECTORY = hasArgInCLI('--webpack-entries-dir')
 /**
  * Set the environment variable to only build blocks.
  */
-process.env.BLOCKS_ONLY = hasArgInCLI('--blocks-only') ? 'true' : 'false';
+process.env.BLOCKS_ONLY = hasArgInCLI('--webpack-blocks-only') ? 'true' : 'false';
 
 // Call wp-scripts with the default arguments.
 spawn(
