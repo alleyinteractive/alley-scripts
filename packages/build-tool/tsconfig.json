@@ -1,0 +1,24 @@
+{
+  "extends": "@alleyinteractive/tsconfig/base.json",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "lib": ["ES2022", "DOM"],
+    "outDir": "dist",
+    "target": "ES2022",
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "config/webpack.config.ts",
+    "utils/**/*",
+    "index.ts"
+  ]
+}
