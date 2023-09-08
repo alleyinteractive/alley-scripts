@@ -1,19 +1,13 @@
 #!/usr/bin/env node
-const { spawn } = require('node:child_process');
-const { argv, cwd } = require('node:process');
+import { spawn } from 'node:child_process';
+import { argv, cwd } from 'node:process';
 
-const {
-  getArgFromCLI,
-  getDefaultArgs,
-  hasArgInCLI,
-} = require('../utils');
-
+// eslint-disable-next-line import/no-unresolved
+import { getDefaultArgs, hasArgInCLI, getArgFromCLI } from './utils';
 /**
  * The default arguments to pass to wp-scripts.
- *
- * @type {string[]}
  */
-const defaultArgs = getDefaultArgs() || [];
+const defaultArgs: string[] = getDefaultArgs() || [];
 
 /**
  * The default directory where wp-scripts will detect entry point directories

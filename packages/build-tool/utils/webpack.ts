@@ -1,21 +1,24 @@
-const { existsSync, readdirSync } = require('fs');
-const { cwd } = require('node:process');
+import { existsSync, readdirSync } from 'fs';
+import { cwd } from 'node:process';
+import { join } from 'path';
+import webpack from 'webpack';
 
-const { join } = require('path');
+export type PathData = webpack.Compiler.PathData;
+type DirectorySrcName = 'name' | 'runtime';
 
 /**
  * Get the entry points from a directory.
  *
- * @param {string} entryDirName - The name of the directory to get entries from.
- * @returns {Object} An object of entries.
+ * @param entryDirName - The name of the directory to get entries from.
+ * @returns An object of entries.
  */
-function getEntries(entryDirName) {
+function getEntries(entryDirName: string): object {
   const directoryPath = join(cwd(), entryDirName);
   const directoryExists = existsSync(directoryPath);
 
   if (directoryExists) {
     return readdirSync(directoryPath)
-      .reduce((acc, dirPath) => {
+      .reduce((acc: { [x: string]: string; }, dirPath: string) => {
         // Ignore .gitkeep files and README.md files.
         if (dirPath?.includes('.gitkeep') || dirPath?.includes('README.md')) {
           return acc;
@@ -42,16 +45,21 @@ function getEntries(entryDirName) {
  * For entries, it constructs a filename with the directory name (stripping 'entries-')
  * and appends '/index' or '/[name]' (if a name is present) followed by the file extension.
  *
- * @param   {Object}  pathData      - The path data object provided by Webpack.
- * @param   {boolean} setAsIndex    - A flag to determine whether to set the filename as 'index'
+ * @param   pathData      - The path data object provided by Webpack.
+ * @param   setAsIndex    - A flag to determine whether to set the filename as 'index'
  *                                    when processing entries. Pass `true` to use 'index' or `false`
  *                                    to use '[name]'.
- * @param   {string}  ext           - The file extension to be used for the output filename.
- * @param   {string}  dirnameSource - The pathData.chunk prop to set the directory name.
+ * @param   ext           - The file extension to be used for the output filename.
+ * @param   dirnameSource - The pathData.chunk prop to set the directory name.
  *                                    'runtime' or 'name'. Defaults to 'name' if not provided.
- * @returns {string}                  The generated filename.
+ * @returns                 The generated filename.
  */
-function processFilename(pathData, setAsIndex, ext, dirnameSource = 'name') {
+function processFilename(
+  pathData: PathData,
+  setAsIndex: boolean,
+  ext: string,
+  dirnameSource: DirectorySrcName = 'name',
+): string {
   const entriesDir = process.env.ENTRIES_DIRECTORY || 'entries';
 
   const dirname = dirnameSource === 'runtime'
@@ -71,7 +79,7 @@ function processFilename(pathData, setAsIndex, ext, dirnameSource = 'name') {
   return `${srcDirname}/${filename}.${ext}`;
 }
 
-module.exports = {
+export {
   getEntries,
   processFilename,
 };

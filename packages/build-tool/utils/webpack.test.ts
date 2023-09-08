@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-const { getEntries, processFilename } = require('./webpack');
+// eslint-disable-next-line import/no-unresolved
+import { getEntries, processFilename } from './webpack';
 
 describe('getEntries', () => {
   const testEntryPath = path.join(process.cwd(), 'test-entries');

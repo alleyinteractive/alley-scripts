@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-const {
+import {
   fromProjectRoot,
   getArgFromCLI,
   getArgsFromCLI,
@@ -10,7 +10,7 @@ const {
   getWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
-} = require('./index');
+} from './index'; // eslint-disable-line import/no-unresolved
 
 describe('fromProjectRoot', () => {
   test('returns the absolute path to a file from the project root', () => {
@@ -117,7 +117,7 @@ describe('getWebpackConfig', () => {
 });
 
 describe('getDefaultArgs', () => {
-  const defaultWebpackConfigPath = path.join(process.cwd(), 'config', 'webpack.config.js');
+  const defaultWebpackConfigPath = path.join(__dirname, '../config/webpack.config.js');
 
   it('should return an empty array if neither "build" nor "start" command is used', () => {
     process.argv = ['node', 'index.js'];

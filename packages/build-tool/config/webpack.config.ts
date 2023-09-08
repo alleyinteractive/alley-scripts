@@ -1,36 +1,32 @@
-const path = require('path');
-const { cwd } = require('node:process');
+import path from 'path';
+import { cwd } from 'node:process';
+import webpack from 'webpack';
 
-const defaultConfig = require('@wordpress/scripts/config/webpack.config');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
-const {
-  getEntries,
-  processFilename,
-} = require('../utils');
+// eslint-disable-next-line import/no-unresolved
+import { getEntries, processFilename, type PathData } from '../utils/webpack';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const defaultConfig: webpack.Configuration = require('@wordpress/scripts/config/webpack.config');
 
 /**
  * Check if the build is running in production mode.
- *
- * @type {boolean}
  */
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction: boolean = process.env.NODE_ENV === 'production';
 
 /**
  * The directory name where the entry point directories are located.
  * These are entries NOT associated with blocks.
- *
- * @type {string}
  */
-const entriesDir = process.env.ENTRIES_DIRECTORY || 'entries';
+const entriesDir: string = process.env.ENTRIES_DIRECTORY || 'entries';
 
 /**
  * The mode to run webpack in. Either production or development.
- * @type {string}
  */
-const mode = isProduction ? 'production' : 'development';
+const mode: string = isProduction ? 'production' : 'development';
 
 /**
  * webpack configuration.
@@ -41,10 +37,8 @@ const mode = isProduction ? 'production' : 'development';
  *
  * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#extending-the-webpack-config
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/config/webpack.config.js
- *
- * @returns {Object}
  */
-const config = () => ({
+const config = (): webpack.Configuration => ({
   ...defaultConfig,
 
   // Dynamically produce entries from the slotfills index file and all blocks.
@@ -67,8 +61,9 @@ const config = () => ({
    */
   output: {
     clean: mode === 'production',
-    filename: (pathData) => processFilename(pathData, true, 'js'),
-    chunkFilename: (pathData) => processFilename(pathData, false, 'js', 'runtime'),
+
+    filename: (pathData: PathData) => processFilename(pathData, true, 'js'),
+    chunkFilename: (pathData: PathData) => processFilename(pathData, false, 'js', 'runtime'),
     path: path.join(cwd(), 'build'),
   },
 
@@ -85,20 +80,20 @@ const config = () => ({
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: (pathData) => processFilename(pathData, true, 'css'),
-      chunkFilename: (pathData) => processFilename(pathData, false, 'css', 'runtime'),
+      filename: (pathData: PathData) => processFilename(pathData, true, 'css'),
+      chunkFilename: (pathData: PathData) => processFilename(pathData, false, 'css', 'runtime'),
     }),
     new CleanWebpackPlugin({
       cleanAfterEveryBuildPatterns: [
         /**
-           * Remove duplicate entry CSS files generated from default
-           * MiniCssExtractPlugin plugin in wpScripts.
-           *
-           * The default MiniCssExtractPlugin filename is [name].css
-           * resulting in the generation of the `${entriesDir}-*.css` files.
-           * The configuration in this file for MiniCssExtractPlugin outputs
-           * the entry CSS into the entry src directory name.
-           */
+         * Remove duplicate entry CSS files generated from default
+         * MiniCssExtractPlugin plugin in wpScripts.
+         *
+         * The default MiniCssExtractPlugin filename is [name].css
+         * resulting in the generation of the `${entriesDir}-*.css` files.
+         * The configuration in this file for MiniCssExtractPlugin outputs
+         * the entry CSS into the entry src directory name.
+         */
         `${entriesDir}-*.css`,
         // Maps are built when running the start mode with wpScripts.
         `${entriesDir}-*.css.map`,
@@ -127,4 +122,4 @@ const config = () => ({
   },
 });
 
-module.exports = config;
+export default config;
