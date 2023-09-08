@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   modulePathIgnorePatterns: [
-    '.buddy-tests',
+    '<rootDir>/dist/',
   ],
   testEnvironment: 'node',
 };
