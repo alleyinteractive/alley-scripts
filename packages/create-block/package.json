@@ -42,7 +42,7 @@
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
-    "@types/cross-spawn": "^6.0.2",
+    "@types/cross-spawn": "^6.0.3",
     "@types/node": "^20.5.6",
     "@types/prompts": "^2.4.4"
   },
