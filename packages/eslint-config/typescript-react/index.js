@@ -1,16 +1,15 @@
 /**
  * Typescript configuration using AirBnBs ESLint config and Airbnb Typescript.
  */
-const packageConfigs = [
-  '../configs/react',
-  '../parsers/typescript',
-].map(require.resolve);
+const reactConfig = require('../configs/react');
+const typescriptParser = require('../parsers/typescript');
 
 module.exports = {
   extends: [
-    ...packageConfigs,
     'airbnb-typescript',
+    ...reactConfig.extends,
   ],
+  ...typescriptParser,
   rules: {
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],

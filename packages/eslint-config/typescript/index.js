@@ -1,15 +1,14 @@
 /**
  * Base Typescript configuration using Airbnb's base config without React.
  */
-const packageConfigs = [
-  '../configs/env',
-  '../parsers/typescript',
-].map(require.resolve);
+const env = require('../configs/env');
+const parser = require('../parsers/typescript');
 
 module.exports = {
   extends: [
     'airbnb/base',
     'airbnb-typescript/base',
-    ...packageConfigs,
   ],
+  ...env,
+  ...parser,
 };

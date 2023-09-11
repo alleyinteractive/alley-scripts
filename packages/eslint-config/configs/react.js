@@ -1,9 +1,11 @@
+const env = require('./env');
+
 module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
-    require.resolve('./env'),
   ],
+  ...env,
   rules: {
     'no-restricted-syntax': [
       'error',

@@ -2,14 +2,13 @@
  * Base configuration using Airbnb's base config.
  * Includes the babel parser.
  */
-const baseConfigs = [
-  '../configs/env.js',
-  '../parsers/babel.js',
-].map(require.resolve);
+const env = require('../configs/env');
+const parser = require('../parsers/babel');
 
 module.exports = {
   extends: [
     'airbnb/base',
-    ...baseConfigs,
   ],
+  ...env,
+  ...parser,
 };
