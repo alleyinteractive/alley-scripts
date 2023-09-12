@@ -23,8 +23,7 @@ Next, choose a configuration from the available ESLint configurations.
 
 This package exports four ESLint configurations for usage.
 1. `@alleyinteractive/eslint-config` - Default configuration that supports React.
-2. `@alleyinteractive/eslint-config/base` - Base configuration similar to Airbnb's base configuration 
-without supporting React plugins.
+2. `@alleyinteractive/eslint-config/base` - Base configuration similar to Airbnb's base configuration without supporting React plugins.
 3. `@alleyinteractive/eslint-config/typescript` - Typescript support without React plugin support.
 4. `@alleyinteractive/eslint-config/typescript-react` - Typescript and React support.
 

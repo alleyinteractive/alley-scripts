@@ -21,6 +21,8 @@ module.exports = {
      * @see https://typescript-eslint.io/packages/parser#tsconfigrootdir
      */
     tsconfigRootDir: cwd(),
+    // https://typescript-eslint.io/packages/parser#warnonunsupportedtypescriptversion
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   /**
    * By default, ESLint looks for configuration files in all parent folders up to the root
