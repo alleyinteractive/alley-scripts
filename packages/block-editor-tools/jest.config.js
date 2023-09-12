@@ -1,4 +1,3 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
@@ -13,7 +12,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   modulePathIgnorePatterns: [
-    '.buddy-tests',
+    '<rootDir>/dist/',
   ],
   testEnvironment: 'node',
 };
