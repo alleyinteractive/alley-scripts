@@ -1,5 +1,6 @@
 import { useState } from '@wordpress/element';
 import styled from 'styled-components';
+import { JSX } from 'react';
 
 import {
   Button,
@@ -8,6 +9,7 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
+// eslint-disable-next-line camelcase
 import type { WP_REST_API_Post } from 'wp-types';
 
 import { usePostById } from '../../hooks';
@@ -22,6 +24,7 @@ interface PostPickerProps {
   onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;
+  // eslint-disable-next-line camelcase
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
   searchEndpoint?: string;
   searchRender?: (post: object) => JSX.Element;
@@ -70,7 +73,7 @@ const PostPicker = ({
     },
   );
 
-  // @ts-ignore
+  // eslint-disable-next-line camelcase
   const post = usePostById(value, getPostType) as any as WP_REST_API_Post;
 
   const {

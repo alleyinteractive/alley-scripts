@@ -2,8 +2,6 @@
   "extends": ["@alleyinteractive/eslint-config/typescript-react"],
   "rules": {
     "import/no-cycle": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off",
     "react/function-component-definition": "off"
   },

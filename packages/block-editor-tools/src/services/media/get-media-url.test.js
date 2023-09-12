@@ -1,3 +1,7 @@
+import {
+  test,
+  expect,
+} from 'jest';
 import getMediaUrl from './get-media-url';
 
 test('getMediaUrl should properly get an image thumbnail from an upload object.', () => {
