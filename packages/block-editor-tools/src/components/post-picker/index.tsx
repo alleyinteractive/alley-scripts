@@ -21,13 +21,17 @@ interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
   getPostType?: (id: number) => string;
+  modalTitle?: string;
   onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;
   // eslint-disable-next-line camelcase
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
+  replaceText?: string;
+  resetText?: string;
   searchEndpoint?: string;
   searchRender?: (post: object) => JSX.Element;
+  selectText?: string;
   suppressPostIds?: number[];
   title?: string;
   value: number;
@@ -52,12 +56,16 @@ const PostPicker = ({
   allowedTypes,
   className,
   getPostType,
+  modalTitle = __('Select Post', 'alley-scripts'),
   onReset,
   onUpdate,
   params = {},
   previewRender,
+  replaceText = __('Replace', 'alley-scripts'),
+  resetText = __('Reset', 'alley-scripts'),
   searchEndpoint = '/wp/v2/search',
   searchRender,
+  selectText = __('Select', 'alley-scripts'),
   suppressPostIds = [],
   title: pickerTitle = '',
   value = 0,
@@ -101,7 +109,7 @@ const PostPicker = ({
           margin: '0 4px',
         }}
       >
-        {__('Reset', 'alley-scripts')}
+        {resetText}
       </Button>
       <Button
         variant="secondary"
@@ -110,7 +118,7 @@ const PostPicker = ({
           margin: '0 4px',
         }}
       >
-        {__('Replace', 'alley-scripts')}
+        {replaceText}
       </Button>
     </ButtonGroup>
   );
@@ -149,13 +157,14 @@ const PostPicker = ({
           onClick={openModal}
           variant="secondary"
         >
-          {__('Select', 'alley-scripts')}
+          {selectText}
         </Button>
       )}
       {showModal ? (
         <SearchModal
           closeModal={closeModal}
           baseUrl={baseUrl}
+          modalTitle={modalTitle}
           onUpdate={onUpdate}
           searchRender={searchRender}
           suppressPostIds={suppressPostIds}

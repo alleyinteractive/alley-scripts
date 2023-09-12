@@ -13,6 +13,7 @@ import PostList from './post-list';
 interface SearchModalProps {
   baseUrl: string;
   closeModal: () => void;
+  modalTitle: string;
   onUpdate: (id: number) => void;
   searchRender?: (post: object) => JSX.Element;
   suppressPostIds?: number[];
@@ -21,6 +22,7 @@ interface SearchModalProps {
 const SearchModal = ({
   baseUrl,
   closeModal,
+  modalTitle,
   onUpdate,
   searchRender,
   suppressPostIds = [],
@@ -38,7 +40,7 @@ const SearchModal = ({
   return (
     <Modal
       isDismissible
-      title={__('Select Post', 'alley-scripts')}
+      title={modalTitle}
       onRequestClose={closeModal}
       closeButtonLabel="Close"
     >
