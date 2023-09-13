@@ -46,7 +46,7 @@ Finally, add `lint` commands to your `package.json`:
 }
 ```
 
-If you are resolving your modules with a Webpack resolver configuration you will need to include `eslint-import-resolver-webpack` in your project.
+If you are resolving your modules with the ESLint webpack import resolver, you will need to add the `eslint-import-resolver-webpack` package and settings configuration in your project:
 ```
 npm install --save-dev eslint-import-resolver-webpack
 ```
@@ -58,6 +58,21 @@ projects `.eslintrc.json` file:
   "settings": {
     "import/resolver": "webpack"
   },
+```
+
+### TypeScript and Monorepo configuration
+If you're using a monorepo, there may be additional steps to setup typed linting.
+
+This package uses the `typescript-eslint` parser and plugin to support TypeScript.
+
+ESLint requires a `tsconfig.json` file to be present in the root of the project and `typescript-eslint` needs to find the `tsconfig.json` file that is used for linting.
+
+If you have a specific tsconfig file for ESLint such as a `tsconfig.eslint.json` file you will need to specify the path to this file in the `parserOptions.project` setting in your `.eslintrc.json` file.
+
+```json
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  }
 ```
 
 ### From Source
