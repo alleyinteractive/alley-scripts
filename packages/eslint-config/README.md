@@ -74,6 +74,19 @@ If you have a specific tsconfig file for ESLint such as a `tsconfig.eslint.json`
     "project": "./tsconfig.eslint.json"
   }
 ```
+More details: https://typescript-eslint.io/linting/typed-linting/monorepos
+
+In some cases where there is no tsconfig file in your project root you may need to convert your eslintrc file to JavaScript to pass in the node global of `__dirname` to the `parserOptions.tsconfigRootDir` setting.
+
+```js
+// eslintrc.js
+module.exports = {
+  parserOptions: {
+    project: `./tsconfig.eslint.json`,
+    tsconfigRootDir: __dirname,
+  },
+};
+```
 
 ### From Source
 
