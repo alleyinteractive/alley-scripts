@@ -61,6 +61,35 @@ projects `.eslintrc.json` file:
 ```
 
 ### TypeScript and Monorepo configuration
+
+#### TypeScript
+For TypeScript projects, you will need to explicitly include files you would like to lint in your `tsconfig.json` file. One way of doing this is to extend the base `tsconfig.json`` file and provide specific configurations for ESLint.
+
+1. Create a `tsconfig.eslint.json` file in your project that extends the base `tsconfig.json` file.
+2. Add the `allowImportingTsExtensions` and `noEmit` compiler options to the `compilerOptions` object since this configuration is not for compiling TypeScript.
+3. Add the files you would like to lint to the `include` array.
+
+Example of a `tsconfig.eslint.json` file:
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+  },
+  "include": [
+    "../jest.config.js",
+    "../config/webpack.config.ts",
+    "../utils",
+    "../index.ts",
+    "../.eslintrc.js",
+    "../utils/index.test.ts",
+    "../utils/webpack.test.ts"
+  ]
+}
+```
+
+#### Monorepo
 If you're using a monorepo, there may be additional steps to setup typed linting.
 
 This package uses the `typescript-eslint` parser and plugin to support TypeScript.
