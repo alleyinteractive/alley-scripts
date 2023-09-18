@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
-import prompts from 'prompts';
-import chalk from 'chalk';
 import { lt, valid } from 'semver';
+import chalk from 'chalk';
+import path from 'path';
+import fs from 'fs';
+import prompts from 'prompts';
 
 import {
+  promptForPluginPath,
   promptForReleaseType,
   promptForReleaseVersion,
 } from './src/prompts.js';
@@ -25,7 +28,20 @@ import {
  * Prompts the user to create a release.
  */
 (async () => {
-  const basePath = process.cwd();
+  let basePath: string = entryArgs.path || process.cwd();
+
+  // Check if this is a valid path to a plugin.
+  if (!fs.existsSync(`${basePath}/composer.json`)) {
+    const pluginPath = await promptForPluginPath();
+
+    if (!pluginPath) {
+      process.exit(1);
+    }
+
+    basePath = path.resolve(pluginPath);
+
+    console.log(`Using plugin path: ${chalk.yellow(basePath)}`);
+  }
 
   const {
     'dry-run': dryRun = false,

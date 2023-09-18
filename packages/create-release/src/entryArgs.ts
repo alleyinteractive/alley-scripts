@@ -8,6 +8,7 @@ export type EntryArgs = {
   major?: boolean;
   minor?: boolean;
   patch?: boolean;
+  path?: string;
   'dry-run'?: boolean;
   help?: boolean;
 };
@@ -36,6 +37,12 @@ const entryArgs = parse<EntryArgs>(
     patch: {
       type: Boolean,
       description: 'Increment the patch version number.',
+      optional: true,
+    },
+    path: {
+      type: String,
+      alias: 'p',
+      description: 'The path to the plugin.',
       optional: true,
     },
     'dry-run': {
