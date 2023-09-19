@@ -27,6 +27,7 @@
     "packages/block-editor-tools",
     "packages/create-block",
     "packages/create-entry",
+    "packages/create-release",
     "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",
