@@ -9,6 +9,8 @@ export type EntryArgs = {
   minor?: boolean;
   patch?: boolean;
   path?: string;
+  composer?: boolean;
+  npm?: boolean;
   'dry-run'?: boolean;
   help?: boolean;
 };
@@ -43,6 +45,16 @@ const entryArgs = parse<EntryArgs>(
       type: String,
       alias: 'p',
       description: 'The path to the plugin.',
+      optional: true,
+    },
+    composer: {
+      type: Boolean,
+      description: 'Update the composer.json file version.',
+      optional: true,
+    },
+    npm: {
+      type: Boolean,
+      description: 'Update the package.json file version.',
       optional: true,
     },
     'dry-run': {

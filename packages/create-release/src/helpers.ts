@@ -62,27 +62,6 @@ function readPluginHeaders(path: string): Record<string, string> | null {
  * plugin headers.
  */
 function getCurrentVersion(path: string): string | undefined {
-  // Check if the composer.json file exists.
-  if (fs.existsSync(`${path}/composer.json`)) {
-    try {
-      const contents = JSON.parse(
-        fs.readFileSync(`${path}/composer.json`, 'utf8'),
-      );
-
-      if (contents.version) {
-        if (valid(contents.version)) {
-          return contents.version;
-        }
-
-        exitError(
-          `The version number in the composer.json file is not a valid semver version number: ${contents.version}`,
-        );
-      }
-    } catch (error) {
-      // Do nothing.
-    }
-  }
-
   // Retrieve the plugin file to read the headers from.
   const files = [
     `${path.split('/').pop()}.php`,
@@ -107,6 +86,27 @@ function getCurrentVersion(path: string): string | undefined {
       exitError(
         `The version number in the plugin file is not a valid semver version number: ${headers.version}`, // eslint-disable-line max-len
       );
+    }
+  }
+
+  // Check if the composer.json file exists.
+  if (fs.existsSync(`${path}/composer.json`)) {
+    try {
+      const contents = JSON.parse(
+        fs.readFileSync(`${path}/composer.json`, 'utf8'),
+      );
+
+      if (contents.version) {
+        if (valid(contents.version)) {
+          return contents.version;
+        }
+
+        exitError(
+          `The version number in the composer.json file is not a valid semver version number: ${contents.version}`,
+        );
+      }
+    } catch (error) {
+      // Do nothing.
     }
   }
 
@@ -211,6 +211,52 @@ function upgradeComposerVersion(basePath: string, version: string): void {
 }
 
 /**
+ * Upgrade the version number in the package.json file.
+ */
+function upgradeNpmPackageVersion(basePath: string, version: string): void {
+  try {
+    const contents = JSON.parse(
+      fs.readFileSync(`${basePath}/package.json`, 'utf8'),
+    );
+
+    // Insert the version after the description/name index if it doesn't exist.
+    if (!contents.version) {
+      const insertIndex = Object.keys(contents).indexOf('name');
+
+      contents.version = version;
+
+      const newContents: Record<string, any> = {};
+
+      Object.keys(contents).forEach((key, index) => {
+        if (index === insertIndex + 1) {
+          newContents.version = version;
+        }
+
+        newContents[key] = contents[key];
+      });
+
+      fs.writeFileSync(
+        `${basePath}/package.json`,
+        `${JSON.stringify(newContents, null, 4)}\n`,
+      );
+    } else {
+      contents.version = version;
+
+      fs.writeFileSync(
+        `${basePath}/package.json`,
+        `${JSON.stringify(contents, null, 4)}\n`,
+      );
+    }
+  } catch (error) {
+    console.error(error); // eslint-disable-line no-console
+
+    exitError(
+      'There was an error upgrading the version number in the package.json file.',
+    );
+  }
+}
+
+/**
  * Upgrade the version number in the plugin header.
  */
 function upgradePluginVersion(basePath: string, version: string): void {
@@ -227,7 +273,6 @@ function upgradePluginVersion(basePath: string, version: string): void {
       continue; // eslint-disable-line no-continue
     }
 
-    // Replace "* Version: " in the plugin header with "* Version: {version}".
     const contents = fs.readFileSync(file, 'utf8');
 
     const newContents = contents.replace(
@@ -235,8 +280,13 @@ function upgradePluginVersion(basePath: string, version: string): void {
       `$1${version}`,
     );
 
-    fs.writeFileSync(file, newContents);
+    if (contents !== newContents) {
+      fs.writeFileSync(file, newContents);
+      return;
+    }
   }
+
+  exitError('Unable to upgrade the "Version" plugin header.');
 }
 
 /**
@@ -264,7 +314,9 @@ function upgradeReadmeVersion(basePath: string, version: string): void {
       `$1${version}`,
     );
 
-    fs.writeFileSync(file, newContents);
+    if (contents !== newContents) {
+      fs.writeFileSync(file, newContents);
+    }
   }
 }
 
@@ -274,6 +326,7 @@ export {
   getReleaseType,
   bumpVersion,
   upgradeComposerVersion,
+  upgradeNpmPackageVersion,
   upgradePluginVersion,
   upgradeReadmeVersion,
 };
