@@ -3,11 +3,13 @@
 This action facilitates the release process of a
 [Create WordPress Plugin](https://github.com/alleyinteractive/create-wordpress-plugin) plugin.
 
-When run, it will trigger a new version to be set in the plugin's
-`composer.json` and plugin's header. This sets up the [GitHub Action
-workflow](https://github.com/alleyinteractive/create-wordpress-plugin/blob/HEAD/.github/workflows/built-release.yml)
+When run, it will trigger a new version to be set in the plugin's header and
+optionally in the plugin's `composer.json`/`package.json` files. This sets up
+the [GitHub Action workflow](https://github.com/alleyinteractive/create-wordpress-plugin/blob/HEAD/.github/workflows/built-release.yml)
 which listens for a new version to automatically build and publish to Git.
-Running this package's command is optional and can be done manually by the user.
+Running this package's command is optional and the work can still be done
+manually by the user but does aim to make it easier to develop and release
+new versions of a plugin.
 
 ## Usage
 
