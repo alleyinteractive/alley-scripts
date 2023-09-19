@@ -2,6 +2,10 @@
 
 All notable changes to the Alley Scripts monorepo will be documented in this file.
 
+## v0.1.1 -- @alleyinteractive/create-release
+
+- No change, re-release with a license and README.
+
 ## v0.1.0 -- @alleyinteractive/create-release
 
 - Initial release.
