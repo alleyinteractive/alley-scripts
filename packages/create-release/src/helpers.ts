@@ -173,25 +173,34 @@ function upgradeComposerVersion(basePath: string, version: string): void {
       fs.readFileSync(`${basePath}/composer.json`, 'utf8'),
     );
 
-    // Insert the version after the description/name index.
-    const insertIndex = Object.keys(contents).indexOf('description') || Object.keys(contents).indexOf('name');
+    // Insert the version after the description/name index if it doesn't exist.
+    if (!contents.version) {
+      const insertIndex = Object.keys(contents).indexOf('description') || Object.keys(contents).indexOf('name');
 
-    contents.version = version;
+      contents.version = version;
 
-    const newContents: Record<string, any> = {};
+      const newContents: Record<string, any> = {};
 
-    Object.keys(contents).forEach((key, index) => {
-      if (index === insertIndex + 1) {
-        newContents.version = version;
-      }
+      Object.keys(contents).forEach((key, index) => {
+        if (index === insertIndex + 1) {
+          newContents.version = version;
+        }
 
-      newContents[key] = contents[key];
-    });
+        newContents[key] = contents[key];
+      });
 
-    fs.writeFileSync(
-      `${basePath}/composer.json`,
-      `${JSON.stringify(newContents, null, 4)}\n`,
-    );
+      fs.writeFileSync(
+        `${basePath}/composer.json`,
+        `${JSON.stringify(newContents, null, 4)}\n`,
+      );
+    } else {
+      contents.version = version;
+
+      fs.writeFileSync(
+        `${basePath}/composer.json`,
+        `${JSON.stringify(contents, null, 4)}\n`,
+      );
+    }
   } catch (error) {
     console.error(error); // eslint-disable-line no-console
 
