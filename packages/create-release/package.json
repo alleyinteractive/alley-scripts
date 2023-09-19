@@ -3,7 +3,7 @@
   "description": "Create alleyinteractive/create-wordpress-plugin releases with ease.",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/create-release",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
