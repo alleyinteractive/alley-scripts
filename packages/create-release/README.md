@@ -26,6 +26,8 @@ following arguments are available:
   --minor              Bump the minor version number.
   --patch              Bump the patch version number.
   -p, --path string    The path to the plugin. Supports relative and absolute paths.
+  --composer           Update the version in the plugin's composer.json file.
+  --npm                Update the version in the plugin's package.json file.
   --dry-run            Run the command without making any changes.
   -h, --help           Prints help information.
 ```

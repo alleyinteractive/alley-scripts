@@ -20,6 +20,7 @@ import {
   getCurrentVersion,
   getReleaseType,
   upgradeComposerVersion,
+  upgradeNpmPackageVersion,
   upgradePluginVersion,
   upgradeReadmeVersion,
 } from './src/helpers.js';
@@ -45,6 +46,8 @@ import {
 
   const {
     'dry-run': dryRun = false,
+    composer: updateComposer = false,
+    npm: updateNpm = false,
   } = entryArgs;
 
   if (dryRun) {
@@ -147,16 +150,32 @@ import {
     process.exit(1);
   }
 
-  // Update the version in Composer.json.
-  if (dryRun) {
-    console.log(`Would be updating "version" in ${chalk.yellow('composer.json')} to ${chalk.yellow(releaseVersion)}`);
-  } else {
-    upgradeComposerVersion(
-      basePath,
-      releaseVersion,
-    );
+  // Update the version in composer.json.
+  if (updateComposer) {
+    if (dryRun) {
+      console.log(`Would be updating "version" in ${chalk.yellow('composer.json')} to ${chalk.yellow(releaseVersion)}`);
+    } else {
+      upgradeComposerVersion(
+        basePath,
+        releaseVersion,
+      );
 
-    console.log(`Updated "version" in ${chalk.yellow('composer.json')} to ${chalk.yellow(releaseVersion)}`);
+      console.log(`Updated "version" in ${chalk.yellow('composer.json')} to ${chalk.yellow(releaseVersion)}`);
+    }
+  }
+
+  // Update the version in package.json.
+  if (updateNpm) {
+    if (dryRun) {
+      console.log(`Would be updating "version" in ${chalk.yellow('package.json')} to ${chalk.yellow(releaseVersion)}`);
+    } else {
+      upgradeNpmPackageVersion(
+        basePath,
+        releaseVersion,
+      );
+
+      console.log(`Updated "version" in ${chalk.yellow('package.json')} to ${chalk.yellow(releaseVersion)}`);
+    }
   }
 
   // Update the version in the plugin header.
