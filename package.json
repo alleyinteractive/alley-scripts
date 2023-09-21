@@ -28,6 +28,7 @@
     "packages/build-tool",
     "packages/create-block",
     "packages/create-entry",
+    "packages/create-release",
     "packages/eslint-config",
     "packages/scaffold",
     "packages/stylelint-config",
@@ -39,14 +40,14 @@
     "@storybook/addon-essentials": "^7.0.26",
     "@storybook/addon-interactions": "^7.4.0",
     "@storybook/addon-links": "^7.4.0",
-    "@storybook/blocks": "^7.3.2",
+    "@storybook/blocks": "^7.4.2",
     "@storybook/react": "^7.0.2",
     "@storybook/react-vite": "^7.0.24",
-    "@storybook/testing-library": "^0.2.0",
+    "@storybook/testing-library": "^0.2.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "storybook": "^7.3.2",
+    "storybook": "^7.4.2",
     "turbo": "^1.10.3"
   }
 }
