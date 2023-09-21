@@ -11,6 +11,7 @@ This monorepo contains the following packages:
 - [`@alleyinteractive/block-editor-tools`](./packages/block-editor-tools/README.md)
 - [`@alleyinteractive/create-block`](./packages/create-block/README.md)
 - [`@alleyinteractive/create-entry`](./packages/create-entry/README.md)
+- [`@alleyinteractive/create-release`](./packages/create-release/README.md)
 - [`@alleyinteractive/eslint-config`](./packages/eslint-config/README.md)
 - [`@alleyinteractive/stylelint-config`](./packages/stylelint-config/README.md)
 - [`@alleyinteractive/tsconfig`](./packages/tsconfig/README.md)

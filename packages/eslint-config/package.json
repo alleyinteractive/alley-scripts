@@ -4,7 +4,7 @@
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
   },
   "dependencies": {
-    "@babel/core": "^7.22.17",
+    "@babel/core": ">= 7",
     "@babel/eslint-parser": "^7.22.15",
     "@babel/preset-env": "^7.22.15",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
