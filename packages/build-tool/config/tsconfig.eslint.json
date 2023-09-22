@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+  },
+  "include": [
+    "../jest.config.js",
+    "../config/webpack.config.ts",
+    "../utils",
+    "../index.ts",
+    "../.eslintrc.js",
+    "../utils/index.test.ts",
+    "../utils/webpack.test.ts"
+  ]
+}
