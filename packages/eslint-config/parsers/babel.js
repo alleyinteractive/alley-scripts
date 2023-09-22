@@ -1,4 +1,6 @@
+const parserOptions = require('./parserOptions');
+
 module.exports = {
-  extends: [require.resolve('./parserOptions.js')],
   parser: '@babel/eslint-parser',
+  ...parserOptions,
 };

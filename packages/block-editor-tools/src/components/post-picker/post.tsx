@@ -1,4 +1,5 @@
 import { sprintf } from '@wordpress/i18n';
+// eslint-disable-next-line camelcase
 import type { WP_REST_API_Attachment } from 'wp-types';
 import styled from 'styled-components';
 import { useMedia } from '../../hooks';
@@ -10,6 +11,7 @@ interface PostInterface {
   attachmentID: string | unknown,
 }
 
+// eslint-disable-next-line camelcase
 interface Media extends WP_REST_API_Attachment {
   media_details: {
     sizes: {

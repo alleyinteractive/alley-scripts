@@ -1,9 +1,12 @@
+const env = require('./env');
+const imports = require('../rules/imports');
+
 module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
-    require.resolve('./env'),
   ],
+  ...env,
   rules: {
     'no-restricted-syntax': [
       'error',
@@ -18,5 +21,6 @@ module.exports = {
     ],
     'react/jsx-props-no-spreading': 'off',
     'react/react-in-jsx-scope': 'off',
+    ...imports.rules,
   },
 };

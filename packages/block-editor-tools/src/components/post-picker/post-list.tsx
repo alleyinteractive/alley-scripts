@@ -4,7 +4,9 @@ import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
 import { Button, TextControl, Spinner } from '@wordpress/components';
 import classNames from 'classnames';
+// eslint-disable-next-line camelcase
 import type { WP_REST_API_Search_Results } from 'wp-types';
+import { JSX } from 'react';
 
 import './post-list.scss';
 import Post from './post';
@@ -35,6 +37,7 @@ const PostList = ({
   suppressPostIds = [],
 }: PostListProps) => {
   const [isUpdating, setIsUpdating] = useState(false);
+  // eslint-disable-next-line camelcase
   const [listposts, setListposts] = useState<WP_REST_API_Search_Results>([]);
   const [initialLoad, setInitialLoad] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
@@ -89,10 +92,12 @@ const PostList = ({
     ));
     // @ts-ignore
     const result = await response.json();
+    // eslint-disable-next-line camelcase
     let posts = result as any as WP_REST_API_Search_Results;
     if (params.page > 1) {
       posts = [
         ...listposts,
+        // eslint-disable-next-line camelcase
         ...result as any as WP_REST_API_Search_Results,
       ];
     }
@@ -100,6 +105,7 @@ const PostList = ({
       return;
     }
     // @ts-ignore
+    // eslint-disable-next-line camelcase
     setListposts(posts as any as WP_REST_API_Search_Results);
     setIsUpdating(false);
   }, [listposts, baseUrl, suppressPostIds]);

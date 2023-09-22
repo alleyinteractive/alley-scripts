@@ -1,15 +1,19 @@
 /**
  * Base Typescript configuration using Airbnb's base config without React.
  */
-const packageConfigs = [
-  '../configs/env',
-  '../parsers/typescript',
-].map(require.resolve);
+const env = require('../configs/env');
+const typescriptParser = require('../parsers/typescript');
+const imports = require('../rules/imports');
 
 module.exports = {
   extends: [
     'airbnb/base',
     'airbnb-typescript/base',
-    ...packageConfigs,
   ],
+  plugins: ['@typescript-eslint'],
+  ...env,
+  ...typescriptParser,
+  rules: {
+    ...imports.rules,
+  },
 };

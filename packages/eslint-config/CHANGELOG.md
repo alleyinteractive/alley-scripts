@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.3 - 2023-09-12
+
+- Ensure that file extensions are not required for imports with the extensions specified in the `import/extensions` rule. `.js, .mjs, .ts, .jsx, .tsx`.
+- Reorganize internal rules for readability using spread operators over extending rules with require.resolve.
+- Update dependencies and address npm audit warnings.
+
 ## 0.1.2 - 2023-08-16
 
 - Add `allowExpressions` to `react/jsx-no-useless-fragment` rule to allow for `<>{children}</>` syntax, which is
