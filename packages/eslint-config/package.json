@@ -34,6 +34,7 @@
     "base",
     "configs",
     "parsers",
+    "rules",
     "typescript",
     "typescript-react"
   ],
@@ -60,7 +61,7 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "version": "0.1.3",
+  "version": "0.1.4",
   "devDependencies": {
     "@types/node": "^20.6.0"
   }
