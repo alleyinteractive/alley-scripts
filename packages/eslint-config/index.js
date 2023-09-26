@@ -1,3 +1,5 @@
+const reactConfig = require('./configs/react');
+
 /**
  * The main configuration uses React.
  * If you are not using React, use the /base config instead.
@@ -6,6 +8,5 @@
  * @see https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
  */
 module.exports = {
-  extends: [require.resolve('./configs/react')],
-  rules: {},
+  ...reactConfig,
 };

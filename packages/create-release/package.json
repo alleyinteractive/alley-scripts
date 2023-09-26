@@ -1,9 +1,9 @@
 {
   "author": "Alley <info@alley.com> (https://alley.com)",
-  "description": "Alley's script for scaffolding code for entry points in projects that use @wordpress/scripts",
+  "description": "Create alleyinteractive/create-wordpress-plugin releases with ease.",
   "license": "GPL-2.0-or-later",
-  "name": "@alleyinteractive/create-entry",
-  "version": "0.0.3",
+  "name": "@alleyinteractive/create-release",
+  "version": "0.1.3",
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
@@ -16,20 +16,17 @@
     "glob": "^10.3.1",
     "mustache": "^4.2.0",
     "prompts": "^2.4.2",
+    "semver": "^7.5.4",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.1.6"
   },
   "files": [
     "dist",
     "LICENSE",
-    "README.md",
-    "templates"
+    "README.md"
   ],
   "bin": {
-    "@alleyinteractive/create-entry": "./dist/index.js"
-  },
-  "peerDependencies": {
-    "@wordpress/scripts": "*"
+    "@alleyinteractive/create-release": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
