@@ -18,9 +18,11 @@
     "lint": "eslint -c .eslintrc.js --ext .ts .",
     "test:watch": "jest --watch",
     "test": "jest --passWithNoTests --silent",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p ./config/tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs",
-    "build:cjs": "tsc -p ./config/tsconfig.cjs.json"
+    "build:cjs": "tsc -p ./config/tsconfig.cjs.json",
+    "prepublishOnly": "npm run build",
+    "prebuild": "npm run clean"
   },
   "repository": {
     "type": "git",
