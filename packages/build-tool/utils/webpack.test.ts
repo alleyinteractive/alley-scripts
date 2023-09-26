@@ -2,7 +2,6 @@
 import path from 'path';
 import fs from 'fs';
 
-// eslint-disable-next-line import/no-unresolved
 import { getEntries, processFilename } from './webpack';
 
 describe('getEntries', () => {
