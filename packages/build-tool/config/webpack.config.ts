@@ -24,6 +24,12 @@ const isProduction: boolean = process.env.NODE_ENV === 'production';
 const entriesDir: string = process.env.ENTRIES_DIRECTORY || 'entries';
 
 /**
+ * Whether to only build blocks from the `--webpack-src-dir` and ignore the
+ * entry points in the `--webpack-entries-dir` or 'entries' directory.
+ */
+const blocksOnly: boolean = process.env.BLOCKS_ONLY === 'true';
+
+/**
  * The mode to run webpack in. Either production or development.
  */
 const mode: string = isProduction ? 'production' : 'development';
@@ -44,10 +50,11 @@ const config = (): webpack.Configuration => ({
   // Dynamically produce entries from the slotfills index file and all blocks.
   entry: () => {
     const blocks = defaultConfig.entry();
+    const entries = blocksOnly === true ? {} : getEntries(entriesDir);
 
     return {
       ...blocks,
-      ...getEntries(entriesDir),
+      ...entries,
     };
   },
 

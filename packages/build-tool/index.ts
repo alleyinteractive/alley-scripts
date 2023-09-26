@@ -10,13 +10,17 @@ import { getDefaultArgs, hasArgInCLI, getArgFromCLI } from './utils';
 const defaultArgs: string[] = getDefaultArgs() || [];
 
 /**
- * The default directory where wp-scripts will detect entry point directories
- * that are not blocks. These entries can be slotfills or webpack entry points.
+ * Set the environment variable for the path to the webpack entries directory.
  *
  * @type {string|undefined}
  */
 process.env.ENTRIES_DIRECTORY = hasArgInCLI('--webpack-entries-dir')
   ? getArgFromCLI('--webpack-entries-dir') : 'entries';
+
+/**
+ * Set the environment variable to only build blocks.
+ */
+process.env.BLOCKS_ONLY = hasArgInCLI('--webpack-blocks-only') ? 'true' : 'false';
 
 // Call wp-scripts with the default arguments.
 spawn(

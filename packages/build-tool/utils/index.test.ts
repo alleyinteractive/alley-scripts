@@ -10,7 +10,7 @@ import {
   getWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
-} from './index'; // eslint-disable-line import/no-unresolved
+} from './index';
 
 describe('fromProjectRoot', () => {
   test('returns the absolute path to a file from the project root', () => {

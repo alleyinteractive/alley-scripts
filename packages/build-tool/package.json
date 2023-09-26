@@ -18,9 +18,11 @@
     "lint": "eslint -c .eslintrc.js --ext .ts .",
     "test:watch": "jest --watch",
     "test": "jest --passWithNoTests --silent",
-    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p ./config/tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs",
-    "build:cjs": "tsc -p ./config/tsconfig.cjs.json"
+    "build:cjs": "tsc -p ./config/tsconfig.cjs.json",
+    "prepublishOnly": "npm run build",
+    "prebuild": "npm run clean"
   },
   "repository": {
     "type": "git",
@@ -48,7 +50,7 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "^0.1.2",
+    "@alleyinteractive/eslint-config": "*",
     "@types/jest": "^29.5.4",
     "@types/node": "^20.5.9",
     "@types/webpack": "^5.28.2",
