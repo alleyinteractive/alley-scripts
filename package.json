@@ -38,7 +38,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@storybook/addon-essentials": "^7.0.26",
-    "@storybook/addon-interactions": "^7.4.4",
+    "@storybook/addon-interactions": "^7.4.5",
     "@storybook/addon-links": "^7.4.0",
     "@storybook/blocks": "^7.4.2",
     "@storybook/react": "^7.0.2",
