@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+import { chdir, cwd } from 'node:process';
+
 /* eslint-disable no-console */
 const fs = require('fs');
 const prompts = require('prompts');
@@ -138,13 +141,16 @@ if (help) {
   }
 
   // Navigate to the directory to create the block.
-  process.chdir(blocksDirectory);
+  try {
+    chdir(blocksDirectory);
+  } catch (err) {
+    console.error(`chdir: ${err}`);
+  }
 
   // Create a block using the @wordpress/create-block package.
   spawn.sync(
-    'npx',
+    'wp-create-block',
     [
-      '@wordpress/create-block',
       /**
        * This argument specifies an external npm package as a template.
        * In this case, the selectTemplates.js file is used as a the entry for the template.
@@ -165,6 +171,9 @@ if (help) {
       '--variant',
       'dynamic',
     ],
-    { stdio: 'inherit' },
+    {
+      cwd: cwd(),
+      stdio: 'inherit',
+    },
   );
 })();

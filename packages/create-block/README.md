@@ -34,14 +34,14 @@ Without providing any options the tool will prompt the user through several opti
 The script will run and will start prompting for the input required to scaffold the block using `@wordpress/create-block` in [interactive mode](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#interactive-mode). See details about the available prompts in the [@wordpress/create-block documentation](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#options).
 
 ### Recommended Setup
-* Install `@alleyinteractive/create-block` as a dev dependency on a project.
+* Install `@alleyinteractive/create-block` as a devDependency on a project.
 * Add a `create-block` script command in the projects `package.json` file to call the script.
 * Add project specific flags to the command setting `--blocksDir`, `--namespace`, and `--blockLanguage` accordingly.
 
 Example in `package.json`:
 ```json
 "scripts": {
-    "create-block": "npx @alleyinteractive/create-block -n my-projects-namespace -l typescript",
+    "create-block": "alley-create-block -n my-projects-namespace -l typescript",
 }
 ```
 The example above will scaffold blocks in the default "blocks" directory in a project using the namespace of "my-projects-namespace" and using typescript as the block language.

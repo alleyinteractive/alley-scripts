@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/create-block",
-  "version": "0.0.3",
+  "version": "0.1.0-next",
   "description": "Alley's custom block scaffolding variation for the @wordpress/create-block script.",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,10 @@
     "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
   },
   "bin": {
-    "@alleyinteractive/create-block": "./dist/index.js"
+    "alley-create-block": "./dist/index.js"
   },
   "peerDependencies": {
+    "@wordpress/create-block": "^4.26.0",
     "@wordpress/scripts": "*"
   },
   "keywords": [
@@ -43,8 +44,7 @@
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
     "@types/cross-spawn": "^6.0.3",
-    "@types/node": "^20.6.0",
-    "@types/prompts": "^2.4.4"
+    "@types/prompts": "^2.4.5"
   },
   "files": [
     "dist",
