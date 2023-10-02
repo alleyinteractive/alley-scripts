@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/create-block",
-  "version": "0.1.0-next",
+  "version": "0.1.0",
   "description": "Alley's custom block scaffolding variation for the @wordpress/create-block script.",
   "main": "index.js",
   "scripts": {
