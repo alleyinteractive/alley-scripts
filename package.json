@@ -38,11 +38,11 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@storybook/addon-essentials": "^7.0.26",
-    "@storybook/addon-interactions": "^7.4.5",
+    "@storybook/addon-interactions": "^7.4.6",
     "@storybook/addon-links": "^7.4.0",
     "@storybook/blocks": "^7.4.2",
     "@storybook/react": "^7.0.2",
-    "@storybook/react-vite": "^7.0.24",
+    "@storybook/react-vite": "^7.4.6",
     "@storybook/testing-library": "^0.2.1",
     "@types/node": "^20.8.0",
     "prop-types": "^15.8.1",
