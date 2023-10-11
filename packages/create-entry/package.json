@@ -9,7 +9,7 @@
     "@alleyinteractive/tsconfig": "*",
     "@types/mustache": "^4.2.2",
     "@types/node": "^20.8.3",
-    "@types/prompts": "^2.4.4"
+    "@types/prompts": "^2.4.5"
   },
   "dependencies": {
     "chalk": "^5.3.0",
