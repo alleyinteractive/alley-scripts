@@ -114,7 +114,7 @@
     "@alleyinteractive/eslint-config": "*",
     "@babel/core": "^7.22.20",
     "@babel/preset-env": "^7.22.15",
-    "@babel/preset-react": "^7.22.5",
+    "@babel/preset-react": "^7.22.15",
     "@types/styled-components": "^5.1.26",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.13.0",
     "autoprefixer": "^10.4.16",
