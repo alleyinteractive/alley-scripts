@@ -1,4 +1,6 @@
 import { sprintf } from '@wordpress/i18n';
+import { decodeEntities } from '@wordpress/html-entities';
+
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Attachment } from 'wp-types';
 import styled from 'styled-components';
@@ -58,7 +60,7 @@ const Post = ({
         />
       ) : null}
       <SafeHTML
-        html={title}
+        html={decodeEntities(title)}
         className="post-picker-result-title"
         tag="strong"
       />
