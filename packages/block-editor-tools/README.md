@@ -10,8 +10,8 @@ This package contains a set of modules used by [Alley Interactive](https://alley
 - [Usage](#usage)
 - [Changelog](#changelog)
 - [Development Process](#development-process)
-    - [Contributing](#contributing)
-	- [Releases](#Releases)
+  - [Contributing](#contributing)
+- [Releases](#releases)
 - [Maintainers](#maintainers)
 - [License](#license)
 
@@ -29,24 +29,28 @@ This package assumes your project is running in an environment compatible with t
 
 To use modules from this package, import them into your files using the `import` declaration
 
-```js
+```jsx
 import { usePostMeta } from '@alleyinteractive/block-editor-tools';
 
 const MyComponent = () => {
-	const [meta, setMeta] = usePostMeta();
-	const { my_meta_key: myMetaKey } = meta;
+ const [meta, setMeta] = usePostMeta();
+ const { my_meta_key: myMetaKey } = meta;
 
-	return (
-		<TextControl
-			label={__('My Meta Key', 'alley-scripts')}
-			onChange={(newValue) => setMeta({ ...meta, my_meta_key: newValue })}
-			value={myMetaKey}
-		/>
-	);
+ return (
+  <TextControl
+   label={__('My Meta Key', 'alley-scripts')}
+   onChange={(newValue) => setMeta({ ...meta, my_meta_key: newValue })}
+   value={myMetaKey}
+  />
+ );
 };
 ```
 
 ## Changelog
+
+### 0.3.7
+
+- Addition of `useCurrentPostId` hook.
 
 ### 0.3.0
 
@@ -72,8 +76,8 @@ This package is developed as part of the [Alley Scripts](https://github.com/alle
 
 You can contribute to this project in several ways:
 
-* Visit the main [Alley Scripts GitHub repo](https://github.com/alleyinteractive/alley-scripts) to [Open an issue](https://github.com/alleyinteractive/alley-scripts/issues/new) or submit PRs.
-* Alley employees can ask questions or ask for support in the [#javascript](https://alleyinteractive.slack.com/archives/C035Y7Q3X) channel in Slack.
+- Visit the main [Alley Scripts GitHub repo](https://github.com/alleyinteractive/alley-scripts) to [Open an issue](https://github.com/alleyinteractive/alley-scripts/issues/new) or submit PRs.
+- Alley employees can ask questions or ask for support in the [#javascript](https://alleyinteractive.slack.com/archives/C035Y7Q3X) channel in Slack.
 
 ### Releases
 

@@ -83,7 +83,7 @@ When you're finished with the changes, create a pull request, also known as a PR
   [git tutorial](https://github.com/skills/resolve-merge-conflicts) to help you
   resolve merge conflicts and other issues.
 
-#### Your PR is Merged!
+#### Your PR is Merged
 
 Congratulations! The Alley team thanks you.
 
