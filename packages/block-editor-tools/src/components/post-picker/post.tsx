@@ -1,5 +1,5 @@
-import { sprintf } from '@wordpress/i18n';
 import { decodeEntities } from '@wordpress/html-entities';
+import { sprintf } from '@wordpress/i18n';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Attachment } from 'wp-types';
 import styled from 'styled-components';
