@@ -1,5 +1,4 @@
 import { useState } from '@wordpress/element';
-// @ts-ignore
 import { JSX } from 'react';
 import {
   Button,
