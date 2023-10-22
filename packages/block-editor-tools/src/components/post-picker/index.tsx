@@ -1,5 +1,6 @@
 import { useState } from '@wordpress/element';
 import styled from 'styled-components';
+// @ts-ignore
 import { JSX } from 'react';
 
 import {

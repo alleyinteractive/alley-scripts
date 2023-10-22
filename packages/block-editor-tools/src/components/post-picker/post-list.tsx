@@ -6,6 +6,7 @@ import { Button, TextControl, Spinner } from '@wordpress/components';
 import classNames from 'classnames';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Search_Results } from 'wp-types';
+// @ts-ignore
 import { JSX } from 'react';
 
 import './post-list.scss';
