@@ -115,6 +115,7 @@
     "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
+    "@storybook/react": "^7.5.1",
     "@types/styled-components": "^5.1.26",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.13.0",
     "autoprefixer": "^10.4.16",
