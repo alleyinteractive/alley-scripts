@@ -5,6 +5,9 @@ import { useSelect } from '@wordpress/data';
  *
  * @returns {integer} The current post ID.
  */
-const useCurrentPostId = () => useSelect((select) => select('core/editor').getCurrentPostId(), []);
+const useCurrentPostId = () => useSelect((select) => {
+  const editorStore = select('core/editor');
+  return editorStore ? editorStore.getCurrentPostId() : null;
+}, []);
 
 export default useCurrentPostId;

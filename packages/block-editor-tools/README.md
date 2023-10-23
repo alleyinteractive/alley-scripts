@@ -4,17 +4,6 @@
 
 This package contains a set of modules used by [Alley Interactive](https://alley.co) to aid in building features for the WordPress block editor.
 
-## Table of Contents
-
-- [Install](#install)
-- [Usage](#usage)
-- [Changelog](#changelog)
-- [Development Process](#development-process)
-  - [Contributing](#contributing)
-- [Releases](#releases)
-- [Maintainers](#maintainers)
-- [License](#license)
-
 ## Install
 
 Install this package in your project:
@@ -33,16 +22,16 @@ To use modules from this package, import them into your files using the `import`
 import { usePostMeta } from '@alleyinteractive/block-editor-tools';
 
 const MyComponent = () => {
- const [meta, setMeta] = usePostMeta();
- const { my_meta_key: myMetaKey } = meta;
+  const [meta, setMeta] = usePostMeta();
+  const { my_meta_key: myMetaKey } = meta;
 
- return (
-  <TextControl
-   label={__('My Meta Key', 'alley-scripts')}
-   onChange={(newValue) => setMeta({ ...meta, my_meta_key: newValue })}
-   value={myMetaKey}
-  />
- );
+  return (
+    <TextControl
+      label={__('My Meta Key', 'alley-scripts')}
+      value={myMetaKey}
+      onChange={(newValue) => setMeta({ ...meta, my_meta_key: newValue })}
+    />
+  );
 };
 ```
 
@@ -77,7 +66,6 @@ This package is developed as part of the [Alley Scripts](https://github.com/alle
 You can contribute to this project in several ways:
 
 - Visit the main [Alley Scripts GitHub repo](https://github.com/alleyinteractive/alley-scripts) to [Open an issue](https://github.com/alleyinteractive/alley-scripts/issues/new) or submit PRs.
-- Alley employees can ask questions or ask for support in the [#javascript](https://alleyinteractive.slack.com/archives/C035Y7Q3X) channel in Slack.
 
 ### Releases
 
