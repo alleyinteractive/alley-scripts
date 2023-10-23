@@ -8,6 +8,7 @@ export { default as useMedia } from './use-media';
 export { default as useParentBlock } from './use-parent-block';
 export { default as useParentBlockAttributes } from './use-parent-block-attributes';
 export { default as usePost } from './use-post';
+export { default as useCurrentPostId } from './use-current-post-id';
 export { default as usePostById } from './use-post-by-id';
 export { default as usePostMeta } from './use-post-meta';
 export { default as usePostMetaValue } from './use-post-meta-value';
