@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.1.1 -- @alleyinteractive/build-tool
 
-- Add `--webpack-blocks-only` that will will disable the entries directory and only compile blocks set in the `blocks` directory.
+- Add `--webpack-blocks-only` that will disable the entries directory and only compile blocks set in the `blocks` directory.
 - Update ESLint config to extend `@alleyinteractive/eslint-config/typescript` config.
 - Add a `prepublishOnly` script to the `package.json` file to run `npm run build` before publishing.
 
