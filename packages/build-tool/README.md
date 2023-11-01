@@ -61,13 +61,16 @@ By default the following command options are applied when running the `build` an
 
 ### Extending the config
 
-Extending the Alley Build Tool webpack configuration is possible and uses the same approach as [extending the webpack config in wp-scripts](https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/README.md#extending-the-webpack-config) by following the steps below:
+Extending the Alley Build Tool webpack configuration is possible and uses the same approach as [extending the webpack config in wp-scripts](https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/README.md#extending-the-webpack-config).
+
+There are several ways to extend the webpack configuration. One uses the common JS `require` syntax and the other uses the ESM `import` syntax. The following examples use the common JS `require` syntax.
 * Provide a `webpack.config.js` file in the root of your project.
 * `require` the webpack config from `@alleyinteractive/build-tool` in the `webpack.config.js` file in your project.
 * Use the spread operator to import all of or part of the provided configuration.
 
 ```js
-const defaultConfig = require('@alleyinteractive/build-tool/config/webpack.config');
+const path = require('path');
+const defaultConfig = require('@alleyinteractive/build-tool/dist/cjs/config/webpack.config');
 
 module.exports = {
   ...defaultConfig,
@@ -75,11 +78,17 @@ module.exports = {
   resolve: {
     ...defaultConfig.resolve,
     alias: {
-      ...defaultConfig.resolve.alias,
+      ...defaultConfig.resolve?.alias,
       // Custom alias to resolve paths to the project root. Example: 'root/client/index.js'.
-      'root': path.resolve(__dirname),
+      root: path.resolve(__dirname),
     },
   },
+};
+```
+
+**NOTE**: To use ESM import syntax use the following import path:
+```js
+import defaultConfig from '@alleyinteractive/build-tool/dist/esm/config/webpack.config';
 ```
 ### From Source
 
