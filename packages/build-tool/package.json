@@ -62,11 +62,11 @@
     ".": {
       "import": {
         "types": "./dist/esm/types/index.d.ts",
-        "default": "./dist/esm"
+        "default": "./dist/esm/index.mjs"
       },
       "require": {
         "types": "./dist/cjs/types/index.d.ts",
-        "default": "./dist/cjs"
+        "default": "./dist/cjs/index.js"
       }
     },
     "./dist/cjs/config/webpack.config": "./dist/cjs/config/webpack.config.js",
