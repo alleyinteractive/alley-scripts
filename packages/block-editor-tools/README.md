@@ -37,6 +37,10 @@ const MyComponent = () => {
 
 ## Changelog
 
+### 0.3.8
+
+- Use of `decodeEntities` in `<PostPicker>` component search results.
+
 ### 0.3.7
 
 - Addition of `useCurrentPostId` hook.
