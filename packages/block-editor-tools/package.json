@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/block-editor-tools",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
   "types": "./build/index.d.ts",
@@ -115,7 +115,7 @@
     "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
-    "@storybook/react": "^7.5.1",
+    "@storybook/react": "^7.5.2",
     "@types/styled-components": "^5.1.26",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.13.0",
     "autoprefixer": "^10.4.16",
