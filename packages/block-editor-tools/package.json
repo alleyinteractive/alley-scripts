@@ -108,7 +108,7 @@
     "styled-components": "^6.1.0",
     "ts-loader": "^9.4.4",
     "uuid": "^9.0.1",
-    "wp-types": "^3.62.4"
+    "wp-types": "^3.63.0"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
