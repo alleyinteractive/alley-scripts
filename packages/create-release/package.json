@@ -8,7 +8,7 @@
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
     "@types/mustache": "^4.2.4",
-    "@types/node": "^20.8.3",
+    "@types/node": "^20.8.10",
     "@types/prompts": "^2.4.5"
   },
   "dependencies": {
