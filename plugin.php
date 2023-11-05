@@ -6,8 +6,8 @@
  * Version: 0.1.0
  * Author: Alley
  * Author URI: https://alley.com/
- * Requires at least: 5.9
- * Tested up to: 5.9
+ * Requires at least: 6.3
+ * Tested up to: 6.3
  *
  * @package Alley_Scripts
  */

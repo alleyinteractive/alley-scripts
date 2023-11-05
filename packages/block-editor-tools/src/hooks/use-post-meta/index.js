@@ -1,3 +1,4 @@
+import { store } from '@wordpress/editor';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { cloneDeep } from 'lodash';
@@ -16,7 +17,7 @@ import { cloneDeep } from 'lodash';
  */
 const usePostMeta = (postType = null, postId = null) => {
   // Ensures that we have a post type, since we need it as an argument to useEntityProp.
-  const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
+  const type = useSelect((select) => postType || select(store).getCurrentPostType(), []);
 
   // Get the return value from useEntityProp so we can wrap it for safety.
   const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', postId);

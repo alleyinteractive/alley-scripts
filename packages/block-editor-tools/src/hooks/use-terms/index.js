@@ -1,3 +1,4 @@
+import { store } from '@wordpress/editor';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
@@ -20,7 +21,7 @@ import { useSelect } from '@wordpress/data';
  */
 const useTerms = (postType = null, postId = null, taxonomy = 'categories') => {
   // Ensures that we have a post type, since we need it as an argument to useEntityProp.
-  const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
+  const type = useSelect((select) => postType || select(store).getCurrentPostType(), []);
 
   // Get the terms and a function for updating terms from useEntityProp.
   const [terms, setTerms] = useEntityProp('postType', type, taxonomy, postId);
