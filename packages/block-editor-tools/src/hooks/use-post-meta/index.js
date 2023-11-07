@@ -1,6 +1,6 @@
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
