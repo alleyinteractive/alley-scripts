@@ -24,15 +24,7 @@
     "build-storybook": "storybook build"
   },
   "workspaces": [
-    "packages/block-editor-tools",
-    "packages/build-tool",
-    "packages/create-block",
-    "packages/create-entry",
-    "packages/create-release",
-    "packages/eslint-config",
-    "packages/scaffold",
-    "packages/stylelint-config",
-    "packages/tsconfig",
+    "packages/*",
     "plugin"
   ],
   "devDependencies": {
