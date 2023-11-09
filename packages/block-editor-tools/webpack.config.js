@@ -1,6 +1,7 @@
 const path = require('path');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env, { mode }) => ({
   /*
@@ -62,6 +63,7 @@ module.exports = (env, { mode }) => ({
   plugins: [
     // This maps references to @wordpress/{package-name} to the wp object.
     new DependencyExtractionWebpackPlugin(),
+    new BundleAnalyzerPlugin(),
   ],
 
   resolve: {

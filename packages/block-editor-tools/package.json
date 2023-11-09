@@ -66,8 +66,8 @@
     "wp-types": "^3.63.0"
   },
   "devDependencies": {
-    "@alleyinteractive/tsconfig": "*",
     "@alleyinteractive/eslint-config": "*",
+    "@alleyinteractive/tsconfig": "*",
     "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
