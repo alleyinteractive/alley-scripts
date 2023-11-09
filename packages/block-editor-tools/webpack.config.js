@@ -1,7 +1,6 @@
 const path = require('path');
 const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env, { mode }) => ({
   /*
@@ -26,6 +25,12 @@ module.exports = (env, { mode }) => ({
         test: /\.(j|t)sx?$/,
         use: {
           loader: 'ts-loader',
+          options: {
+            compilerOptions: {
+              transpileOnly: true,
+              experimentalWatchApi: true,
+            },
+          },
         },
       },
       {
@@ -62,8 +67,7 @@ module.exports = (env, { mode }) => ({
   // Configure plugins.
   plugins: [
     // This maps references to @wordpress/{package-name} to the wp object.
-    new DependencyExtractionWebpackPlugin(),
-    new BundleAnalyzerPlugin(),
+    new DependencyExtractionWebpackPlugin({}),
   ],
 
   resolve: {
