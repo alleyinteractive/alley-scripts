@@ -60,17 +60,15 @@
     "papaparse": "^5.4.0",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
-    "styled-components": "^6.1.0",
-    "uuid": "^9.0.1",
-    "wp-types": "^3.63.0"
+    "styled-components": "^6.1.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
-    "@babel/core": "^7.23.2",
-    "@babel/preset-react": "^7.22.15",
-    "@storybook/react": "^7.5.2",
-    "@types/styled-components": "^5.1.26",
+    "@babel/preset-react": "^7.23.3",
+    "@storybook/react": "^7.5.3",
+    "@types/styled-components": "^5.1.30",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.28.0",
     "autoprefixer": "^10.4.16",
     "babel-jest": "^29.6.2",
@@ -81,12 +79,12 @@
     "jest": "^29.7.0",
     "postcss-loader": "^7.3.3",
     "resolve-url-loader": "^5.0.0",
-    "sass": "^1.66.1",
+    "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.5.0",
     "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
-  },
-  "peerDependencies": {}
+    "webpack-cli": "^5.1.4",
+    "wp-types": "^3.64.0"
+  }
 }
