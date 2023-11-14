@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
