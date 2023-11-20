@@ -37,29 +37,7 @@ const MyComponent = () => {
 
 ## Changelog
 
-### 0.3.8
-
-- Use of `decodeEntities` in `<PostPicker>` component search results.
-
-### 0.3.7
-
-- Addition of `useCurrentPostId` hook.
-
-### 0.3.0
-
-- Addition of `<PostPicker>` component.
-- Addition of `usePostById` hook.
-
-### 0.1.0
-
-- Addition of Eslint configuration and rules.
-- Make peer dependency requirements lenient.
-- Add Styleint config.
-- Include Typescript types.
-
-### 0.0.1
-
-– Initial release
+This project keeps a [changelog](CHANGELOG.md).
 
 ## Development Process
 
