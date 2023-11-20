@@ -63,12 +63,6 @@ module.exports = (env, { mode }) => ({
         test: /\.(j|t)sx?$/,
         use: {
           loader: 'ts-loader',
-          options: {
-            compilerOptions: {
-              transpileOnly: true,
-              experimentalWatchApi: true,
-            },
-          },
         },
       },
       {
