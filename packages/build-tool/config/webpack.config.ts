@@ -54,7 +54,7 @@ const mode: string = isProduction ? 'production' : 'development';
  * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#extending-the-webpack-config
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/config/webpack.config.js
  */
-const config = (): webpack.Configuration => ({
+const config = (): webpack.Configuration => (defaultConfig ? {
   ...defaultConfig,
 
   // Dynamically produce entries from the slotfills index file and all blocks.
@@ -139,6 +139,6 @@ const config = (): webpack.Configuration => ({
       directory: '/build',
     },
   },
-});
+} : {});
 
 export default config;
