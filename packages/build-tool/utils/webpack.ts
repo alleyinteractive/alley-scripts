@@ -61,6 +61,7 @@ function processFilename(
 ): string {
   const entriesDir = process.env.ENTRIES_DIRECTORY || 'entries';
 
+  // For runtime chunks we are casting chunk to Chunk as runtime does not exist on ChunkPathData.
   const { chunk } = pathData as { chunk: Chunk };
 
   const dirname = dirnameSource === 'runtime'
