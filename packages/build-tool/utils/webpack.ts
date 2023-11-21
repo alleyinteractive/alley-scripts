@@ -1,9 +1,8 @@
 import { existsSync, readdirSync } from 'fs';
 import { cwd } from 'node:process';
 import { join } from 'path';
-import webpack from 'webpack';
+import { type PathData, type Chunk } from 'webpack';
 
-export type PathData = webpack.Compiler.PathData;
 type DirectorySrcName = 'name' | 'runtime';
 
 /**
@@ -62,8 +61,10 @@ function processFilename(
 ): string {
   const entriesDir = process.env.ENTRIES_DIRECTORY || 'entries';
 
+  const { chunk } = pathData as { chunk: Chunk };
+
   const dirname = dirnameSource === 'runtime'
-    ? pathData.chunk.runtime : pathData.chunk.name;
+    ? chunk?.runtime as string : pathData?.chunk?.name;
 
   let filename = '[name]';
   if (typeof setAsIndex === 'boolean' && setAsIndex) {
@@ -71,7 +72,10 @@ function processFilename(
   }
 
   // Process all block entries.
-  if (!dirname.includes(`${entriesDir}-`)) {
+  if (
+    typeof dirname === 'undefined'
+    || !dirname.includes(`${entriesDir}-`)
+  ) {
     return `[name].${ext}`;
   }
 
