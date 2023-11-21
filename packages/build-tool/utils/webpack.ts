@@ -64,16 +64,16 @@ function processFilename(
   const { chunk } = pathData as { chunk: Chunk };
 
   const dirname = dirnameSource === 'runtime'
-    ? chunk?.runtime as string : pathData?.chunk?.name;
+    ? chunk?.runtime : pathData?.chunk?.name;
 
   let filename = '[name]';
   if (typeof setAsIndex === 'boolean' && setAsIndex) {
     filename = 'index';
   }
 
-  // Process all block entries.
+  // Process all block entries that do not include the entriesDir prefix.
   if (
-    typeof dirname === 'undefined'
+    typeof dirname !== 'string'
     || !dirname.includes(`${entriesDir}-`)
   ) {
     return `[name].${ext}`;

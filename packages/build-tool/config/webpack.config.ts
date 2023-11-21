@@ -61,6 +61,7 @@ const config = (): webpack.Configuration => ({
   entry: () => {
     let blocks = typeof defaultConfig.entry === 'function' ? defaultConfig.entry() : {};
     blocks = blocks && typeof blocks === 'object' ? blocks : {};
+
     const entries = blocksOnly === true ? {} : getEntries(entriesDir);
 
     return {
