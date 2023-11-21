@@ -50,10 +50,7 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "*",
-    "@types/webpack": "^5.28.2",
-    "jest": "^29.6.4",
-    "ts-jest": "^29.1.1"
+    "@alleyinteractive/eslint-config": "*"
   },
   "exports": {
     ".": {

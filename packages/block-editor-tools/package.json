@@ -73,7 +73,6 @@
     "check-node-version": "^4.2.1",
     "css-loader": "^6.8.1",
     "dompurify": "^3.0.6",
-    "jest": "^29.7.0",
     "lodash": "^4.17.21",
     "postcss-loader": "^7.3.3",
     "resolve-url-loader": "^5.0.0",
