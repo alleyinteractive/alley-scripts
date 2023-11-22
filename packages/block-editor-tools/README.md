@@ -12,11 +12,13 @@ Install this package in your project:
 npm install @alleyinteractive/block-editor-tools --save
 ```
 
-This package assumes your project is running in an environment compatible with the WordPress block editor and is using the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) or similar to externalize dependencies included in WordPress. As such, this package does not include these dependencies.
+This package assumes your project is running in an environment compatible with the WordPress block editor and is using the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) or similar to externalize dependencies included in WordPress. As such, this package does not include these dependencies. 
+
+The `block-editor-tools` package must be used alongside the [Alley Build Tool](https://github.com/alleyinteractive/alley-scripts/blob/main/packages/build-tool/README.md), [WP Scripts](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/), or a custom implementation of the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) in your project. This will ensure that the build maps the WordPress externals to the correct dependencies.
 
 ## Usage
 
-To use modules from this package, import them into your files using the `import` declaration
+To use modules from this package, import them into your files using the `import` declaration.
 
 ```jsx
 import { usePostMeta } from '@alleyinteractive/block-editor-tools';
