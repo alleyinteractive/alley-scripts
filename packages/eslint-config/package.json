@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@babel/core": ">= 7",
-    "@babel/eslint-parser": "^7.22.15",
+    "@babel/eslint-parser": "^7.23.3",
     "@babel/preset-env": "^7.23.2",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.3",
