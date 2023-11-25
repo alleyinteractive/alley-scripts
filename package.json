@@ -42,7 +42,7 @@
     "@storybook/addon-links": "^7.5.3",
     "@storybook/blocks": "^7.5.2",
     "@storybook/react": "^7.0.2",
-    "@storybook/react-vite": "^7.4.6",
+    "@storybook/react-vite": "^7.5.3",
     "@storybook/testing-library": "^0.2.2",
     "@types/node": "^20.9.0",
     "prop-types": "^15.8.1",
