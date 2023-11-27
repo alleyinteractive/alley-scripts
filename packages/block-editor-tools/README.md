@@ -2,7 +2,7 @@
 
 [![README standard](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-This package contains a set of modules used by [Alley Interactive](https://alley.co) to aid in building features for the WordPress block editor.
+This package contains a set of modules used by [Alley Interactive](https://alley.com) to aid in building features for the WordPress block editor.
 
 ## Install
 
@@ -11,10 +11,6 @@ Install this package in your project:
 ```sh
 npm install @alleyinteractive/block-editor-tools --save
 ```
-
-This package assumes your project is running in an environment compatible with the WordPress block editor and is using the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) or similar to externalize dependencies included in WordPress. As such, this package does not include these dependencies. 
-
-The `block-editor-tools` package must be used alongside the [Alley Build Tool](https://github.com/alleyinteractive/alley-scripts/blob/main/packages/build-tool/README.md), [WP Scripts](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/), or a custom implementation of the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) in your project. This will ensure that the build maps the WordPress externals to the correct dependencies.
 
 ## Usage
 
