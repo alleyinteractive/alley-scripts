@@ -5,7 +5,8 @@ const autoprefixer = require('autoprefixer');
 const fs = require('fs');
 
 /**
- * Create entry points from a directory path.
+ * Create entry points from a directory path while maintaining the directory structure.
+ *
  * The function will create entries from nested directories if there is an index file.
  * The entry name will be the directory name.
  *
@@ -13,12 +14,20 @@ const fs = require('fs');
  * @returns An object of entries.
  */
 function createEntriesPerDirPath(directoryPath) {
+  // Check if the directory exists before continuing.
   const directoryExists = fs.existsSync(directoryPath);
 
   if (directoryExists) {
+    // Read the directory and reduce its content to an entries object.
     return fs.readdirSync(directoryPath)
       .reduce((acc, dirItemName) => {
+        // Define the full path of the current directory item.
         const fullPath = path.join(directoryPath, dirItemName);
+
+        // Define the base directory.
+        const baseDir = '/src/';
+        // Initialize an object to hold nested entries.
+        let nestedEntries = {};
 
         if (fs.statSync(fullPath).isDirectory()) {
           // Ensure that the directory has an index file.
@@ -26,11 +35,22 @@ function createEntriesPerDirPath(directoryPath) {
             .some((ext) => fs.existsSync(path.join(fullPath, `index.${ext}`)));
 
           if (indexExists) {
-            acc[dirItemName] = fullPath;
+            // Get the relative path from the base directory `src/`.
+            const relativePath = fullPath.substring(fullPath.indexOf(baseDir) + baseDir.length);
+
+            // Add the current directory item to the entries object.
+            acc[dirItemName] = {
+              import: fullPath,
+              filename: `${relativePath}/index.js`,
+            };
           }
+
+          // If current item is a directory, call the function recursively.
+          nestedEntries = createEntriesPerDirPath(fullPath);
         }
 
-        return acc;
+        // Return the entries object with the nested entries added
+        return { ...acc, ...nestedEntries };
       }, {});
   }
   return {};
@@ -51,7 +71,6 @@ module.exports = (env, { mode }) => ({
     // The main entry point.
     ...{ index: './src' },
     // Process the directories, in the 'src' directory, into their own entry points.
-    // [components, blocks, hooks, services]
     ...createEntriesPerDirPath(path.join(process.cwd(), 'src')),
   },
 
@@ -63,6 +82,11 @@ module.exports = (env, { mode }) => ({
         test: /\.(j|t)sx?$/,
         use: {
           loader: 'ts-loader',
+          options: {
+            compilerOptions: {
+              transpileOnly: false,
+            },
+          },
         },
       },
       {

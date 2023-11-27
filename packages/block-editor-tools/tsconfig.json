@@ -3,8 +3,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "jsx": "preserve",
-    "isolatedModules": false,
+    "declaration": true,
     "outDir": "build",
     "paths": {
       "@/*": ["*"]
