@@ -14,16 +14,14 @@
     "npm": ">=8.0.0 <10.0.0"
   },
   "scripts": {
-    "build-types": "npx tsc --declaration --emitDeclarationOnly",
-    "build:types": "npm run clean && tsc && npm run copy-files",
-    "build": "webpack --mode=production && npm run build-types",
+    "build:types": "npx tsc --declaration --emitDeclarationOnly",
+    "build": "webpack --mode=production",
+    "check-types": "npx tsc --noEmit",
     "clean": "rimraf build/",
-    "copy-files": "copyfiles -u 1 src/**/*.scss src/**/*.css build/",
     "dev": "webpack --mode=development --watch",
     "lint:fix": "eslint --ext .jsx --ext .js . --ext .tsx --ext .ts . --fix",
     "lint": "eslint --ext .jsx --ext .js . --ext .tsx --ext .ts .",
     "packages-update": "wp-scripts packages-update",
-    "prebuild-types": "check-node-version --package",
     "prebuild": "check-node-version --package && rm -rf build/*",
     "predev": "check-node-version --package",
     "prelint:fix": "check-node-version --package",
@@ -74,7 +72,6 @@
     "babel-loader": "^9.1.3",
     "babel-plugin-styled-components": "^2.1.4",
     "check-node-version": "^4.2.1",
-    "copyfiles": "^2.4.1",
     "css-loader": "^6.8.1",
     "dompurify": "^3.0.6",
     "lodash": "^4.17.21",
@@ -95,7 +92,7 @@
     ".": {
       "import": {
         "types": "./build/index.d.ts",
-        "default": "./build/index.js"
+        "default": "./build/index.bundle.min.js"
       }
     },
     "./*": "./build/*"
