@@ -2,7 +2,7 @@
 
 [![README standard](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-This package contains a set of modules used by [Alley Interactive](https://alley.com) to aid in building features for the WordPress block editor.
+This package contains a set of modules used by [Alley](https://alley.com) to aid in building features for the WordPress block editor.
 
 ## Install
 
