@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.1.3 -- @alleyinteractive/build-tool
 
-- In the `tsconfig.esm.json` file, when `moduleResolution` is set to `NodeNext` the `module` field must be set to `NodeNext` as well.
-- Update webpack and address typescript errors.
+- In the `tsconfig.esm.json` file, when `moduleResolution` is set to `NodeNext`, the `module` field must be set to `NodeNext` as well.
+- Updated webpack and addressed TypeScript errors.
 
 ## v0.1.2 -- @alleyinteractive/build-tool
 
