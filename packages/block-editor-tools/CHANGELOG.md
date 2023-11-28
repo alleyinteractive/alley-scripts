@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.5.0 -- @alleyinteractive/block-editor-tools
+## v0.5.0
 
 - Dependencies of `block-editor-tools` that are added as externals using the WordPress Dependency Extraction Webpack Plugin were moved to `devDependencies` to avoid peer dependency downloads.
 - The ESLint rule import/no-extraneous-dependencies was turned off as it requesting that the externalized packages be moved to dependencies.
@@ -19,33 +19,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some shared devDependencies were moved to the root `package.json`.
 - Moved changelog from the README to the CHANGELOG.md file to match the pattern of adjacent packages.
 
-### 0.3.8
+## v0.4.0
+
+- Reduce the number of `@wordpress/*` dependencies that are not used directly by this package.
+
+## 0.3.8
 
 - Use of `decodeEntities` in `<PostPicker>` component search results.
 
-## v0.3.7 -- @alleyinteractive/block-editor-tools
+## v0.3.7
 
 - added `useCurrentPostId` hook.
 
-## v0.3.0 -- @alleyinteractive/block-editor-tools
+## v0.3.0
 
 - added `<PostPicker>` component and `usePostById` hook.
 
-## v0.2.0 - @alleyinteractive/block-editor-tools
+## v0.2.0
 
 - Upgraded to WordPress 6.2
 
-## v0.1.2 - @alleyinteractive/block-editor-tools
+## v0.1.2
 
 - Added Node 16 support back.
 
-### 0.1.0
+## 0.1.0
 
 - Addition of Eslint configuration and rules.
 - Make peer dependency requirements lenient.
 - Add Styleint config.
 - Include Typescript types.
 
-### 0.0.1
+## 0.0.1
 
 - Initial release
