@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reduce the number of `@wordpress/*` dependencies that are not used directly by this package.
 
-## 0.3.8
+## v0.3.8
 
 - Use of `decodeEntities` in `<PostPicker>` component search results.
 
@@ -43,13 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Node 16 support back.
 
-## 0.1.0
+## v0.1.0
 
 - Addition of Eslint configuration and rules.
 - Make peer dependency requirements lenient.
 - Add Styleint config.
 - Include Typescript types.
 
-## 0.0.1
+## v0.0.1
 
 - Initial release
