@@ -1,6 +1,5 @@
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
-import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
@@ -31,16 +30,10 @@ const usePostMeta = (postType = null, postId = null) => {
     : () => console.error(`Error attempting to set post meta for post type ${type}. Does it have support for custom-fields?`); // eslint-disable-line no-console
 
   /**
-   * Define a wrapper for the setMeta function that performs a recursive clone
-   * of the meta object to ensure that there are no issues related to updating
-   * objects or array values within meta keys not triggering React or
-   * Gutenberg's state management system realizing that there is a change due
-   * to the fact that sub-items are stored as object references. These bugs are
-   * extremely difficult to find and correct, so it makes sense to include this
-   * functionality here as a catch-all on updates.
+   * Define a wrapper for the setMeta function that spreads the next meta value into a new object.
    * @param {object} next - The new value for meta.
    */
-  const setMetaSafe = (next) => setMeta(cloneDeep(next));
+  const setMetaSafe = (next) => setMeta({ ...next });
 
   return [meta, setMetaSafe];
 };

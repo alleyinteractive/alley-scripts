@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some shared devDependencies were moved to the root `package.json`.
 - Moved changelog from the README to the CHANGELOG.md file to match the pattern of adjacent packages.
 
+## v0.4.1
+
+- Remove `lodash` as dependency from `block-editor-tools` package.
+
 ## v0.4.0
 
 - Reduce the number of `@wordpress/*` dependencies that are not used directly by this package.
