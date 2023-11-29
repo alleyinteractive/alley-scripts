@@ -37,6 +37,10 @@ const MyComponent = () => {
 
 ## Changelog
 
+### 0.4.1
+
+- Remove `lodash` as dependency from `block-editor-tools` package.
+
 ### 0.3.8
 
 - Use of `decodeEntities` in `<PostPicker>` component search results.
