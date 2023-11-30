@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import path from 'path';
 import fs from 'fs';
+import { type PathData } from 'webpack';
 
 import { getEntries, processFilename } from './webpack';
 
@@ -74,7 +75,7 @@ describe('processFilename', () => {
         name: 'my-chunk',
       },
     };
-    const result = processFilename(pathData, false, 'js');
+    const result = processFilename(pathData as PathData, false, 'js');
     expect(result).toBe('[name].js');
   });
 
@@ -84,7 +85,7 @@ describe('processFilename', () => {
         name: 'entries-my-entry',
       },
     };
-    const result = processFilename(pathData, true, 'js');
+    const result = processFilename(pathData as PathData, true, 'js');
     expect(result).toBe('my-entry/index.js');
   });
 
@@ -94,7 +95,7 @@ describe('processFilename', () => {
         name: 'entries-my-entry',
       },
     };
-    const result = processFilename(pathData, false, 'js');
+    const result = processFilename(pathData as PathData, false, 'js');
     expect(result).toBe('my-entry/[name].js');
   });
 
@@ -104,7 +105,7 @@ describe('processFilename', () => {
         runtime: 'entries-my-runtime',
       },
     };
-    const result = processFilename(pathData, false, 'js', 'runtime');
+    const result = processFilename(pathData as PathData, false, 'js', 'runtime');
     expect(result).toBe('my-runtime/[name].js');
   });
 
@@ -114,7 +115,7 @@ describe('processFilename', () => {
         name: 'my-chunk',
       },
     };
-    const result = processFilename(pathData, false, 'js');
+    const result = processFilename(pathData as PathData, false, 'js');
     expect(result).toBe('[name].js');
   });
 });

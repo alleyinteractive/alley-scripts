@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
-    "module": "node16",
   },
   "exclude": [
     "dist",

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelect } from '@wordpress/data';
 import type { Meta, StoryFn } from '@storybook/react';
 

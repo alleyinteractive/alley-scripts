@@ -2,7 +2,7 @@
 
 [![README standard](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-This package contains a set of modules used by [Alley Interactive](https://alley.co) to aid in building features for the WordPress block editor.
+This package contains a set of modules used by [Alley](https://alley.com) to aid in building features for the WordPress block editor.
 
 ## Install
 
@@ -12,11 +12,9 @@ Install this package in your project:
 npm install @alleyinteractive/block-editor-tools --save
 ```
 
-This package assumes your project is running in an environment compatible with the WordPress block editor and is using the [Dependency Extraction Webpack Plugin](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) or similar to externalize dependencies included in WordPress. As such, this package does not include these dependencies.
-
 ## Usage
 
-To use modules from this package, import them into your files using the `import` declaration
+To use modules from this package, import them into your files using the `import` declaration.
 
 ```jsx
 import { usePostMeta } from '@alleyinteractive/block-editor-tools';
@@ -37,33 +35,7 @@ const MyComponent = () => {
 
 ## Changelog
 
-### 0.4.1
-
-- Remove `lodash` as dependency from `block-editor-tools` package.
-
-### 0.3.8
-
-- Use of `decodeEntities` in `<PostPicker>` component search results.
-
-### 0.3.7
-
-- Addition of `useCurrentPostId` hook.
-
-### 0.3.0
-
-- Addition of `<PostPicker>` component.
-- Addition of `usePostById` hook.
-
-### 0.1.0
-
-- Addition of Eslint configuration and rules.
-- Make peer dependency requirements lenient.
-- Add Styleint config.
-- Include Typescript types.
-
-### 0.0.1
-
-– Initial release
+This project keeps a [changelog](CHANGELOG.md).
 
 ## Development Process
 
