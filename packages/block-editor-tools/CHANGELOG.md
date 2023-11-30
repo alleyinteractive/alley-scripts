@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v0.5.0
 
 - Dependencies of `block-editor-tools` that are added as externals using the WordPress Dependency Extraction Webpack Plugin were moved to `devDependencies` to avoid peer dependency downloads.
-- The ESLint rule import/no-extraneous-dependencies was turned off as it requesting that the externalized packages be moved to dependencies.
+The ESLint rule import/no-extraneous-dependencies was turned off as it requested that the externalized packages be moved to dependencies.
 - Additional exports were created for importing specific scripts from this plugin:
   * `/hooks` - For using any of the hooks available.
   * `/components` - For using any of the components available.
