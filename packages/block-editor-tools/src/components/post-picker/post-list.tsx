@@ -7,6 +7,7 @@ import classNames from 'classnames';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Search_Results } from 'wp-types';
 import { JSX } from 'react';
+import { useDebounce } from '@uidotdev/usehooks';
 
 import './post-list.scss';
 import Post from './post';
@@ -45,6 +46,10 @@ const PostList = ({
     searchValue: '',
     page: 1,
   });
+  const [searchText, setSeachText] = useState('');
+
+  const debouncedSearchText = useDebounce(searchText, 1000);
+  console.log('debouncedSearchText', debouncedSearchText);
 
   /**
    * Gets the posts based on the params.
@@ -126,15 +131,15 @@ const PostList = ({
    * Handles a change to the search text string.
    * @param {event} event - The event from typing in the text box.
    */
-  const handleSearchTextChange = (value: string) => {
+  useEffect(() => {
     const newParams = {
       ...pathParams,
-      searchValue: value,
+      searchValue: debouncedSearchText,
       page: 1,
     };
     setPathParams(newParams);
     getPosts(newParams);
-  };
+  }, [debouncedSearchText, getPosts, pathParams, suppressPostIds]);
 
   // Load posts on page load.
   useEffect(() => {
@@ -151,11 +156,11 @@ const PostList = ({
   return (
     <>
       <TextControl
-        value={pathParams.searchValue}
+        value={searchText}
         placeholder={__('Search...', 'alley-scripts')}
         label={__('Search', 'alley-scripts')}
         // @ts-ignore
-        onChange={handleSearchTextChange}
+        onChange={setSeachText}
       />
       <div className="alley-scripts-post-picker__post-list">
         {listposts ? (
