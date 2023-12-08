@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { cwd } from 'node:process';
 import path from 'path';
+import webpack from 'webpack';
 
 type CliArg = string | undefined;
 type PathToConfig = CliArg;
@@ -55,9 +56,9 @@ const getArgFromCLI = (arg: string): CliArg => {
 const hasArgInCLI = (arg: string): boolean => getArgFromCLI(arg) !== undefined;
 
 /**
- * Get the path to the webpack config file.
+ * Get the path to the user's webpack config file.
  */
-const getWebpackConfig = (): PathToConfig => {
+const getUserWebpackConfigFilePath = (): PathToConfig => {
   if (hasProjectFile('webpack.config.js')) {
     return fromProjectRoot('webpack.config.js');
   }
@@ -65,8 +66,31 @@ const getWebpackConfig = (): PathToConfig => {
   if (hasArgInCLI('--config')) {
     return getArgFromCLI('--config');
   }
+  return undefined;
+};
 
-  return path.join(__dirname, '../config/webpack.config.js');
+/**
+ * Get the path to the webpack config file.
+ */
+const getWebpackConfig = (): PathToConfig => path.join(__dirname, '../config/extended.config.js');
+
+/**
+ * Get the user's webpack configuration.
+ */
+const getUserWebpackConfig = (): webpack.Configuration | {} => {
+  const webpackConfigFilePath = getUserWebpackConfigFilePath();
+
+  if (typeof webpackConfigFilePath === 'undefined') {
+    return {};
+  }
+
+  try {
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    const webpackConfig = require(require.resolve(webpackConfigFilePath));
+    return webpackConfig;
+  } catch (error) {
+    return {};
+  }
 };
 
 /**
@@ -92,11 +116,11 @@ const getDefaultArgs = (): string[] => {
     }
 
     /**
-   * The default directory where wp-scripts will detect block.json files.
-   * Explicitly set the webpack source directory to "blocks" unless specified.
-   *
-   * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#automatic-blockjson-detection-and-the-source-code-directory
-   */
+     * The default directory where wp-scripts will detect block.json files.
+     * Explicitly set the webpack source directory to "blocks" unless specified.
+     *
+     * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#automatic-blockjson-detection-and-the-source-code-directory
+     */
     const webpackSrcDir: PathToConfig = hasArgInCLI('--webpack-src-dir')
       ? getArgFromCLI('--webpack-src-dir') : 'blocks';
 
@@ -112,6 +136,8 @@ export {
   getArgsFromCLI,
   getDefaultArgs,
   getWebpackConfig,
+  getUserWebpackConfigFilePath,
+  getUserWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
 };

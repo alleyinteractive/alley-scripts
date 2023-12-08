@@ -61,27 +61,49 @@ By default the following command options are applied when running the `build` an
 
 ### Extending the config
 
-Extending the Alley Build Tool webpack configuration is possible and uses the same approach as [extending the webpack config in wp-scripts](https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/README.md#extending-the-webpack-config).
+Extending the Alley Build Tool webpack configuration is possible by providing a custom `webpack.config.js` file in the root of your project. The Alley Build Tool will look for this file and use it to extend the default configuration.
 
-There are several ways to extend the webpack configuration. One uses the common JS `require` syntax and the other uses the ESM `import` syntax. The following examples use the common JS `require` syntax.
-* Provide a `webpack.config.js` file in the root of your project.
-* `require` the webpack config from `@alleyinteractive/build-tool` in the `webpack.config.js` file in your project.
-* Use the spread operator to import all of or part of the provided configuration.
+Example:
+```js
+// webpack.config.js
+const config = {
+  output: {
+    asyncChunks: true,
+  },
+  resolve: {
+    alias: {
+      '@': 'path/to/some/folder',
+    },
+  },
+};
+
+module.exports = config;
+```
+The Alley Build Tool will deep merge the provided configuration with the default configuration. The webpack.config.js file must use the standard webpack configuration format. Certain webpack options can be overridden by providing them in the custom configuration.
+
+**Important**: The Alley Build Tool will not merge all webpack configuration options. If you need to add additional configurations, you must extend the default configuration using the spread operator.
+
+It is also possible to import the default extend the default configuration using the spread operator.
+
+The following config files are available for import with these paths:
+* `@alleyinteractive/build-tool/dist/cjs/config/webpack.config` - CommonJS
+* `@alleyinteractive/build-tool/dist/esm/config/webpack.config` - ESM
+
+Example of extending the default configuration using the spread operator:
 
 ```js
+// webpack.config.js
 const path = require('path');
 const defaultConfig = require('@alleyinteractive/build-tool/dist/cjs/config/webpack.config');
 
+/**
+ * Extend the default entry configuration to add a custom entry point.
+ */
 module.exports = {
-  ...defaultConfig,
-
-  resolve: {
-    ...defaultConfig.resolve,
-    alias: {
-      ...defaultConfig.resolve?.alias,
-      // Custom alias to resolve paths to the project root. Example: 'root/client/index.js'.
-      root: path.resolve(__dirname),
-    },
+  entry: {
+    // The entry is a function that returns the default entry object.
+    ...defaultConfig.default.entry(),
+    'my-entry': path.resolve(__dirname, 'path/to/entry.js'),
   },
 };
 ```

@@ -17,6 +17,7 @@
     "node_modules"
   ],
   "include": [
+    "config/extended.config.ts",
     "config/webpack.config.ts",
     "utils/**/*",
     "index.ts"

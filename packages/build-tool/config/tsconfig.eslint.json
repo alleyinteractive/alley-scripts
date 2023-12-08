@@ -6,6 +6,7 @@
   },
   "include": [
     "../jest.config.js",
+    "../config/extended.config.ts",
     "../config/webpack.config.ts",
     "../utils",
     "../index.ts",
