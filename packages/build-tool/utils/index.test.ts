@@ -78,7 +78,7 @@ describe('hasArgInCLI', () => {
 });
 
 describe('getWebpackConfig', () => {
-  test('returns the default path to the webpack config file', () => {
+  test('returns the path to the extended webpack config file', () => {
     const expectedPath = path.join(__dirname, '../config/extended.config.js');
     expect(getWebpackConfig()).toBe(expectedPath);
   });
@@ -94,7 +94,7 @@ describe('getUserWebpackConfigFilePath', () => {
     const argName = '--config';
     const argValue = 'path/to/webpack.config.js';
     process.argv = ['node', 'index.js', `${argName}=${argValue}`];
-    expect(getUserWebpackConfigFilePath()).toBe(argValue);
+    expect(getUserWebpackConfigFilePath()).toBe(path.join(process.cwd(), argValue));
   });
 
   test('returns the path to the webpack config file in the project root', () => {

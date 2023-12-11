@@ -64,7 +64,19 @@ const getUserWebpackConfigFilePath = (): PathToConfig => {
   }
 
   if (hasArgInCLI('--config')) {
-    return getArgFromCLI('--config');
+    const args = getArgsFromCLI();
+    // Get the --config flag that is not the one from this package.
+    const userCLIConfigArg: string[] = args.filter((arg) => arg.startsWith('--config')
+      && !arg.includes('build-tool/dist'));
+
+    if (typeof userCLIConfigArg[0] !== 'undefined') {
+      // Get the value of the --config flag.
+      const configPath = userCLIConfigArg[0].split('=')[1];
+
+      if (typeof configPath !== 'undefined') {
+        return path.join(cwd(), configPath);
+      }
+    }
   }
   return undefined;
 };
