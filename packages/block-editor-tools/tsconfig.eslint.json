@@ -9,5 +9,6 @@
     "./jest.config.js",
     "./.eslintrc.js",
     "./webpack.config.js",
-  ]
+  ],
+  "exclude": []
 }
