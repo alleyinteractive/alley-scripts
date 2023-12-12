@@ -6,7 +6,7 @@
   "main": "plugin.php",
   "engines": {
     "node": ">=16.0.0 <19.0.0",
-    "npm": ">=8.0.0 <11.0.0"
+    "npm": ">=9"
   },
   "browserslist": [
     "defaults",
