@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+### Patch Changes
+
+- 4690cc8: Ensure that TypeScript types are generated for the package.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
@@ -8,11 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v0.5.0
 
 - Dependencies of `block-editor-tools` that are added as externals using the WordPress Dependency Extraction Webpack Plugin were moved to `devDependencies` to avoid peer dependency downloads.
-The ESLint rule import/no-extraneous-dependencies was turned off as it requested that the externalized packages be moved to dependencies.
+  The ESLint rule import/no-extraneous-dependencies was turned off as it requested that the externalized packages be moved to dependencies.
 - Additional exports were created for importing specific scripts from this plugin:
-  * `/hooks` - For using any of the hooks available.
-  * `/components` - For using any of the components available.
-  * `/services` - For using any of the service functions.
+  - `/hooks` - For using any of the hooks available.
+  - `/components` - For using any of the components available.
+  - `/services` - For using any of the service functions.
 - The `tsconfig` file was split for ESLint specific configuration to allow for TS linting.
 - Dependency Extraction Webpack Plugin was missing the options parameter.
 - The `combineAssets` was set to true for Dependency Extraction Webpack Plugin to reduce the number of built files.
