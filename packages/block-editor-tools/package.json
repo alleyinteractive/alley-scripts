@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build:types": "npx tsc --declaration --emitDeclarationOnly",
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=production && npm run build:types",
     "check-types": "npx tsc --noEmit",
     "clean": "rimraf build/*",
     "dev": "webpack --mode=development --watch",

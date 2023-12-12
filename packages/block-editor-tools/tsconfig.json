@@ -9,6 +9,9 @@
       "@/*": ["*"]
     }
   },
+  "exclude": [
+    "**/*.stories.tsx"
+  ],
   "include": [
     "src/**/*"
   ]
