@@ -2,6 +2,8 @@
   "extends": "@alleyinteractive/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "module": "nodeNext",
+    "moduleResolution": "nodenext",
     "outDir": "dist",
   },
   "exclude": [
