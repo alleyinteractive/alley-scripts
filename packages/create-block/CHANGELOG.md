@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.1.2 - 2023-12-15
 
-- Bug fix error where an import statement is used outside of a module. Ensures built files are compatible with CommonJS.
+- Bug fix error where an import statement is used outside of a module. Ensures built files are compatible with NodeJS.
 
 ## 0.1.1 - 2023-11-20
 
