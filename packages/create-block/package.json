@@ -35,18 +35,16 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
-    "@wordpress/create-block": "^4.32.0",
+    "@wordpress/create-block": "*",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^7.0.1",
-    "cross-spawn": "^7.0.3",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
     "@types/command-line-args": "^5.2.3",
-    "@types/command-line-usage": "^5.0.4",
-    "@types/cross-spawn": "^6.0.5"
+    "@types/command-line-usage": "^5.0.4"
   },
   "files": [
     "dist",
