@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.2 - 2023-12-15
+
+- Bug fix error where an import statement is used outside of a module. Ensures built files are compatible with CommonJS.
+
 ## 0.1.1 - 2023-11-20
 
 - Remove `"module": "node16"` from `tsconfig.json` to inherit the default value of `"module": "esnext"`.
