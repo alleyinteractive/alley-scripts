@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import { chdir, cwd } from 'node:process';
+import { spawn } from 'node:child_process';
 
 /* eslint-disable no-console */
-const fs = require('fs');
-const prompts = require('prompts');
-const path = require('path');
-const spawn = require('cross-spawn');
-const commandLineArgs = require('command-line-args');
-const commandLineUsage = require('command-line-usage');
+import fs from 'fs';
+import prompts from 'prompts';
+import path from 'path';
+import commandLineArgs, { OptionDefinition } from 'command-line-args';
+import commandLineUsage from 'command-line-usage';
 
 type Options = {
   name: string;
@@ -76,12 +76,7 @@ const {
   blocksDir: blocksDirectory,
   blockLanguage,
   help,
-} : {
-  namespace: string;
-  blocksDir: string;
-  blockLanguage: LanguageType | undefined;
-  help: boolean;
-} = commandLineArgs(options);
+} = commandLineArgs(options as OptionDefinition[]);
 
 // Display the help text if the --help option is used.
 const usage = commandLineUsage([
@@ -91,7 +86,7 @@ const usage = commandLineUsage([
   },
   {
     header: 'Options',
-    optionList: options,
+    optionList: options as OptionDefinition[],
   },
 ]);
 
@@ -148,7 +143,7 @@ if (help) {
   }
 
   // Create a block using the @wordpress/create-block package.
-  spawn.sync(
+  spawn(
     'wp-create-block',
     [
       /**
