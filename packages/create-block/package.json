@@ -1,13 +1,15 @@
 {
   "name": "@alleyinteractive/create-block",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Alley's custom block scaffolding variation for the @wordpress/create-block script.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist",
     "watch": "tsc -w",
     "lint": "eslint index.ts src",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "prebuild": "npm run clean"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,7 @@
     "alley-create-block": "./dist/index.js"
   },
   "peerDependencies": {
-    "@wordpress/create-block": "^4.26.0",
+    "@wordpress/create-block": "*",
     "@wordpress/scripts": "*"
   },
   "keywords": [
@@ -33,15 +35,16 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
+    "@wordpress/create-block": "*",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^7.0.1",
-    "cross-spawn": "^7.0.3",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
-    "@types/cross-spawn": "^6.0.5"
+    "@types/command-line-args": "^5.2.3",
+    "@types/command-line-usage": "^5.0.4"
   },
   "files": [
     "dist",
