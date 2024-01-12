@@ -3,7 +3,7 @@
   "description": "Quickly scaffold project template files.",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/scaffolder",
-  "version": "0.1.5",
+  "version": "0.1.0",
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*"
@@ -13,8 +13,8 @@
     "glob": "^10.3.10",
     "mustache": "^4.2.0",
     "prompts": "^2.4.2",
-    "semver": "^7.5.4",
-    "ts-command-line-args": "^2.5.1"
+    "ts-command-line-args": "^2.5.1",
+    "yaml": "^2.3.4"
   },
   "files": [
     "dist",
