@@ -8,11 +8,12 @@ on:
 
 jobs:
   node-tests:
-    name: Build and Test
     timeout-minutes: 15
     strategy:
+      fail-fast: false
       matrix:
         node: [16, 18, 20]
+    name: "Build and Test: Node.js ${{ matrix.node }}"
     runs-on: ubuntu-latest
     # To use Remote Caching, uncomment the next lines and follow the steps below.
     # env:
