@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [16, 18, 20]
-    name: "Build and Test: Node.js ${{ matrix.node }}"
+    name: "Build and Test: Node ${{ matrix.node }}"
     runs-on: ubuntu-latest
     # To use Remote Caching, uncomment the next lines and follow the steps below.
     # env:
@@ -29,9 +29,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          key: ${{ runner.os }}-${{ matrix.node }}-turbo-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-${{ matrix.node }}-turbo-
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
