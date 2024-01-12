@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
-import { lt, valid } from 'semver';
-import chalk from 'chalk';
-import path from 'path';
-import fs from 'fs';
+// import chalk from 'chalk';
+// import path from 'path';
+// import fs from 'fs';
 import prompts from 'prompts';
 // import { createInterface } from 'readline';
 
-import {
-  promptForPluginPath,
-  promptForReleaseType,
-  promptForReleaseVersion,
-} from './src/prompts.js';
+// import {
+//   promptForPluginPath,
+//   promptForReleaseType,
+//   promptForReleaseVersion,
+// } from './src/prompts.js';
 import entryArgs from './src/entryArgs.js';
 import { discoverFeatures, locateScaffolderRoot } from './src/discovery.js';
 import { exitError } from './src/error.js';
@@ -39,12 +38,11 @@ import { exitError } from './src/error.js';
     type: 'select',
     name: 'feature',
     message: 'Select a feature to scaffold:',
-    choices: features.map((feature) => ({
-      title: feature.name,
-      value: feature.name,
+    choices: features.map((item) => ({
+      title: item.name,
+      value: item.name,
     })),
   });
-
 
   console.log('features', feature);
 

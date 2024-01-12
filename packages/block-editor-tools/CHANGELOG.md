@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- cb1a57f: Extending support for Node 20.
+
 ## 0.5.1
 
 ### Patch Changes
