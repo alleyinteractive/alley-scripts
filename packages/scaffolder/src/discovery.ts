@@ -3,6 +3,8 @@
 import fs from 'fs';
 import { parse } from 'yaml';
 
+import { exitError } from './error';
+
 /**
  * Functionality to aid in the discovery of templates that can be used to
  * generate code.
@@ -80,8 +82,17 @@ export async function discoverFeatures(rootDirectory: string) {
     .filter((feature) => fs.existsSync(`${rootDirectory}/${feature.name}/config.yml`));
 
   // Read the configuration from each feature.
-  return Promise.all(availableFeatures.map(async (feature) => ({
-    path: `${rootDirectory}/${feature.name}`,
-    config: await parseConfiguration(`${rootDirectory}/${feature.name}/config.yml`),
-  })));
+  return Promise.all(availableFeatures.map(async (feature) => {
+    const config = await parseConfiguration(`${rootDirectory}/${feature.name}/config.yml`);
+
+    if (!config.name) {
+      exitError(`The feature "${rootDirectory}/${feature.name}" does not have a name defined in the config.yml file.`); // eslint-disable-line max-len
+    }
+
+    return {
+      config,
+      name: config.name,
+      path: `${rootDirectory}/${feature.name}`,
+    };
+  }));
 }

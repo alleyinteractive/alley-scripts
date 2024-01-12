@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs';
 import prompts from 'prompts';
+// import { createInterface } from 'readline';
 
 import {
   promptForPluginPath,
@@ -14,10 +15,11 @@ import {
 } from './src/prompts.js';
 import entryArgs from './src/entryArgs.js';
 import { discoverFeatures, locateScaffolderRoot } from './src/discovery.js';
-import { exitError } from './src/helpers.js';
+import { exitError } from './src/error.js';
 
+// const rl = createInterface
 /**
- * Prompts the user to create a release.
+ * Alley Scaffolder
  */
 (async () => {
   const root: string | null = entryArgs.root || await locateScaffolderRoot();
@@ -32,7 +34,19 @@ import { exitError } from './src/helpers.js';
     exitError(`No features found in ${root}. Ensure that the features have a config.yml file.`);
   }
 
-  console.log('features', features);
+  // Prompt the user to select a feature.
+  const { feature } = await prompts({
+    type: 'select',
+    name: 'feature',
+    message: 'Select a feature to scaffold:',
+    choices: features.map((feature) => ({
+      title: feature.name,
+      value: feature.name,
+    })),
+  });
+
+
+  console.log('features', feature);
 
   // const configuration = await parseConfiguration(
   //   `${root}/.scaffolder/config.yml`
