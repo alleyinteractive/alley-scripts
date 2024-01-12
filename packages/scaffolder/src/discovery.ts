@@ -3,8 +3,6 @@
 import fs from 'fs';
 import { parse } from 'yaml';
 
-import { exitError } from './error';
-
 /**
  * Functionality to aid in the discovery of templates that can be used to
  * generate code.
@@ -26,7 +24,7 @@ export async function locateScaffolderRoot() {
 
   while (true) { // eslint-disable-line no-constant-condition
     if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
-      return `${currentDirectory}/.scaffolder`;
+      return currentDirectory;
     }
 
     if (!fs.existsSync(currentDirectory)) {
@@ -68,31 +66,33 @@ export async function parseConfiguration(filePath: string) {
  * directory and contain a `config.yml` file.
  */
 export async function discoverFeatures(rootDirectory: string) {
-  if (!fs.existsSync(rootDirectory)) {
+  const scaffolderDirectory = `${rootDirectory}/.scaffolder`;
+
+  if (!fs.existsSync(rootDirectory) || !fs.existsSync(scaffolderDirectory)) {
     return [];
   }
 
-  const features = await fs.promises.readdir(rootDirectory, {
+  const features = await fs.promises.readdir(scaffolderDirectory, {
     recursive: false,
     withFileTypes: true,
   });
 
   const availableFeatures = features
     .filter((feature) => feature.isDirectory())
-    .filter((feature) => fs.existsSync(`${rootDirectory}/${feature.name}/config.yml`));
+    .filter((feature) => fs.existsSync(`${scaffolderDirectory}/${feature.name}/config.yml`));
 
   // Read the configuration from each feature.
   return Promise.all(availableFeatures.map(async (feature) => {
-    const config = await parseConfiguration(`${rootDirectory}/${feature.name}/config.yml`);
+    const config = await parseConfiguration(`${scaffolderDirectory}/${feature.name}/config.yml`);
 
     if (!config.name) {
-      exitError(`The feature "${rootDirectory}/${feature.name}" does not have a name defined in the config.yml file.`); // eslint-disable-line max-len
+      throw new Error(`The feature "${scaffolderDirectory}/${feature.name}" does not have a name defined in the config.yml file.`); // eslint-disable-line max// eslint-disable-next-line array-callback-return
     }
 
     return {
       config,
       name: config.name,
-      path: `${rootDirectory}/${feature.name}`,
+      path: `${scaffolderDirectory}/${feature.name}`,
     };
   }));
 }

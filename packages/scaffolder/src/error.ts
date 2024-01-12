@@ -3,10 +3,8 @@
 import chalk from 'chalk';
 
 /**
- * Exit error display message. The process will exit with a message.
- * @param message - The error message to display on exit.
+ * Exit error display message.
  */
-export function exitError(message: string): never {
+export default function handleError(message: string): void {
   console.error(chalk?.red(message)); // eslint-disable-line no-console
-  process.exit();
 }
