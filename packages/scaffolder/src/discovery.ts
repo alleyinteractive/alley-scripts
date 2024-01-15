@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import { parse } from 'yaml';
+import { Feature } from './types.js';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
@@ -65,7 +66,7 @@ export async function parseConfiguration(filePath: string) {
  * Features are defined as one-level subdirectories of the scaffolder root
  * directory and contain a `config.yml` file.
  */
-export async function discoverFeatures(rootDirectory: string) {
+export async function discoverFeatures(rootDirectory: string): Promise<Feature[]> {
   const scaffolderDirectory = `${rootDirectory}/.scaffolder`;
 
   if (!fs.existsSync(rootDirectory) || !fs.existsSync(scaffolderDirectory)) {
@@ -86,7 +87,7 @@ export async function discoverFeatures(rootDirectory: string) {
     const config = await parseConfiguration(`${scaffolderDirectory}/${feature.name}/config.yml`);
 
     if (!config.name) {
-      throw new Error(`The feature "${scaffolderDirectory}/${feature.name}" does not have a name defined in the config.yml file.`); // eslint-disable-line max// eslint-disable-next-line array-callback-return
+      throw new Error(`The feature "${scaffolderDirectory}/${feature.name}" does not have a name defined in the config.yml file.`);
     }
 
     return {
