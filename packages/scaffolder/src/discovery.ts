@@ -15,8 +15,10 @@ import { Feature } from './types.js';
 
 /**
  * Locate the template directory, recursively searching up the directory tree
- * until a template directory is found. A template directory is defined as a
- * directory that contains a `.scaffolder` directory.
+ * until a template directory is found.
+ *
+ * A template directory is defined as a directory that contains a `.scaffolder`
+ * directory.
  */
 export async function locateScaffolderRoot() {
   // Recursively search up the directory tree until a template directory is

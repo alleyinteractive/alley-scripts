@@ -30,26 +30,28 @@ import processFeature from './src/feature.js';
 
   console.log(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
 
-  // Prompt the user to select a feature.
-  // TODO: Allow a prompt to be passed in via the CLI.
-  const { featureName } = await prompts({
-    type: 'select',
-    name: 'featureName',
-    message: 'Select a feature to scaffold:',
-    choices: features.map((item) => ({
-      title: item.name,
-      value: item.name,
-    })),
-  });
+  await processFeature(root, features[0]);
 
-  const feature = features.find((item) => item.name === featureName);
+  // // Prompt the user to select a feature.
+  // // TODO: Allow a prompt to be passed in via the CLI.
+  // const { featureName } = await prompts({
+  //   type: 'select',
+  //   name: 'featureName',
+  //   message: 'Select a feature to scaffold:',
+  //   choices: features.map((item) => ({
+  //     title: item.name,
+  //     value: item.name,
+  //   })),
+  // });
 
-  if (!feature) {
-    handleError(`Could not find the feature ${featureName}`);
-  }
+  // const feature = features.find((item) => item.name === featureName);
 
-  // Hand off the feature to the feature processor.
-  await processFeature(root, feature);
+  // if (!feature) {
+  //   handleError(`Could not find the feature ${featureName}`);
+  // }
+
+  // // Hand off the feature to the feature processor.
+  // await processFeature(root, feature);
 
   console.log('🎉 Done. Happy coding!');
 
