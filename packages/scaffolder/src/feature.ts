@@ -24,7 +24,7 @@ type FeatureContext = {
 };
 
 /**
- * he context variables passed to the template engine.
+ * Collect the context variables passed to the template engine.
  */
 const collectContextVariables = async (feature: Feature): Promise<FeatureContext> => {
   const {
