@@ -33,6 +33,8 @@ import processFeature from './src/feature.js';
 
   console.log(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
 
+  // TODO: Allow a feature to be passed in via the CLI.
+
   // Prompt the user to select a feature.
   // TODO: Allow a prompt to be passed in via the CLI.
   const { featureName } = await prompts({
