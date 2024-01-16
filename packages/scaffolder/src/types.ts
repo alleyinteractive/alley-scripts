@@ -7,6 +7,10 @@ export type RootConfiguration = {
   sources?: string[];
 };
 
+/**
+ * Type representation of the parsed configuration of file from a feature
+ * configuration file (the files attribute in a feature config.yml file).
+ */
 export type FeatureFile = {
   source: string;
   destination: string;
@@ -19,10 +23,15 @@ export type FeatureFile = {
  * @todo Add support for more input types.
  */
 export type FeatureInput = {
+  /* Default value of the input. Defaults to an empty string. */
   default?: any;
+  /* Description of the input. */
   description?: string;
+  /* Name of the input. */
   name: string;
+  /* Whether the input is required. Defaults to true. */
   required?: boolean;
+  /* Type of the input. Defaults to string. */
   type?: 'string' | 'boolean';
 };
 
