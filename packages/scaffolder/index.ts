@@ -13,6 +13,7 @@ import processFeature from './src/feature.js';
  * Alley Scaffolder
  */
 (async () => {
+  // Reminder: The root directory is the root of the project, not the .scaffolder directory.
   const root: string | null = entryArgs.root || await locateScaffolderRoot();
 
   if (!root) {
@@ -37,8 +38,8 @@ import processFeature from './src/feature.js';
     name: 'featureName',
     message: 'Select a feature to scaffold:',
     choices: features.map((item) => ({
-      title: item.name,
-      value: item.name,
+      title: item.config.name,
+      value: item.config.name,
     })),
   });
 
@@ -46,7 +47,7 @@ import processFeature from './src/feature.js';
     handleError('No feature selected.');
   }
 
-  const feature = features.find((item) => item.name === featureName);
+  const feature = features.find((item) => item.config.name === featureName);
 
   if (!feature) {
     handleError(`Could not find the feature ${featureName}`);

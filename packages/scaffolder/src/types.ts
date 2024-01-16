@@ -1,3 +1,12 @@
+/**
+ * Type representation of the parsed root configuration.
+ *
+ * This exists in the .scaffolder/config.yml file and is optional.
+ */
+export type RootConfiguration = {
+  sources?: string[];
+};
+
 export type FeatureFile = {
   source: string;
   destination: string;
@@ -19,6 +28,8 @@ export type FeatureInput = {
 
 /**
  * Type representation of the parsed configuration of a feature.
+ *
+ * This exists in the .scaffolder/<feature>/config.yml file.
  */
 export type FeatureConfig = {
   files: FeatureFile[];
@@ -31,7 +42,8 @@ export type FeatureConfig = {
  * information about where the feature is located.
  */
 export type Feature = {
+  /* The parsed configuration file of the feature. */
   config: FeatureConfig;
-  name: string;
+  /* The directory path to the feature. */
   path: string;
 };

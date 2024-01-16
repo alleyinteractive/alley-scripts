@@ -2,7 +2,9 @@
 
 import fs from 'fs';
 import { parse } from 'yaml';
-import { Feature } from './types.js';
+import chalk from 'chalk';
+
+import { Feature, FeatureConfig, RootConfiguration } from './types.js';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
@@ -48,7 +50,7 @@ export async function locateScaffolderRoot() {
 /**
  * Parse the YAML configuration file of a scaffolder feature.
  */
-export async function parseConfiguration(filePath: string) {
+export async function parseConfiguration<TData extends object>(filePath: string): Promise<TData> {
   // Ensure this is a YAML file.
   if (!filePath.endsWith('.yml')) {
     throw new Error('The configuration file must be a YAML file.');
@@ -59,6 +61,23 @@ export async function parseConfiguration(filePath: string) {
   }
 
   return parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+let rootConfiguration: RootConfiguration;
+
+/**
+ * Get the root configuration for the scaffolder.
+ *
+ * The root configuration is defined in the `.scaffolder/config.yml` file.
+ */
+export async function getRootConfiguration(rootDirectory: string) {
+  if (!rootConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
+    rootConfiguration = await parseConfiguration<RootConfiguration>(`${rootDirectory}/.scaffolder/config.yml`);
+  } else if (!rootConfiguration) {
+    rootConfiguration = {};
+  }
+
+  return rootConfiguration;
 }
 
 /**
@@ -75,27 +94,66 @@ export async function discoverFeatures(rootDirectory: string): Promise<Feature[]
     return [];
   }
 
-  const features = await fs.promises.readdir(scaffolderDirectory, {
-    recursive: false,
-    withFileTypes: true,
-  });
+  // The source directories are the directories that contain the features that
+  // can be scaffolded to a project.
+  const sourceDirectories = [scaffolderDirectory];
 
-  const availableFeatures = features
-    .filter((feature) => feature.isDirectory())
-    .filter((feature) => fs.existsSync(`${scaffolderDirectory}/${feature.name}/config.yml`));
+  const { sources = [] } = await getRootConfiguration(rootDirectory);
 
-  // Read the configuration from each feature.
-  return Promise.all(availableFeatures.map(async (feature) => {
-    const config = await parseConfiguration(`${scaffolderDirectory}/${feature.name}/config.yml`);
+  // Push any additional source directories to the list from the configuration.
+  if (Array.isArray(sources) && sources.length) {
+    // TODO: Allow remote sources to be defined and the scaffolder directory not
+    // to be prepended.
+    sourceDirectories.push(
+      ...sources.map((source: string) => `${scaffolderDirectory}/${source}`),
+    );
+  }
 
-    if (!config.name) {
-      throw new Error(`The feature "${scaffolderDirectory}/${feature.name}" does not have a name defined in the config.yml file.`);
-    }
+  const availableFeatures: Feature[] = [];
 
-    return {
-      config,
-      name: config.name,
-      path: `${scaffolderDirectory}/${feature.name}`,
-    };
-  }));
+  await Promise.all(
+    sourceDirectories
+      .filter((value, index, self) => self.indexOf(value) === index)
+      .map(async (sourceDirectory) => {
+        // Present a warning to the user if the source directory does not exist.
+        if (!fs.existsSync(sourceDirectory)) {
+          console.warn(`Source directory ${chalk.yellow(sourceDirectory)} not found.`); // eslint-disable-line no-console
+          return;
+        }
+
+        const features = await fs.promises.readdir(sourceDirectory, {
+          recursive: false,
+          withFileTypes: true,
+        });
+
+        const featuresWithConfig = await Promise.all(
+          features
+            .filter((feature) => feature.isDirectory())
+            .map(async (feature) => {
+              const configPath = `${sourceDirectory}/${feature.name}/config.yml`;
+
+              if (!fs.existsSync(configPath)) {
+                return null;
+              }
+
+              const config = await parseConfiguration<FeatureConfig>(configPath);
+
+              if (!config.name) {
+                throw new Error(`The feature "${configPath}" does not have a name defined in the config.yml file.`);
+              }
+
+              return {
+                config,
+                path: `${sourceDirectory}/${feature.name}`,
+              } as Feature;
+            }),
+        );
+
+        availableFeatures.push(
+          ...featuresWithConfig.filter((feature): feature is Feature => feature !== null),
+        );
+      }),
+  );
+
+  return availableFeatures;
 }
