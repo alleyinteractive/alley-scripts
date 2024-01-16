@@ -53,6 +53,8 @@ export function parseExpression(
   context: ExpressionContext = {},
   extensionFunctions: [] = [],
 ) {
+  console.log('parse expression', expression, context);
+
   const lexer = new Lexer(expression);
   const lr = lexer.lex();
 

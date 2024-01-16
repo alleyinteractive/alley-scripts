@@ -1,9 +1,7 @@
 #!/usr/bin/env node
+
 /* eslint-disable no-console */
 
-// import chalk from 'chalk';
-// import path from 'path';
-// import fs from 'fs';
 import prompts from 'prompts';
 
 import entryArgs from './src/entryArgs.js';
@@ -11,7 +9,6 @@ import { discoverFeatures, locateScaffolderRoot } from './src/discovery.js';
 import handleError from './src/error.js';
 import processFeature from './src/feature.js';
 
-// const rl = createInterface
 /**
  * Alley Scaffolder
  */

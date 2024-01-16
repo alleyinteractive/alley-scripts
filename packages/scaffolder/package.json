@@ -9,7 +9,7 @@
     "@alleyinteractive/tsconfig": "*"
   },
   "dependencies": {
-    "@actions/expressions": "^0.3.8",
+    "@actions/expressions": "file:/Users/srtfisher/sites/languageservices/expressions",
     "chalk": "^5.3.0",
     "glob": "^10.3.10",
     "mustache": "^4.2.0",
