@@ -5,7 +5,7 @@ import getEnvironment from './environment.js';
 type ExpressionContext = Record<string, any>;
 
 /**
- * Parse expressions via the @actions/expressions package and return the result.
+ * Parse an expression with the given context.
  *
  * Context is expected to be an object with keys and values. For example:
  *
@@ -20,8 +20,6 @@ type ExpressionContext = Record<string, any>;
  *
  * The above would be accessible as `context.example` and `inputs.key` in the
  * expressions.
- *
- * @link https://github.com/actions/languageservices/tree/main/expressions
  */
 export function parseExpression(expression: string, context: ExpressionContext = {}) {
   return getEnvironment().renderString(expression, context);
@@ -33,10 +31,12 @@ export function parseExpression(expression: string, context: ExpressionContext =
 export function parseObjectExpression<TObject>(
   object: TObject extends object ? TObject : never,
   context: ExpressionContext = {},
-) {
+): TObject {
   return Object.entries(object).reduce((acc, [key, value]) => ({
     ...acc,
-    [key]: parseExpression(`${value}`, context),
+    [key]: typeof value === 'object'
+      ? parseObjectExpression<TObject>(value, context)
+      : parseExpression(`${value}`, context),
   }), {}) as TObject;
 }
 
