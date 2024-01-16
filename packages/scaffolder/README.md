@@ -10,18 +10,27 @@ Run the package with `npx`:
 
 ```sh
 npx @alleyinteractive/scaffolder@latest
+
+# Run a specific feature template.
+npx @alleyinteractive/scaffolder@latest <feature>
 ```
 
 The following arguments are available:
 
 ```
+  --root               The root directory of the project.
   --dry-run            Run the command without making any changes.
   -h, --help           Prints help information.
 ```
 
-If the command is not run from the root of a plugin, you can either pass the
-`--path` argument or the command will prompt you for the path to the plugin to
-release.
+If the command is not run from the root of a project with a `.scaffolder`
+directory, Scaffolder will attempt to find a `.scaffolder` configuration in a
+parent directory. You can also pass the `--root` argument to specify the root
+directory of the project.
+
+## Writing Templates
+
+tktk
 
 ## Changelog
 

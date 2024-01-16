@@ -4,9 +4,11 @@ import { parse } from 'ts-command-line-args';
  * The command line argument types.
  */
 export type EntryArgs = {
+  feature?: string;
   root?: string;
   'dry-run'?: boolean;
   help?: boolean;
+  _unknown?: string[];
 };
 
 /**
@@ -17,6 +19,11 @@ const entryArgs = parse<EntryArgs>(
     root: {
       type: String,
       description: 'The path to a scaffolder configuration directory (.scaffolder).',
+      optional: true,
+    },
+    feature: {
+      type: String,
+      description: 'The name of the feature to scaffold.',
       optional: true,
     },
     'dry-run': {
@@ -37,6 +44,8 @@ const entryArgs = parse<EntryArgs>(
       header: 'Alley Scaffolder',
       content: 'Scaffold templates for your projects and work faster.',
     }],
+    processExitCode: 1,
+    stopAtFirstUnknown: true,
   },
 );
 

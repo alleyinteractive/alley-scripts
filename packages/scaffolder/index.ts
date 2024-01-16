@@ -2,6 +2,7 @@
 
 /* eslint-disable no-console */
 
+import chalk from 'chalk';
 import prompts from 'prompts';
 
 import entryArgs from './src/entryArgs.js';
@@ -9,11 +10,16 @@ import { discoverFeatures, locateScaffolderRoot } from './src/discovery.js';
 import handleError from './src/error.js';
 import processFeature from './src/feature.js';
 
+import type { Feature } from './src/types.js';
+
 /**
  * Alley Scaffolder
  */
 (async () => {
-  const { 'dry-run': dryRun = false } = entryArgs;
+  const {
+    'dry-run': dryRun = false,
+    _unknown: argv = undefined,
+  } = entryArgs;
 
   // Reminder: The root directory is the root of the project, not the .scaffolder directory.
   const root: string | null = entryArgs.root || await locateScaffolderRoot();
@@ -33,28 +39,43 @@ import processFeature from './src/feature.js';
 
   console.log(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
 
-  // TODO: Allow a feature to be passed in via the CLI.
+  let feature: Feature | undefined;
 
-  // Prompt the user to select a feature.
-  // TODO: Allow a prompt to be passed in via the CLI.
-  const { featureName } = await prompts({
-    type: 'select',
-    name: 'featureName',
-    message: 'Select a feature to scaffold:',
-    choices: features.map((item) => ({
-      title: item.config.name,
-      value: item.config.name,
-    })),
-  });
+  // Allow a feature to be passed in via the CLI.
+  if (Array.isArray(argv) && typeof argv[0] !== 'undefined') {
+    const [featureName = ''] = argv;
 
-  if (!featureName) {
-    handleError('No feature selected.');
-  }
+    // Attempt to find the feature by name case-insensitively supporting partial matches.
+    feature = features.find(
+      (item) => item.config.name.toLowerCase().includes(featureName.toLowerCase()),
+    );
 
-  const feature = features.find((item) => item.config.name === featureName);
+    if (!feature) {
+      handleError(`Could not find the feature: ${chalk.yellow(featureName)}`);
+    }
 
-  if (!feature) {
-    handleError(`Could not find the feature ${featureName}`);
+    console.log(`🔍 Found feature: ${chalk.yellow(feature.config.name)}`);
+  } else {
+    // Prompt the user to select a feature.
+    const { featureName } = await prompts({
+      type: 'select',
+      name: 'featureName',
+      message: 'Select a feature to scaffold:',
+      choices: features.map((item) => ({
+        title: item.config.name,
+        value: item.config.name,
+      })),
+    });
+
+    if (!featureName) {
+      handleError('No feature selected.');
+    }
+
+    feature = features.find((item) => item.config.name === featureName);
+
+    if (!feature) {
+      handleError(`Could not find the feature ${featureName}`);
+    }
   }
 
   // Hand off the feature to the feature processor.
