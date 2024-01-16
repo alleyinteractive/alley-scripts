@@ -13,6 +13,8 @@ import processFeature from './src/feature.js';
  * Alley Scaffolder
  */
 (async () => {
+  const { 'dry-run': dryRun = false } = entryArgs;
+
   // Reminder: The root directory is the root of the project, not the .scaffolder directory.
   const root: string | null = entryArgs.root || await locateScaffolderRoot();
 
@@ -54,7 +56,7 @@ import processFeature from './src/feature.js';
   }
 
   // Hand off the feature to the feature processor.
-  await processFeature(root, feature);
+  await processFeature(root, feature, dryRun);
 
   console.log('🎉 Done. Happy coding!');
 

@@ -18,7 +18,7 @@ import type { Feature } from './types.js';
 /**
  * Process a feature and scaffold the files.
  */
-export default async function processFeature(rootDir: string, feature: Feature) {
+export default async function processFeature(rootDir: string, feature: Feature, dryRun: boolean) {
   const {
     config: {
       name,
@@ -83,13 +83,17 @@ export default async function processFeature(rootDir: string, feature: Feature) 
       const destinationDir = dirname(destination);
 
       // Ensure that the directory exists.
-      if (!existsSync(destinationDir)) {
+      if (!existsSync(destinationDir) && !dryRun) {
         mkdirSync(destinationDir, { recursive: true });
       }
 
-      writeFileSync(destination, file);
+      if (!dryRun) {
+        writeFileSync(destination, file);
 
-      console.log(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
+        console.log(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
+      } else {
+        console.log(`Would generate ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
+      }
     } catch (error: any) {
       handleError(`Error writing from ${chalk.yellow(source)} to ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
     }
