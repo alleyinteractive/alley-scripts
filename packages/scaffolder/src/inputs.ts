@@ -1,19 +1,13 @@
 import prompts from 'prompts';
-import { FeatureInput } from './types.js';
-import handleError from './error.js';
 
-/**
- * Escape a string for use in a regular expression.
- */
-export function pregQuote(str: string) {
-  return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&').replace(/-/g, '\\x2d');
-}
+import handleError from './error.js';
+import type { FeatureInput } from './types.js';
 
 /**
  * Prompt the user for inputs to a feature by parsing the inputs and generating
  * questions for prompts.
  */
-export async function collectInputs(featureInputs: FeatureInput[]) {
+export default async function collectInputs(featureInputs: FeatureInput[]) {
   const inputs: Record<string, any> = {};
 
   if (!featureInputs.length) {

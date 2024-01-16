@@ -10,9 +10,10 @@ import {
 import { dirname } from 'path';
 
 import { parseExpression, parseFalsy, parseObjectExpression } from './expressions/index.js';
-import { collectInputs } from './helpers.js';
-import { Feature } from './types.js';
+import collectInputs from './inputs.js';
 import handleError from './error.js';
+
+import type { Feature } from './types.js';
 
 /**
  * Process a feature and scaffold the files.
