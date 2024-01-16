@@ -10,19 +10,20 @@ export type FeatureFile = {
  * @todo Add support for more input types.
  */
 export type FeatureInput = {
-  name: string;
-  description?: string;
-  type?: 'string' | 'boolean';
   default?: any;
+  description?: string;
+  name: string;
+  required?: boolean;
+  type?: 'string' | 'boolean';
 };
 
 /**
  * Type representation of the parsed configuration of a feature.
  */
 export type FeatureConfig = {
-  name: string;
-  inputs: FeatureInput[];
   files: FeatureFile[];
+  inputs: FeatureInput[];
+  name: string;
 };
 
 /**

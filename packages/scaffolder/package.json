@@ -7,14 +7,12 @@
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
-    "@types/jexl": "^2.3.4",
     "@types/nunjucks": "^3.2.6"
   },
   "dependencies": {
     "@actions/expressions": "file:/Users/srtfisher/sites/languageservices/expressions",
     "chalk": "^5.3.0",
     "glob": "^10.3.10",
-    "jexl": "^2.3.0",
     "mustache": "^4.2.0",
     "nunjucks": "^3.2.4",
     "prompts": "^2.4.2",

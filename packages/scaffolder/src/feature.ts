@@ -1,5 +1,15 @@
-import { existsSync } from 'fs';
-import { parseFalsy, parseObjectExpression } from './expressions.js';
+/* eslint-disable no-console */
+
+import chalk from 'chalk';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from 'fs';
+import { dirname } from 'path';
+
+import { parseExpression, parseFalsy, parseObjectExpression } from './expressions/index.js';
 import { collectInputs } from './helpers.js';
 import { Feature } from './types.js';
 import handleError from './error.js';
@@ -34,9 +44,10 @@ export default async function processFeature(rootDir: string, feature: Feature) 
     // Parse the expression of any file attribute.
     .map((file) => parseObjectExpression({
       ...file,
-      // Ensure that source and destination are prefixed with the feature
-      // directory to allow the configuration to be relative.
-      destination: `${featurePath}/${file.destination}`,
+      // Ensure that destination/source directories are prefixed with the
+      // feature/root directories, respectively, to allow the configuration to
+      // be relative from the config file.
+      destination: `${rootDir}/${file.destination}`,
       source: `${featurePath}/${file.source}`,
     }, expressionContext))
     // Check if the already-parsed condition is not falsy.
@@ -62,9 +73,24 @@ export default async function processFeature(rootDir: string, feature: Feature) 
     handleError(`No files to generate for the feature ${name}`);
   }
 
-  console.log('files', files);
+  // Run each file through the expression parser and write the file to their new
+  // file destination.
+  files.forEach(async ({ destination, source }) => {
+    try {
+      // Read the file from the source and parse the expressions.
+      const file = parseExpression(readFileSync(source, 'utf8'), expressionContext);
+      const destinationDir = dirname(destination);
 
-  // Go through each file and generate the file from the calculated inputs.
+      // Ensure that the directory exists.
+      if (!existsSync(destinationDir)) {
+        mkdirSync(destinationDir, { recursive: true });
+      }
 
-  // Put the file in the new location.
+      writeFileSync(destination, file);
+
+      console.log(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
+    } catch (error: any) {
+      handleError(`Error writing from ${chalk.yellow(source)} to ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
+    }
+  });
 }

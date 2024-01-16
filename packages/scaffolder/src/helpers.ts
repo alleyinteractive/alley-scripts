@@ -22,10 +22,11 @@ export async function collectInputs(featureInputs: FeatureInput[]) {
 
   const questions = featureInputs.map((input): prompts.PromptObject<string> => { // eslint-disable-line consistent-return, max-len, array-callback-return
     const {
-      name: inputName,
-      description = undefined,
-      type = 'string',
       default: defaultValue = undefined,
+      description = undefined,
+      name: inputName,
+      required = true,
+      type = 'string',
     } = input;
 
     if (type === 'string') {
@@ -34,7 +35,13 @@ export async function collectInputs(featureInputs: FeatureInput[]) {
         name: inputName,
         message: description || `Enter a value for ${inputName}`,
         initial: defaultValue || undefined,
-        validate: (value) => value.length > 0 || `Please enter a value for ${inputName}`,
+        validate: (value) => {
+          if (!required && !value.length) {
+            return true;
+          }
+
+          return value.length > 0 || `Please enter a value for ${inputName}`;
+        },
       };
     }
 
@@ -52,5 +59,7 @@ export async function collectInputs(featureInputs: FeatureInput[]) {
     handleError(`🚨 Unsupported input type ${type} for ${inputName}`);
   });
 
-  return prompts(questions);
+  return prompts(questions, {
+    onCancel: () => handleError('User cancelled.'),
+  });
 }
