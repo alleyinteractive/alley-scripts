@@ -4,13 +4,21 @@
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/scaffolder",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=16.0.0 <21.0.0",
+    "npm": ">=8"
+  },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
+    "@babel/cli": "7.23.4",
+    "@babel/core": "7.23.7",
+    "@babel/preset-env": "7.23.8",
+    "@babel/preset-typescript": "7.23.3",
     "@types/nunjucks": "^3.2.6"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
+    "chalk": "^4.1.2",
     "glob": "^10.3.10",
     "mustache": "^4.2.0",
     "nunjucks": "^3.2.4",
@@ -29,9 +37,9 @@
     "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "lint": "eslint index.ts src",
+    "build": "babel src -d dist --extensions=\".ts\"",
+    "watch": "babel src -d dist --watch --source-maps --extensions=\".ts\"",
+    "lint": "eslint src",
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",
     "test:watch": "jest --watch",
