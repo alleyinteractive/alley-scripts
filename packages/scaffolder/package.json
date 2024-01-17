@@ -20,11 +20,13 @@
   },
   "files": [
     "dist",
+    "bin.js",
     "LICENSE",
     "README.md"
   ],
+  "main": "src/bin/scaffolder.ts",
   "bin": {
-    "@alleyinteractive/scaffolder": "./dist/index.js"
+    "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
   },
   "scripts": {
     "build": "tsc",
@@ -35,7 +37,6 @@
     "test:watch": "jest --watch",
     "test": "jest --passWithNoTests"
   },
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
@@ -43,5 +44,8 @@
   "bugs": {
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
   },
-  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme"
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "exports": {
+    "./bin.js": "./bin.js"
+  }
 }

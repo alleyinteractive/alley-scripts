@@ -1,7 +1,7 @@
 import prompts from 'prompts';
 
-import handleError from './error.js';
-import type { FeatureInput } from './types.js';
+import handleError from './error';
+import type { FeatureInput } from '../types';
 
 /**
  * Prompt the user for inputs to a feature by parsing the inputs and generating

@@ -5,12 +5,12 @@
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import entryArgs from './src/entryArgs.js';
-import { discoverFeatures, locateScaffolderRoot } from './src/discovery.js';
-import handleError from './src/error.js';
-import processFeature from './src/feature.js';
+import entryArgs, { EntryArgs } from '../lib/entryArgs';
+import { discoverFeatures, locateScaffolderRoot } from '../lib/discovery';
+import handleError from '../lib/error';
+import processFeature from '../lib/feature';
 
-import type { Feature } from './src/types.js';
+import type { Feature } from '../types';
 
 /**
  * Alley Scaffolder
@@ -19,7 +19,7 @@ import type { Feature } from './src/types.js';
   const {
     'dry-run': dryRun = false,
     _unknown: argv = undefined,
-  } = entryArgs;
+  } = entryArgs as EntryArgs & { _unknown?: string[] };
 
   // Reminder: The root directory is the root of the project, not the .scaffolder directory.
   const root: string | null = entryArgs.root || await locateScaffolderRoot();

@@ -9,11 +9,11 @@ import {
 } from 'fs';
 import { dirname } from 'path';
 
-import { parseExpression, parseFalsy, parseObjectExpression } from './expressions/index.js';
-import collectInputs from './inputs.js';
-import handleError from './error.js';
+import { parseExpression, parseFalsy, parseObjectExpression } from './expressions';
+import collectInputs from './inputs';
+import handleError from './error';
 
-import type { Feature } from './types.js';
+import type { Feature } from '../types';
 
 type FeatureContext = {
   feature: {
@@ -26,7 +26,7 @@ type FeatureContext = {
 /**
  * Collect the context variables passed to the template engine.
  */
-const collectContextVariables = async (feature: Feature): Promise<FeatureContext> => {
+const collectContextVariables = async (feature: Feature) => {
   const {
     config: {
       name,
@@ -35,16 +35,13 @@ const collectContextVariables = async (feature: Feature): Promise<FeatureContext
     path: featurePath,
   } = feature;
 
-  // Prompt the user for all feature inputs.
-  const inputs = await collectInputs(featureInputs);
-
   return {
     feature: {
       name,
       path: featurePath,
     },
-    inputs,
-  };
+    inputs: await collectInputs(featureInputs),
+  } as FeatureContext;
 };
 
 /**

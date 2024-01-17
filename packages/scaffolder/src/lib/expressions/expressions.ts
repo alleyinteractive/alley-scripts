@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import getEnvironment from './environment.js';
+import getEnvironment from './environment';
 
 type ExpressionContext = Record<string, any>;
 

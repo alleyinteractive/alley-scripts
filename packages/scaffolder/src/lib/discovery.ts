@@ -4,7 +4,7 @@ import fs from 'fs';
 import { parse } from 'yaml';
 import chalk from 'chalk';
 
-import type { Feature, FeatureConfig, RootConfiguration } from './types.js';
+import type { Feature, FeatureConfig, RootConfiguration } from '../types';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
