@@ -107,18 +107,35 @@ export default async function processFeature(rootDir: string, feature: Feature, 
   // file destination.
   // TODO: Allow entire directories to be handled.
   files.forEach(async ({ destination, source }) => {
+    let contents: string;
+    let generatedFile: string;
+
     try {
-      // Read the file from the source and parse the expressions.
-      const file = parseExpression(readFileSync(source, 'utf8'), context);
+      contents = readFileSync(source, 'utf8');
+    } catch (error: any) {
+      handleError(`Error reading from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
+    }
+
+    try {
+      generatedFile = parseExpression(contents, context);
+    } catch (error: any) {
+      handleError(`Error generating template from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
+    }
+
+    try {
       const destinationDir = dirname(destination);
 
       // Ensure that the directory exists.
       if (!existsSync(destinationDir) && !dryRun) {
         mkdirSync(destinationDir, { recursive: true });
       }
+    } catch (error: any) {
+      handleError(`Error creating directory for ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
+    }
 
+    try {
       if (!dryRun) {
-        writeFileSync(destination, file);
+        writeFileSync(destination, generatedFile);
 
         console.log(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
       } else {

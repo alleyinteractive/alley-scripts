@@ -39,6 +39,10 @@ import type { Feature } from '../types';
 
   console.log(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
 
+  if (dryRun) {
+    console.log('🚨 Running in dry-run mode. No files will be generated.');
+  }
+
   let feature: Feature | undefined;
 
   // Allow a feature to be passed in via the CLI.
