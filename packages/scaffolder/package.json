@@ -40,9 +40,10 @@
     "build": "babel src -d dist --extensions=\".ts\"",
     "watch": "babel src -d dist --watch --source-maps --extensions=\".ts\"",
     "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watchAll",
     "test": "jest --passWithNoTests"
   },
   "repository": {
