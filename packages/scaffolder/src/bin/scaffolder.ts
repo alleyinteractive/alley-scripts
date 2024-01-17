@@ -8,7 +8,7 @@ import prompts from 'prompts';
 import entryArgs, { EntryArgs } from '../lib/entryArgs';
 import { discoverFeatures, locateScaffolderRoot } from '../lib/discovery';
 import handleError from '../lib/error';
-import processFeature from '../lib/feature';
+import processFeature from '../lib/run';
 
 import type { Feature } from '../types';
 
