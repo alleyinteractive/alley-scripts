@@ -31,3 +31,5 @@ npx @alleyinteractive/scaffolder --dry-run
 The scaffolder will attempt to locate any configured project features as well as
 global features that are included with Alley Scaffolder. See [Features](./1-features.md)
 for more information.
+
+[Next: Features](./1-features.md) &rarr;

@@ -151,3 +151,5 @@ properties:
 
 Once the user has submitted the inputs, the inputs will be available in the
 `inputs` object when evaluating expressions.
+
+[Next: Expressions](./3-expressions.md) &rarr;

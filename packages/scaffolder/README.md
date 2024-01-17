@@ -28,7 +28,13 @@ directory, Scaffolder will attempt to find a `.scaffolder` configuration in a
 parent directory. You can also pass the `--root` argument to specify the root
 directory of the project.
 
-For more information, see the [documentation](./docs/0-getting-started.md).
+## Documentation
+
+1. [Getting Started](./docs/1-getting-started.md)
+2. [Features](./docs/2-features.md)
+3. [Expressions](./docs/3-expressions.md)
+4. [Writing Stub Files](./docs/4-writing-stub-files.md)
+5. [Configuration](./docs/5-configuration.md)
 
 ## Changelog
 
