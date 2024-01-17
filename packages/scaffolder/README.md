@@ -28,9 +28,7 @@ directory, Scaffolder will attempt to find a `.scaffolder` configuration in a
 parent directory. You can also pass the `--root` argument to specify the root
 directory of the project.
 
-## Writing Templates
-
-tktk
+For more information, see the [documentation](./docs/0-getting-started.md).
 
 ## Changelog
 
