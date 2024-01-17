@@ -3,7 +3,7 @@ import nunjucks from 'nunjucks';
 let env: nunjucks.Environment | null = null;
 
 /**
- * Get the Nunjucks environment.
+ * Get the configured Nunjucks environment.
  */
 export default function getEnvironment() {
   if (env) {
@@ -38,11 +38,39 @@ export default function getEnvironment() {
   /**
    * Register a filter that converts a string to a WordPress-style file name:
    *
-   *    Example Feature -> example-feature
+   *    Example Feature -> class-example-feature.php
+   *    Folder/Example Feature -> folder/class-example-feature.php
+   *    example-feature -> class-example-feature.php
    */
   env.addFilter(
     'wpClassFilename',
-    (value: any) => `${value}`.toLowerCase().replace(/\s+/g, '-'),
+    (value: any, prefix: string = 'class-', suffix: string = '.php') => {
+      const [namespace, className] = splitFeatureName(value);
+
+      return [
+        ...namespace.split('/').map((part) => camelCaseString(part, '-').toLowerCase()),
+        `${prefix}${camelCaseString(className, '-').toLowerCase()}${suffix}`,
+      ].filter((part) => part !== '').join('/');
+    },
+  );
+
+  /**
+   * Register a filter that converts a string to a PSR-4 file name:
+   *
+   *   Example Feature -> ExampleFeature.php
+   *   Folder/Example Feature -> Folder/ExampleFeature.php
+   *   example-feature -> ExampleFeature.php
+   */
+  env.addFilter(
+    'psrClassFilename',
+    (value: any, prefix: string = '', suffix: string = '.php') => {
+      const [namespace, className] = splitFeatureName(value);
+
+      return [
+        ...namespace.split('/').map((part) => camelCaseString(part, '')),
+        `${prefix}${camelCaseString(className, '')}${suffix}`,
+      ].filter((part) => part !== '').join('/');
+    },
   );
 
   /**
@@ -54,7 +82,19 @@ export default function getEnvironment() {
    */
   env.addFilter(
     'wpClassName',
-    (value: any) => camelCaseString(splitFeatureName(value)[1]),
+    (value: any, prefix: string = '', suffix: string = '') => `${prefix}${camelCaseString(splitFeatureName(value)[1])}${suffix}`,
+  );
+
+  /**
+   * Register a filter that converts a string into a PSR-4 class name:
+   *
+   *   example-feature -> ExampleFeature
+   *   Example Feature -> ExampleFeature
+   *   Folder/Example Feature -> ExampleFeature
+   */
+  env.addFilter(
+    'psrClassName',
+    (value: any, prefix: string = '', suffix: string = '') => `${prefix}${camelCaseString(splitFeatureName(value)[1], '')}${suffix}`,
   );
 
   /**
@@ -82,18 +122,6 @@ export default function getEnvironment() {
 
       return parts.map((p) => camelCaseString(p)).join('\\');
     },
-  );
-
-  /**
-   * Register a filter that converts a string into a PSR-4 class name:
-   *
-   *   example-feature -> ExampleFeature
-   *   Example Feature -> ExampleFeature
-   *   Folder/Example Feature -> ExampleFeature
-   */
-  env.addFilter(
-    'psrClassName',
-    (value: any) => camelCaseString(splitFeatureName(value)[1], ''),
   );
 
   /**

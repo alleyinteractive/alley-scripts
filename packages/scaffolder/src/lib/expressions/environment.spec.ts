@@ -9,11 +9,33 @@ describe('environment', () => {
   test('filter:wpClassFilename', () => {
     expect(
       render('${{ "Example Feature" | wpClassFilename }}'),
-    ).toBe('example-feature');
+    ).toEqual('class-example-feature.php');
 
     expect(
       render('${{ "Folder/Example Feature" | wpClassFilename }}'),
-    ).toBe('folder/example-feature');
+    ).toEqual('folder/class-example-feature.php');
+
+    expect(
+      render('${{ "Example Feature" | wpClassFilename("test-") }}'),
+    ).toEqual('test-example-feature.php');
+  });
+
+  test('filter:psrClassFilename', () => {
+    expect(
+      render('${{ "Example Feature" | psrClassFilename }}'),
+    ).toEqual('ExampleFeature.php');
+
+    expect(
+      render('${{ "Folder/Example Feature" | psrClassFilename }}'),
+    ).toEqual('Folder/ExampleFeature.php');
+
+    expect(
+      render('${{ "Example Feature" | psrClassFilename("Test") }}'),
+    ).toEqual('TestExampleFeature.php');
+
+    expect(
+      render('${{ "Example Feature" | psrClassFilename("", "Test.php") }}'),
+    ).toEqual('ExampleFeatureTest.php');
   });
 
   test('filter:wpClassName', () => {
@@ -24,6 +46,10 @@ describe('environment', () => {
     expect(
       render('${{ "Folder/Example Feature" | wpClassName }}'),
     ).toBe('Example_Feature');
+
+    expect(
+      render('${{ "Example Feature" | wpClassName("Test_") }}'),
+    ).toBe('Test_Example_Feature');
   });
 
   test('filter:psrClassName', () => {
@@ -34,6 +60,14 @@ describe('environment', () => {
     expect(
       render('${{ "Folder/Example Feature" | psrClassName }}'),
     ).toBe('ExampleFeature');
+
+    expect(
+      render('${{ "Example Feature" | psrClassName("Test") }}'),
+    ).toBe('TestExampleFeature');
+
+    expect(
+      render('${{ "Example Feature" | psrClassName("", "Test") }}'),
+    ).toBe('ExampleFeatureTest');
   });
 
   test('filter:wpNamespace', () => {
