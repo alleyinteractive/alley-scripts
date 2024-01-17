@@ -14,8 +14,8 @@ Let's use an `if` conditional file as an example:
 ```yaml
 files:
   - source: test.stub
-	if: ${{ inputs.tests }}
-	destination: tests/Features/${{ inputs.caseStudyName | psrClassFilename('', 'Test.php') }}
+    if: ${{ inputs.tests }}
+    destination: tests/Features/${{ inputs.caseStudyName | psrClassFilename('', 'Test.php') }}
 ```
 
 In this example, the `if` conditional is used to conditionally scaffold a file
