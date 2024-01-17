@@ -138,3 +138,5 @@ namespace.
 ${{ "User Input" | psrNamespace('Feature\\') }} => "Feature"
 ${{ "Folder/User Input" | psrNamespace('Feature\\') }} => "Feature\\Folder"
 ```
+
+[Next: Writing Stub Files](./4-writing-stub-files.md) &rarr;

@@ -115,7 +115,7 @@ Let's break down the configuration file:
 
 - `name`: The name of the feature. This is used to identify the feature in the
   list of features. If not provided, the name of the directory will be used.
-- `inputs`: A list of inputs that the feature requires. Optional. See [Inputs](#inputs)
+- `inputs`: A list of inputs that the feature requires. Optional. See [Input](#input)
   for more information.
 - `files`: A list of files to scaffold. The files support an individual file or
   an entire directory. Both the source and destination support expressions for
