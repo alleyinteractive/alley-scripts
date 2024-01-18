@@ -22,16 +22,19 @@ import type { Feature } from '../types';
   } = entryArgs as EntryArgs & { _unknown?: string[] };
 
   // Reminder: The root directory is the root of the project, not the .scaffolder directory.
-  const root: string | null = entryArgs.root || await locateScaffolderRoot();
+  let root: string | null = entryArgs.root || await locateScaffolderRoot();
 
   if (!root) {
-    handleError('🚨 Could not locate a scaffolder configuration directory (.scaffolder) Ensure that one exists in the current or parent directories or pass the --root argument to specify a path.'); // eslint-disable-line max-len
+    console.log('No scaffolder configuration found, using current directory as root.');
+    console.log(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory.')));
+
+    root = process.cwd();
   }
 
   const features = await discoverFeatures(root);
 
   if (!features.length) {
-    handleError(`No features found in ${root}. Ensure that the features have a config.yml file.`);
+    handleError(`No features found to scaffold in ${root}.\n\nEnsure that your configuration isn't inadvertently overriding the built-in sources included with the scaffolder.`);
   }
 
   const emojis = ['👋', '🌸', '🚀']; // TODO: Add more emojis.

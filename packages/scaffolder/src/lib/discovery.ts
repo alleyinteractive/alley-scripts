@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 
 import fs from 'fs';
-import { parse } from 'yaml';
 import chalk from 'chalk';
 
-import type { Feature, FeatureConfig, RootConfiguration } from '../types';
+import type { Feature, FeatureConfig } from '../types';
+import { getProjectConfiguration, parseConfiguration } from './configuration';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
@@ -16,11 +16,11 @@ import type { Feature, FeatureConfig, RootConfiguration } from '../types';
  */
 
 /**
- * Locate the template directory, recursively searching up the directory tree
- * until a template directory is found.
+ * Locate the scaffolder root, recursively searching up the directory tree until
+ * a template directory is found.
  *
- * A template directory is defined as a directory that contains a `.scaffolder`
- * directory.
+ * The scaffolder root directory is defined as a directory that contains a
+ * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
  */
 export async function locateScaffolderRoot() {
   // Recursively search up the directory tree until a template directory is
@@ -48,39 +48,6 @@ export async function locateScaffolderRoot() {
 }
 
 /**
- * Parse the YAML configuration file of a scaffolder feature.
- */
-export async function parseConfiguration<TData extends object>(filePath: string): Promise<TData> {
-  // Ensure this is a YAML file.
-  if (!filePath.endsWith('.yml')) {
-    throw new Error('The configuration file must be a YAML file.');
-  }
-
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`The configuration file does not exist: ${filePath}`);
-  }
-
-  return parse(fs.readFileSync(filePath, 'utf8'));
-}
-
-let rootConfiguration: RootConfiguration;
-
-/**
- * Get the root configuration for the scaffolder.
- *
- * The root configuration is defined in the `.scaffolder/config.yml` file.
- */
-export async function getRootConfiguration(rootDirectory: string) {
-  if (!rootConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
-    rootConfiguration = await parseConfiguration<RootConfiguration>(`${rootDirectory}/.scaffolder/config.yml`);
-  } else if (!rootConfiguration) {
-    rootConfiguration = {};
-  }
-
-  return rootConfiguration;
-}
-
-/**
  * Discover features that are defined in the scaffolder root directory that can
  * be discovered and used.
  *
@@ -98,7 +65,7 @@ export async function discoverFeatures(rootDirectory: string): Promise<Feature[]
   // can be scaffolded to a project.
   const sourceDirectories = [scaffolderDirectory];
 
-  const { sources = [] } = await getRootConfiguration(rootDirectory);
+  const { sources = [] } = await getProjectConfiguration(rootDirectory);
 
   // Push any additional source directories to the list from the configuration.
   if (Array.isArray(sources) && sources.length) {
