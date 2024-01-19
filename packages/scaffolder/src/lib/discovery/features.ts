@@ -1,39 +1,9 @@
-/* eslint-disable import/prefer-default-export */
-
 import fs from 'fs';
 import chalk from 'chalk';
 
-import type { Feature, FeatureConfig } from '../types';
-import { getProjectConfiguration, parseConfiguration } from './configuration';
-
-/**
- * Functionality to aid in the discovery of templates that can be used to
- * generate code.
- *
- * Out of the box we'll look for templates in the current folder and all the
- * parent directories. The end goal is to add the ability to look for templates
- * in a shared remote resource like a git repository.
- */
-
-/**
- * Retrieve all the configured source directories to read from.
- */
-export async function getSourceDirectories(rootDirectory: string): Promise<string[]> {
-  const sourceDirectories = [];
-
-  if (fs.existsSync(`${rootDirectory}/.scaffolder`)) {
-    sourceDirectories.push(`${rootDirectory}/.scaffolder`);
-  }
-
-  const {
-    sources: configuredSources = [],
-  } = await getProjectConfiguration(rootDirectory);
-
-  return [
-    ...sourceDirectories,
-    ...configuredSources,
-  ];
-}
+import type { Feature, FeatureConfig } from '../../types';
+import { parseConfiguration } from '../configuration';
+import { getSourceDirectories } from './sources';
 
 /**
  * Discover features that are defined in the scaffolder root directory that can
@@ -48,7 +18,6 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
 
   await Promise.all(
     sourceDirectories
-      .filter((value, index, self) => self.indexOf(value) === index)
       .map(async (sourceDirectory) => {
         // Present a warning to the user if the source directory does not exist.
         if (!fs.existsSync(sourceDirectory)) {

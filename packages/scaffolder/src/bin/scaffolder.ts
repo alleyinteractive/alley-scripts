@@ -7,7 +7,7 @@ import prompts from 'prompts';
 
 import entryArgs, { EntryArgs } from '../lib/entryArgs';
 import { getScaffolderRoot } from '../lib/configuration';
-import { getFeatures } from '../lib/features';
+import { getFeatures } from '../lib/discovery';
 import handleError from '../lib/error';
 import processFeature from '../lib/run';
 
@@ -33,6 +33,8 @@ import type { Feature } from '../types';
 
     root = process.cwd();
   }
+
+  console.log('getFeatures', getFeatures);
 
   const features = await getFeatures(root);
 
