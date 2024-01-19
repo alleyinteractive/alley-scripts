@@ -40,7 +40,7 @@ Below is the documentation for all available components, hooks, and services.
 
 React components that can be used within the WordPress block editor.
 
-### [AudioPicker](src/components/audio-picker/)
+### AudioPicker
 
 Allows a user to select or remove audio using the media modal or via direct
 URL entry. This component is a thin wrapper around `MediaPicker` and sets the
