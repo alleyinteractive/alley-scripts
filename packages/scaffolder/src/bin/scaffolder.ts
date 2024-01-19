@@ -34,8 +34,6 @@ import type { Feature } from '../types';
     root = process.cwd();
   }
 
-  console.log('getFeatures', getFeatures);
-
   const features = await getFeatures(root);
 
   if (!features.length) {

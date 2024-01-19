@@ -6,11 +6,9 @@ import { parseConfiguration } from '../configuration';
 import { getSourceDirectories } from './sources';
 
 /**
- * Discover features that are defined in the scaffolder root directory that can
- * be discovered and used.
+ * Discover features that can be discovered and used.
  *
- * Features are defined as one-level subdirectories of the scaffolder root
- * directory and contain a `config.yml` file.
+ * Loads features configured globally and locally on the project.
  */
 export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
   const sourceDirectories = await getSourceDirectories(rootDirectory);

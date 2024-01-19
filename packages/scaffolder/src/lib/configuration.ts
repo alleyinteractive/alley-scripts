@@ -3,6 +3,7 @@ import path from 'path';
 import { parse } from 'yaml';
 
 import type { RootConfiguration } from '../types';
+import { resolvePath } from '../helpers';
 
 export const DEFAULT_CONFIGURATION = typeof jest === 'undefined' ? {
   sources: [],
@@ -57,13 +58,6 @@ export async function getScaffolderRoot() {
 
   return null;
 }
-
-/**
- * Resolve the absolute path of a file relative to a base directory.
- */
-const resolvePath = (base: string, filePath: string) => (path.isAbsolute(filePath)
-  ? filePath
-  : path.join(base, filePath));
 
 /**
  * Get the global configuration directory for the scaffolder.
