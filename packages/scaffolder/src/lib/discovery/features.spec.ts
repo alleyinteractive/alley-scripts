@@ -10,11 +10,13 @@ const fixturesDirectory = path.resolve(__dirname, '../../../__tests__/fixtures')
 
 describe('discovery/features', () => {
   beforeEach(() => {
+    delete process.env.SCAFFOLDER_HOME;
+
     jest.resetAllMocks();
 
     resetConfiguration({
       sources: [
-        `${fixturesDirectory}/features`,
+        `${fixturesDirectory}/a-features`,
       ],
     }, {});
   });
@@ -24,20 +26,20 @@ describe('discovery/features', () => {
 
     expect(features).toHaveLength(2);
     expect(features[0].config.name).toEqual('Test Feature A');
-    expect(features[0].path).toEqual(`${fixturesDirectory}/features/feature-a`);
+    expect(features[0].path).toEqual(`${fixturesDirectory}/a-features/feature-a`);
 
     expect(features[1].config.name).toEqual('Test Feature B');
-    expect(features[1].path).toEqual(`${fixturesDirectory}/features/feature-b`);
+    expect(features[1].path).toEqual(`${fixturesDirectory}/a-features/feature-b`);
   });
 
   it('should be able to discover global and local features', async () => {
     resetConfiguration({
       sources: [
-        `${fixturesDirectory}/features`,
+        `${fixturesDirectory}/a-features`,
       ],
     }, {
       sources: [
-        `${fixturesDirectory}/z-feature-set-two`,
+        `${fixturesDirectory}/z-features`,
       ],
     });
 

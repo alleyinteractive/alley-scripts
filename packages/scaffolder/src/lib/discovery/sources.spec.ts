@@ -8,6 +8,8 @@ jest.mock('fs');
 
 describe('discover/sources', () => {
   beforeEach(() => {
+    delete process.env.SCAFFOLDER_HOME;
+
     jest.resetAllMocks();
     resetConfiguration();
   });
@@ -67,4 +69,12 @@ describe('discover/sources', () => {
       path.resolve(__dirname, '../../../__tests__/fixtures/features'),
     ]);
   });
+
+  it('should be able to handle an object source path', () => {
+
+  });
+
+  // it('should be able to resolve a source from github', () => {
+
+  // });
 });

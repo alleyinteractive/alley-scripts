@@ -3,12 +3,14 @@ import path from 'path';
 import { parse } from 'yaml';
 
 import type { RootConfiguration } from '../types';
-import { resolvePath } from '../helpers';
+import { resolveSourcePath } from '../helpers';
 
 export const DEFAULT_CONFIGURATION = typeof jest === 'undefined' ? {
   sources: [],
 } : {
-  sources: ['./default-configuration'],
+  sources: [
+    path.resolve(__dirname, '../../__tests__/fixtures/a-features'),
+  ],
 };
 
 /**
@@ -91,7 +93,7 @@ export async function getGlobalConfiguration() {
 
   // Ensure that the sources are absolute paths.
   globalConfiguration.sources = globalConfiguration.sources?.map(
-    (source) => resolvePath(globalConfigDir, source),
+    (source) => resolveSourcePath(globalConfigDir, source),
   );
 
   return globalConfiguration;
@@ -119,7 +121,9 @@ export async function getProjectConfiguration(rootDirectory: string) {
     ...projectConfiguration,
     sources: [
       ...(globalConfiguration?.sources || []),
-      ...(projectConfiguration?.sources || []).map((source) => resolvePath(rootDirectory, source)),
+      ...(projectConfiguration?.sources || []).map(
+        (source) => resolveSourcePath(rootDirectory, source),
+      ),
     ],
   };
 

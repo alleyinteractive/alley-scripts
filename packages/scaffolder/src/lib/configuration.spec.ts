@@ -13,6 +13,8 @@ jest.mock('fs');
 
 describe('configuration', () => {
   beforeEach(() => {
+    delete process.env.SCAFFOLDER_HOME;
+
     jest.resetAllMocks();
     resetConfiguration();
   });
@@ -37,6 +39,10 @@ describe('configuration', () => {
     process.env.SCAFFOLDER_HOME = '/scaffolder/dir';
 
     expect(getGlobalConfigurationDir()).toEqual('/scaffolder/dir');
+
+    delete process.env.SCAFFOLDER_HOME;
+
+    expect(getGlobalConfigurationDir()).toEqual(`${process.env.HOME}/.scaffolder`);
   });
 
   it('should get the default configuration when no global configuration exists', async () => {
@@ -46,13 +52,15 @@ describe('configuration', () => {
   });
 
   it('should get the global configuration', async () => {
+    process.env.SCAFFOLDER_HOME = '/scaffolder/dir';
+
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
     (fs.readFileSync as jest.Mock).mockReturnValue(`
 sources:
   # Check another directory in the project for features. Supports both formats.
   - directory: ../project-features
-  - ../another-project-features
+  - ./another-project-features
 
   # Check a remote repository for features.
   - github: alleyinteractive/scaffolder-features
@@ -60,10 +68,8 @@ sources:
 
     expect(await getGlobalConfiguration()).toEqual({
       sources: [
-        {
-          directory: '../project-features',
-        },
-        '../another-project-features',
+        '/scaffolder/project-features',
+        '/scaffolder/dir/another-project-features',
         {
           github: 'alleyinteractive/scaffolder-features',
         },
@@ -72,6 +78,8 @@ sources:
   });
 
   it('should get the project configuration with the global merged in', async () => {
+    process.env.SCAFFOLDER_HOME = '/scaffolder';
+
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
     // Project configuration.
@@ -87,10 +95,10 @@ sources:
   - ./global-dir
     `);
 
-    expect(await getProjectConfiguration('./')).toEqual({
+    expect(await getProjectConfiguration('/project')).toEqual({
       sources: [
-        './global-dir',
-        './project-dir',
+        '/scaffolder/global-dir',
+        '/project/project-dir',
       ],
     });
   });

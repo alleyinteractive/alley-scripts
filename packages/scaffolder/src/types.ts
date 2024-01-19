@@ -1,10 +1,19 @@
 /**
+ * Source configuration.
+ */
+export type Source = string | {
+  directory: string;
+} | {
+  github: string;
+};
+
+/**
  * Type representation of the parsed root configuration.
  *
  * This exists in the .scaffolder/config.yml file and is optional.
  */
 export type RootConfiguration = {
-  sources?: string[];
+  sources?: Source[];
 };
 
 /**

@@ -25,9 +25,32 @@ export async function getSourceDirectories(rootDirectory: string): Promise<strin
     sources: configuredSources = [],
   } = await getProjectConfiguration(rootDirectory);
 
-  return [
+  const combinedSources = [
     ...sourceDirectories,
     ...configuredSources,
     // Remove duplicate source directories.
   ].filter((value, index, self) => self.indexOf(value) === index);
+
+  // Resolve any object-based sources.
+  return Promise.all(
+    combinedSources.map(async (source) => {
+      if (typeof source === 'string') {
+        return source;
+      }
+
+      if (typeof source !== 'object') {
+        throw new Error(`Unsupported source type: ${typeof source}`);
+      }
+
+      if ('directory' in source) {
+        return source.directory;
+      }
+
+      // if ('github' in source) {
+
+      // }
+
+      throw new Error(`Unsupported source type: ${typeof source}`);
+    }),
+  );
 }
