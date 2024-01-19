@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { parse } from 'yaml';
 
 import type { RootConfiguration } from '../types';
@@ -26,6 +27,45 @@ export async function parseConfiguration<TData extends object>(filePath: string)
 }
 
 /**
+ * Locate the scaffolder root, recursively searching up the directory tree until
+ * a template directory is found.
+ *
+ * The scaffolder root directory is defined as a directory that contains a
+ * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
+ */
+export async function getScaffolderRoot() {
+  // Recursively search up the directory tree until a template directory is
+  // found. Ensure that we eventually stop at the root directory.
+  let currentDirectory = process.cwd();
+
+  while (true) { // eslint-disable-line no-constant-condition
+    if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
+      return currentDirectory;
+    }
+
+    if (!fs.existsSync(currentDirectory)) {
+      break;
+    }
+
+    currentDirectory = path.resolve(currentDirectory, '..');
+
+    // Stop at the root directory.
+    if (currentDirectory === '/') {
+      break;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolve the absolute path of a file relative to a base directory.
+ */
+const resolvePath = (base: string, filePath: string) => (path.isAbsolute(filePath)
+  ? filePath
+  : path.join(base, filePath));
+
+/**
  * Get the global configuration directory for the scaffolder.
  *
  * By default this is located at `~/.scaffolder`.
@@ -40,8 +80,10 @@ let globalConfiguration: RootConfiguration | null;
  * Retrieve the global configuration for the scaffolder.
  */
 export async function getGlobalConfiguration() {
-  if (!globalConfiguration && fs.existsSync(`${getGlobalConfigurationDir()}/config.yml`)) {
-    globalConfiguration = await parseConfiguration<RootConfiguration>(`${getGlobalConfigurationDir()}/config.yml`);
+  const globalConfigDir = getGlobalConfigurationDir();
+
+  if (!globalConfiguration && fs.existsSync(`${globalConfigDir}/config.yml`)) {
+    globalConfiguration = await parseConfiguration<RootConfiguration>(`${globalConfigDir}/config.yml`);
   } else if (!globalConfiguration) {
     globalConfiguration = {};
   }
@@ -53,10 +95,15 @@ export async function getGlobalConfiguration() {
     ...globalConfiguration,
   };
 
+  // Ensure that the sources are absolute paths.
+  globalConfiguration.sources = globalConfiguration.sources?.map(
+    (source) => resolvePath(globalConfigDir, source),
+  );
+
   return globalConfiguration;
 }
 
-let rootConfiguration: RootConfiguration | null;
+let projectConfiguration: RootConfiguration | null;
 
 /**
  * Get the root configuration for the scaffolder from the project.
@@ -64,31 +111,34 @@ let rootConfiguration: RootConfiguration | null;
  * This is an optional file and is located at `.scaffolder/config.yml`.
  */
 export async function getProjectConfiguration(rootDirectory: string) {
-  if (!rootConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
-    rootConfiguration = await parseConfiguration<RootConfiguration>(`${rootDirectory}/.scaffolder/config.yml`);
-  } else if (!rootConfiguration) {
-    rootConfiguration = {};
+  if (!projectConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
+    projectConfiguration = await parseConfiguration<RootConfiguration>(`${rootDirectory}/.scaffolder/config.yml`);
+  } else if (!projectConfiguration) {
+    projectConfiguration = {};
   }
 
   await getGlobalConfiguration();
 
   // Merge the project configuration with the global configuration recursively.
-  rootConfiguration = {
-    ...(globalConfiguration || {}),
-    ...(rootConfiguration || {}),
+  projectConfiguration = {
+    ...globalConfiguration,
+    ...projectConfiguration,
     sources: [
       ...(globalConfiguration?.sources || []),
-      ...(rootConfiguration?.sources || []),
+      ...(projectConfiguration?.sources || []).map((source) => resolvePath(rootDirectory, source)),
     ],
   };
 
-  return rootConfiguration;
+  return projectConfiguration;
 }
 
 /**
  * Reset the configuration to allow the configuration to be reloaded.
  */
-export function resetConfiguration() {
-  globalConfiguration = null;
-  rootConfiguration = null;
+export function resetConfiguration(
+  newGlobalConfiguration: RootConfiguration | null = null,
+  newProjectConfiguration: RootConfiguration | null = null,
+) {
+  globalConfiguration = newGlobalConfiguration;
+  projectConfiguration = newProjectConfiguration;
 }

@@ -6,7 +6,8 @@ import chalk from 'chalk';
 import prompts from 'prompts';
 
 import entryArgs, { EntryArgs } from '../lib/entryArgs';
-import { discoverFeatures, locateScaffolderRoot } from '../lib/discovery';
+import { getScaffolderRoot } from '../lib/configuration';
+import { getFeatures } from '../lib/features';
 import handleError from '../lib/error';
 import processFeature from '../lib/run';
 
@@ -14,6 +15,8 @@ import type { Feature } from '../types';
 
 /**
  * Alley Scaffolder
+ *
+ * @todo Refeactor all the services used here to a separate package.
  */
 (async () => {
   const {
@@ -22,7 +25,7 @@ import type { Feature } from '../types';
   } = entryArgs as EntryArgs & { _unknown?: string[] };
 
   // Reminder: The root directory is the root of the project, not the .scaffolder directory.
-  let root: string | null = entryArgs.root || await locateScaffolderRoot();
+  let root: string | null = entryArgs.root || await getScaffolderRoot();
 
   if (!root) {
     console.log('No scaffolder configuration found, using current directory as root.');
@@ -31,7 +34,7 @@ import type { Feature } from '../types';
     root = process.cwd();
   }
 
-  const features = await discoverFeatures(root);
+  const features = await getFeatures(root);
 
   if (!features.length) {
     handleError(`No features found to scaffold in ${root}.\n\nEnsure that your configuration isn't inadvertently overriding the built-in sources included with the scaffolder.`);

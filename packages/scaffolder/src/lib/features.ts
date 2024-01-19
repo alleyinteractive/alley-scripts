@@ -16,35 +16,23 @@ import { getProjectConfiguration, parseConfiguration } from './configuration';
  */
 
 /**
- * Locate the scaffolder root, recursively searching up the directory tree until
- * a template directory is found.
- *
- * The scaffolder root directory is defined as a directory that contains a
- * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
+ * Retrieve all the configured source directories to read from.
  */
-export async function locateScaffolderRoot() {
-  // Recursively search up the directory tree until a template directory is
-  // found. Ensure that we eventually stop at the root directory.
-  let currentDirectory = process.cwd();
+export async function getSourceDirectories(rootDirectory: string): Promise<string[]> {
+  const sourceDirectories = [];
 
-  while (true) { // eslint-disable-line no-constant-condition
-    if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
-      return currentDirectory;
-    }
-
-    if (!fs.existsSync(currentDirectory)) {
-      break;
-    }
-
-    currentDirectory = fs.realpathSync(`${currentDirectory}/..`);
-
-    // Stop at the root directory.
-    if (currentDirectory === '/') {
-      break;
-    }
+  if (fs.existsSync(`${rootDirectory}/.scaffolder`)) {
+    sourceDirectories.push(`${rootDirectory}/.scaffolder`);
   }
 
-  return null;
+  const {
+    sources: configuredSources = [],
+  } = await getProjectConfiguration(rootDirectory);
+
+  return [
+    ...sourceDirectories,
+    ...configuredSources,
+  ];
 }
 
 /**
@@ -54,28 +42,8 @@ export async function locateScaffolderRoot() {
  * Features are defined as one-level subdirectories of the scaffolder root
  * directory and contain a `config.yml` file.
  */
-export async function discoverFeatures(rootDirectory: string): Promise<Feature[]> {
-  const scaffolderDirectory = `${rootDirectory}/.scaffolder`;
-
-  if (!fs.existsSync(rootDirectory) || !fs.existsSync(scaffolderDirectory)) {
-    return [];
-  }
-
-  // The source directories are the directories that contain the features that
-  // can be scaffolded to a project.
-  const sourceDirectories = [scaffolderDirectory];
-
-  const { sources = [] } = await getProjectConfiguration(rootDirectory);
-
-  // Push any additional source directories to the list from the configuration.
-  if (Array.isArray(sources) && sources.length) {
-    // TODO: Allow remote sources to be defined and the scaffolder directory not
-    // to be prepended.
-    sourceDirectories.push(
-      ...sources.map((source: string) => `${scaffolderDirectory}/${source}`),
-    );
-  }
-
+export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
+  const sourceDirectories = await getSourceDirectories(rootDirectory);
   const availableFeatures: Feature[] = [];
 
   await Promise.all(

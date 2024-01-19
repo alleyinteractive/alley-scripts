@@ -1,9 +1,11 @@
 import * as fs from 'fs';
+import path from 'path';
 import {
   DEFAULT_CONFIGURATION,
   getGlobalConfiguration,
   getGlobalConfigurationDir,
   getProjectConfiguration,
+  getScaffolderRoot,
   resetConfiguration,
 } from './configuration';
 
@@ -13,6 +15,20 @@ describe('configuration', () => {
   beforeEach(() => {
     jest.resetAllMocks();
     resetConfiguration();
+  });
+
+  it('should locate the scaffolder root if .scaffolder exists in current directory', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true);
+
+    expect(await getScaffolderRoot()).toEqual(process.cwd());
+  });
+
+  it('should locate the scaffolder root if .scaffolder exists in parent directory', async () => {
+    (fs.existsSync as jest.Mock)
+      .mockReturnValueOnce(false)
+      .mockReturnValue(true);
+
+    expect(await getScaffolderRoot()).toEqual(path.resolve(process.cwd(), '..'));
   });
 
   it('should get the global configuration directory', () => {
