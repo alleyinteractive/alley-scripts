@@ -284,7 +284,7 @@ strip that out first.
 | prop      | required | type   |                                                 |
 |-----------|----------|--------|-------------------------------------------------|
 | className | No       | string | A classname for the element.                    |
-| html      | Yes      | string | The arbitrary HTML to sanitize and inse.rt      |
+| html      | Yes      | string | The arbitrary HTML to sanitize and insert      |
 | tag       | Yes      | string | The tag name to wrap the HTML in, e.g.,  `div`. |
 
 ### Selector
