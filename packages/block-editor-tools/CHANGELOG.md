@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.2
+
+### Patch Changes
+
+- 931181d: Updated README that documents components, hooks, and services usage.
+
 ## 0.6.0
 
 ### Minor Changes
