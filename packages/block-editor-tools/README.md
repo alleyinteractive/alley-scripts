@@ -321,7 +321,7 @@ Importantly, this component does not save the selected item, it just returns it 
 | multiple    | false            | false    | boolean  | If set to true the component allows for the ability to select multiple items returned through the `onSelect` callback.      |
 | onSelect    | NA               | true     | function | Callback to receive the selected item array, as it is returned from the `search` REST endpoint. Required.                   |
 | placeholder | Search for items | false    | string   | If specified, this overrides the default input placeholder value.                                                           |
-| subTypes   | []               | false    | array    | All queryable subtypes that will be included in the form comma-separated array. The default query is "any" subtype.     |
+| subTypes   | []               | false    | array    | All queryable subtypes that will be included in the form of a comma-separated array. The default query is "any" subtype.     |
 | selected    | []               | false    | array    | Optional array of objects with id and title keys to auto-hydrate selections on load.                                        |
 | threshold   | 3                | false    | integer  | If specified, this overrides the default minimum number of characters that must be entered in order for the search to fire. |
 
