@@ -1,4 +1,5 @@
-/* eslint-disable no-console */
+/* eslint-disable max-len, no-console */
+
 import chalk from 'chalk';
 import * as fs from 'fs';
 import simpleGit from 'simple-git';
@@ -127,8 +128,8 @@ async function cloneFreshRepository(directory: string, source: GitSource) {
  * version is available. The source is returned to the generator as a directory
  * source.
  */
-export async function processGitSource(source: GitSource): Promise<DirectorySource> {
-  const checkoutDirectory = remoteSourceToLocalDirectory(source);
+export async function processGitSource(source: GitSource, directory?: string): Promise<DirectorySource> {
+  const checkoutDirectory = directory || remoteSourceToLocalDirectory(source);
 
   // Check if the directory exists. If it does, update the repository.
   if (fs.existsSync(checkoutDirectory)) {
@@ -152,7 +153,18 @@ export async function processGitHubSource(source: GithubSource): Promise<Directo
   // just the organization and repository name.
   const { github: url } = source;
 
-  return {
-    directory: url,
-  };
+  // Handle a full URL being passed.
+  if (url.startsWith('https://' || url.startsWith('git@'))) {
+    return processGitSource({
+      git: url,
+    });
+  }
+
+  const directory = remoteSourceToLocalDirectory(source);
+
+  const [, org, repo, revision] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-]*)?$/) || [];
+
+  return processGitSource({
+    git: `https://github.com/${org}/${repo}.git${revision || ''}`,
+  }, directory);
 }

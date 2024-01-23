@@ -3,6 +3,7 @@ import * as fs from 'fs';
 
 import {
   getCheckoutBaseDirectory,
+  processGitHubSource,
   processGitSource,
   remoteSourceToLocalDirectory,
 } from './remoteSources';
@@ -17,7 +18,6 @@ const simpleGitMock = {
 
 jest.mock('fs');
 jest.mock('simple-git', () => jest.fn(() => simpleGitMock));
-
 
 describe('remoteSources', () => {
   beforeEach(() => {
@@ -144,6 +144,59 @@ describe('remoteSources', () => {
   });
 
   it('should be able to checkout a github repository', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(false);
 
+    await processGitHubSource({
+      github: 'alleyinteractive/example-generators',
+    });
+
+    expect(simpleGit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
+      }),
+    );
+
+    expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
+    expect(simpleGitMock.pull).not.toHaveBeenCalled();
+    expect(simpleGitMock.checkout).not.toHaveBeenCalled();
+  });
+
+  it('should be able to checkout a github repository with a specific branch', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(false);
+
+    await processGitHubSource({
+      github: 'alleyinteractive/example-generators#8defe001',
+    });
+
+    expect(simpleGit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
+      }),
+    );
+
+    expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
+    expect(simpleGitMock.pull).not.toHaveBeenCalled();
+    expect(simpleGitMock.checkout).toHaveBeenCalledWith('8defe001');
+  });
+
+  it('should be able to update an existing github repository', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true);
+    (fs.statSync as jest.Mock).mockReturnValue({
+      mtimeMs: Date.now() - 9600000,
+    });
+
+    await processGitHubSource({
+      github: 'alleyinteractive/example-update-generators#8defe001',
+    });
+
+    expect(simpleGit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-update-generators`,
+      }),
+    );
+
+    expect(simpleGitMock.clone).not.toHaveBeenCalledTimes(1);
+    expect(simpleGitMock.fetch).toHaveBeenCalled();
+    expect(simpleGitMock.checkout).toHaveBeenCalledWith('8defe001');
   });
 });
