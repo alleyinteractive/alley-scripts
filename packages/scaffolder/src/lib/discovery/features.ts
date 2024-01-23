@@ -10,6 +10,8 @@ import { logger } from '../logger';
  * Discover features that can be discovered and used.
  *
  * Loads features configured globally and locally on the project.
+ *
+ * @todo Add caching to improve performance.
  */
 export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
   const sourceDirectories = await getConfiguredSources(rootDirectory);

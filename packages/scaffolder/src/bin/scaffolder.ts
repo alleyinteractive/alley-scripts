@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk';
-import prompts from 'prompts';
 
 import entryArgs, { EntryArgs } from '../lib/entryArgs';
 import { getScaffolderRoot } from '../lib/configuration';
@@ -9,8 +8,8 @@ import { getFeatures } from '../lib/discovery';
 import handleError from '../lib/error';
 import processFeature from '../lib/run';
 
-import type { Feature } from '../types';
 import { initializeLogger } from '../lib/logger';
+import resolveFeature from '../lib/resolveFeature';
 
 /**
  * Alley Scaffolder
@@ -52,47 +51,11 @@ import { initializeLogger } from '../lib/logger';
     logger.info('🚨 Running in dry-run mode. No files will be generated.');
   }
 
-  let feature: Feature | undefined;
-
-  // Allow a feature to be passed in via the CLI.
-  if (Array.isArray(argv) && typeof argv[0] !== 'undefined') {
-    const [featureName = ''] = argv;
-
-    // Attempt to find the feature by name case-insensitively supporting partial matches.
-    feature = features.find(
-      (item) => item.config.name.toLowerCase().includes(featureName.toLowerCase()),
-    );
-
-    if (!feature) {
-      handleError(`Could not find the feature: ${chalk.yellow(featureName)}`);
-    }
-
-    logger.info(`🔍 Found feature: ${chalk.yellow(feature.config.name)}`);
-  } else {
-    // Prompt the user to select a feature.
-    const { featureName } = await prompts({
-      type: 'select',
-      name: 'featureName',
-      message: 'Select a feature to scaffold:',
-      choices: features.map((item) => ({
-        title: item.config.name,
-        value: item.config.name,
-      })),
-    });
-
-    if (!featureName) {
-      handleError('No feature selected.');
-    }
-
-    feature = features.find((item) => item.config.name === featureName);
-
-    if (!feature) {
-      handleError(`Could not find the feature ${featureName}`);
-    }
-  }
-
-  // Hand off the feature to the feature processor.
-  await processFeature(root, feature, dryRun);
+  await processFeature(
+    root,
+    await resolveFeature(features, argv && argv[0]),
+    dryRun,
+  );
 
   logger.info('🎉 Done. Happy coding!');
 
