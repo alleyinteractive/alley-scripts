@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import chalk from 'chalk';
 import {
   existsSync,
@@ -14,6 +12,7 @@ import collectInputs from './inputs';
 import handleError from './error';
 
 import type { Feature } from '../types';
+import { logger } from './logger';
 
 type FeatureContext = {
   feature: {
@@ -137,9 +136,9 @@ export default async function processFeature(rootDir: string, feature: Feature, 
       if (!dryRun) {
         writeFileSync(destination, generatedFile);
 
-        console.log(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
+        logger().info(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
       } else {
-        console.log(`Would generate ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
+        logger().info(`Would generate ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
       }
     } catch (error: any) {
       handleError(`Error writing from ${chalk.yellow(source)} to ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
