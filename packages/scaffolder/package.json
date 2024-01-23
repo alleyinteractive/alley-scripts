@@ -26,6 +26,7 @@
     "prompts": "^2.4.2",
     "simple-git": "^3.22.0",
     "ts-command-line-args": "^2.5.1",
+    "winston": "^3.11.0",
     "yaml": "^2.3.4"
   },
   "files": [

@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import type { Feature, FeatureConfig } from '../../types';
 import { parseConfiguration } from '../configuration';
 import { getConfiguredSources } from './sources';
+import { logger } from '../logger';
 
 /**
  * Discover features that can be discovered and used.
@@ -19,7 +20,7 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
       .map(async ({ directory }) => {
         // Present a warning to the user if the source directory does not exist.
         if (!fs.existsSync(directory)) {
-          console.warn(`Source directory ${chalk.yellow(directory)} not found.`); // eslint-disable-line no-console
+          logger().debug(`Source directory ${chalk.yellow(directory)} not found.`);
           return;
         }
 

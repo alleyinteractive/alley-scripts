@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-console */
-
 import chalk from 'chalk';
 import prompts from 'prompts';
 
@@ -12,6 +10,7 @@ import handleError from '../lib/error';
 import processFeature from '../lib/run';
 
 import type { Feature } from '../types';
+import { initializeLogger } from '../lib/logger';
 
 /**
  * Alley Scaffolder
@@ -20,6 +19,7 @@ import type { Feature } from '../types';
  */
 (async () => {
   const {
+    debug = false,
     'dry-run': dryRun = false,
     _unknown: argv = undefined,
   } = entryArgs as EntryArgs & { _unknown?: string[] };
@@ -27,9 +27,12 @@ import type { Feature } from '../types';
   // Reminder: The root directory is the root of the project, not the .scaffolder directory.
   let root: string | null = entryArgs.root || await getScaffolderRoot();
 
+  // Initialize the logger service.
+  const logger = initializeLogger(debug);
+
   if (!root) {
-    console.log('No scaffolder configuration found, using current directory as root.');
-    console.log(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory.')));
+    logger.info('No scaffolder configuration found, using current directory as root.');
+    logger.info(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory.')));
 
     root = process.cwd();
   }
@@ -43,10 +46,10 @@ import type { Feature } from '../types';
   const emojis = ['👋', '🌸', '🚀']; // TODO: Add more emojis.
   const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
 
-  console.log(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
+  logger.info(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
 
   if (dryRun) {
-    console.log('🚨 Running in dry-run mode. No files will be generated.');
+    logger.info('🚨 Running in dry-run mode. No files will be generated.');
   }
 
   let feature: Feature | undefined;
@@ -64,7 +67,7 @@ import type { Feature } from '../types';
       handleError(`Could not find the feature: ${chalk.yellow(featureName)}`);
     }
 
-    console.log(`🔍 Found feature: ${chalk.yellow(feature.config.name)}`);
+    logger.info(`🔍 Found feature: ${chalk.yellow(feature.config.name)}`);
   } else {
     // Prompt the user to select a feature.
     const { featureName } = await prompts({
@@ -91,7 +94,7 @@ import type { Feature } from '../types';
   // Hand off the feature to the feature processor.
   await processFeature(root, feature, dryRun);
 
-  console.log('🎉 Done. Happy coding!');
+  logger.info('🎉 Done. Happy coding!');
 
   process.exit(0);
 })();

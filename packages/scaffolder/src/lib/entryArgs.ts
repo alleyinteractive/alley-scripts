@@ -5,6 +5,7 @@ import { parse } from 'ts-command-line-args';
  */
 export type EntryArgs = {
   root?: string;
+  debug?: boolean;
   'dry-run'?: boolean;
   help?: boolean;
 };
@@ -17,6 +18,11 @@ const entryArgs = parse<EntryArgs>(
     root: {
       type: String,
       description: 'The path to a scaffolder configuration directory (.scaffolder).',
+      optional: true,
+    },
+    debug: {
+      type: Boolean,
+      description: 'Enable debug logging.',
       optional: true,
     },
     'dry-run': {

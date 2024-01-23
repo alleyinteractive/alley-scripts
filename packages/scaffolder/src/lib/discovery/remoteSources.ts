@@ -11,6 +11,7 @@ import {
   Source,
 } from '../../types';
 import { getGlobalConfigurationDir } from '../configuration';
+import { logger } from '../logger';
 
 /**
  * Handle remote sources that are checked out from a git repository.
@@ -82,12 +83,12 @@ async function updateLocalRepository(directory: string, source: GitSource) {
 
   // Check if the repository should be updated.
   if (fs.statSync(directory).mtimeMs > Date.now() - 3600000) {
-    console.log(`Skipping ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
+    logger().debug(`Skipping ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
     return true;
   }
 
-  console.log(`Updating ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
+  logger().debug(`Updating ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
   const git = createGit(directory);
 
@@ -109,7 +110,7 @@ async function cloneFreshRepository(directory: string, source: GitSource) {
   // Extract the branch/commit from the clone URL.
   const [cleanUrl, revision] = cloneUrl.split('#', 2);
 
-  console.log(`Cloning ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
+  logger().debug(`Cloning ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
   const git = createGit(directory);
 
@@ -149,22 +150,17 @@ export async function processGitSource(source: GitSource, directory?: string): P
  * @see processGitSource()
  */
 export async function processGitHubSource(source: GithubSource): Promise<DirectorySource> {
-  // Convert a GitHub source into a Git source. The source can be a full URL or
-  // just the organization and repository name.
   const { github: url } = source;
 
-  // Handle a full URL being passed.
   if (url.startsWith('https://' || url.startsWith('git@'))) {
     return processGitSource({
       git: url,
     });
   }
 
-  const directory = remoteSourceToLocalDirectory(source);
-
   const [, org, repo, revision] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-]*)?$/) || [];
 
   return processGitSource({
     git: `https://github.com/${org}/${repo}.git${revision || ''}`,
-  }, directory);
+  }, remoteSourceToLocalDirectory(source));
 }
