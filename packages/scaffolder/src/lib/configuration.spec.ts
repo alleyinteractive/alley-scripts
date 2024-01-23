@@ -68,8 +68,12 @@ sources:
 
     expect(await getGlobalConfiguration()).toEqual({
       sources: [
-        '/scaffolder/project-features',
-        '/scaffolder/dir/another-project-features',
+        {
+          directory: '/scaffolder/project-features',
+        },
+        {
+          directory: '/scaffolder/dir/another-project-features',
+        },
         {
           github: 'alleyinteractive/scaffolder-features',
         },
@@ -97,8 +101,12 @@ sources:
 
     expect(await getProjectConfiguration('/project')).toEqual({
       sources: [
-        '/scaffolder/global-dir',
-        '/project/project-dir',
+        {
+          directory: '/scaffolder/global-dir',
+        },
+        {
+          directory: '/project/project-dir',
+        },
       ],
     });
   });

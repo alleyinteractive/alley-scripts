@@ -11,9 +11,11 @@ export const resolvePath = (base: string, filePath: string) => (path.isAbsolute(
 /**
  * Resolve the absolute path of a source relative to a base directory.
  */
-export const resolveSourcePath = (base: string, source: Source): string | Source => {
+export const resolveSourcePath = (base: string, source: string | Source): Source => {
   if (typeof source === 'string') {
-    return resolvePath(base, source);
+    return {
+      directory: resolvePath(base, source),
+    };
   }
 
   if (typeof source !== 'object') {
@@ -21,8 +23,14 @@ export const resolveSourcePath = (base: string, source: Source): string | Source
   }
 
   if ('directory' in source) {
-    return resolvePath(base, source.directory);
+    return {
+      directory: resolvePath(base, source.directory),
+    };
   }
 
-  return source;
+  if ('github' in source) {
+    return source;
+  }
+
+  throw new Error(`Unsupported source to resolve: ${typeof source}`);
 };

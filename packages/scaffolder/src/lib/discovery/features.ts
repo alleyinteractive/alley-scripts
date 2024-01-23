@@ -3,7 +3,7 @@ import chalk from 'chalk';
 
 import type { Feature, FeatureConfig } from '../../types';
 import { parseConfiguration } from '../configuration';
-import { getSourceDirectories } from './sources';
+import { getConfiguredSources } from './sources';
 
 /**
  * Discover features that can be discovered and used.
@@ -11,19 +11,19 @@ import { getSourceDirectories } from './sources';
  * Loads features configured globally and locally on the project.
  */
 export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
-  const sourceDirectories = await getSourceDirectories(rootDirectory);
+  const sourceDirectories = await getConfiguredSources(rootDirectory);
   const availableFeatures: Feature[] = [];
 
   await Promise.all(
     sourceDirectories
-      .map(async (sourceDirectory) => {
+      .map(async ({ directory }) => {
         // Present a warning to the user if the source directory does not exist.
-        if (!fs.existsSync(sourceDirectory)) {
-          console.warn(`Source directory ${chalk.yellow(sourceDirectory)} not found.`); // eslint-disable-line no-console
+        if (!fs.existsSync(directory)) {
+          console.warn(`Source directory ${chalk.yellow(directory)} not found.`); // eslint-disable-line no-console
           return;
         }
 
-        const features = await fs.promises.readdir(sourceDirectory, {
+        const features = await fs.promises.readdir(directory, {
           recursive: false,
           withFileTypes: true,
         });
@@ -32,7 +32,7 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
           features
             .filter((feature) => feature.isDirectory())
             .map(async (feature) => {
-              const configPath = `${sourceDirectory}/${feature.name}/config.yml`;
+              const configPath = `${directory}/${feature.name}/config.yml`;
 
               if (!fs.existsSync(configPath)) {
                 return null;
@@ -46,7 +46,7 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
 
               return {
                 config,
-                path: `${sourceDirectory}/${feature.name}`,
+                path: `${directory}/${feature.name}`,
               } as Feature;
             }),
         );

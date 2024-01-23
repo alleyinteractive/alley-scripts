@@ -9,7 +9,9 @@ export const DEFAULT_CONFIGURATION = typeof jest === 'undefined' ? {
   sources: [],
 } : {
   sources: [
-    path.resolve(__dirname, '../../__tests__/fixtures/a-features'),
+    {
+      directory: path.resolve(__dirname, '../../__tests__/fixtures/a-features'),
+    },
   ],
 };
 

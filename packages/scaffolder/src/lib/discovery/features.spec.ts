@@ -51,4 +51,8 @@ describe('discovery/features', () => {
     expect(features[1].config.name).toEqual('Test Feature B');
     expect(features[2].config.name).toEqual('Feature Set Two: Feature A');
   });
+
+  // it('should be able to discover remote features', async () => {
+
+  // });
 });

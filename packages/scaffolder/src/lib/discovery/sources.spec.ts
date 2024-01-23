@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import path from 'path';
 
 import { resetConfiguration } from '../configuration';
-import { getSourceDirectories } from './sources';
+import { getConfiguredSources } from './sources';
 
 jest.mock('fs');
 
@@ -25,9 +25,13 @@ describe('discover/sources', () => {
 
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
-    expect(await getSourceDirectories(process.cwd())).toEqual([
-      `${process.cwd()}/.scaffolder`,
-      path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+    expect(await getConfiguredSources(process.cwd())).toEqual([
+      {
+        directory: `${process.cwd()}/.scaffolder`,
+      },
+      {
+        directory: path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+      },
     ]);
   });
 
@@ -43,8 +47,10 @@ describe('discover/sources', () => {
 
     (fs.existsSync as jest.Mock).mockReturnValue(false);
 
-    expect(await getSourceDirectories(process.cwd())).toEqual([
-      path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+    expect(await getConfiguredSources(process.cwd())).toEqual([
+      {
+        directory: path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+      },
     ]);
   });
 
@@ -64,9 +70,13 @@ describe('discover/sources', () => {
 
     (fs.existsSync as jest.Mock).mockReturnValue(false);
 
-    expect(await getSourceDirectories(process.cwd())).toEqual([
-      '/scaffolder/dir/example-dir',
-      path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+    expect(await getConfiguredSources(process.cwd())).toEqual([
+      {
+        directory: '/scaffolder/dir/example-dir',
+      },
+      {
+        directory: path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+      },
     ]);
   });
 
