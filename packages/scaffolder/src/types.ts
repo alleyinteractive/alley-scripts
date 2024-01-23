@@ -7,10 +7,14 @@ export type GithubSource = {
   github: string;
 };
 
+export type GitSource = {
+  git: string;
+};
+
 /**
  * Source configuration.
  */
-export type Source = DirectorySource | GithubSource;
+export type Source = DirectorySource | GithubSource | GitSource;
 
 /**
  * Type representation of the parsed root configuration.

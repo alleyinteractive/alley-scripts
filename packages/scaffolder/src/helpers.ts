@@ -19,7 +19,7 @@ export const resolveSourcePath = (base: string, source: string | Source): Source
   }
 
   if (typeof source !== 'object') {
-    throw new Error(`Unsupported source type: ${typeof source}`);
+    throw new Error(`Unsupported source type: ${JSON.stringify(source)}`);
   }
 
   if ('directory' in source) {
@@ -32,5 +32,5 @@ export const resolveSourcePath = (base: string, source: string | Source): Source
     return source;
   }
 
-  throw new Error(`Unsupported source to resolve: ${typeof source}`);
+  throw new Error(`Unsupported source to resolve: ${JSON.stringify(source)}`);
 };

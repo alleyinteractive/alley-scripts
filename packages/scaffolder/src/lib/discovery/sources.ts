@@ -11,16 +11,15 @@ import fs from 'fs';
 
 import { getProjectConfiguration } from '../configuration';
 import { DirectorySource, Source } from '../../types';
+import { processGitHubSource, processGitSource } from './remoteSources';
 
 /**
  * Process the source for use within the generator.
  */
 async function processSource(source: Source | string): Promise<DirectorySource> {
+  // Reformat a string source into a directory source.
   if (typeof source === 'string') {
-    // Reformat a string source into a directory source.
-    return {
-      directory: source,
-    } as DirectorySource;
+    return { directory: source } as DirectorySource;
   }
 
   if (typeof source === 'object') {
@@ -31,11 +30,15 @@ async function processSource(source: Source | string): Promise<DirectorySource> 
 
     // Convert the GitHub source into a directory source.
     if ('github' in source) {
-      // @todo Implement GitHub source.
+      return processGitHubSource(source);
+    }
+
+    if ('git' in source) {
+      return processGitSource(source);
     }
   }
 
-  throw new Error(`Unsupported source type: ${typeof source}`);
+  throw new Error(`Unsupported source type: ${JSON.stringify(source)}`);
 }
 
 /**
