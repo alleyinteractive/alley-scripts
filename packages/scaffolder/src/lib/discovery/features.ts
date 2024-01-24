@@ -3,7 +3,7 @@ import fg from 'fast-glob';
 import path from 'path';
 
 import type { Feature, FeatureConfig } from '../../types';
-import { getConfiguredSources } from './sources';
+import { getLookupSources } from './sources';
 import { logger } from '../logger';
 import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 
@@ -29,7 +29,7 @@ async function discoverFeatureConfigurations(directory: string, cwd: string): Pr
  * @todo Add caching to improve performance.
  */
 export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
-  const sourceDirectories = await getConfiguredSources(rootDirectory);
+  const sourceDirectories = await getLookupSources(rootDirectory);
 
   const fileIndex = await Promise.all(
     sourceDirectories

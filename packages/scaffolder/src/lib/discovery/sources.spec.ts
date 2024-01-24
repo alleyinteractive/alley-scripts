@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
-import { resetConfiguration } from '../configuration';
-import { getConfiguredSources } from './sources';
+import { getGlobalConfigurationDir, resetConfiguration } from '../configuration';
+import { getLookupSources } from './sources';
 
 jest.mock('fs');
 
@@ -26,13 +26,20 @@ describe('discover/sources', () => {
 
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
-    expect(await getConfiguredSources(process.cwd())).toEqual([
+    const globalConfigDir = getGlobalConfigurationDir();
+
+    expect(await getLookupSources(process.cwd())).toEqual([
       // The project scaffolder directory is always included.
       {
         directory: `${process.cwd()}/.scaffolder`,
         root: process.cwd(),
       },
-      // Default configuration.
+      // Default configuration -- global configuration directory.
+      {
+        directory: globalConfigDir,
+        root: globalConfigDir,
+      },
+      // Default configuration -- project configuration directory.
       {
         directory: './__tests__/fixtures/a-features',
         root: process.cwd(),
