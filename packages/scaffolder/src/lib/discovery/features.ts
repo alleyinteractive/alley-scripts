@@ -52,7 +52,7 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
       try {
         validateFeatureConfiguration(config);
       } catch (err: any) {
-        logger().warn(`The feature "${file}" is invalid: ${chalk.yellow(err.message)}`);
+        logger().warn(`The feature "${chalk.italic(file)}" is invalid:\n\n${chalk.yellow(err.message)}\n`);
         return null;
       }
 

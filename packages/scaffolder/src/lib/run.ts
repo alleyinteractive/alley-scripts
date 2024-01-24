@@ -1,26 +1,14 @@
-import chalk from 'chalk';
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFileSync,
-} from 'fs';
 import { dirname } from 'path';
+import { glob } from 'fast-glob';
+import chalk from 'chalk';
+import fs from 'fs';
 
 import { parseExpression, parseFalsy, parseObjectExpression } from './expressions';
 import collectInputs from './inputs';
 import handleError from './error';
-
-import type { Feature } from '../types';
 import { logger } from './logger';
 
-type FeatureContext = {
-  feature: {
-    name: string;
-    path: string;
-  };
-  inputs: Record<string, any>;
-};
+import type { Feature, FeatureContext, FeatureFile } from '../types';
 
 /**
  * Collect the context variables passed to the template engine.
@@ -31,7 +19,7 @@ const collectContextVariables = async (feature: Feature) => {
       name,
       inputs: featureInputs = [],
     },
-    configPath: featurePath,
+    path: featurePath,
   } = feature;
 
   return {
@@ -49,9 +37,10 @@ const collectContextVariables = async (feature: Feature) => {
  * Compiles all the expressions from the configuration and returns the list of
  * source files that should be generated for a feature.
  */
-const collectFeatureSourceFiles = (rootDir: string, feature: Feature, context: FeatureContext) => {
+const collectFeatureSourceFiles = (rootDir: string, feature: Feature, context: FeatureContext): FeatureFile[] => { // eslint-disable-line max-len
   const {
     config: {
+      name: featureName,
       files: featureFiles = [],
     },
     path: featurePath,
@@ -69,18 +58,38 @@ const collectFeatureSourceFiles = (rootDir: string, feature: Feature, context: F
     }, context))
     // Check if the already-parsed condition is not falsy.
     .filter(({ if: condition = null }) => condition === null || !parseFalsy(condition))
-    .filter(({
-      destination: destinationPath,
-      source: sourcePath,
-    }) => {
-      // Ensure that the source exists and can be resolved.
-      if (!existsSync(sourcePath)) {
-        handleError(`Source file not found: ${sourcePath}`);
+    // Expand any directories into their files that match the glob pattern.
+    .flatMap((file) => {
+      const { destination, source } = file;
+
+      // If the source is a file and it exists, return the file.
+      if (fs.existsSync(source) && fs.statSync(source).isFile()) {
+        return file;
       }
 
-      // Ensure that the destination does not exist.
-      if (existsSync(destinationPath)) {
-        handleError(`Destination file already exists: ${destinationPath}`);
+      // Find all files that match the glob pattern.
+      const matchedFiles = glob.sync(source, {
+        absolute: true,
+        cwd: featurePath,
+      });
+
+      // Warn the user if no files were found.
+      if (!matchedFiles.length) {
+        logger().warn(`No files found against "${chalk.yellow(source)}" for "${chalk.yellow(featureName)}".`);
+        return file;
+      }
+
+      return matchedFiles.map((matchedFile) => ({
+        destination: `${destination.replace(/\/$/, '')}/${matchedFile.replace(featurePath, '').replace(/^\//, '')}`,
+        source: matchedFile,
+      }));
+    })
+    // Filter out any files that already exist.
+    .filter(({ destination: destinationPath }) => {
+      if (fs.existsSync(destinationPath)) {
+        logger().error(`Destination file already exists: ${destinationPath}. Skipping.`);
+
+        return false;
       }
 
       return true;
@@ -110,7 +119,7 @@ export default async function processFeature(rootDir: string, feature: Feature, 
     let generatedFile: string;
 
     try {
-      contents = readFileSync(source, 'utf8');
+      contents = fs.readFileSync(source, 'utf8');
     } catch (error: any) {
       handleError(`Error reading from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
     }
@@ -125,8 +134,8 @@ export default async function processFeature(rootDir: string, feature: Feature, 
       const destinationDir = dirname(destination);
 
       // Ensure that the directory exists.
-      if (!existsSync(destinationDir) && !dryRun) {
-        mkdirSync(destinationDir, { recursive: true });
+      if (!fs.existsSync(destinationDir) && !dryRun) {
+        fs.mkdirSync(destinationDir, { recursive: true });
       }
     } catch (error: any) {
       handleError(`Error creating directory for ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
@@ -134,7 +143,7 @@ export default async function processFeature(rootDir: string, feature: Feature, 
 
     try {
       if (!dryRun) {
-        writeFileSync(destination, generatedFile);
+        fs.writeFileSync(destination, generatedFile);
 
         logger().info(`${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(rootDir, '').replace(/^\//, ''))}`);
       } else {
