@@ -7,9 +7,13 @@ import {
   getProjectConfiguration,
   getScaffolderRoot,
   resetConfiguration,
+  validateConfiguration,
 } from './configuration';
+import { parse } from 'yaml';
 
 jest.mock('fs');
+
+const rootDir = path.resolve(__dirname, '../..');
 
 describe('configuration', () => {
   beforeEach(() => {
@@ -68,12 +72,15 @@ sources:
 
     expect(await getGlobalConfiguration()).toEqual({
       sources: [
+        // Default configuration.
         {
-          directory: '/scaffolder/project-features',
+          directory: `${rootDir}/__tests__/fixtures/a-features`,
         },
+        // Root configuration from above mock.
         {
-          directory: '/scaffolder/dir/another-project-features',
+          directory: '../project-features',
         },
+        './another-project-features',
         {
           github: 'alleyinteractive/scaffolder-features',
         },
@@ -91,6 +98,7 @@ sources:
       .mockReturnValueOnce(`
 sources:
   - ./project-dir
+  - directory: ./another-project-dir
     `)
 
     // Global configuration.
@@ -100,14 +108,50 @@ sources:
     `);
 
     expect(await getProjectConfiguration('/project')).toEqual({
-      sources: [
-        {
-          directory: '/scaffolder/global-dir',
+      root: {
+        location: getGlobalConfigurationDir(),
+        config: {
+          sources: [
+            {
+              directory: `${rootDir}/__tests__/fixtures/a-features`,
+            },
+            './global-dir',
+          ],
         },
-        {
-          directory: '/project/project-dir',
+      },
+      project: {
+        location: '/project',
+        config: {
+          sources: [
+            './project-dir',
+            {
+              directory: './another-project-dir',
+            },
+          ],
         },
-      ],
+      },
     });
+  });
+
+  const invalidConfigurations = [
+    `
+sources:
+  - unknown: value
+`,
+    'unknown_key: value',
+    `
+sources:
+  - false
+`,
+    `
+sources:
+  - ./project-dir
+
+unknown_key: value
+`,
+  ];
+
+  it.each(invalidConfigurations)('should throw an error for invalid configuration', (configuration) => {
+    expect(() => validateConfiguration(parse(configuration))).toThrow();
   });
 });

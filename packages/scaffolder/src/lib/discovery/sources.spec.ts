@@ -6,6 +6,9 @@ import { getConfiguredSources } from './sources';
 
 jest.mock('fs');
 
+const projectRoot = path.resolve(__dirname, '../../..');
+console.log('projectRoot', projectRoot);
+
 describe('discover/sources', () => {
   beforeEach(() => {
     delete process.env.SCAFFOLDER_HOME;
@@ -19,7 +22,7 @@ describe('discover/sources', () => {
       sources: [],
     }, {
       sources: [
-        path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+        `${projectRoot}/__tests__/fixtures/features`,
       ],
     });
 
@@ -30,7 +33,7 @@ describe('discover/sources', () => {
         directory: `${process.cwd()}/.scaffolder`,
       },
       {
-        directory: path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+        directory: `${projectRoot}/__tests__/fixtures/features`,
       },
     ]);
   });
@@ -75,16 +78,8 @@ describe('discover/sources', () => {
         directory: '/scaffolder/dir/example-dir',
       },
       {
-        directory: path.resolve(__dirname, '../../../__tests__/fixtures/features'),
+        directory: `${projectRoot}/__tests__/fixtures/features`,
       },
     ]);
   });
-
-  it('should be able to handle an object source path', () => {
-
-  });
-
-  // it('should be able to resolve a source from github', () => {
-
-  // });
 });

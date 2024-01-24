@@ -1,27 +1,12 @@
-export type DirectorySource = {
-  directory: string;
-};
-
-export type GithubSource = {
-  /* Repository to clone from (organization/repository with an optional branch). */
-  github: string;
-};
-
-export type GitSource = {
-  git: string;
-};
-
-/**
- * Source configuration.
- */
-export type Source = DirectorySource | GithubSource | GitSource;
+import { Source } from './source';
 
 /**
  * Type representation of the parsed root configuration.
  *
- * This exists in the .scaffolder/config.yml file and is optional.
+ * This file can exists globally in ~/.scaffolder/config.yml or in a project at
+ * .scaffolder/config.yml file. Both are optional.
  */
-export type RootConfiguration = {
+export type Configuration = {
   sources?: (Source | string)[];
 };
 
