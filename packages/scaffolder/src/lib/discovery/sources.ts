@@ -78,7 +78,7 @@ export async function getConfiguredSources(rootDirectory: string): Promise<Direc
   }
 
   /**
-   * Pre-process the source
+   * Pre-process the source.
    *
    * Ensures that directory sources have the 'root' directory set that allows
    * them to be resolved when using relative paths.

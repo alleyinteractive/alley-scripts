@@ -37,7 +37,7 @@
     "LICENSE",
     "README.md"
   ],
-  "main": "src/bin/scaffolder.ts",
+  "main": "./dist/bin/scaffolder.js",
   "bin": {
     "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
   },
@@ -60,6 +60,10 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "exports": {
-    "./bin.js": "./bin.js"
+    ".": {
+      "import": {
+        "default": "./dist/index.js"
+      }
+    }
   }
 }

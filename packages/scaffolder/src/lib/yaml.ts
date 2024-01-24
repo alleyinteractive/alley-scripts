@@ -7,7 +7,6 @@ import yaml from 'js-yaml';
  * with Joi.
  */
 const getConfigurationStructure = () => Joi.object({
-  // sources support either an array of strings or an array of objects.
   sources: Joi.array().items(Joi.alternatives([
     Joi.string(),
     Joi.object({
