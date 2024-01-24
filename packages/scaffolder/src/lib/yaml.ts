@@ -1,6 +1,6 @@
 import fs from 'fs';
-import yaml from 'js-yaml';
 import Joi from 'joi';
+import yaml from 'js-yaml';
 
 /**
  * Retrieve the structure for a scaffolder configuration file for validation
