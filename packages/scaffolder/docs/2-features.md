@@ -41,7 +41,7 @@ project that contains a `config.yml` file:
 
 The `config.yml` file will have the following structure
 (see [Feature Configuration](#feature-configuration) and
-[Expressions](./expressions.md) for more information):
+[Expressions](./2-expressions.md) for more information):
 
 ```yaml
 name: Case Study
@@ -120,7 +120,7 @@ Let's break down the configuration file:
 - `files`: A list of files to scaffold. The files support an individual file or
   an entire directory with a `glob` pattern. Both the source and destination
   support expressions for reformatting of the user's input. See
-  [Expressions](./expressions.md) for more
+  [Expressions](./3-expressions.md) for more
 
   Files support an `if` condition that can be used to conditionally scaffold a
   file. By default, the file will be included unless the `if` condition is
