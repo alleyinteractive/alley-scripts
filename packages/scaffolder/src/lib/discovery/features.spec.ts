@@ -1,9 +1,7 @@
 import path from 'path';
 
 import { resetConfiguration } from '../configuration';
-import { getFeatures } from '.';
-
-// jest.mock('fs');
+import { getFeatures } from './features';
 
 const fixturesDirectory = path.resolve(__dirname, '../../../__tests__/fixtures');
 
