@@ -56,6 +56,8 @@ export type FeatureConfig = {
 export type Feature = {
   /* The parsed configuration file of the feature. */
   config: FeatureConfig;
-  /* The directory path to the feature directory. */
+  /* The directory path to the feature configuration file. */
+  configPath: string;
+  /* The directory path to the feature. */
   path: string;
 };

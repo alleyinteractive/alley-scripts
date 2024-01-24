@@ -15,19 +15,21 @@
     "@babel/core": "7.23.7",
     "@babel/preset-env": "7.23.8",
     "@babel/preset-typescript": "7.23.3",
+    "@types/js-yaml": "^4.0.9",
     "@types/nunjucks": "^3.2.6"
   },
   "dependencies": {
     "chalk": "^4.1.2",
     "fast-glob": "^3.3.2",
     "glob": "^10.3.10",
+    "joi": "^17.12.0",
+    "js-yaml": "^4.1.0",
     "mustache": "^4.2.0",
     "nunjucks": "^3.2.4",
     "prompts": "^2.4.2",
     "simple-git": "^3.22.0",
     "ts-command-line-args": "^2.5.1",
-    "winston": "^3.11.0",
-    "yaml": "^2.3.4"
+    "winston": "^3.11.0"
   },
   "files": [
     "dist",
@@ -47,7 +49,7 @@
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",
     "test:watch": "jest --watchAll",
-    "test": "jest --passWithNoTests"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

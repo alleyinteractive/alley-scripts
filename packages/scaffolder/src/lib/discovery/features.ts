@@ -3,9 +3,9 @@ import fg from 'fast-glob';
 import path from 'path';
 
 import type { Feature, FeatureConfig } from '../../types';
-import { parseConfiguration, validateFeatureConfiguration } from '../configuration';
 import { getConfiguredSources } from './sources';
 import { logger } from '../logger';
+import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 
 /**
  * Discover all feature configurations in a directory.
@@ -47,7 +47,7 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
 
   return Promise.all(
     fileIndex.map(async (file) => {
-      const config = await parseConfiguration<FeatureConfig>(file);
+      const config = await parseYamlFile<FeatureConfig>(file);
 
       try {
         validateFeatureConfiguration(config);
@@ -63,7 +63,11 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
         config.name = path.basename(path.dirname(file));
       }
 
-      return { config, path: file } as Feature;
+      return {
+        config,
+        configPath: file,
+        path: path.dirname(file),
+      } as Feature;
     }),
   )
     .then((features) => features.filter((feature) => feature !== null)) as Promise<Feature[]>;

@@ -1,99 +1,10 @@
-import { parse } from 'yaml';
-import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 
-import type { Configuration } from '../types';
+import { DEFAULT_CONFIGURATION } from './defaultConfiguration';
 import { logger } from './logger';
-
-export const DEFAULT_CONFIGURATION = typeof jest === 'undefined' ? {
-  sources: [],
-} : {
-  sources: [
-    {
-      root: path.resolve(__dirname, '../..'),
-      directory: './__tests__/fixtures/a-features',
-    },
-  ],
-};
-
-/**
- * Validate the configuration to ensure that it meets our expected format.
- *
- * This is used for both the global and project configuration but not the
- * feature configuration.
- */
-export function validateConfiguration<TData extends object>(config: TData): void {
-  const allowedKeys = Object.keys(DEFAULT_CONFIGURATION);
-
-  // Ensure that the configuration only contains allowed keys.
-  Object.keys(config).forEach((key) => {
-    if (!allowedKeys.includes(key)) {
-      throw new Error(`The configuration contains an unknown root key: ${key}`);
-    }
-  });
-
-  // Ensure that the sources are valid.
-  const { sources = [] } = config as any;
-
-  if (!Array.isArray(sources)) {
-    throw new Error('The sources key must be an array.');
-  }
-
-  sources.forEach((source: any) => {
-    if (typeof source === 'string') {
-      return;
-    }
-
-    if (typeof source === 'object') {
-      if ('directory' in source || 'github' in source || 'git' in source) {
-        return;
-      }
-    }
-
-    throw new Error(`The source contains an unknown format: ${chalk.yellow(JSON.stringify(source))}`);
-  });
-}
-
-/**
- * Validate the configuration for a feature.
- */
-export function validateFeatureConfiguration(config: object): void {
-  const schema = {
-    files: 'object', // This really is an array of objects.
-    inputs: 'object',
-    name: 'string',
-  };
-
-  Object.keys(schema).forEach((key) => {
-    // Ignore if the key is not in the schema.
-    if (!(key in config)) {
-      return;
-    }
-
-    const { [key as keyof typeof config]: value } = config;
-
-    if (typeof value !== schema[key as keyof typeof schema]) {
-      throw new Error(`The feature configuration contains an invalid "${key}" key. Expected "${schema[key as keyof typeof schema]}" but got "${typeof value}".`);
-    }
-  });
-}
-
-/**
- * Parse the YAML configuration file of a scaffolder feature.
- */
-export async function parseConfiguration<TData extends object>(filePath: string): Promise<TData> {
-  // Ensure this is a YAML file.
-  if (!filePath.endsWith('.yml')) {
-    throw new Error('The configuration file must be a YAML file.');
-  }
-
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`The configuration file does not exist: ${filePath}`);
-  }
-
-  return parse(fs.readFileSync(filePath, 'utf8')) as TData;
-}
+import type { Configuration } from '../types';
+import { parseYamlFile, validateConfiguration } from './yaml';
 
 /**
  * Locate the scaffolder root, recursively searching up the directory tree until
@@ -146,7 +57,7 @@ export async function getGlobalConfiguration() {
 
   try {
     if (!globalConfiguration && fs.existsSync(`${globalConfigDir}/config.yml`)) {
-      globalConfiguration = await parseConfiguration<Configuration>(`${globalConfigDir}/config.yml`);
+      globalConfiguration = await parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`);
     } else if (!globalConfiguration) {
       globalConfiguration = {};
     }
@@ -194,7 +105,7 @@ export async function getProjectConfiguration(rootDirectory: string): Promise<{
 }> {
   try {
     if (!projectConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
-      projectConfiguration = await parseConfiguration<Configuration>(`${rootDirectory}/.scaffolder/config.yml`);
+      projectConfiguration = await parseYamlFile<Configuration>(`${rootDirectory}/.scaffolder/config.yml`);
     } else if (!projectConfiguration) {
       projectConfiguration = {};
     }

@@ -31,7 +31,7 @@ const collectContextVariables = async (feature: Feature) => {
       name,
       inputs: featureInputs = [],
     },
-    path: featurePath,
+    configPath: featurePath,
   } = feature;
 
   return {

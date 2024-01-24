@@ -1,16 +1,16 @@
 import * as fs from 'fs';
 import path from 'path';
-import { parse } from 'yaml';
+import { load } from 'js-yaml';
 
 import {
-  DEFAULT_CONFIGURATION,
   getGlobalConfiguration,
   getGlobalConfigurationDir,
   getProjectConfiguration,
   getScaffolderRoot,
   resetConfiguration,
-  validateConfiguration,
 } from './configuration';
+import { validateConfiguration, validateFeatureConfiguration } from './yaml';
+import { DEFAULT_CONFIGURATION } from './defaultConfiguration';
 
 jest.mock('fs');
 
@@ -152,9 +152,40 @@ sources:
 
 unknown_key: value
 `,
+    `
+sources:
+  - directory: ./project-dir
+    github: alleyinteractive/scaffolder-features
+`,
   ];
 
   it.each(invalidConfigurations)('should throw an error for invalid configuration', (configuration) => {
-    expect(() => validateConfiguration(parse(configuration))).toThrow();
+    expect(() => validateConfiguration(load(configuration) as object)).toThrow();
+  });
+
+  const invalidFeatureConfigurations = [
+    `
+name: test
+
+inputs:
+  - name: test
+    type: string
+    `,
+    `
+name: test
+
+files:
+  - source: test
+    `,
+    'name: test',
+    `
+name: test
+
+unknown_key: value
+    `,
+  ];
+
+  it.each(invalidFeatureConfigurations)('should throw an error for invalid feature configuration', (configuration) => {
+    expect(() => validateFeatureConfiguration(load(configuration) as object)).toThrow();
   });
 });
