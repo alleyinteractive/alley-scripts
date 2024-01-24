@@ -27,10 +27,12 @@ const getFeatureConfigurationStructure = () => Joi.object({
     name: Joi.string().required(),
     description: Joi.string(),
     type: Joi.string().valid('string', 'boolean').required(),
+    default: Joi.any(),
   })),
   files: Joi.array().items(Joi.object({
     source: Joi.string().required(),
     destination: Joi.string().required(),
+    if: Joi.string(),
   })).required(),
 });
 
