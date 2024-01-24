@@ -19,7 +19,7 @@ import { processGitHubSource, processGitSource } from './remoteSources';
  * For remote sources such as GitHub/Git, the source is cloned to a local
  * directory and then returned as a directory source.
  */
-async function processSource(source: Source): Promise<DirectorySource> {
+async function resolveSourceToDirectory(source: Source): Promise<DirectorySource> {
   if (typeof source === 'object') {
     // Return the source if it's a directory source.
     if ('directory' in source) {
@@ -110,7 +110,7 @@ async function getConfiguredSources(rootDirectory: string): Promise<DirectorySou
   return Promise.all([
     ...rootSources.map((source) => preProcessSourceForRoot(source, rootDirectory)),
     ...projectSources.map((source) => preProcessSourceForRoot(source, projectDirectory)),
-  ].map(processSource));
+  ].map(resolveSourceToDirectory));
 }
 
 /**
