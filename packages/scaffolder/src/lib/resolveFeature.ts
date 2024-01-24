@@ -39,7 +39,9 @@ export default async function resolveFeature(features: Feature[], featureName?: 
   const { name } = await prompts({
     type: 'select',
     name: 'name',
-    message: 'Select a feature to scaffold:',
+    message: featureName
+      ? `Select a feature to scaffold from that includes "${featureName}:`
+      : 'Select a feature to scaffold:',
     choices: availableFeatures.map((item) => ({
       title: item.config.name,
       value: item.config.name,

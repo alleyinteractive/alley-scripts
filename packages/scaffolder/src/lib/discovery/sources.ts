@@ -15,20 +15,18 @@ import { processGitHubSource, processGitSource } from './remoteSources';
 
 /**
  * Process the source for use within the generator.
+ *
+ * For remote sources such as GitHub/Git, the source is cloned to a local
+ * directory and then returned as a directory source.
  */
-async function processSource(source: Source | string): Promise<DirectorySource> {
-  // Reformat a string source into a directory source.
-  if (typeof source === 'string') {
-    return { directory: source } as DirectorySource;
-  }
-
+async function processSource(source: Source): Promise<DirectorySource> {
   if (typeof source === 'object') {
     // Return the source if it's a directory source.
     if ('directory' in source) {
       return source;
     }
 
-    // Convert the GitHub source into a directory source.
+    // Convert the GitHub/Git source into a directory source.
     if ('github' in source) {
       return processGitHubSource(source);
     }
@@ -42,25 +40,66 @@ async function processSource(source: Source | string): Promise<DirectorySource> 
 }
 
 /**
- * Retrieve all the configured source directories to read from.
+ * Read all the available configuration files and determine all the available
+ * sources.
  */
 export async function getConfiguredSources(rootDirectory: string): Promise<DirectorySource[]> {
-  const sourceDirectories = [];
+  const sources = [];
 
   // Include the project's scaffolder directory if it exists.
   if (fs.existsSync(`${rootDirectory}/.scaffolder`)) {
-    sourceDirectories.push(`${rootDirectory}/.scaffolder`);
+    sources.push({
+      directory: `${rootDirectory}/.scaffolder`,
+      root: rootDirectory,
+    });
   }
 
   const {
-    sources: configuredSources = [],
+    root: {
+      config: rootConfiguration = {},
+    },
+    project: {
+      location: projectDirectory,
+      config: projectConfiguration = {},
+    },
   } = await getProjectConfiguration(rootDirectory);
 
-  const combinedSources = [
-    ...sourceDirectories,
-    ...configuredSources,
-    // Remove duplicate/invalid source directories.
-  ].filter((value, index, self) => value && self.indexOf(value) === index);
+  const {
+    sources: rootSources = [],
+  } = rootConfiguration || {};
 
-  return Promise.all(combinedSources.map(processSource));
+  const {
+    sources: projectSources = [],
+  } = projectConfiguration || {};
+
+  // Return early if there are no sources configured.
+  if (!rootSources.length && !projectSources.length) {
+    return Promise.all(sources.map(processSource));
+  }
+
+  /**
+   * Pre-process the source
+   *
+   * Ensures that directory sources have the 'root' directory set that allows
+   * them to be resolved when using relative paths.
+   */
+  const preProcessSourceForRoot = (source: Source | string, root: string): Source => {
+    if (typeof source === 'string') {
+      return { root, directory: source } as DirectorySource;
+    }
+
+    if ('directory' in source) {
+      return { root, ...source } as DirectorySource;
+    }
+
+    return source;
+  };
+
+  // Reduce the root and project sources into a single stream of sources.
+  sources.push(
+    ...rootSources.map((source) => preProcessSourceForRoot(source, rootDirectory)),
+    ...projectSources.map((source) => preProcessSourceForRoot(source, projectDirectory)),
+  );
+
+  return Promise.all(sources.map(processSource));
 }

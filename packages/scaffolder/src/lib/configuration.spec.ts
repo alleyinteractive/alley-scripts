@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import path from 'path';
+import { parse } from 'yaml';
+
 import {
   DEFAULT_CONFIGURATION,
   getGlobalConfiguration,
@@ -9,7 +11,6 @@ import {
   resetConfiguration,
   validateConfiguration,
 } from './configuration';
-import { parse } from 'yaml';
 
 jest.mock('fs');
 
@@ -74,7 +75,8 @@ sources:
       sources: [
         // Default configuration.
         {
-          directory: `${rootDir}/__tests__/fixtures/a-features`,
+          root: rootDir,
+          directory: './__tests__/fixtures/a-features',
         },
         // Root configuration from above mock.
         {
@@ -113,7 +115,8 @@ sources:
         config: {
           sources: [
             {
-              directory: `${rootDir}/__tests__/fixtures/a-features`,
+              directory: './__tests__/fixtures/a-features',
+              root: rootDir,
             },
             './global-dir',
           ],

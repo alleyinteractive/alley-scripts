@@ -1,5 +1,8 @@
 export type DirectorySource = {
+  /* Directory to use as the source. Can be a relative path. */
   directory: string;
+  /* Directory within the source directory to use as the root. */
+  root?: string;
 };
 
 export type GithubSource = {

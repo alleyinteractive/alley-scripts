@@ -11,13 +11,17 @@ export const DEFAULT_CONFIGURATION = typeof jest === 'undefined' ? {
 } : {
   sources: [
     {
-      directory: path.resolve(__dirname, '../../__tests__/fixtures/a-features'),
+      root: path.resolve(__dirname, '../..'),
+      directory: './__tests__/fixtures/a-features',
     },
   ],
 };
 
 /**
  * Validate the configuration to ensure that it meets our expected format.
+ *
+ * This is used for both the global and project configuration but not the
+ * feature configuration.
  */
 export function validateConfiguration<TData extends object>(config: TData): void {
   const allowedKeys = Object.keys(DEFAULT_CONFIGURATION);
@@ -48,6 +52,30 @@ export function validateConfiguration<TData extends object>(config: TData): void
     }
 
     throw new Error(`The source contains an unknown format: ${chalk.yellow(JSON.stringify(source))}`);
+  });
+}
+
+/**
+ * Validate the configuration for a feature.
+ */
+export function validateFeatureConfiguration(config: object): void {
+  const schema = {
+    files: 'object', // This really is an array of objects.
+    inputs: 'object',
+    name: 'string',
+  };
+
+  Object.keys(schema).forEach((key) => {
+    // Ignore if the key is not in the schema.
+    if (!(key in config)) {
+      return;
+    }
+
+    const { [key as keyof typeof config]: value } = config;
+
+    if (typeof value !== schema[key as keyof typeof schema]) {
+      throw new Error(`The feature configuration contains an invalid "${key}" key. Expected "${schema[key as keyof typeof schema]}" but got "${typeof value}".`);
+    }
   });
 }
 
@@ -183,7 +211,7 @@ export async function getProjectConfiguration(rootDirectory: string): Promise<{
       config: await getGlobalConfiguration(),
     },
     project: {
-      location: rootDirectory,
+      location: `${rootDirectory}/.scaffolder`,
       config: projectConfiguration,
     },
   };

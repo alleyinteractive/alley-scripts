@@ -1,64 +1,70 @@
-import fs from 'fs';
 import chalk from 'chalk';
+import fg from 'fast-glob';
+import path from 'path';
 
 import type { Feature, FeatureConfig } from '../../types';
-import { parseConfiguration } from '../configuration';
+import { parseConfiguration, validateFeatureConfiguration } from '../configuration';
 import { getConfiguredSources } from './sources';
 import { logger } from '../logger';
 
 /**
- * Discover features that can be discovered and used.
+ * Discover all feature configurations in a directory.
  *
- * Loads features configured globally and locally on the project.
+ * Using glob patterns, we can discover all the feature configurations
+ * (<feature>/config.yml files) in a directory.
+ */
+async function discoverFeatureConfigurations(directory: string, cwd: string): Promise<string[]> {
+  return fg.glob(`${directory}/*/config.yml`, {
+    absolute: true,
+    cwd,
+    ignore: [
+      '**/.scaffolder/config.yml',
+    ],
+  });
+}
+
+/**
+ * Discover features that can be used.
  *
  * @todo Add caching to improve performance.
  */
 export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
   const sourceDirectories = await getConfiguredSources(rootDirectory);
-  const availableFeatures: Feature[] = [];
 
-  await Promise.all(
+  const fileIndex = await Promise.all(
     sourceDirectories
-      .map(async ({ directory }) => {
-        // Present a warning to the user if the source directory does not exist.
-        if (!fs.existsSync(directory)) {
-          logger().debug(`Source directory ${chalk.yellow(directory)} not found.`);
-          return;
-        }
+      .map(async ({ directory, root: sourceRelativeRoot = null }) => discoverFeatureConfigurations(
+        directory,
+        sourceRelativeRoot || rootDirectory,
+      )),
+  )
+    // Flatten the file index and remove duplicates.
+    .then((files) => files.flat().filter((file, index, arr) => arr.indexOf(file) === index));
 
-        const features = await fs.promises.readdir(directory, {
-          recursive: false,
-          withFileTypes: true,
-        });
+  if (!fileIndex.length) {
+    return [];
+  }
 
-        const featuresWithConfig = await Promise.all(
-          features
-            .filter((feature) => feature.isDirectory())
-            .map(async (feature) => {
-              const configPath = `${directory}/${feature.name}/config.yml`;
+  return Promise.all(
+    fileIndex.map(async (file) => {
+      const config = await parseConfiguration<FeatureConfig>(file);
 
-              if (!fs.existsSync(configPath)) {
-                return null;
-              }
+      try {
+        validateFeatureConfiguration(config);
+      } catch (err: any) {
+        logger().warn(`The feature "${file}" is invalid: ${chalk.yellow(err.message)}`);
+        return null;
+      }
 
-              const config = await parseConfiguration<FeatureConfig>(configPath);
+      if (!config.name) {
+        logger().warn(`The feature "${chalk.yellow(file)}" does not have a name defined in the config.yml file. Using the directory name as the feature name.`);
 
-              if (!config.name) {
-                throw new Error(`The feature "${configPath}" does not have a name defined in the config.yml file.`);
-              }
+        // Use the directory name as the feature name.
+        config.name = path.basename(path.dirname(file));
+      }
 
-              return {
-                config,
-                path: `${directory}/${feature.name}`,
-              } as Feature;
-            }),
-        );
-
-        availableFeatures.push(
-          ...featuresWithConfig.filter((feature): feature is Feature => feature !== null),
-        );
-      }),
-  );
-
-  return availableFeatures;
+      return { config, path: file } as Feature;
+    }),
+  )
+    .then((features) => features.filter((feature) => feature !== null)) as Promise<Feature[]>;
 }
