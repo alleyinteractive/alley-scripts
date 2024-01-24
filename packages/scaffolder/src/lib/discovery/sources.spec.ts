@@ -45,7 +45,7 @@ describe('discover/sources', () => {
       // Project configuration.
       {
         directory: './__tests__/fixtures/z-features',
-        root: process.cwd(),
+        root: `${process.cwd()}/.scaffolder`,
       },
     ]);
   });

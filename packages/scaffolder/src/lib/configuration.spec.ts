@@ -123,7 +123,7 @@ sources:
         },
       },
       project: {
-        location: '/project',
+        location: '/project/.scaffolder',
         config: {
           sources: [
             './project-dir',
