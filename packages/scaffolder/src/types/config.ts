@@ -15,8 +15,11 @@ export type Configuration = {
  * configuration file (the files attribute in a feature config.yml file).
  */
 export type FeatureFile = {
+  /* Source file or glob pattern. */
   source: string;
+  /* Destination file. For folders, this is the base folder. */
   destination: string;
+  /* Condition to check if the file should be generated. */
   if?: string;
 };
 
