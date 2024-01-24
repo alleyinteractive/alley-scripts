@@ -21,6 +21,9 @@ sources:
 
   # Check a remote repository for features.
   - github: alleyinteractive/scaffolder-features
+
+  # Check a git repository for features.
+  - git: git@bitbucket.com:alleyinteractive/scaffolder-features.git
 ```
 
 ## Global Configuration

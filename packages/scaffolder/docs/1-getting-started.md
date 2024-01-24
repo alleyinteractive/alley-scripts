@@ -6,7 +6,7 @@ add new features to an existing project from a template.
 
 ## Usage
 
-Requires Node 16 though 20 and NPM >= 8.0.0.
+Supports Node 16 though 20 and NPM >= 8.0.0.
 
 ```bash
 npx @alleyinteractive/scaffolder

@@ -118,8 +118,9 @@ Let's break down the configuration file:
 - `inputs`: A list of inputs that the feature requires. Optional. See [Input](#input)
   for more information.
 - `files`: A list of files to scaffold. The files support an individual file or
-  an entire directory. Both the source and destination support expressions for
-  reformatting of the user's input. See [Expressions](./expressions.md) for more
+  an entire directory with a `glob` pattern. Both the source and destination
+  support expressions for reformatting of the user's input. See
+  [Expressions](./expressions.md) for more
 
   Files support an `if` condition that can be used to conditionally scaffold a
   file. By default, the file will be included unless the `if` condition is
@@ -138,12 +139,10 @@ properties:
   input to the user.
 - `type`: Optional. The type of the input. This is used to validate the input. The
   following types are supported:
-
     - `string`: A string value.
     - `boolean`: A boolean value. The input will be a checkbox.
 	- `select`: (Not yet supported!) A select value. The input will be a select
 	box. Options are defined in the `options` property.
-
 - `default`: Optional. The default value of the input. If not provided, the
   default value is an empty string.
 - `required`: Optional. Whether the input is required. If not provided, the

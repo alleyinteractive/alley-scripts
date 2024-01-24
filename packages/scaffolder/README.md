@@ -19,6 +19,7 @@ The following arguments are available:
 
 ```
   --root               The root directory of the project.
+  --debug              Print debug information.
   --dry-run            Run the command without making any changes.
   -h, --help           Prints help information.
 ```
