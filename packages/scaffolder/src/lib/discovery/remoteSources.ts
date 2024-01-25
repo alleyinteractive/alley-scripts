@@ -1,7 +1,8 @@
 /* eslint-disable max-len, no-console */
 
-import chalk from 'chalk';
+import path from 'node:path';
 import * as fs from 'node:fs';
+import chalk from 'chalk';
 import simpleGit from 'simple-git';
 
 import {
@@ -25,11 +26,12 @@ export function getCheckoutBaseDirectory() {
  *
  * @todo All the configuration to specify git options.
  */
-const createGit = (directory: string) => simpleGit({
+const createGit = (directory?: string) => simpleGit({
   baseDir: directory,
   binary: process.env.GIT_BINARY || 'git',
   progress({ method, stage, progress }) {
-    console.log(`git.${method} ${stage} stage ${progress}% complete`);
+    // TODO: Make this a progress bar.
+    logger().debug(`git.${method} ${stage} stage ${progress}% complete`);
   },
 });
 
@@ -45,7 +47,7 @@ export function remoteSourceToLocalDirectory(source: Source): string {
     // being passed or just the organization and repository.
     const { github: url } = source;
 
-    const [, org, repo] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(?:#[A-Za-z0-9_.-]*)?$/) || [];
+    const [, org, repo] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(?:#[A-Za-z0-9_.-/]*)?$/) || [];
 
     if (!org || !repo) {
       throw new Error(`Invalid GitHub URL: ${url}`);
@@ -57,7 +59,7 @@ export function remoteSourceToLocalDirectory(source: Source): string {
   if ('git' in source) {
     const { git: url } = source;
 
-    const [, protocol, host, org, repo] = url.match(/^(git@|https:\/\/)([A-Za-z0-9_.-]*)[/|:]([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(?:#[A-Za-z0-9_.-]*)?$/) || [];
+    const [, protocol, host, org, repo] = url.match(/^(git@|https:\/\/)([A-Za-z0-9_.-]*)[/|:]([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(?:#[A-Za-z0-9_.-/]*)?$/) || [];
 
     if (!protocol || !host || !org || !repo) {
       throw new Error(`Invalid Git URL: ${url}`);
@@ -81,16 +83,30 @@ async function updateLocalRepository(directory: string, source: GitSource) {
   // Extract the branch/commit from the clone URL.
   const [cleanUrl, revision] = cloneUrl.split('#', 2);
 
-  // Check if the repository should be updated.
+  const git = createGit(directory);
+
+  // Clean the repository of any changes or untracked files.
+  await git.clean('fd');
+
+  // Check if the repository is tracking the proper revision
+  if (revision) {
+    const { current } = await git.status();
+
+    if (current !== revision) {
+      logger().debug(`Checking out ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
+
+      await git.checkout(revision);
+    }
+  }
+
+  // Check if the repository should be updated and no revision was specified.
   if (fs.statSync(directory).mtimeMs > Date.now() - 3600000) {
-    logger().debug(`Skipping ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
+    logger().debug(`Skipping updating ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
     return true;
   }
 
   logger().debug(`Updating ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
-
-  const git = createGit(directory);
 
   await git.fetch();
 
@@ -112,9 +128,16 @@ async function cloneFreshRepository(directory: string, source: GitSource) {
 
   logger().debug(`Cloning ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
-  const git = createGit(directory);
+  // Ensure the parent directory exists.
+  if (!fs.existsSync(path.resolve(directory, '..'))) {
+    fs.mkdirSync(path.resolve(directory, '..'), {
+      recursive: true,
+    });
+  }
 
-  await git.clone(cleanUrl);
+  const git = createGit();
+
+  await git.clone(cleanUrl, directory);
 
   if (revision) {
     await git.checkout(revision);
@@ -158,7 +181,7 @@ export async function processGitHubSource(source: GithubSource): Promise<Directo
     });
   }
 
-  const [, org, repo, revision] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-]*)?$/) || [];
+  const [, org, repo, revision] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-/]*)?$/) || [];
 
   return processGitSource({
     git: `https://github.com/${org}/${repo}.git${revision || ''}`,
