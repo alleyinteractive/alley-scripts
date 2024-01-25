@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
@@ -12,6 +12,7 @@ import fs from 'fs';
 import { getGlobalConfigurationDir, getProjectConfiguration } from '../configuration';
 import { DirectorySource, Source } from '../../types';
 import { processGitHubSource, processGitSource } from './remoteSources';
+import { getNpmLookupSources } from './npm';
 
 /**
  * Process the source for use within the generator.
@@ -122,5 +123,6 @@ export async function getLookupSources(rootDirectory: string): Promise<Directory
   return [
     ...await getDefaultSources(rootDirectory),
     ...await getConfiguredSources(rootDirectory),
+    ...await getNpmLookupSources(),
   ];
 }

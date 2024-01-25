@@ -1,9 +1,9 @@
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 import { getGlobalConfigurationDir, resetConfiguration } from '../configuration';
 import { getLookupSources } from './sources';
 
-jest.mock('fs');
+jest.mock('node:fs');
 
 describe('discover/sources', () => {
   beforeEach(() => {
@@ -24,7 +24,11 @@ describe('discover/sources', () => {
       ],
     });
 
-    (fs.existsSync as jest.Mock).mockReturnValue(true);
+    (fs.existsSync as jest.Mock)
+      .mockReturnValueOnce(true)
+      .mockReturnValueOnce(true)
+      .mockReturnValueOnce(true)
+      .mockReturnValueOnce(false);
 
     const globalConfigDir = getGlobalConfigurationDir();
 
@@ -53,6 +57,10 @@ describe('discover/sources', () => {
       {
         directory: './__tests__/fixtures/z-features',
         root: `${process.cwd()}/.scaffolder`,
+      },
+      // Node modules.
+      {
+        directory: '/node_modules',
       },
     ]);
   });

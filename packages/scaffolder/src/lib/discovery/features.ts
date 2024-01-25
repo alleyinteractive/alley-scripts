@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import fg from 'fast-glob';
-import path from 'path';
+import path from 'node:path';
 
 import type { Feature, FeatureConfig } from '../../types';
 import { getLookupSources } from './sources';
@@ -32,6 +32,8 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
   logger().debug(`Discovering features in ${rootDirectory}`);
 
   const sourceDirectories = await getLookupSources(rootDirectory);
+
+  logger().debug(`Found ${sourceDirectories.length} source directories.`);
 
   const fileIndex = await Promise.all(
     sourceDirectories

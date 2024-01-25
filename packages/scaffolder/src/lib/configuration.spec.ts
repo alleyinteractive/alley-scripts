@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import path from 'path';
+import * as fs from 'node:fs';
+import path from 'node:path';
 import { load } from 'js-yaml';
 
 import {
@@ -12,7 +12,7 @@ import {
 import { validateConfiguration, validateFeatureConfiguration } from './yaml';
 import { DEFAULT_CONFIGURATION } from './defaultConfiguration';
 
-jest.mock('fs');
+jest.mock('node:fs');
 
 const rootDir = path.resolve(__dirname, '../..');
 

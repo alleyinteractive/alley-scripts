@@ -1,5 +1,5 @@
 import simpleGit from 'simple-git';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 import {
   getCheckoutBaseDirectory,
@@ -16,7 +16,7 @@ const simpleGitMock = {
   pull: jest.fn(),
 };
 
-jest.mock('fs');
+jest.mock('node:fs');
 jest.mock('simple-git', () => jest.fn(() => simpleGitMock));
 
 describe('remoteSources', () => {

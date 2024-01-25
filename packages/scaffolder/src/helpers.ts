@@ -1,4 +1,5 @@
-import path from 'path';
+import path from 'node:path';
+
 import { Source } from './types';
 
 /**
@@ -34,3 +35,48 @@ export const resolveSourcePath = (base: string, source: string | Source): Source
 
   throw new Error(`Unsupported source to resolve: ${JSON.stringify(source)}`);
 };
+
+/**
+ * Run a command with arguments and return the output.
+ */
+export const execaOutput = async (cmg: string, args: string[], options: object) => {
+  const { execa } = await import('execa');
+
+  try {
+    const result = await execa(cmg, args, options);
+
+    if (!result.failed) {
+      return result.stdout;
+    }
+  } catch {
+    // Ignore errors.
+  }
+
+  return undefined;
+};
+
+/**
+ * Two-step argument splitting function that first splits arguments in quotes,
+ * and then splits up the remaining arguments if they are not part of a quote.
+ */
+export function splitArgsFromString(argsString: string | string[]): string[] {
+  if (Array.isArray(argsString)) {
+    return argsString;
+  }
+
+  if (!argsString) {
+    return [];
+  }
+
+  return argsString
+    .split(/("[^"]*")/)
+    .filter(Boolean)
+    .map((arg) => {
+      if (arg.includes('"')) {
+        return arg.replaceAll('"', '');
+      }
+
+      return arg.trim().split(' ');
+    })
+    .flat();
+}
