@@ -29,6 +29,8 @@ async function discoverFeatureConfigurations(directory: string, cwd: string): Pr
  * @todo Add caching to improve performance.
  */
 export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
+  logger().debug(`Discovering features in ${rootDirectory}`);
+
   const sourceDirectories = await getLookupSources(rootDirectory);
 
   const fileIndex = await Promise.all(
@@ -41,12 +43,16 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
     // Flatten the file index and remove duplicates.
     .then((files) => files.flat().filter((file, index, arr) => arr.indexOf(file) === index));
 
+  logger().debug(`Found ${fileIndex.length} features.`);
+
   if (!fileIndex.length) {
     return [];
   }
 
   return Promise.all(
     fileIndex.map(async (file) => {
+      logger().debug(`Parsing feature configuration from ${file}`);
+
       const config = await parseYamlFile<FeatureConfig>(file);
 
       try {
