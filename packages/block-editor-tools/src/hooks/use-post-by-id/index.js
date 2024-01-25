@@ -28,9 +28,13 @@ const usePostById = (postId, getPostType = null) => {
           }
         } else {
           const path = addQueryArgs('/wp/v2/search', { include: postId });
-          const newPost = await apiFetch({ path });
+          try {
+            const newPost = await apiFetch({ path });
+          } catch(error) {
+            console.error('Error finding PostId')
+          }
           // TODO: What if the lookup fails? Should handle error state in some way.
-          setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0].subtype }));
+          setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0]?.subtype }));
         }
       })();
     }
