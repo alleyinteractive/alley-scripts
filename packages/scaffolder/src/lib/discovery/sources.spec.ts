@@ -1,9 +1,9 @@
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 import { getGlobalConfigurationDir, resetConfiguration } from '../configuration';
 import { getLookupSources } from './sources';
 
-jest.mock('fs');
+jest.mock('node:fs');
 
 describe('discover/sources', () => {
   beforeEach(() => {

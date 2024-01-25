@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-console */
 
 import chalk from 'chalk';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import simpleGit from 'simple-git';
 
 import {

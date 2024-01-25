@@ -1,7 +1,7 @@
-import { dirname } from 'path';
+import { dirname } from 'node:path';
 import { glob } from 'fast-glob';
 import chalk from 'chalk';
-import fs from 'fs';
+import fs from 'node:fs';
 
 import { parseExpression, parseFalsy, parseObjectExpression } from './expressions';
 import collectInputs from './inputs';

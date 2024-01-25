@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import fg from 'fast-glob';
-import path from 'path';
+import path from 'node:path';
 
 import type { Feature, FeatureConfig } from '../../types';
 import { getLookupSources } from './sources';

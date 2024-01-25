@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
