@@ -46,6 +46,8 @@ const collectFeatureSourceFiles = (rootDir: string, feature: Feature, context: F
     path: featurePath,
   } = feature;
 
+  logger().debug(`Collecting source files for ${chalk.yellow(featureName)}`);
+
   return featureFiles
     // Parse the expression of any file attribute.
     .map((file) => parseObjectExpression({
@@ -104,8 +106,12 @@ export default async function processFeature(rootDir: string, feature: Feature, 
     config: { name: featureName },
   } = feature;
 
+  logger().debug(`Processing feature ${chalk.yellow(featureName)}`);
+
   const context = await collectContextVariables(feature);
   const files = collectFeatureSourceFiles(rootDir, feature, context);
+
+  logger().debug(`Found ${files.length} files to generate`);
 
   if (!files.length) {
     handleError(`No files to generate for the feature ${featureName}`);
@@ -113,7 +119,6 @@ export default async function processFeature(rootDir: string, feature: Feature, 
 
   // Run each file through the expression parser and write the file to their new
   // file destination.
-  // TODO: Allow entire directories to be handled.
   files.forEach(async ({ destination, source }) => {
     let contents: string;
     let generatedFile: string;

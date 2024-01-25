@@ -2,6 +2,7 @@ import prompts from 'prompts';
 
 import handleError from './error';
 import type { FeatureInput } from '../types';
+import { logger } from './logger';
 
 /**
  * Prompt the user for inputs to a feature by parsing the inputs and generating
@@ -11,8 +12,12 @@ export default async function collectInputs(featureInputs: FeatureInput[]) {
   const inputs: Record<string, any> = {};
 
   if (!featureInputs.length) {
+    logger().debug('No inputs to collect.');
+
     return inputs;
   }
+
+  logger().debug(`Collecting ${featureInputs.length} input(s)`);
 
   const questions = featureInputs.map((input): prompts.PromptObject<string> => { // eslint-disable-line consistent-return, max-len, array-callback-return
     const {
