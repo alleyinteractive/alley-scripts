@@ -33,6 +33,8 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
 
   const sourceDirectories = await getLookupSources(rootDirectory);
 
+  logger().debug(`Found the following sources to discover from:\n${JSON.stringify(sourceDirectories, null, 2)}`);
+
   const fileIndex = await Promise.all(
     sourceDirectories
       .map(async ({ directory, root: sourceRelativeRoot = null }) => discoverFeatureConfigurations(
