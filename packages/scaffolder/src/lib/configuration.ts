@@ -11,18 +11,19 @@ import { parseYamlFile, validateConfiguration } from './yaml';
 let projectDirectory: string | undefined;
 
 /**
- * Locate the scaffolder root, recursively searching up the directory tree until
- * a template directory is found.
+ * Locate the scaffolder project directory, recursively searching up the
+ * directory tree until a template directory is found.
  *
- * The scaffolder root directory is defined as a directory that contains a
+ * The scaffolder project directory is defined as a directory that contains a
  * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
  *
- * @param {String} rootDir The root directory to set as the scaffolder root, optional.
+ * @param {String} directory The root directory to set as the scaffolder
+ *                           project directory,  optional.
  */
-export function getProjectDirectory(rootDir?: string) {
+export function getProjectDirectory(directory?: string) {
   // Set the root directory if it has been passed as an argument.
-  if (rootDir) {
-    projectDirectory = rootDir;
+  if (directory) {
+    projectDirectory = directory;
   }
 
   if (typeof projectDirectory !== 'undefined') {
