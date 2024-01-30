@@ -35,7 +35,7 @@ class FileFeature extends Feature {
         // Ensure that destination/source directories are prefixed with the
         // feature/root directories, respectively, to allow the configuration to
         // be relative from the config file.
-        destination: `${this.rootDir}/${file.destination}`,
+        destination: `${this.getDestinationDirectory()}/${file.destination}`,
         source: `${this.path}/${file.source}`,
       }, context))
       // Check if the already-parsed condition is not falsy.

@@ -27,6 +27,7 @@ const featureConfigSchema = () => Joi.object({
     github: Joi.string(),
     git: Joi.string(),
     destination: Joi.string(),
+    postCloneCommand: Joi.string(),
   }).when('type', {
     is: 'repository',
     then: Joi.required(),

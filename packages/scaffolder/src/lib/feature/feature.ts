@@ -1,4 +1,4 @@
-import { getProjectDirectory } from '../configuration';
+import { getGlobalDirectory, getProjectDirectory, getProjectScaffolderDirectory } from '../configuration';
 import { logger } from '../logger';
 import collectInputs from '../inputs';
 import type { FeatureConfig, FeatureContext } from '../../types';
@@ -37,7 +37,7 @@ abstract class Feature {
   /**
    * Collect the context variables passed to the template engine.
    */
-  collectContextVariables() {
+  public collectContextVariables() {
     const { name } = this.config;
 
     return {
@@ -49,12 +49,26 @@ abstract class Feature {
   /**
    * Resolve the inputs for the feature before being run.
    */
-  protected async collectInputs() {
+  public async collectInputs() {
     const { inputs: featureInputs = [] } = this.config;
 
     this.inputs = await collectInputs(featureInputs);
 
     logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
+  }
+
+  /**
+   * Get the destination directory for the feature.
+   *
+   * If there is a project configuration that is not the global configuration,
+   * use the project directory. If not, use the current working directory.
+   */
+  public getDestinationDirectory(): string {
+    if (getProjectScaffolderDirectory() === getGlobalDirectory()) {
+      return process.cwd();
+    }
+
+    return this.rootDir;
   }
 
   /**

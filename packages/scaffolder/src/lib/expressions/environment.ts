@@ -34,6 +34,18 @@ export default function getEnvironment(): typeof Handlebars {
   const camelCaseString = (value: any, join: string = '_') => `${value}`.split(/[\s-]/).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(join);
 
   /**
+   * Register a filter that covnerts a string to a dasherized string:
+   *
+   *   Example Feature -> example-feature
+   *   example-feature -> example-feature
+   *   Folder/Example Feature -> folder-example-feature
+   */
+  env.registerHelper(
+    'dasherize',
+    (value: any) => `${value}`.toLowerCase().replace(/[^a-z-0-9]/g, '-'),
+  );
+
+  /**
    * Register a filter that converts a string to a WordPress-style file name:
    *
    *    Example Feature -> class-example-feature.php

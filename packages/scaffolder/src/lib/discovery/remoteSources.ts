@@ -2,8 +2,6 @@
 
 import fs from 'node:fs';
 import chalk from 'chalk';
-import cliProgress from 'cli-progress';
-import simpleGit from 'simple-git';
 
 import {
   DirectorySource,
@@ -13,6 +11,7 @@ import {
 } from '../../types';
 import { getGlobalDirectory } from '../configuration';
 import { logger } from '../logger';
+import { createGit } from '../git';
 
 /**
  * Handle remote sources that are checked out from a git repository.
@@ -20,46 +19,6 @@ import { logger } from '../logger';
 export function getCheckoutBaseDirectory() {
   return `${getGlobalDirectory()}/.remote-sources`;
 }
-
-let currentStage: string | undefined;
-let bar: cliProgress.SingleBar | undefined;
-
-/**
- * Update the progress bar to support multiple stages.
- */
-const updateBar = (stage: string, progress: number) => {
-  if (currentStage && currentStage !== stage) {
-    bar?.stop();
-    bar = undefined;
-  }
-
-  currentStage = stage;
-
-  if (!bar) {
-    bar = new cliProgress.SingleBar({
-      clearOnComplete: true,
-      format: `${stage} [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}`,
-      stopOnComplete: true,
-    }, cliProgress.Presets.shades_classic);
-
-    bar.start(100, progress);
-  } else {
-    bar.update(progress);
-  }
-};
-
-/**
- * Retrieve the git instance
- *
- * @todo All the configuration to specify git options.
- */
-const createGit = (directory?: string) => simpleGit({
-  baseDir: directory,
-  binary: process.env.GIT_BINARY || 'git',
-  progress({ stage, progress }) {
-    updateBar(stage, progress);
-  },
-});
 
 // Escape all non alphanumeric characters in a string and replace it with a dash.
 const escapeNonAlphanumeric = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '-');

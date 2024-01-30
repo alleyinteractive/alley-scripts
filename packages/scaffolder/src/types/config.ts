@@ -42,6 +42,17 @@ export type FeatureInput = {
   type?: 'string' | 'boolean';
 };
 
+export type FeatureRepositoryConfig = {
+  /* Destination directory for the repository. */
+  destination?: string;
+  /* Git URL for the repository. */
+  git?: string;
+  /* GitHub configuration for the repository. */
+  github?: string;
+  /* Command to run after the repository is cloned. */
+  postCloneCommand?: string;
+};
+
 /**
  * Type representation of the parsed configuration of a feature.
  *
@@ -50,6 +61,7 @@ export type FeatureInput = {
 export type FeatureConfig = {
   name: string;
   type: 'file' | 'repository';
-  files: FeatureFile[];
-  inputs: FeatureInput[];
+  files?: FeatureFile[];
+  inputs?: FeatureInput[];
+  repository?: FeatureRepositoryConfig;
 };
