@@ -53,7 +53,7 @@ export function getProjectDirectory(rootDir?: string) {
   }
 
   logger().info('No configuration found, using current directory as root.');
-  logger().info(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory in the current/parent directory.')));
+  logger().info(chalk.italic(chalk.blueBright('Use the --root option to specify a different project directory or create a .scaffolder directory in the current/parent directory.')));
 
   scaffolderRoot = process.cwd();
 

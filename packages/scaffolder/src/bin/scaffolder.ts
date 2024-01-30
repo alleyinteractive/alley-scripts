@@ -16,7 +16,7 @@ import { run } from '../lib/run';
     _unknown: argv = undefined,
   } = entryArgs as EntryArgs & { _unknown?: string[] };
 
-  // Ensure the root directory is calculated first.
+  // Ensure the project directory is calculated first.
   getProjectDirectory(entryArgs.root);
 
   const logger = initializeLogger(debug);
