@@ -1,8 +1,8 @@
 /* eslint-disable max-len, no-console */
 
-import path from 'node:path';
 import fs from 'node:fs';
 import chalk from 'chalk';
+import cliProgress from 'cli-progress';
 import simpleGit from 'simple-git';
 
 import {
@@ -21,6 +21,33 @@ export function getCheckoutBaseDirectory() {
   return `${getGlobalDirectory()}/.remote-sources`;
 }
 
+let currentStage: string | undefined;
+let bar: cliProgress.SingleBar | undefined;
+
+/**
+ * Update the progress bar to support multiple stages.
+ */
+const updateBar = (stage: string, progress: number) => {
+  if (currentStage && currentStage !== stage) {
+    bar?.stop();
+    bar = undefined;
+  }
+
+  currentStage = stage;
+
+  if (!bar) {
+    bar = new cliProgress.SingleBar({
+      clearOnComplete: true,
+      format: `${stage} [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}`,
+      stopOnComplete: true,
+    }, cliProgress.Presets.shades_classic);
+
+    bar.start(100, progress);
+  } else {
+    bar.update(progress);
+  }
+};
+
 /**
  * Retrieve the git instance
  *
@@ -29,9 +56,8 @@ export function getCheckoutBaseDirectory() {
 const createGit = (directory?: string) => simpleGit({
   baseDir: directory,
   binary: process.env.GIT_BINARY || 'git',
-  progress({ method, stage, progress }) {
-    // TODO: Make this a progress bar.
-    logger().debug(`git.${method} ${stage} stage ${progress}% complete`);
+  progress({ stage, progress }) {
+    updateBar(stage, progress);
   },
 });
 
@@ -128,11 +154,9 @@ async function cloneFreshRepository(source: GitSource, directory: string) {
 
   logger().debug(`Cloning ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
-  // Ensure the parent directory exists.
-  if (!fs.existsSync(path.resolve(directory, '..'))) {
-    fs.mkdirSync(path.resolve(directory, '..'), {
-      recursive: true,
-    });
+  // Ensure the directory exists.
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
   }
 
   const git = createGit(directory);
