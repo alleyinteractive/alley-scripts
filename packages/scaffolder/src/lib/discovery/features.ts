@@ -8,6 +8,7 @@ import { getLookupSources } from './sources';
 import { logger } from '../logger';
 import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 import handleError from '../error';
+import { getConfiguration, getRootDirectory } from '../configuration';
 
 /**
  * Discover all feature configurations in a directory.
@@ -26,14 +27,61 @@ async function discoverFeatureConfigurations(directory: string, cwd: string): Pr
 }
 
 /**
+ * Take a feature configuration and convert it to a feature object.
+ */
+function parseFeatureConfiguration(config: FeatureConfig, configFile: string, directory: string): Feature { // eslint-disable-line max-len, consistent-return
+  const { type = 'file' } = config;
+
+  if (type === 'file') {
+    return new FileFeature(config, configFile, directory);
+  } if (type === 'repository') {
+    return new RepositoryFeature(config, configFile, directory);
+  }
+
+  // Throw an error if an invalid type has reached this far though Joi
+  // validation should have caught it.
+  handleError(`The feature "${chalk.yellow(configFile)}" has an invalid type "${chalk.yellow(type)}" defined.`);
+}
+
+/**
+ * Retrieve the features configured by the project and global configuration.
+ *
+ * These are features defined under the "features" key in the project and global
+ * configuration files.
+ */
+async function getConfiguredFeatures(): Promise<Feature[]> {
+  const {
+    root: {
+      location: rootDirectory,
+      config: {
+        features: rootFeatures = [],
+      } = {},
+    },
+    project: {
+      location: projectDirectory,
+      config: {
+        features: projectFeatures = [],
+      } = {},
+    },
+  } = await getConfiguration();
+
+  return [
+    ...rootFeatures.map((feature) => parseFeatureConfiguration(feature, '', rootDirectory)),
+    ...projectFeatures.map((feature) => parseFeatureConfiguration(feature, '', projectDirectory)),
+  ];
+}
+
+/**
  * Discover features that can be used.
  *
  * @todo Add caching to improve performance.
  */
-export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
+export async function getFeatures(): Promise<Feature[]> {
+  const rootDirectory = getRootDirectory();
+
   logger().debug(`Discovering features in ${rootDirectory}`);
 
-  const sourceDirectories = await getLookupSources(rootDirectory);
+  const sourceDirectories = await getLookupSources();
 
   logger().debug(`Found the following sources to discover from:\n${JSON.stringify(sourceDirectories, null, 2)}`);
 
@@ -49,9 +97,13 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
 
   logger().debug(`Found ${fileIndex.length} features.`);
 
+  const configuredFeatures = await getConfiguredFeatures();
+
   if (!fileIndex.length) {
-    return [];
+    return configuredFeatures;
   }
+
+  console.log('configuredFeatures', configuredFeatures);
 
   return Promise.all(
     fileIndex.map(async (file) => { // eslint-disable-line consistent-return
@@ -73,18 +125,22 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
         config.name = path.basename(path.dirname(file));
       }
 
-      const { type = 'file' } = config;
+      return parseFeatureConfiguration(config, file, path.dirname(file));
 
-      if (type === 'file') {
-        return new FileFeature(config, file, path.dirname(file));
-      } if (type === 'repository') {
-        return new RepositoryFeature(config, file, path.dirname(file));
-      }
+      // const { type = 'file' } = config;
 
-      // Throw an error if an invalid type has reached this far though Joi
-      // validation should have caught it.
-      handleError(`The feature "${chalk.yellow(file)}" has an invalid type "${chalk.yellow(type)}" defined in the config.yml file.`);
+      // if (type === 'file') {
+      //   return new FileFeature(config, file, path.dirname(file));
+      // } if (type === 'repository') {
+      //   return new RepositoryFeature(config, file, path.dirname(file));
+      // }
+
+      // // Throw an error if an invalid type has reached this far though Joi
+      // // validation should have caught it.
+      // handleError(`The feature "${chalk.yellow(file)}" has an invalid type "${chalk.yellow(type)}" defined in the config.yml file.`);
     }),
   )
-    .then((features) => features.filter((feature) => feature !== null)) as Promise<Feature[]>;
+    .then((features) => features.filter((feature) => feature !== null))
+    .then((features) => features.concat(configuredFeatures)) as Promise<Feature[]>;
+    //  as Promise<Feature[]>
 }

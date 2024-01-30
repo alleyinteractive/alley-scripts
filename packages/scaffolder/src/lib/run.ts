@@ -1,3 +1,4 @@
+import { getRootDirectory } from './configuration';
 import { getFeatures } from './discovery';
 import handleError from './error';
 import { logger } from './logger';
@@ -17,10 +18,11 @@ const welcome = (dryRun: boolean) => {
 /**
  * Run the scaffolder with the provided arguments.
  */
-export const run = async (rootDir: string, argv: string[] | undefined, dryRun = false) => {
+export const run = async (argv: string[] | undefined, dryRun = false) => {
   welcome(dryRun);
 
-  const features = await getFeatures(rootDir);
+  const rootDir = getRootDirectory();
+  const features = await getFeatures();
 
   if (!features.length) {
     handleError(`No features found to scaffold in ${rootDir}.\n\nEnsure that your configuration isn't inadvertently overriding the built-in sources included with the scaffolder.`);
@@ -30,5 +32,5 @@ export const run = async (rootDir: string, argv: string[] | undefined, dryRun = 
 
   const feature = await resolveFeature(features, argv ? argv[0] : undefined);
 
-  return feature.resolveAndInvoke(rootDir, dryRun);
+  return feature.resolveAndInvoke(dryRun);
 };

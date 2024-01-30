@@ -7,6 +7,7 @@ import { Source } from './source';
  * .scaffolder/config.yml file. Both are optional.
  */
 export type Configuration = {
+  features?: FeatureConfig[];
   sources?: (Source | string)[];
 };
 

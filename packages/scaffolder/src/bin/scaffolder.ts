@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-import chalk from 'chalk';
-
 import entryArgs, { EntryArgs } from '../lib/entryArgs';
-import { getScaffolderRoot } from '../lib/configuration';
+import { getRootDirectory } from '../lib/configuration';
 
 import { initializeLogger } from '../lib/logger';
 import { run } from '../lib/run';
@@ -18,20 +16,14 @@ import { run } from '../lib/run';
     _unknown: argv = undefined,
   } = entryArgs as EntryArgs & { _unknown?: string[] };
 
-  // Reminder: The root directory is the root of the project, not the .scaffolder directory.
-  let root: string | null = entryArgs.root || await getScaffolderRoot();
+  // Ensure the root directory is calculated first.
+  getRootDirectory(entryArgs.root);
 
-  // Initialize the logger service.
   const logger = initializeLogger(debug);
 
-  if (!root) {
-    logger.info('No configuration found, using current directory as root.');
-    logger.info(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory.')));
+  logger.debug('Starting scaffolder...');
 
-    root = process.cwd();
-  }
-
-  await run(root, argv, dryRun);
+  await run(argv, dryRun);
 
   logger.info('🎉 Done. Happy coding!');
 

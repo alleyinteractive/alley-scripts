@@ -9,7 +9,7 @@ import fs from 'node:fs';
  * in a shared remote resource like a git repository.
  */
 
-import { getGlobalConfigurationDir, getProjectConfiguration } from '../configuration';
+import { getGlobalDirectory, getConfiguration, getRootDirectory } from '../configuration';
 import { DirectorySource, Source } from '../../types';
 import { processGitHubSource, processGitSource } from './remoteSources';
 
@@ -40,9 +40,10 @@ async function resolveSourceToDirectory(source: Source): Promise<DirectorySource
 }
 
 /**
- * The default sources that are always included.
+ * The default sources that are always included from the global configuration.
  */
-async function getDefaultSources(rootDirectory: string): Promise<DirectorySource[]> {
+function getDefaultSources(): DirectorySource[] {
+  const rootDirectory = getRootDirectory();
   const sources: DirectorySource[] = [];
 
   // Include the project's scaffolder directory if it exists.
@@ -53,7 +54,7 @@ async function getDefaultSources(rootDirectory: string): Promise<DirectorySource
     });
   }
 
-  const globalConfigDir = getGlobalConfigurationDir();
+  const globalConfigDir = getGlobalDirectory();
 
   // Include the global scaffolder configuration directory if it exists.
   if (fs.existsSync(globalConfigDir)) {
@@ -69,7 +70,8 @@ async function getDefaultSources(rootDirectory: string): Promise<DirectorySource
 /**
  * Retrieve the sources configured by the project and global configuration.
  */
-async function getConfiguredSources(rootDirectory: string): Promise<DirectorySource[]> {
+async function getConfiguredSources(): Promise<DirectorySource[]> {
+  const rootDirectory = getRootDirectory();
   const {
     root: {
       config: rootConfiguration = {},
@@ -78,7 +80,7 @@ async function getConfiguredSources(rootDirectory: string): Promise<DirectorySou
       location: projectDirectory,
       config: projectConfiguration = {},
     },
-  } = await getProjectConfiguration(rootDirectory);
+  } = await getConfiguration();
 
   const { sources: rootSources = [] } = rootConfiguration || {};
   const { sources: projectSources = [] } = projectConfiguration || {};
@@ -118,9 +120,9 @@ async function getConfiguredSources(rootDirectory: string): Promise<DirectorySou
  *
  * @todo Add support for automatically loading sources from NPM.
  */
-export async function getLookupSources(rootDirectory: string): Promise<DirectorySource[]> {
+export async function getLookupSources(): Promise<DirectorySource[]> {
   return [
-    ...await getDefaultSources(rootDirectory),
-    ...await getConfiguredSources(rootDirectory),
+    ...getDefaultSources(),
+    ...await getConfiguredSources(),
   ];
 }

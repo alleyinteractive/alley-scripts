@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-console */
 
 import path from 'node:path';
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 import chalk from 'chalk';
 import simpleGit from 'simple-git';
 
@@ -11,14 +11,14 @@ import {
   GithubSource,
   Source,
 } from '../../types';
-import { getGlobalConfigurationDir } from '../configuration';
+import { getGlobalDirectory } from '../configuration';
 import { logger } from '../logger';
 
 /**
  * Handle remote sources that are checked out from a git repository.
  */
 export function getCheckoutBaseDirectory() {
-  return `${getGlobalConfigurationDir()}/.remote-sources`;
+  return `${getGlobalDirectory()}/.remote-sources`;
 }
 
 /**

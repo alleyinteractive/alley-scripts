@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -6,20 +7,34 @@ import { logger } from './logger';
 import type { Configuration } from '../types';
 import { parseYamlFile, validateConfiguration } from './yaml';
 
+let scaffolderRooter: string | undefined;
+
 /**
  * Locate the scaffolder root, recursively searching up the directory tree until
  * a template directory is found.
  *
  * The scaffolder root directory is defined as a directory that contains a
  * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
+ *
+ * @param {String} rootDir The root directory to set as the scaffolder root.
  */
-export async function getScaffolderRoot() {
+export function getRootDirectory(rootDir?: string) {
+  if (rootDir) {
+    scaffolderRooter = rootDir;
+  }
+
+  if (typeof scaffolderRooter !== 'undefined') {
+    return scaffolderRooter;
+  }
+
   // Recursively search up the directory tree until a template directory is
   // found. Ensure that we eventually stop at the root directory.
   let currentDirectory = process.cwd();
 
   while (true) { // eslint-disable-line no-constant-condition
     if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
+      scaffolderRooter = currentDirectory;
+
       return currentDirectory;
     }
 
@@ -35,7 +50,12 @@ export async function getScaffolderRoot() {
     }
   }
 
-  return null;
+  logger().info('No configuration found, using current directory as root.');
+  logger().info(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory in the current/parent directory.')));
+
+  scaffolderRooter = process.cwd();
+
+  return scaffolderRooter;
 }
 
 /**
@@ -43,7 +63,7 @@ export async function getScaffolderRoot() {
  *
  * By default this is located at `~/.scaffolder`.
  */
-export function getGlobalConfigurationDir(): string {
+export function getGlobalDirectory(): string {
   return process.env.SCAFFOLDER_HOME || `${process.env.HOME}/.scaffolder`;
 }
 
@@ -52,12 +72,12 @@ let globalConfiguration: Configuration | null;
 /**
  * Retrieve the global configuration for the scaffolder.
  */
-export async function getGlobalConfiguration() {
-  const globalConfigDir = getGlobalConfigurationDir();
+export function getGlobalConfiguration(): Configuration {
+  const globalConfigDir = getGlobalDirectory();
 
   try {
     if (!globalConfiguration && fs.existsSync(`${globalConfigDir}/config.yml`)) {
-      globalConfiguration = await parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`);
+      globalConfiguration = parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`);
     } else if (!globalConfiguration) {
       globalConfiguration = {};
     }
@@ -89,23 +109,23 @@ export async function getGlobalConfiguration() {
 let projectConfiguration: Configuration | null;
 
 /**
- * Get the root configuration for the scaffolder from the project.
- *
- * This is an optional file and is located at `.scaffolder/config.yml`.
+ * Retrieve the root and project configuration.
  */
-export async function getProjectConfiguration(rootDirectory: string): Promise<{
+export function getConfiguration(): {
   root: {
     location: string,
-    config: Configuration | null;
+    config: Configuration | undefined;
   },
   project: {
     location: string;
-    config: Configuration | null;
+    config: Configuration | undefined;
   },
-}> {
+} {
+  const rootDirectory = getRootDirectory();
+
   try {
     if (!projectConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
-      projectConfiguration = await parseYamlFile<Configuration>(`${rootDirectory}/.scaffolder/config.yml`) || {};
+      projectConfiguration = parseYamlFile<Configuration>(`${rootDirectory}/.scaffolder/config.yml`) || {};
     } else if (!projectConfiguration) {
       projectConfiguration = {};
     }
@@ -118,8 +138,8 @@ export async function getProjectConfiguration(rootDirectory: string): Promise<{
 
   return {
     root: {
-      location: getGlobalConfigurationDir(),
-      config: await getGlobalConfiguration(),
+      location: getGlobalDirectory(),
+      config: getGlobalConfiguration(),
     },
     project: {
       location: `${rootDirectory}/.scaffolder`,
@@ -131,12 +151,12 @@ export async function getProjectConfiguration(rootDirectory: string): Promise<{
 /**
  * Reset the configuration to allow the configuration to be reloaded.
  *
- * Used for testing.
+ * Used only for testing.
  */
 export function resetConfiguration(
   newGlobalConfiguration: Configuration | null = null,
-  newProjectConfiguration: Configuration | null = null,
+  newConfiguration: Configuration | null = null,
 ) {
   globalConfiguration = newGlobalConfiguration;
-  projectConfiguration = newProjectConfiguration;
+  projectConfiguration = newConfiguration;
 }

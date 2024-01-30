@@ -4,9 +4,9 @@ import { load } from 'js-yaml';
 
 import {
   getGlobalConfiguration,
-  getGlobalConfigurationDir,
-  getProjectConfiguration,
-  getScaffolderRoot,
+  getGlobalDirectory,
+  getConfiguration,
+  getRootDirectory,
   resetConfiguration,
 } from './configuration';
 import { validateConfiguration, validateFeatureConfiguration } from './yaml';
@@ -27,7 +27,7 @@ describe('configuration', () => {
   it('should locate the scaffolder root if .scaffolder exists in current directory', async () => {
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
-    expect(await getScaffolderRoot()).toEqual(process.cwd());
+    expect(await getRootDirectory()).toEqual(process.cwd());
   });
 
   it('should locate the scaffolder root if .scaffolder exists in parent directory', async () => {
@@ -35,19 +35,19 @@ describe('configuration', () => {
       .mockReturnValueOnce(false)
       .mockReturnValue(true);
 
-    expect(await getScaffolderRoot()).toEqual(path.resolve(process.cwd(), '..'));
+    expect(await getRootDirectory()).toEqual(path.resolve(process.cwd(), '..'));
   });
 
   it('should get the global configuration directory', () => {
-    expect(getGlobalConfigurationDir()).toEqual(`${process.env.HOME}/.scaffolder`);
+    expect(getGlobalDirectory()).toEqual(`${process.env.HOME}/.scaffolder`);
 
     process.env.SCAFFOLDER_HOME = '/scaffolder/dir';
 
-    expect(getGlobalConfigurationDir()).toEqual('/scaffolder/dir');
+    expect(getGlobalDirectory()).toEqual('/scaffolder/dir');
 
     delete process.env.SCAFFOLDER_HOME;
 
-    expect(getGlobalConfigurationDir()).toEqual(`${process.env.HOME}/.scaffolder`);
+    expect(getGlobalDirectory()).toEqual(`${process.env.HOME}/.scaffolder`);
   });
 
   it('should get the default configuration when no global configuration exists', async () => {
@@ -109,9 +109,9 @@ sources:
   - ./global-dir
     `);
 
-    expect(await getProjectConfiguration('/project')).toEqual({
+    expect(await getConfiguration('/project')).toEqual({
       root: {
-        location: getGlobalConfigurationDir(),
+        location: getGlobalDirectory(),
         config: {
           sources: [
             {

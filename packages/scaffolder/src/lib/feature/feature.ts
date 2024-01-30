@@ -1,6 +1,7 @@
-import { FeatureConfig, FeatureContext } from '../../types';
-import collectInputs from '../inputs';
+import { getRootDirectory } from '../configuration';
 import { logger } from '../logger';
+import collectInputs from '../inputs';
+import type { FeatureConfig, FeatureContext } from '../../types';
 
 /**
  * Base feature class.
@@ -19,7 +20,7 @@ abstract class Feature {
   public inputs: Record<string, string | boolean> = {};
 
   /* Root directory for the project. */
-  public rootDir: string = '';
+  public rootDir: string;
 
   /* Whether the feature is a dry run. */
   public dryRun: boolean = false;
@@ -31,6 +32,7 @@ abstract class Feature {
     this.config = config;
     this.configPath = configPath;
     this.path = path;
+    this.rootDir = getRootDirectory();
   }
 
   /**
@@ -59,8 +61,7 @@ abstract class Feature {
   /**
    * Resolve the inputs for the feature and run it.
    */
-  public async resolveAndInvoke(rootDir: string, dryRun: boolean) {
-    this.rootDir = rootDir;
+  public async resolveAndInvoke(dryRun: boolean) {
     this.dryRun = dryRun;
 
     await this.collectInputs();

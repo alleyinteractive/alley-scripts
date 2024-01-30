@@ -3,21 +3,6 @@ import Joi from 'joi';
 import yaml from 'js-yaml';
 
 /**
- * Retrieve the structure for a scaffolder configuration file for validation
- * with Joi.
- */
-const configurationSchema = () => Joi.object({
-  sources: Joi.array().items(Joi.alternatives([
-    Joi.string(),
-    Joi.object({
-      directory: Joi.string(),
-      github: Joi.string(),
-      git: Joi.string(),
-    }).xor('directory', 'github', 'git'),
-  ])),
-});
-
-/**
  * Retrieve the structure for a scaffolder feature configuration file for
  * validation with Joi.
  */
@@ -49,9 +34,25 @@ const featureConfigSchema = () => Joi.object({
 });
 
 /**
+ * Retrieve the structure for a scaffolder configuration file for validation
+ * with Joi.
+ */
+const configurationSchema = () => Joi.object({
+  sources: Joi.array().items(Joi.alternatives([
+    Joi.string(),
+    Joi.object({
+      directory: Joi.string(),
+      github: Joi.string(),
+      git: Joi.string(),
+    }).xor('directory', 'github', 'git'),
+  ])),
+  features: Joi.array().items(featureConfigSchema()),
+});
+
+/**
  * Parse the YAML configuration.
  */
-export async function parseYamlFile<TData extends object>(filePath: string): Promise<TData> {
+export function parseYamlFile<TData extends object>(filePath: string): TData {
   // Ensure this is a YAML file.
   if (!filePath.endsWith('.yml')) {
     throw new Error('The configuration file must be a YAML file.');
