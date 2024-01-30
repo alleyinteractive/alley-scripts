@@ -14,6 +14,9 @@ const simpleGitMock = {
   clone: jest.fn(),
   fetch: jest.fn(),
   pull: jest.fn(),
+  status: jest.fn(() => ({
+    current: 'master',
+  })),
 };
 
 jest.mock('node:fs');
@@ -139,7 +142,8 @@ describe('remoteSources', () => {
       git: 'https://github.com/alleyinteractive/example-update-generators.git#8defe001',
     });
 
-    expect(simpleGit).not.toHaveBeenCalled();
+    expect(simpleGit).toHaveBeenCalled();
+    expect(simpleGitMock.status).toHaveBeenCalled();
     expect(simpleGitMock.fetch).not.toHaveBeenCalled();
   });
 

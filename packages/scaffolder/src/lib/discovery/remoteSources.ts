@@ -77,7 +77,7 @@ export function remoteSourceToLocalDirectory(source: Source): string {
  * Only update the local repository once every hour.
  * TODO: Allow this cache to be overridden.
  */
-async function updateLocalRepository(directory: string, source: GitSource) {
+async function updateLocalRepository(source: GitSource, directory: string) {
   const { git: cloneUrl } = source;
 
   // Extract the branch/commit from the clone URL.
@@ -120,7 +120,7 @@ async function updateLocalRepository(directory: string, source: GitSource) {
 /**
  * Clone a fresh copy of a repository.
  */
-async function cloneFreshRepository(directory: string, source: GitSource) {
+async function cloneFreshRepository(source: GitSource, directory: string) {
   const { git: cloneUrl } = source;
 
   // Extract the branch/commit from the clone URL.
@@ -135,7 +135,7 @@ async function cloneFreshRepository(directory: string, source: GitSource) {
     });
   }
 
-  const git = createGit();
+  const git = createGit(directory);
 
   await git.clone(cleanUrl, directory);
 
@@ -157,9 +157,9 @@ export async function processGitSource(source: GitSource, directory?: string): P
 
   // Check if the directory exists. If it does, update the repository.
   if (fs.existsSync(checkoutDirectory)) {
-    await updateLocalRepository(checkoutDirectory, source);
+    await updateLocalRepository(source, checkoutDirectory);
   } else {
-    await cloneFreshRepository(checkoutDirectory, source);
+    await cloneFreshRepository(source, checkoutDirectory);
   }
 
   return {
