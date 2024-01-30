@@ -1,6 +1,10 @@
 import path from 'node:path';
+import { Configuration } from '../types';
 
-export const DEFAULT_CONFIGURATION = typeof jest === 'undefined' ? {
+/**
+ * Default configuration of the scaffolder.
+ */
+export const DEFAULT_CONFIGURATION: Configuration = typeof jest === 'undefined' ? {
   features: [],
   sources: [],
 } : {
