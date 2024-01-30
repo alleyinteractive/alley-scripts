@@ -10,9 +10,6 @@ abstract class Feature {
   /* Feature configuration. */
   public config: FeatureConfig;
 
-  /* Path to the feature configuration file. */
-  public configPath: string;
-
   /* Path to the feature folder. */
   public path: string;
 
@@ -27,10 +24,12 @@ abstract class Feature {
 
   /**
    * Constructor
+   *
+   * @param {FeatureConfig} config Feature configuration.
+   * @param {string} path Path to the feature folder.
    */
-  constructor(config: FeatureConfig, configPath: string, path: string) {
+  constructor(config: FeatureConfig, path: string) {
     this.config = config;
-    this.configPath = configPath;
     this.path = path;
     this.rootDir = getProjectDirectory();
   }

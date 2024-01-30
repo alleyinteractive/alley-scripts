@@ -29,18 +29,18 @@ async function discoverFeatureConfigurations(directory: string, cwd: string): Pr
 /**
  * Take a feature configuration and convert it to a feature object.
  */
-function parseFeatureConfiguration(config: FeatureConfig, configFile: string, directory: string): Feature { // eslint-disable-line max-len, consistent-return
+function parseFeatureConfiguration(config: FeatureConfig, directory: string): Feature { // eslint-disable-line max-len, consistent-return
   const { type = 'file' } = config;
 
   if (type === 'file') {
-    return new FileFeature(config, configFile, directory);
+    return new FileFeature(config, directory);
   } if (type === 'repository') {
-    return new RepositoryFeature(config, configFile, directory);
+    return new RepositoryFeature(config, directory);
   }
 
   // Throw an error if an invalid type has reached this far though Joi
   // validation should have caught it.
-  handleError(`The feature "${chalk.yellow(configFile)}" has an invalid type "${chalk.yellow(type)}" defined.`);
+  handleError(`The feature "${config.name}" has an invalid type "${chalk.yellow(type)}" defined.`);
 }
 
 /**
@@ -50,19 +50,15 @@ function parseFeatureConfiguration(config: FeatureConfig, configFile: string, di
  * configuration files.
  */
 async function getConfiguredFeatures(): Promise<Feature[]> {
-  const {
-    features: globalFeatures = [],
-  } = getGlobalConfiguration();
   const globalDirectory = getGlobalDirectory();
-
-  const {
-    features: projectFeatures = [],
-  } = getProjectConfiguration();
   const projectDirectory = getProjectDirectory();
 
+  const { features: globalFeatures = [] } = getGlobalConfiguration();
+  const { features: projectFeatures = [] } = getProjectConfiguration();
+
   return [
-    ...globalFeatures.map((feature) => parseFeatureConfiguration(feature, '', globalDirectory)),
-    ...projectFeatures.map((feature) => parseFeatureConfiguration(feature, '', projectDirectory)),
+    ...globalFeatures.map((feature) => parseFeatureConfiguration(feature, globalDirectory)),
+    ...projectFeatures.map((feature) => parseFeatureConfiguration(feature, projectDirectory)),
   ];
 }
 
@@ -98,8 +94,6 @@ export async function getFeatures(): Promise<Feature[]> {
     return configuredFeatures;
   }
 
-  console.log('configuredFeatures', configuredFeatures);
-
   return Promise.all(
     fileIndex.map(async (file) => { // eslint-disable-line consistent-return
       logger().debug(`Parsing feature configuration from ${chalk.yellow(file)}`);
@@ -120,22 +114,15 @@ export async function getFeatures(): Promise<Feature[]> {
         config.name = path.basename(path.dirname(file));
       }
 
-      return parseFeatureConfiguration(config, file, path.dirname(file));
+      // Default the feature type to a file feature.
+      if (!config.type) {
+        config.type = 'file';
+      }
 
-      // const { type = 'file' } = config;
-
-      // if (type === 'file') {
-      //   return new FileFeature(config, file, path.dirname(file));
-      // } if (type === 'repository') {
-      //   return new RepositoryFeature(config, file, path.dirname(file));
-      // }
-
-      // // Throw an error if an invalid type has reached this far though Joi
-      // // validation should have caught it.
-      // handleError(`The feature "${chalk.yellow(file)}" has an invalid type "${chalk.yellow(type)}" defined in the config.yml file.`);
+      return parseFeatureConfiguration(config, path.dirname(file));
     }),
   )
     .then((features) => features.filter((feature) => feature !== null))
+    // Merge in the features configured via the project and global configuration.
     .then((features) => features.concat(configuredFeatures)) as Promise<Feature[]>;
-    //  as Promise<Feature[]>
 }
