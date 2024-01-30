@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { uniq } from 'lodash';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
@@ -9,7 +10,13 @@ import fs from 'node:fs';
  * in a shared remote resource like a git repository.
  */
 
-import { getGlobalDirectory, getConfiguration, getProjectDirectory, getGlobalConfiguration, getProjectConfiguration } from '../configuration';
+import {
+  getGlobalDirectory,
+  getProjectDirectory,
+  getGlobalConfiguration,
+  getProjectConfiguration,
+  getProjectScaffolderDirectory,
+} from '../configuration';
 import { DirectorySource, Source } from '../../types';
 import { processGitHubSource, processGitSource } from './remoteSources';
 
@@ -72,7 +79,7 @@ function getDefaultSources(): DirectorySource[] {
  */
 async function getConfiguredSources(): Promise<DirectorySource[]> {
   const globalDirectory = getGlobalDirectory();
-  const projectDirectory = getProjectDirectory();
+  const projectDirectory = getProjectScaffolderDirectory();
 
   const { sources: globalSources = [] } = getGlobalConfiguration();
   const { sources: projectSources = [] } = getProjectConfiguration();
@@ -112,8 +119,8 @@ async function getConfiguredSources(): Promise<DirectorySource[]> {
  * @todo Add support for automatically loading sources from NPM.
  */
 export async function getLookupSources(): Promise<DirectorySource[]> {
-  return [
+  return uniq([
     ...getDefaultSources(),
     ...await getConfiguredSources(),
-  ];
+  ]);
 }

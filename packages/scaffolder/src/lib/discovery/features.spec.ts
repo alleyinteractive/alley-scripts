@@ -19,15 +19,13 @@ describe('discovery/features', () => {
   });
 
   it('should be able to discover local features', async () => {
-    const features = await getFeatures(process.cwd());
+    const features = await getFeatures();
 
     expect(features).toHaveLength(2);
     expect(features[0].config.name).toEqual('Test Feature A');
-    expect(features[0].configPath).toEqual(`${fixturesDirectory}/a-features/feature-a/config.yml`);
     expect(features[0].path).toEqual(`${fixturesDirectory}/a-features/feature-a`);
 
     expect(features[1].config.name).toEqual('Test Feature B');
-    expect(features[1].configPath).toEqual(`${fixturesDirectory}/a-features/feature-b/config.yml`);
     expect(features[1].path).toEqual(`${fixturesDirectory}/a-features/feature-b`);
   });
 
@@ -42,7 +40,7 @@ describe('discovery/features', () => {
       ],
     });
 
-    const features = await getFeatures(process.cwd());
+    const features = await getFeatures();
 
     expect(features).toHaveLength(3);
 

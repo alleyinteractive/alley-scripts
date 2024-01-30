@@ -53,16 +53,3 @@ export type FeatureConfig = {
   files: FeatureFile[];
   inputs: FeatureInput[];
 };
-
-/**
- * Type representation of the parsed configuration of a feature along with
- * information about where the feature is located.
- */
-// export type Feature = {
-//   /* The parsed configuration file of the feature. */
-//   config: FeatureConfig;
-//   /* The directory path to the feature configuration file. */
-//   configPath: string;
-//   /* The directory path to the feature. */
-//   path: string;
-// };

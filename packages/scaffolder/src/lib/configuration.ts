@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
-import { merge, uniq } from 'lodash';
+import { uniq } from 'lodash';
 
 import { DEFAULT_CONFIGURATION } from './defaultConfiguration';
 import { logger } from './logger';
@@ -14,11 +14,13 @@ let projectDirectory: string | undefined;
  * Locate the scaffolder project directory, recursively searching up the
  * directory tree until a template directory is found.
  *
- * The scaffolder project directory is defined as a directory that contains a
- * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
+ * The scaffolder project directory is defined as a directory that **contains**
+ * a `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
  *
- * @param {String} directory The root directory to set as the scaffolder
- *                           project directory,  optional.
+ * @see getProjectScaffolderDirectory() to retrieve the scaffolder directory.
+ *
+ * @param {String} directory The root directory to set as the scaffolder project
+ *                           directory,  optional.
  */
 export function getProjectDirectory(directory?: string) {
   // Set the root directory if it has been passed as an argument.
@@ -62,6 +64,25 @@ export function getProjectDirectory(directory?: string) {
 }
 
 /**
+ * Get the project scaffolder directory.
+ *
+ * This is the directory that contains the scaffolder configuration and
+ * templates.
+ */
+export function getProjectScaffolderDirectory() {
+  return `${getProjectDirectory()}/.scaffolder`;
+}
+
+/**
+ * Clear the project directory.
+ *
+ * Used only for testing.
+ */
+export function clearProjectDirectory() {
+  projectDirectory = undefined;
+}
+
+/**
  * Get the global configuration directory for the scaffolder.
  *
  * By default this is located at `~/.scaffolder`.
@@ -76,31 +97,37 @@ let globalConfiguration: Configuration | undefined;
  * Retrieve the global configuration for the scaffolder.
  */
 export function getGlobalConfiguration(): Configuration {
-  if (globalConfiguration) {
-    return globalConfiguration;
-  }
+  if (!globalConfiguration) {
+    const globalConfigDir = getGlobalDirectory();
 
-  const globalConfigDir = getGlobalDirectory();
-
-  try {
-    if (!globalConfiguration && fs.existsSync(`${globalConfigDir}/config.yml`)) {
-      globalConfiguration = parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`);
-    } else if (!globalConfiguration) {
-      globalConfiguration = {};
+    try {
+      if (!globalConfiguration && fs.existsSync(`${globalConfigDir}/config.yml`)) {
+        globalConfiguration = parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`);
+      } else if (!globalConfiguration) {
+        globalConfiguration = {};
+      }
+    } catch (err: any) {
+      logger().error(`Failed to parse global configuration: ${err.message}`);
+      process.exit(1);
     }
-  } catch (err: any) {
-    logger().error(`Failed to parse global configuration: ${err.message}`);
-    process.exit(1);
-  }
 
-  validateConfiguration(globalConfiguration);
+    validateConfiguration(globalConfiguration);
+  }
 
   // Merge the default configuration with the global configuration.
-  globalConfiguration = merge(globalConfiguration, DEFAULT_CONFIGURATION);
-
-  // Filter out duplicate features/sources.
-  globalConfiguration.features = uniq(globalConfiguration.features);
-  globalConfiguration.sources = uniq(globalConfiguration.sources);
+  // Using lodash's merge method didn't work as expected so we use a custom
+  // implementation with lodash uniq.
+  globalConfiguration = {
+    ...DEFAULT_CONFIGURATION,
+    sources: uniq([
+      ...DEFAULT_CONFIGURATION.sources || [],
+      ...globalConfiguration.sources || [],
+    ]),
+    features: uniq([
+      ...DEFAULT_CONFIGURATION.features || [],
+      ...globalConfiguration.features || [],
+    ]),
+  };
 
   return globalConfiguration;
 }
@@ -125,10 +152,6 @@ export function getProjectConfiguration(): Configuration {
     }
 
     validateConfiguration(projectConfiguration);
-
-    // Ensure that the project's sources/features are unique.
-    projectConfiguration.features = uniq(projectConfiguration.features || []);
-    projectConfiguration.sources = uniq(projectConfiguration.sources || []);
   } catch (err: any) {
     logger().error(`Failed to retrieve project configuration: ${err.message}`);
     process.exit(1);

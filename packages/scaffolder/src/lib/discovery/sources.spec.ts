@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import { getGlobalDirectory, resetConfiguration } from '../configuration';
+import { clearProjectDirectory, getGlobalDirectory, resetConfiguration } from '../configuration';
 import { getLookupSources } from './sources';
 
 jest.mock('node:fs');
@@ -11,6 +11,7 @@ describe('discover/sources', () => {
 
     jest.resetAllMocks();
     resetConfiguration();
+    clearProjectDirectory();
   });
 
   it('should get the configured source directories', async () => {
@@ -47,7 +48,7 @@ describe('discover/sources', () => {
       // Root configuration.
       {
         directory: './global-configuration',
-        root: process.cwd(),
+        root: globalConfigDir,
       },
       // Project configuration.
       {

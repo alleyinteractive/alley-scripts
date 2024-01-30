@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import fg from 'fast-glob';
 import path from 'node:path';
+import { uniqBy } from 'lodash';
 
 import type { FeatureConfig } from '../../types';
 import { Feature, FileFeature, RepositoryFeature } from '../feature';
@@ -8,7 +9,12 @@ import { getLookupSources } from './sources';
 import { logger } from '../logger';
 import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 import handleError from '../error';
-import { getConfiguration, getGlobalConfiguration, getGlobalDirectory, getProjectConfiguration, getProjectDirectory } from '../configuration';
+import {
+  getGlobalConfiguration,
+  getGlobalDirectory,
+  getProjectConfiguration,
+  getProjectDirectory,
+} from '../configuration';
 
 /**
  * Discover all feature configurations in a directory.
@@ -123,6 +129,12 @@ export async function getFeatures(): Promise<Feature[]> {
     }),
   )
     .then((features) => features.filter((feature) => feature !== null))
-    // Merge in the features configured via the project and global configuration.
-    .then((features) => features.concat(configuredFeatures)) as Promise<Feature[]>;
+    .then(
+      // Ensure that the features are unique by name.
+      (features) => uniqBy(
+        // Merge in the features configured via the project and global configuration.
+        features.concat(configuredFeatures),
+        (feature) => feature && feature.config.name,
+      ),
+    ) as Promise<Feature[]>;
 }

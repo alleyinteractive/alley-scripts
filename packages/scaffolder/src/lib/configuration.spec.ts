@@ -3,9 +3,9 @@ import path from 'node:path';
 import { load } from 'js-yaml';
 
 import {
+  clearProjectDirectory,
   getGlobalConfiguration,
   getGlobalDirectory,
-  getConfiguration,
   getProjectDirectory,
   resetConfiguration,
 } from './configuration';
@@ -22,6 +22,7 @@ describe('configuration', () => {
 
     jest.resetAllMocks();
     resetConfiguration();
+    clearProjectDirectory();
   });
 
   it('should locate the scaffolder root if .scaffolder exists in current directory', async () => {
@@ -71,7 +72,8 @@ sources:
   - github: alleyinteractive/scaffolder-features
     `);
 
-    expect(await getGlobalConfiguration()).toEqual({
+    expect(getGlobalConfiguration()).toEqual({
+      features: [],
       sources: [
         // Default configuration.
         {
@@ -89,52 +91,6 @@ sources:
       ],
     });
   });
-
-//   it('should get the project configuration with the global merged in', async () => {
-//     process.env.SCAFFOLDER_HOME = '/scaffolder';
-
-//     (fs.existsSync as jest.Mock).mockReturnValue(true);
-
-//     // Project configuration.
-//     (fs.readFileSync as jest.Mock)
-//       .mockReturnValueOnce(`
-// sources:
-//   - ./project-dir
-//   - directory: ./another-project-dir
-//     `)
-
-//     // Global configuration.
-//       .mockReturnValueOnce(`
-// sources:
-//   - ./global-dir
-//     `);
-
-//     expect(await getConfiguration('/project')).toEqual({
-//       root: {
-//         location: getGlobalDirectory(),
-//         config: {
-//           sources: [
-//             {
-//               directory: './__tests__/fixtures/a-features',
-//               root: rootDir,
-//             },
-//             './global-dir',
-//           ],
-//         },
-//       },
-//       project: {
-//         location: '/project/.scaffolder',
-//         config: {
-//           sources: [
-//             './project-dir',
-//             {
-//               directory: './another-project-dir',
-//             },
-//           ],
-//         },
-//       },
-//     });
-//   });
 
   const invalidConfigurations = [
     `
