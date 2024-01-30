@@ -3,98 +3,110 @@ import getEnvironment from './environment';
 /* eslint-disable no-template-curly-in-string */
 
 const render = (string: string, context: object = {}) => getEnvironment()
-  .renderString(string, context);
+  .compile(string)(context);
 
 describe('environment', () => {
   test('filter:wpClassFilename', () => {
     expect(
-      render('${{ "Example Feature" | wpClassFilename }}'),
+      render('{{ wpClassFilename "Example Feature" }}'),
     ).toEqual('class-example-feature.php');
 
     expect(
-      render('${{ "Folder/Example Feature" | wpClassFilename }}'),
+      render('{{ wpClassFilename "Folder/Example Feature" }}'),
     ).toEqual('folder/class-example-feature.php');
 
     expect(
-      render('${{ "Example Feature" | wpClassFilename("test-") }}'),
+      render('{{ wpClassFilename "Example Feature" prefix="test-" }}'),
     ).toEqual('test-example-feature.php');
+
+    expect(
+      render('{{ wpClassFilename "Example Feature" suffix=".bak" }}'),
+    ).toEqual('class-example-feature.bak');
   });
 
   test('filter:psrClassFilename', () => {
     expect(
-      render('${{ "Example Feature" | psrClassFilename }}'),
+      render('{{ psrClassFilename "Example Feature" }}'),
     ).toEqual('ExampleFeature.php');
 
     expect(
-      render('${{ "Folder/Example Feature" | psrClassFilename }}'),
+      render('{{ psrClassFilename "Folder/Example Feature" }}'),
     ).toEqual('Folder/ExampleFeature.php');
 
     expect(
-      render('${{ "Example Feature" | psrClassFilename("Test") }}'),
+      render('{{ psrClassFilename "Example Feature" prefix="Test" }}'),
     ).toEqual('TestExampleFeature.php');
 
     expect(
-      render('${{ "Example Feature" | psrClassFilename("", "Test.php") }}'),
+      render('{{ psrClassFilename "Example Feature" prefix="" suffix="Test.php" }}'),
     ).toEqual('ExampleFeatureTest.php');
   });
 
   test('filter:wpClassName', () => {
     expect(
-      render('${{ "Example Feature" | wpClassName }}'),
+      render('{{ wpClassName "Example Feature" }}'),
     ).toBe('Example_Feature');
 
     expect(
-      render('${{ "Folder/Example Feature" | wpClassName }}'),
+      render('{{ wpClassName "Folder/Example Feature" }}'),
     ).toBe('Example_Feature');
 
     expect(
-      render('${{ "Example Feature" | wpClassName("Test_") }}'),
+      render('{{ wpClassName "Example Feature" prefix="Test_" }}'),
     ).toBe('Test_Example_Feature');
+
+    expect(
+      render('{{ wpClassName "Example Feature" prefix="Test_" suffix="_Test" }}'),
+    ).toBe('Test_Example_Feature_Test');
   });
 
   test('filter:psrClassName', () => {
     expect(
-      render('${{ "Example Feature" | psrClassName }}'),
+      render('{{ psrClassName "Example Feature" }}'),
     ).toBe('ExampleFeature');
 
     expect(
-      render('${{ "Folder/Example Feature" | psrClassName }}'),
+      render('{{ psrClassName "Folder/Example Feature" }}'),
     ).toBe('ExampleFeature');
 
     expect(
-      render('${{ "Example Feature" | psrClassName("Test") }}'),
+      render('{{ psrClassName "Example Feature" prefix="Test" }}'),
     ).toBe('TestExampleFeature');
 
     expect(
-      render('${{ "Example Feature" | psrClassName("", "Test") }}'),
+      render('{{ psrClassName "Example Feature" prefix="" suffix="Test" }}'),
     ).toBe('ExampleFeatureTest');
   });
 
   test('filter:wpNamespace', () => {
     expect(
-      render('${{ "Example Feature" | wpNamespace("Feature") }}'),
+      render('{{ wpNamespace "Example Feature" prefix="Feature" }}'),
     ).toBe('Feature');
 
     expect(
-      render('${{ "Folder/Example Feature" | wpNamespace("Feature") }}'),
+      render('{{ wpNamespace "Folder/Example Feature" prefix="Feature" }}'),
     ).toBe('Feature\\Folder');
 
     expect(
-      render('${{ "Folder/Sub Folder/Example Feature" | wpNamespace("Feature") }}'),
+      render('{{ wpNamespace "Folder/Sub Folder/Example Feature" prefix="Feature" }}'),
     ).toBe('Feature\\Folder\\Sub_Folder');
   });
 
   test('filter:psrNamespace', () => {
     expect(
-      render('${{ "Example Feature" | psrNamespace("Feature") }}'),
+      render('{{ psrNamespace "Example Feature" }}'),
+    ).toBe('');
+
+    expect(
+      render('{{ psrNamespace "Example Feature" prefix="Feature" }}'),
     ).toBe('Feature');
 
     expect(
-      render('${{ "Folder/Example Feature" | psrNamespace("Feature") }}'),
+      render('{{ psrNamespace "Folder/Example Feature" prefix="Feature" }}'),
     ).toBe('Feature\\Folder');
 
     expect(
-      render('${{ "Folder/Sub Folder/Example Feature" | psrNamespace("Feature") }}'),
+      render('{{ psrNamespace "Folder/Sub Folder/Example Feature" prefix="Feature" }}'),
     ).toBe('Feature\\Folder\\SubFolder');
   });
 });

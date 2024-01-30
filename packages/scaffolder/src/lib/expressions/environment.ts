@@ -1,24 +1,24 @@
-import nunjucks from 'nunjucks';
+/* eslint-disable prefer-rest-params */
 
-let env: nunjucks.Environment | null = null;
+import Handlebars from 'handlebars';
+import helpers from 'handlebars-helpers';
+
+let env: typeof Handlebars | undefined;
 
 /**
- * Get the configured Nunjucks environment.
+ * Get the configured Handlebars environment.
  */
-export default function getEnvironment() {
+export default function getEnvironment(): typeof Handlebars {
   if (env) {
     return env;
   }
 
-  // Configure nunjucks to use the same syntax as the GitHub Actions expression
-  // and register out filters/custom functions.
-  env = nunjucks.configure({
-    autoescape: false,
-    tags: {
-      variableStart: '${{',
-      variableEnd: '}}',
-    },
-    throwOnUndefined: true,
+  // Create a new Handlebars environment.
+  env = Handlebars.create();
+
+  // Register additional helpers.
+  helpers(['array', 'comparison', 'math', 'object', 'string'], {
+    handlebars: env,
   });
 
   /**
@@ -40,9 +40,16 @@ export default function getEnvironment() {
    *    Folder/Example Feature -> folder/class-example-feature.php
    *    example-feature -> class-example-feature.php
    */
-  env.addFilter(
+  env.registerHelper(
     'wpClassFilename',
-    (value: any, prefix: string = 'class-', suffix: string = '.php') => {
+    (value: any, options: { hash: Record<string, string> }) => {
+      const {
+        hash: {
+          prefix = 'class-',
+          suffix = '.php',
+        } = {},
+      } = options;
+
       const [namespace, className] = splitFeatureName(value);
 
       return [
@@ -59,9 +66,16 @@ export default function getEnvironment() {
    *   Folder/Example Feature -> Folder/ExampleFeature.php
    *   example-feature -> ExampleFeature.php
    */
-  env.addFilter(
+  env.registerHelper(
     'psrClassFilename',
-    (value: any, prefix: string = '', suffix: string = '.php') => {
+    (value: any, options: { hash: Record<string, string> }) => {
+      const {
+        hash: {
+          prefix = '',
+          suffix = '.php',
+        } = {},
+      } = options;
+
       const [namespace, className] = splitFeatureName(value);
 
       return [
@@ -78,9 +92,18 @@ export default function getEnvironment() {
    *   example-feature -> Example_Feature
    *   Folder/Example Feature -> Example_Feature
    */
-  env.addFilter(
+  env.registerHelper(
     'wpClassName',
-    (value: any, prefix: string = '', suffix: string = '') => `${prefix}${camelCaseString(splitFeatureName(value)[1])}${suffix}`,
+    (value: any, options: { hash: Record<string, string> }) => {
+      const {
+        hash: {
+          prefix = '',
+          suffix = '',
+        } = {},
+      } = options;
+
+      return `${prefix}${camelCaseString(splitFeatureName(value)[1])}${suffix}`;
+    },
   );
 
   /**
@@ -90,9 +113,18 @@ export default function getEnvironment() {
    *   Example Feature -> ExampleFeature
    *   Folder/Example Feature -> ExampleFeature
    */
-  env.addFilter(
+  env.registerHelper(
     'psrClassName',
-    (value: any, prefix: string = '', suffix: string = '') => `${prefix}${camelCaseString(splitFeatureName(value)[1], '')}${suffix}`,
+    (value: any, options: { hash: Record<string, string> }) => {
+      const {
+        hash: {
+          prefix = '',
+          suffix = '',
+        } = {},
+      } = options;
+
+      return `${prefix}${camelCaseString(splitFeatureName(value)[1], '')}${suffix}`;
+    },
   );
 
   /**
@@ -109,13 +141,19 @@ export default function getEnvironment() {
    *   Example Feature (with base namespace Feature) -> Feature
    *   Folder/Example Feature (with base namespace Feature) -> Feature\\Folder
    */
-  env.addFilter(
+  env.registerHelper(
     'wpNamespace',
-    (value: any, baseNamespace: string = '') => {
+    (value: any, options: { hash: Record<string, string> }) => {
+      const {
+        hash: {
+          prefix = '',
+        } = {},
+      } = options;
+
       const parts = splitFeatureName(value)[0].split('/').filter((part) => part !== '');
 
-      if (baseNamespace) {
-        parts.unshift(baseNamespace);
+      if (prefix) {
+        parts.unshift(prefix);
       }
 
       return parts.map((p) => camelCaseString(p)).join('\\');
@@ -129,13 +167,19 @@ export default function getEnvironment() {
    *   Example Feature -> ExampleFeature
    *   Folder/Example Feature -> Folder\\ExampleFeature
    */
-  env.addFilter(
+  env.registerHelper(
     'psrNamespace',
-    (value: any, baseNamespace: string = '') => {
+    (value: any, options: { hash: Record<string, string> }) => {
+      const {
+        hash: {
+          prefix = '',
+        } = {},
+      } = options;
+
       const parts = splitFeatureName(value)[0].split('/').filter((part) => part !== '');
 
-      if (baseNamespace) {
-        parts.unshift(baseNamespace);
+      if (prefix) {
+        parts.unshift(prefix);
       }
 
       return parts.map((p) => camelCaseString(p, '')).join('\\');
@@ -149,10 +193,16 @@ export default function getEnvironment() {
    *   example-feature -> example-feature
    *   Folder/Example Feature -> folder-example-feature
    */
-  env.addFilter(
+  env.registerHelper(
     'folderName',
     (value: any) => `${value}`.split('/').map((part) => camelCaseString(part, '-').toLowerCase()).join('-'),
   );
+
+  /**
+   * Compare two values and determine if they are equal.
+   *
+   *
+   */
 
   return env;
 }

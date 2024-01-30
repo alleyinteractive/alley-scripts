@@ -15,17 +15,17 @@
     "@babel/core": "7.23.7",
     "@babel/preset-env": "7.23.8",
     "@babel/preset-typescript": "7.23.3",
-    "@types/js-yaml": "^4.0.9",
-    "@types/nunjucks": "^3.2.6"
+    "@types/handlebars-helpers": "^0.5.6",
+    "@types/js-yaml": "^4.0.9"
   },
   "dependencies": {
     "chalk": "^4.1.2",
     "fast-glob": "^3.3.2",
     "glob": "^10.3.10",
+    "handlebars": "^4.7.8",
+    "handlebars-helpers": "^0.10.0",
     "joi": "^17.12.0",
     "js-yaml": "^4.1.0",
-    "mustache": "^4.2.0",
-    "nunjucks": "^3.2.4",
     "prompts": "^2.4.2",
     "simple-git": "^3.22.0",
     "ts-command-line-args": "^2.5.1",

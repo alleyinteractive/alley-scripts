@@ -16,20 +16,25 @@ describe('expressions', () => {
   });
 
   it('should parse expression', () => {
-    expect(parseExpression('Hello, ${{ inputs.name }}!', {
+    expect(parseExpression('Hello, {{ inputs.name }}!', {
       inputs: {
         name: 'World',
       },
     })).toBe('Hello, World!');
 
-    expect(parseExpression('${{ "true" === "true" }}')).toBe('true');
+    // Test the usage of https://github.com/helpers/handlebars-helpers
+    expect(parseExpression('{{ eq "true" "true" }}')).toBe('true');
+    expect(parseExpression('{{ and "true" "1" }}')).toBe('true');
+    expect(parseExpression('{{ and "true" true }}')).toBe('true');
+    expect(parseExpression('{{ eq "true" "false" }}')).toBe('false');
+    expect(parseExpression('{{ isFalsey "false" }}')).toBe('true');
   });
 
   it('should parse object expression', () => {
     expect(parseObjectExpression({
-      key: 'Hello, ${{ inputs.name }}!',
+      key: 'Hello, {{ inputs.name }}!',
       sub: {
-        var2: 'This is ${{ inputs.var2 }}',
+        var2: 'This is {{ inputs.var2 }}',
       },
     }, {
       inputs: {

@@ -25,7 +25,7 @@ import { run } from '../lib/run';
   const logger = initializeLogger(debug);
 
   if (!root) {
-    logger.info('No scaffolder configuration found, using current directory as root.');
+    logger.info('No configuration found, using current directory as root.');
     logger.info(chalk.italic(chalk.blueBright('Use the --root option to specify a different root directory or create a .scaffolder directory.')));
 
     root = process.cwd();

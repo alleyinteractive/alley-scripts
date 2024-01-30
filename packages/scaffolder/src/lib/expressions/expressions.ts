@@ -22,7 +22,7 @@ type ExpressionContext = Record<string, any>;
  * expressions.
  */
 export function parseExpression(expression: string, context: ExpressionContext = {}) {
-  return getEnvironment().renderString(expression, context);
+  return getEnvironment().compile(expression)(context);
 }
 
 /**
