@@ -1,7 +1,7 @@
 import chalk from 'chalk';
-import fs from 'fs';
+import fs from 'node:fs';
 import { glob } from 'fast-glob';
-import { dirname } from 'path';
+import { dirname } from 'node:path';
 
 import { FeatureFile } from '../../types';
 import { logger } from '../logger';
