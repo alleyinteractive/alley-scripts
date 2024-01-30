@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { uniq } from 'lodash';
+import { uniq, uniqWith } from 'lodash';
 
 /**
  * Functionality to aid in the discovery of templates that can be used to
@@ -107,10 +107,13 @@ async function getConfiguredSources(): Promise<DirectorySource[]> {
     return source;
   };
 
-  return Promise.all([
+  // Create a single unique stream of sources.
+  const combinedSources = uniqWith([
     ...globalSources.map((source) => preProcessSourceForRoot(source, globalDirectory)),
     ...projectSources.map((source) => preProcessSourceForRoot(source, projectDirectory)),
-  ].map(resolveSourceToDirectory));
+  ], (a, b) => JSON.stringify(a) === JSON.stringify(b));
+
+  return Promise.all(combinedSources.map(resolveSourceToDirectory));
 }
 
 /**
