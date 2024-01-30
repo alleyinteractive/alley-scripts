@@ -8,7 +8,7 @@ import { logger } from './logger';
 import type { Configuration } from '../types';
 import { parseYamlFile, validateConfiguration } from './yaml';
 
-let scaffolderRoot: string | undefined;
+let projectDirectory: string | undefined;
 
 /**
  * Locate the scaffolder root, recursively searching up the directory tree until
@@ -22,11 +22,11 @@ let scaffolderRoot: string | undefined;
 export function getProjectDirectory(rootDir?: string) {
   // Set the root directory if it has been passed as an argument.
   if (rootDir) {
-    scaffolderRoot = rootDir;
+    projectDirectory = rootDir;
   }
 
-  if (typeof scaffolderRoot !== 'undefined') {
-    return scaffolderRoot;
+  if (typeof projectDirectory !== 'undefined') {
+    return projectDirectory;
   }
 
   // Recursively search up the directory tree until a template directory is
@@ -35,9 +35,9 @@ export function getProjectDirectory(rootDir?: string) {
 
   while (true) { // eslint-disable-line no-constant-condition
     if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
-      scaffolderRoot = currentDirectory;
+      projectDirectory = currentDirectory;
 
-      return scaffolderRoot;
+      return projectDirectory;
     }
 
     if (!fs.existsSync(currentDirectory)) {
@@ -55,9 +55,9 @@ export function getProjectDirectory(rootDir?: string) {
   logger().info('No configuration found, using current directory as root.');
   logger().info(chalk.italic(chalk.blueBright('Use the --root option to specify a different project directory or create a .scaffolder directory in the current/parent directory.')));
 
-  scaffolderRoot = process.cwd();
+  projectDirectory = process.cwd();
 
-  return scaffolderRoot;
+  return projectDirectory;
 }
 
 /**
