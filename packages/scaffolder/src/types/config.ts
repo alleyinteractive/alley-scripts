@@ -47,20 +47,21 @@ export type FeatureInput = {
  * This exists in the .scaffolder/<feature>/config.yml file.
  */
 export type FeatureConfig = {
+  name: string;
+  type: 'file' | 'repository';
   files: FeatureFile[];
   inputs: FeatureInput[];
-  name: string;
 };
 
 /**
  * Type representation of the parsed configuration of a feature along with
  * information about where the feature is located.
  */
-export type Feature = {
-  /* The parsed configuration file of the feature. */
-  config: FeatureConfig;
-  /* The directory path to the feature configuration file. */
-  configPath: string;
-  /* The directory path to the feature. */
-  path: string;
-};
+// export type Feature = {
+//   /* The parsed configuration file of the feature. */
+//   config: FeatureConfig;
+//   /* The directory path to the feature configuration file. */
+//   configPath: string;
+//   /* The directory path to the feature. */
+//   path: string;
+// };

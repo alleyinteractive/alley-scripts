@@ -6,7 +6,7 @@ import yaml from 'js-yaml';
  * Retrieve the structure for a scaffolder configuration file for validation
  * with Joi.
  */
-const getConfigurationStructure = () => Joi.object({
+const configurationSchema = () => Joi.object({
   sources: Joi.array().items(Joi.alternatives([
     Joi.string(),
     Joi.object({
@@ -21,8 +21,9 @@ const getConfigurationStructure = () => Joi.object({
  * Retrieve the structure for a scaffolder feature configuration file for
  * validation with Joi.
  */
-const getFeatureConfigurationStructure = () => Joi.object({
+const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
+  type: Joi.string().default('file').valid('file', 'repository'),
   inputs: Joi.array().items(Joi.object({
     name: Joi.string().required(),
     description: Joi.string(),
@@ -33,7 +34,18 @@ const getFeatureConfigurationStructure = () => Joi.object({
     source: Joi.string().required(),
     destination: Joi.string().required(),
     if: Joi.string(),
-  })).required(),
+  })).when('type', {
+    is: 'file',
+    then: Joi.required(),
+  }),
+  repository: Joi.object({
+    github: Joi.string(),
+    git: Joi.string(),
+    destination: Joi.string(),
+  }).when('type', {
+    is: 'repository',
+    then: Joi.required(),
+  }),
 });
 
 /**
@@ -56,10 +68,10 @@ export async function parseYamlFile<TData extends object>(filePath: string): Pro
  * Validate the root/project configuration.
  */
 export function validateConfiguration(config: object) {
-  const { error } = getConfigurationStructure().validate(config);
+  const { error } = configurationSchema().validate(config);
 
   if (error) {
-    throw new Error(`The configuration is invalid: ${error.message}`);
+    throw error;
   }
 }
 
@@ -67,9 +79,9 @@ export function validateConfiguration(config: object) {
  * Validate the feature configuration.
  */
 export function validateFeatureConfiguration(config: object) {
-  const { error } = getFeatureConfigurationStructure().validate(config);
+  const { error } = featureConfigSchema().validate(config);
 
   if (error) {
-    throw new Error(`The feature configuration is invalid: ${error.message}`);
+    throw error;
   }
 }

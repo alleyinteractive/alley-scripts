@@ -105,14 +105,14 @@ export async function getProjectConfiguration(rootDirectory: string): Promise<{
 }> {
   try {
     if (!projectConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
-      projectConfiguration = await parseYamlFile<Configuration>(`${rootDirectory}/.scaffolder/config.yml`);
+      projectConfiguration = await parseYamlFile<Configuration>(`${rootDirectory}/.scaffolder/config.yml`) || {};
     } else if (!projectConfiguration) {
       projectConfiguration = {};
     }
 
     validateConfiguration(projectConfiguration);
   } catch (err: any) {
-    logger().error(`Failed to parse project configuration: ${err.message}`);
+    logger().error(`Failed to retrieve project configuration: ${err.message}`);
     process.exit(1);
   }
 
@@ -130,6 +130,8 @@ export async function getProjectConfiguration(rootDirectory: string): Promise<{
 
 /**
  * Reset the configuration to allow the configuration to be reloaded.
+ *
+ * Used for testing.
  */
 export function resetConfiguration(
   newGlobalConfiguration: Configuration | null = null,

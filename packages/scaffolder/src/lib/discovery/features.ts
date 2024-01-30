@@ -2,10 +2,12 @@ import chalk from 'chalk';
 import fg from 'fast-glob';
 import path from 'node:path';
 
-import type { Feature, FeatureConfig } from '../../types';
+import type { FeatureConfig } from '../../types';
+import { Feature, FileFeature, RepositoryFeature } from '../feature';
 import { getLookupSources } from './sources';
 import { logger } from '../logger';
 import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
+import handleError from '../error';
 
 /**
  * Discover all feature configurations in a directory.
@@ -52,15 +54,15 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
   }
 
   return Promise.all(
-    fileIndex.map(async (file) => {
-      logger().debug(`Parsing feature configuration from ${file}`);
+    fileIndex.map(async (file) => { // eslint-disable-line consistent-return
+      logger().debug(`Parsing feature configuration from ${chalk.yellow(file)}`);
 
       const config = await parseYamlFile<FeatureConfig>(file);
 
       try {
         validateFeatureConfiguration(config);
       } catch (err: any) {
-        logger().warn(`The feature "${chalk.italic(file)}" is invalid:\n\n${chalk.yellow(err.message)}\n`);
+        logger().warn(`The feature "${chalk.italic(file)}" is invalid and is not being loaded: ${chalk.yellow(err.message)}\n`);
         return null;
       }
 
@@ -71,11 +73,17 @@ export async function getFeatures(rootDirectory: string): Promise<Feature[]> {
         config.name = path.basename(path.dirname(file));
       }
 
-      return {
-        config,
-        configPath: file,
-        path: path.dirname(file),
-      } as Feature;
+      const { type = 'file' } = config;
+
+      if (type === 'file') {
+        return new FileFeature(config, file, path.dirname(file));
+      } if (type === 'repository') {
+        return new RepositoryFeature(config, file, path.dirname(file));
+      }
+
+      // Throw an error if an invalid type has reached this far though Joi
+      // validation should have caught it.
+      handleError(`The feature "${chalk.yellow(file)}" has an invalid type "${chalk.yellow(type)}" defined in the config.yml file.`);
     }),
   )
     .then((features) => features.filter((feature) => feature !== null)) as Promise<Feature[]>;

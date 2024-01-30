@@ -33,8 +33,6 @@ export default function getEnvironment() {
 
   const camelCaseString = (value: any, join: string = '_') => `${value}`.split(/[\s-]/).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(join);
 
-  // Register the custom filters for nunjucks to support WordPress development.
-
   /**
    * Register a filter that converts a string to a WordPress-style file name:
    *
@@ -142,6 +140,18 @@ export default function getEnvironment() {
 
       return parts.map((p) => camelCaseString(p, '')).join('\\');
     },
+  );
+
+  /**
+   * Sanitize a string to be used as a folder name.
+   *
+   *   Example Feature -> example-feature
+   *   example-feature -> example-feature
+   *   Folder/Example Feature -> folder-example-feature
+   */
+  env.addFilter(
+    'folderName',
+    (value: any) => `${value}`.split('/').map((part) => camelCaseString(part, '-').toLowerCase()).join('-'),
   );
 
   return env;

@@ -9,7 +9,7 @@ import { logger } from './logger';
  * questions for prompts.
  */
 export default async function collectInputs(featureInputs: FeatureInput[]) {
-  const inputs: Record<string, any> = {};
+  const inputs: Record<string, string | boolean> = {};
 
   if (!featureInputs.length) {
     logger().debug('No inputs to collect.');
