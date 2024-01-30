@@ -1,4 +1,4 @@
-import { getRootDirectory } from '../configuration';
+import { getProjectDirectory } from '../configuration';
 import { logger } from '../logger';
 import collectInputs from '../inputs';
 import type { FeatureConfig, FeatureContext } from '../../types';
@@ -32,7 +32,7 @@ abstract class Feature {
     this.config = config;
     this.configPath = configPath;
     this.path = path;
-    this.rootDir = getRootDirectory();
+    this.rootDir = getProjectDirectory();
   }
 
   /**

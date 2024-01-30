@@ -9,7 +9,7 @@ import fs from 'node:fs';
  * in a shared remote resource like a git repository.
  */
 
-import { getGlobalDirectory, getConfiguration, getRootDirectory, getGlobalConfiguration, getProjectConfiguration } from '../configuration';
+import { getGlobalDirectory, getConfiguration, getProjectDirectory, getGlobalConfiguration, getProjectConfiguration } from '../configuration';
 import { DirectorySource, Source } from '../../types';
 import { processGitHubSource, processGitSource } from './remoteSources';
 
@@ -43,7 +43,7 @@ async function resolveSourceToDirectory(source: Source): Promise<DirectorySource
  * The default sources that are always included from the global configuration.
  */
 function getDefaultSources(): DirectorySource[] {
-  const rootDirectory = getRootDirectory();
+  const rootDirectory = getProjectDirectory();
   const sources: DirectorySource[] = [];
 
   // Include the project's scaffolder directory if it exists.
@@ -72,7 +72,7 @@ function getDefaultSources(): DirectorySource[] {
  */
 async function getConfiguredSources(): Promise<DirectorySource[]> {
   const globalDirectory = getGlobalDirectory();
-  const projectDirectory = getRootDirectory();
+  const projectDirectory = getProjectDirectory();
 
   const { sources: globalSources = [] } = getGlobalConfiguration();
   const { sources: projectSources = [] } = getProjectConfiguration();

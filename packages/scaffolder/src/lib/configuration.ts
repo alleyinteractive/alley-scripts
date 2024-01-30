@@ -14,14 +14,12 @@ let scaffolderRoot: string | undefined;
  * Locate the scaffolder root, recursively searching up the directory tree until
  * a template directory is found.
  *
- * This can also be referred to as the project root directory.
- *
  * The scaffolder root directory is defined as a directory that contains a
  * `.scaffolder` directory. The `.scaffolder/config.yml` file is optional.
  *
  * @param {String} rootDir The root directory to set as the scaffolder root, optional.
  */
-export function getRootDirectory(rootDir?: string) {
+export function getProjectDirectory(rootDir?: string) {
   // Set the root directory if it has been passed as an argument.
   if (rootDir) {
     scaffolderRoot = rootDir;
@@ -116,7 +114,7 @@ export function getProjectConfiguration(): Configuration {
     return projectConfiguration;
   }
 
-  const rootDirectory = getRootDirectory();
+  const rootDirectory = getProjectDirectory();
 
   try {
     if (!projectConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {

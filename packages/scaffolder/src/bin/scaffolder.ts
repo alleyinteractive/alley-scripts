@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import entryArgs, { EntryArgs } from '../lib/entryArgs';
-import { getRootDirectory } from '../lib/configuration';
+import { getProjectDirectory } from '../lib/configuration';
 
 import { initializeLogger } from '../lib/logger';
 import { run } from '../lib/run';
@@ -17,7 +17,7 @@ import { run } from '../lib/run';
   } = entryArgs as EntryArgs & { _unknown?: string[] };
 
   // Ensure the root directory is calculated first.
-  getRootDirectory(entryArgs.root);
+  getProjectDirectory(entryArgs.root);
 
   const logger = initializeLogger(debug);
 

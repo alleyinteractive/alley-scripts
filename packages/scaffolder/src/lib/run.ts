@@ -1,4 +1,4 @@
-import { getRootDirectory } from './configuration';
+import { getProjectDirectory } from './configuration';
 import { getFeatures } from './discovery';
 import handleError from './error';
 import { logger } from './logger';
@@ -21,7 +21,7 @@ const welcome = (dryRun: boolean) => {
 export const run = async (argv: string[] | undefined, dryRun = false) => {
   welcome(dryRun);
 
-  const rootDir = getRootDirectory();
+  const rootDir = getProjectDirectory();
   const features = await getFeatures();
 
   if (!features.length) {

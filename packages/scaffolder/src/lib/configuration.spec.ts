@@ -6,7 +6,7 @@ import {
   getGlobalConfiguration,
   getGlobalDirectory,
   getConfiguration,
-  getRootDirectory,
+  getProjectDirectory,
   resetConfiguration,
 } from './configuration';
 import { validateConfiguration, validateFeatureConfiguration } from './yaml';
@@ -27,7 +27,7 @@ describe('configuration', () => {
   it('should locate the scaffolder root if .scaffolder exists in current directory', async () => {
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
-    expect(await getRootDirectory()).toEqual(process.cwd());
+    expect(await getProjectDirectory()).toEqual(process.cwd());
   });
 
   it('should locate the scaffolder root if .scaffolder exists in parent directory', async () => {
@@ -35,7 +35,7 @@ describe('configuration', () => {
       .mockReturnValueOnce(false)
       .mockReturnValue(true);
 
-    expect(await getRootDirectory()).toEqual(path.resolve(process.cwd(), '..'));
+    expect(await getProjectDirectory()).toEqual(path.resolve(process.cwd(), '..'));
   });
 
   it('should get the global configuration directory', () => {
