@@ -1,11 +1,13 @@
 # Expressions
 
 Expressions are used to reformat the user's input. Alley Scaffolder uses
-[Nunjucks](https://mozilla.github.io/nunjucks/) for expression parsing which is a
-full featured templating language.
+[Handlebars](https://handlebarsjs.com/) for expression parsing which is a
+full featured templating language. Scaffodler also includes a
+[helper package](https://github.com/helpers/handlebars-helpers) to make it
+easier to work with expressions.
 
 For the purposes of Alley Scaffolder, variables and other expressions are
-surrended by `${{ }}`. This syntax is similar to GitHub Actions, but is not
+surrended by `{{ }}`. This syntax is similar to GitHub Actions, but is not
 compatible with GitHub Actions expressions.
 
 You can see expressions in use in the [Feature Configuration](./2-features.md).
@@ -14,23 +16,19 @@ Let's use an `if` conditional file as an example:
 ```yaml
 files:
   - source: test.stub
-    if: ${{ inputs.tests }}
-    destination: tests/Features/${{ inputs.caseStudyName | psrClassFilename('', 'Test.php') }}
+    if: "{{ inputs.tests }}"
+    destination: tests/Features/{{ psrClassFilename | inputs.caseStudyName prefix="" suffix="Test.php" }}
 ```
 
 In this example, the `if` conditional is used to conditionally scaffold a file
 based on the user's input. If the user selects to scaffold tests, the file will
 be scaffolded. If not, the file will be skipped.
 
-## Filters
+## Helper
 
-Filters are the most powerful part of expressions. Filters are used to modify
+Helper are the most powerful part of expressions. Helpers are used to modify
 the user's input. For example, if you want to convert a user's input to a
-valid WordPress file name, you can use the `wpClassFilename` filter.
-
-See
-[Nunjucks's Builtin Filters](https://mozilla.github.io/nunjucks/templating.html#builtin-filters)
-as well as the custom filters below.
+valid WordPress file name, you can use the `wpClassFilename` helper.
 
 ### `wpClassFilename`
 
@@ -39,11 +37,11 @@ be prefixed with `class-` and suffixed with `.php` but can be overridden with
 the `prefix` and `suffix` arguments.
 
 ```
-${{ "User Input" | wpClassFilename }} => "class-user-input.php"
-${{ "Folder/User Input" | wpClassFilename }} => "folder/class-user-input.php"
-${{ "Folder/Subfolder/User Input" | wpClassFilename }} => "folder/subfolder/class-user-input.php"
-${{ "User Input" | wpClassFilename('prefix-') }} => "prefix-user-input.php"
-${{ "User Input" | wpClassFilename('prefix-', '.suffix') }} => "prefix-user-input.suffix"
+{{ wpClassFilename "User Input" }} => "class-user-input.php"
+{{ wpClassFilename "Folder/User Input" }} => "folder/class-user-input.php"
+{{ wpClassFilename "Folder/Subfolder/User Input" }} => "folder/subfolder/class-user-input.php"
+{{ wpClassFilename "User Input" prefix="prefix-" }} => "prefix-user-input.php"
+{{ wpClassFilename "User Input" prefix="prefix-" suffix=".suffix" }} => "prefix-user-input.suffix"
 ```
 
 ### `wpClassName`
@@ -53,16 +51,16 @@ preceding folder (which becomes a namespace) along with any invalid characters
 and converts the string to Pascal_Case.
 
 ```
-${{ "User Input" | wpClassName }} => "User_Input"
-${{ "Folder/User Input" | wpClassName }} => "User_Input"
-${{ "Folder/Subfolder/User Input" | wpClassName }} => "User_Input"
+{{ wpClassName "User Input" }} => "User_Input"
+{{ wpClassName "Folder/User Input" }} => "User_Input"
+{{ wpClassName "Folder/Subfolder/User Input" }} => "User_Input"
 ```
 
 The filter also supports a `prefix` and `suffix` argument to add a prefix or
 suffix to the string.
 
 ```
-${{ "User Input" | wpClassName('Prefix_', '_Suffix') }} => "Prefix_User_Input_Suffix"
+{{ wpClassName "User Input" prefix="Prefix_" suffix="_Suffix" }} => "Prefix_User_Input_Suffix"
 ```
 
 ### `wpNamespace`
@@ -71,16 +69,16 @@ Converts a string to a valid WordPress namespace. This filter will strip any
 invalid characters and convert the string to Pascal_Case. The last part of the input will be stripped and used as the class name.
 
 ```
-${{ "User Input" | wpNamespace }} => ""
-${{ "Folder/User Input" | wpNamespace }} => "Folder"
+{{ wpNamespace "User Input" }} => ""
+{{ wpNamespace "Folder/User Input" }} => "Folder"
 ```
 
 The filter also supports a base namespace argument to add a prefix to the
 namespace.
 
 ```
-${{ "User Input" | wpNamespace('Feature\\') }} => "Feature\\"
-${{ "Folder/User Input" | wpNamespace('Feature\\') }} => "Feature\\Folder"
+{{ wpNamespace "User Input" prefix="Feature\" }} => "Feature\\"
+{{ wpNamespace "Folder/User Input" prefix="Feature\" }} => "Feature\\Folder"
 ```
 
 ### `psrClassFilename`
@@ -89,17 +87,17 @@ Converts a string to a valid PSR-4 file name. By default, the file name will be
 suffixed with `.php` but can be overridden with the `suffix` argument.
 
 ```
-${{ "User Input" | psrClassFilename }} => "UserInput.php"
-${{ "Folder/User Input" | psrClassFilename }} => "Folder/UserInput.php"
-${{ "Folder/Subfolder/User Input" | psrClassFilename }} => "Folder/Subfolder/UserInput.php"
+{{ psrClassFilename "User Input" }} => "UserInput.php"
+{{ psrClassFilename "Folder/User Input" }} => "Folder/UserInput.php"
+{{ psrClassFilename "Folder/Subfolder/User Input" }} => "Folder/Subfolder/UserInput.php"
 ```
 
 The filter also supports a `prefix` and `suffix` argument to add a prefix or
 suffix to the string.
 
 ```
-${{ "User Input" | psrClassFilename('Prefix') }} => "PrefixUserInput.php"
-${{ "User Input" | psrClassFilename('Prefix', 'Test.php') }} => "PrefixUserInputTest.php"
+{{ psrClassFilename "User Input" prefix="Prefix" }} => "PrefixUserInput.php"
+{{ psrClassFilename "User Input" prefix="Prefix" suffix="Test.php" }} => "PrefixUserInputTest.php"
 ```
 
 ### `psrClassName`
@@ -109,16 +107,16 @@ preceding folder (which becomes a namespace) along with any invalid characters
 and converts the string to PascalCase.
 
 ```
-${{ "User Input" | psrClassName }} => "UserInput"
-${{ "Folder/User Input" | psrClassName }} => "UserInput"
-${{ "Folder/Subfolder/User Input" | psrClassName }} => "UserInput"
+{{ psrClassName "User Input" }} => "UserInput"
+{{ psrClassName "Folder/User Input" }} => "UserInput"
+{{ psrClassName "Folder/Subfolder/User Input" }} => "UserInput"
 ```
 
 The filter also supports a `prefix` and `suffix` argument to add a prefix or
 suffix to the string.
 
 ```
-${{ "User Input" | psrClassName('Prefix', 'Suffix') }} => "PrefixUserInputSuffix"
+{{ psrClassName "User Input" prefix="Prefix" suffix="Suffix" }} => "PrefixUserInputSuffix"
 ```
 
 ### `psrNamespace`
@@ -127,16 +125,16 @@ Converts a string to a valid PSR-4 namespace. This filter will strip any
 invalid characters and convert the string to PascalCase.
 
 ```
-${{ "User Input" | psrNamespace }} => ""
-${{ "Folder/User Input" | psrNamespace }} => "Folder"
+{{ psrNamespace "User Input" }} => ""
+{{ psrNamespace "Folder/User Input" }} => "Folder"
 ```
 
 The filter also supports a base namespace argument to add a prefix to the
 namespace.
 
 ```
-${{ "User Input" | psrNamespace('Feature\\') }} => "Feature"
-${{ "Folder/User Input" | psrNamespace('Feature\\') }} => "Feature\\Folder"
+{{ psrNamespace "User Input" prefix="Feature\" }} => "Feature"
+{{ psrNamespace "Folder/User Input" prefix="Feature\" }} => "Feature\\Folder"
 ```
 
 [Next: Writing Stub Files](./4-writing-stub-files.md) &rarr;

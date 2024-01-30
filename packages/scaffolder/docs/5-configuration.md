@@ -8,12 +8,9 @@ create a `.scaffolder` directory in the root of your project.
 ## Project Configuration
 
 The project configuration is defined in the `.scaffolder/config.yml` file. This
-file defines the project's name, description, and any additional sources (local
-or remote).
+file defines the project's sources (local or remote).
 
 ```yaml
-apiVersion: 1
-
 sources:
   # Check another directory in the project for features. Supports both formats.
   - directory: ../project-features
@@ -25,6 +22,9 @@ sources:
   # Check a git repository for features.
   - git: git@bitbucket.com:alleyinteractive/scaffolder-features.git
 ```
+
+The global configuration and all `node_modules` directories are included as
+sources. This cannot be overridden at this time.
 
 ## Global Configuration
 

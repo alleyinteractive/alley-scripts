@@ -57,18 +57,47 @@ inputs:
 
 files:
   - source: case-study.stub
-    destination: src/case-study/${{ inputs.caseStudyName | wpClassFilename }}
+    destination: src/case-study/{{ wpClassFilename | inputs.caseStudyName }}
   - source: case-study-feed.stub
-    destination: src/feeds/${{ inputs.caseStudyName | wpClassFilename }}.php
+    destination: src/feeds/{{ wpClassFilename | inputs.caseStudyName }}.php
   - source: test.stub
-    if: ${{ inputs.tests }}
-    destination: tests/Features/${{ inputs.caseStudyName | psrClassFilename('', 'Test.php') }}
+    if: "{{ inputs.tests }}"
+    destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
 ```
 
 Run the scaffolder and you will be prompted for the "Case Study" feature. If
 selected, the scaffolder will prompt you for the inputs defined in the
 `config.yml` file. Once the inputs are provided and valid, the files will be
 generated and copied over to the configured destination.
+
+### Defining Features without a Subdirectory
+
+Features can also be defined without a subdirectory on the `features` key in the
+project's `.scaffolder/config.yml` file.
+
+```yaml
+features:
+  - name: Case Study
+	inputs:
+	  - name: caseStudyName
+		description: "Case Study Name"
+		type: string
+	  - name: tests
+		description: "Include Tests?"
+		type: boolean
+		default: true
+	files:
+	  - source: case-study.stub
+		destination: src/case-study/{{ wpClassFilename | inputs.caseStudyName }}
+	  - source: case-study-feed.stub
+		destination: src/feeds/{{ wpClassFilename | inputs.caseStudyName }}.php
+	  - source: test.stub
+		if: "{{ inputs.tests }}"
+		destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}
+```
+
+Subdirectories are strongly recommended to keep the project organized, but
+features can be defined in the root of the `.scaffolder` directory if desired.
 
 ## Remote Features
 
@@ -82,51 +111,7 @@ sourced from a remote repository or a local directory. See
 Remote Features follow the same syntax as local features, but are not located
 within a project.
 
-## Feature Configuration
-
-The simplest form of a feature is a `config.yml` file located in a directory, be
-it local or remote. The `config.yml` file defines the feature and its inputs.
-From there, the feature can either scaffold files from the same directory or
-scaffold an entire project.
-
-The following is a standard configuration file for a feature:
-
-```yaml
-name: Plugin Feature
-
-inputs:
-  - name: featureName
-    description: "Feature Name"
-    type: string
-  - name: tests
-    description: "Include Tests?"
-    type: boolean
-    default: true
-
-files:
-  - source: feature.stub
-    destination: src/features/${{ inputs.featureName | wpClassFilename }}
-  - source: test.stub
-    if: ${{ inputs.tests }}
-    destination: tests/Features/${{ inputs.featureName | psrClassFilename('', 'Test.php') }}
-```
-
-Let's break down the configuration file:
-
-- `name`: The name of the feature. This is used to identify the feature in the
-  list of features. If not provided, the name of the directory will be used.
-- `inputs`: A list of inputs that the feature requires. Optional. See [Input](#input)
-  for more information.
-- `files`: A list of files to scaffold. The files support an individual file or
-  an entire directory with a `glob` pattern. Both the source and destination
-  support expressions for reformatting of the user's input. See
-  [Expressions](./3-expressions.md) for more
-
-  Files support an `if` condition that can be used to conditionally scaffold a
-  file. By default, the file will be included unless the `if` condition is
-  included and evaluates to `false`.
-
-### Inputs
+## Inputs
 
 Inputs are a list of values that the user will be prompted for when the feature
 is selected. Inputs are optional, but can be used to customize the feature to
@@ -150,5 +135,84 @@ properties:
 
 Once the user has submitted the inputs, the inputs will be available in the
 `inputs` object when evaluating expressions.
+
+## Feature Types
+
+### File Features
+
+The simplest form of a feature is a `config.yml` file located in a directory, be
+it local or remote. The `config.yml` file defines the feature and its inputs.
+From there, the feature can either scaffold files from the same directory or
+scaffold an entire project.
+
+If a feature type is not defined, the feature will default to a file feature.
+The following is a standard configuration file for a feature:
+
+```yaml
+name: Plugin Feature
+
+inputs:
+  - name: featureName
+    description: "Feature Name"
+    type: string
+  - name: tests
+    description: "Include Tests?"
+    type: boolean
+    default: true
+
+files:
+  - source: feature.stub
+    destination: src/features/{{ wpClassFilename inputs.featureName }}
+  - source: test.stub
+    if: {{ inputs.tests }}
+    destination: tests/Features/{{ psrClassFilename inputs.featureName suffix="Test.php" }}
+```
+
+Let's break down the configuration file:
+
+- `name`: The name of the feature. This is used to identify the feature in the
+  list of features. If not provided, the name of the directory will be used.
+- `inputs`: A list of inputs that the feature requires. Optional. See [Input](#input)
+  for more information.
+- `files`: A list of files to scaffold. The files support an individual file or
+  an entire directory with a `glob` pattern. Both the source and destination
+  support expressions for reformatting of the user's input. See
+  [Expressions](./3-expressions.md) for more
+
+  Files support an `if` condition that can be used to conditionally scaffold a
+  file. By default, the file will be included unless the `if` condition is
+  included and evaluates to `false`.
+
+### Repository Feature
+
+You can define a feature that will clone a remote repository and run a command
+after cloning. For example, the scaffolder includes a feature out of the box
+that will clone the `create-wordpress-plugin` repository and run the
+configuration script after cloning.
+
+The following is a standard configuration file for a repository feature:
+
+```yaml
+name: create-wordpress-plugin
+type: repository
+inputs:
+- name: pluginName
+	type: string
+	description: "Plugin Name"
+repository:
+	github: alleyinteractive/create-wordpress-plugin
+
+	# Supports a specific revision with a `#` divider.
+	# github: alleyinteractive/create-wordpress-plugin#main
+
+	# Supports git repositories as well.
+	# git: https://github.com/
+
+	# The destination of the repository after cloning. Supports expressions.
+	destination: "{{ dasherize inputs.pluginName }}"
+
+	# The command to run after cloning the repository. Supports expressions.
+	postCloneCommand: "php configure.php"
+```
 
 [Next: Expressions](./3-expressions.md) &rarr;
