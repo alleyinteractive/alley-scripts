@@ -22,6 +22,7 @@ let scaffolderRoot: string | undefined;
  * @param {String} rootDir The root directory to set as the scaffolder root, optional.
  */
 export function getRootDirectory(rootDir?: string) {
+  // Set the root directory if it has been passed as an argument.
   if (rootDir) {
     scaffolderRoot = rootDir;
   }
@@ -38,7 +39,7 @@ export function getRootDirectory(rootDir?: string) {
     if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
       scaffolderRoot = currentDirectory;
 
-      return currentDirectory;
+      return scaffolderRoot;
     }
 
     if (!fs.existsSync(currentDirectory)) {
