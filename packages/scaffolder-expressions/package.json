@@ -1,0 +1,45 @@
+{
+  "name": "@alleyinteractive/scaffolder-expressions",
+  "version": "0.0.0",
+  "description": "Expressions for the Alley Scaffolder",
+  "keywords": [
+    "alley-scaffolder"
+  ],
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "license": "ISC",
+  "author": "Alley Interactive",
+  "main": "index.js",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint index.ts src",
+    "prepublish": "npm run build",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "glob": "^10.3.10",
+    "mustache": "^4.2.0",
+    "prompts": "^2.4.2",
+    "ts-command-line-args": "^2.5.1"
+  },
+  "devDependencies": {
+    "@alleyinteractive/eslint-config": "*",
+    "@alleyinteractive/tsconfig": "*"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
