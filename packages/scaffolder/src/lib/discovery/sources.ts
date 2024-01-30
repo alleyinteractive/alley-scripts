@@ -9,7 +9,7 @@ import fs from 'node:fs';
  * in a shared remote resource like a git repository.
  */
 
-import { getGlobalDirectory, getConfiguration, getRootDirectory } from '../configuration';
+import { getGlobalDirectory, getConfiguration, getRootDirectory, getGlobalConfiguration, getProjectConfiguration } from '../configuration';
 import { DirectorySource, Source } from '../../types';
 import { processGitHubSource, processGitSource } from './remoteSources';
 
@@ -71,22 +71,14 @@ function getDefaultSources(): DirectorySource[] {
  * Retrieve the sources configured by the project and global configuration.
  */
 async function getConfiguredSources(): Promise<DirectorySource[]> {
-  const rootDirectory = getRootDirectory();
-  const {
-    root: {
-      config: rootConfiguration = {},
-    },
-    project: {
-      location: projectDirectory,
-      config: projectConfiguration = {},
-    },
-  } = await getConfiguration();
+  const globalDirectory = getGlobalDirectory();
+  const projectDirectory = getRootDirectory();
 
-  const { sources: rootSources = [] } = rootConfiguration || {};
-  const { sources: projectSources = [] } = projectConfiguration || {};
+  const { sources: globalSources = [] } = getGlobalConfiguration();
+  const { sources: projectSources = [] } = getProjectConfiguration();
 
   // Return early if there are no sources configured.
-  if (!rootSources.length && !projectSources.length) {
+  if (!globalSources.length && !projectSources.length) {
     return [];
   }
 
@@ -108,9 +100,8 @@ async function getConfiguredSources(): Promise<DirectorySource[]> {
     return source;
   };
 
-  // Reduce the root and project sources into a single stream of sources.
   return Promise.all([
-    ...rootSources.map((source) => preProcessSourceForRoot(source, rootDirectory)),
+    ...globalSources.map((source) => preProcessSourceForRoot(source, globalDirectory)),
     ...projectSources.map((source) => preProcessSourceForRoot(source, projectDirectory)),
   ].map(resolveSourceToDirectory));
 }

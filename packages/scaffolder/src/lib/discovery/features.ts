@@ -8,7 +8,7 @@ import { getLookupSources } from './sources';
 import { logger } from '../logger';
 import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 import handleError from '../error';
-import { getConfiguration, getRootDirectory } from '../configuration';
+import { getConfiguration, getGlobalConfiguration, getGlobalDirectory, getProjectConfiguration, getRootDirectory } from '../configuration';
 
 /**
  * Discover all feature configurations in a directory.
@@ -51,22 +51,17 @@ function parseFeatureConfiguration(config: FeatureConfig, configFile: string, di
  */
 async function getConfiguredFeatures(): Promise<Feature[]> {
   const {
-    root: {
-      location: rootDirectory,
-      config: {
-        features: rootFeatures = [],
-      } = {},
-    },
-    project: {
-      location: projectDirectory,
-      config: {
-        features: projectFeatures = [],
-      } = {},
-    },
-  } = await getConfiguration();
+    features: globalFeatures = [],
+  } = getGlobalConfiguration();
+  const globalDirectory = getGlobalDirectory();
+
+  const {
+    features: projectFeatures = [],
+  } = getProjectConfiguration();
+  const projectDirectory = getRootDirectory();
 
   return [
-    ...rootFeatures.map((feature) => parseFeatureConfiguration(feature, '', rootDirectory)),
+    ...globalFeatures.map((feature) => parseFeatureConfiguration(feature, '', globalDirectory)),
     ...projectFeatures.map((feature) => parseFeatureConfiguration(feature, '', projectDirectory)),
   ];
 }

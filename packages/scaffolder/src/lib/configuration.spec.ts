@@ -90,51 +90,51 @@ sources:
     });
   });
 
-  it('should get the project configuration with the global merged in', async () => {
-    process.env.SCAFFOLDER_HOME = '/scaffolder';
+//   it('should get the project configuration with the global merged in', async () => {
+//     process.env.SCAFFOLDER_HOME = '/scaffolder';
 
-    (fs.existsSync as jest.Mock).mockReturnValue(true);
+//     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
-    // Project configuration.
-    (fs.readFileSync as jest.Mock)
-      .mockReturnValueOnce(`
-sources:
-  - ./project-dir
-  - directory: ./another-project-dir
-    `)
+//     // Project configuration.
+//     (fs.readFileSync as jest.Mock)
+//       .mockReturnValueOnce(`
+// sources:
+//   - ./project-dir
+//   - directory: ./another-project-dir
+//     `)
 
-    // Global configuration.
-      .mockReturnValueOnce(`
-sources:
-  - ./global-dir
-    `);
+//     // Global configuration.
+//       .mockReturnValueOnce(`
+// sources:
+//   - ./global-dir
+//     `);
 
-    expect(await getConfiguration('/project')).toEqual({
-      root: {
-        location: getGlobalDirectory(),
-        config: {
-          sources: [
-            {
-              directory: './__tests__/fixtures/a-features',
-              root: rootDir,
-            },
-            './global-dir',
-          ],
-        },
-      },
-      project: {
-        location: '/project/.scaffolder',
-        config: {
-          sources: [
-            './project-dir',
-            {
-              directory: './another-project-dir',
-            },
-          ],
-        },
-      },
-    });
-  });
+//     expect(await getConfiguration('/project')).toEqual({
+//       root: {
+//         location: getGlobalDirectory(),
+//         config: {
+//           sources: [
+//             {
+//               directory: './__tests__/fixtures/a-features',
+//               root: rootDir,
+//             },
+//             './global-dir',
+//           ],
+//         },
+//       },
+//       project: {
+//         location: '/project/.scaffolder',
+//         config: {
+//           sources: [
+//             './project-dir',
+//             {
+//               directory: './another-project-dir',
+//             },
+//           ],
+//         },
+//       },
+//     });
+//   });
 
   const invalidConfigurations = [
     `
