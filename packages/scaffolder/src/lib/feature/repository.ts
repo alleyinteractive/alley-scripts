@@ -8,7 +8,7 @@ class RepositoryFeature extends Feature {
    * Process a feature and scaffold the files.
    */
   async invoke() {
-
+    console.log('invoking', this);
   }
 }
 

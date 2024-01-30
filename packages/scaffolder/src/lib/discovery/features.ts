@@ -62,10 +62,10 @@ async function getConfiguredFeatures(): Promise<Feature[]> {
   const { features: globalFeatures = [] } = getGlobalConfiguration();
   const { features: projectFeatures = [] } = getProjectConfiguration();
 
-  return [
+  return uniqBy([
     ...globalFeatures.map((feature) => parseFeatureConfiguration(feature, globalDirectory)),
     ...projectFeatures.map((feature) => parseFeatureConfiguration(feature, projectDirectory)),
-  ];
+  ], (feature) => feature.config.name);
 }
 
 /**

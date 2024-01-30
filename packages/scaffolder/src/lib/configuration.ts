@@ -106,12 +106,12 @@ export function getGlobalConfiguration(): Configuration {
       } else if (!globalConfiguration) {
         globalConfiguration = {};
       }
+
+      validateConfiguration(globalConfiguration);
     } catch (err: any) {
       logger().error(`Failed to parse global configuration: ${err.message}`);
       process.exit(1);
     }
-
-    validateConfiguration(globalConfiguration);
   }
 
   // Merge the default configuration with the global configuration.

@@ -99,9 +99,9 @@ export function remoteSourceToLocalDirectory(source: Source): string {
 
 /**
  * Ensure a local repository is up to date.
- *
  * Only update the local repository once every hour.
- * TODO: Allow this cache to be overridden.
+ *
+ * @todo Allow this cache to be overridden.
  */
 async function updateLocalRepository(source: GitSource, directory: string) {
   const { git: cloneUrl } = source;
