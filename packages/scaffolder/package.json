@@ -22,7 +22,6 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "cli-progress": "^3.12.0",
-    "execa": "^8.0.1",
     "fast-glob": "^3.3.2",
     "glob": "^10.3.10",
     "handlebars": "^4.7.8",

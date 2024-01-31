@@ -21,11 +21,10 @@ const welcome = (dryRun: boolean) => {
 export const run = async (argv: string[] | undefined, dryRun = false) => {
   welcome(dryRun);
 
-  const rootDir = getProjectDirectory();
   const features = await getFeatures();
 
   if (!features.length) {
-    handleError(`No features found to scaffold in ${rootDir}.\n\nEnsure that your configuration isn't inadvertently overriding the built-in sources included with the scaffolder.`);
+    handleError(`No features found to scaffold in ${getProjectDirectory()}.\n\nEnsure that your configuration isn't inadvertently overriding the built-in sources included with the scaffolder.`);
   }
 
   logger().debug(`Found ${features.length} features to scaffold: ${JSON.stringify(features, null, 2)}`);

@@ -5,7 +5,7 @@ import { uniq } from 'lodash';
 
 import { DEFAULT_CONFIGURATION } from './defaultConfiguration';
 import { logger } from './logger';
-import type { Configuration } from '../types';
+import type { Configuration } from './types';
 import { parseYamlFile, validateConfiguration } from './yaml';
 
 let projectDirectory: string | undefined;
@@ -25,7 +25,9 @@ let projectDirectory: string | undefined;
 export function getProjectDirectory(directory?: string) {
   // Set the root directory if it has been passed as an argument.
   if (directory) {
-    projectDirectory = directory;
+    projectDirectory = path.resolve(directory);
+
+    logger().info(`Set project root to ${chalk.yellow(projectDirectory)} from --root option.\n`);
   }
 
   if (typeof projectDirectory !== 'undefined') {

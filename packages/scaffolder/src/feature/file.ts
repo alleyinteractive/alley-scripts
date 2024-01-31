@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { glob } from 'fast-glob';
 import { dirname } from 'node:path';
 
-import { FeatureFile } from '../../types';
+import { FeatureFile } from '../types';
 import { logger } from '../logger';
 import { Feature } from './feature';
 import { parseExpression, parseFalsy, parseObjectExpression } from '../expressions';
@@ -11,6 +11,9 @@ import handleError from '../error';
 
 /**
  * File-based feature.
+ *
+ * Can generate a set of files/folders in a new source directory while parsing
+ * the files/folders for expressions based on the user's input.
  */
 class FileFeature extends Feature {
   /**

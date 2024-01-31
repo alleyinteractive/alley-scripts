@@ -8,7 +8,7 @@ import {
   GitSource,
   GithubSource,
   Source,
-} from '../../types';
+} from '../types';
 import { getGlobalDirectory } from '../configuration';
 import { logger } from '../logger';
 import { createGit } from '../git';

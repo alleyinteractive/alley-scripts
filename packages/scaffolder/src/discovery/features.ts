@@ -3,7 +3,7 @@ import fg from 'fast-glob';
 import path from 'node:path';
 import { uniqBy } from 'lodash';
 
-import type { FeatureConfig } from '../../types';
+import type { FeatureConfig } from '../types';
 import { Feature, FileFeature, RepositoryFeature } from '../feature';
 import { getLookupSources } from './sources';
 import { logger } from '../logger';

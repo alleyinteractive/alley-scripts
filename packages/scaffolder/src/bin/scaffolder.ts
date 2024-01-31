@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import entryArgs, { EntryArgs } from '../lib/entryArgs';
-import { getProjectDirectory } from '../lib/configuration';
+import entryArgs, { EntryArgs } from '../entryArgs';
+import { getProjectDirectory } from '../configuration';
 
-import { initializeLogger } from '../lib/logger';
-import { run } from '../lib/run';
+import { initializeLogger } from '../logger';
+import { run } from '../run';
 
 /**
  * Alley Scaffolder

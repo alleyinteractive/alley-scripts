@@ -17,7 +17,7 @@ import {
   getProjectConfiguration,
   getProjectScaffolderDirectory,
 } from '../configuration';
-import { DirectorySource, Source } from '../../types';
+import { DirectorySource, Source } from '../types';
 import { processGitHubSource, processGitSource } from './remoteSources';
 
 /**
