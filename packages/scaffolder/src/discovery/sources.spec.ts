@@ -16,10 +16,12 @@ describe('discover/sources', () => {
 
   it('should get the configured source directories', async () => {
     resetConfiguration({
+      // Relative to the global configuration directory.
       sources: [
         './global-configuration',
       ],
     }, {
+      // Relative to the "packages/scaffolder" directory.
       sources: [
         './__tests__/fixtures/z-features',
       ],
@@ -40,12 +42,12 @@ describe('discover/sources', () => {
         directory: globalConfigDir,
         root: globalConfigDir,
       },
-      // Default configuration -- project configuration directory.
+      // Default testing configuration (DEFAULT_CONFIGURATION).
       {
         directory: './__tests__/fixtures/a-features',
         root: process.cwd(),
       },
-      // Root configuration.
+      // Project configuration.
       {
         directory: './global-configuration',
         root: globalConfigDir,

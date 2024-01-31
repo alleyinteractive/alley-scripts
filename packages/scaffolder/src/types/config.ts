@@ -1,4 +1,3 @@
-import { Feature } from '../feature/feature';
 import { Source } from './source';
 
 /**
@@ -61,7 +60,7 @@ export type FeatureRepositoryConfig = {
  */
 export type FeatureConfig = {
   name: string;
-  type: 'file' | 'repository' | typeof Feature;
+  type: 'file' | 'repository';
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;

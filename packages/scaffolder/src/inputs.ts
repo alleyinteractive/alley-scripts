@@ -1,14 +1,14 @@
 import prompts from 'prompts';
 
 import handleError from './error';
-import type { FeatureInput } from '../types';
 import { logger } from './logger';
+import type { FeatureInput } from './types';
 
 /**
  * Prompt the user for inputs to a feature by parsing the inputs and generating
  * questions for prompts.
  */
-export default async function collectInputs(featureInputs: FeatureInput[]) {
+export async function collectInputs(featureInputs: FeatureInput[]) {
   const inputs: Record<string, string | boolean> = {};
 
   if (!featureInputs.length) {

@@ -18,7 +18,8 @@ npx @alleyinteractive/scaffolder@latest <feature>
 The following arguments are available:
 
 ```
-  --root               The root directory of the project.
+  --root               The root directory of the project. Defaults to finding the
+					   nearest .scaffolder directory.
   --debug              Print debug information.
   --dry-run            Run the command without making any changes.
   -h, --help           Prints help information.
@@ -36,6 +37,15 @@ directory of the project.
 3. [Expressions](./docs/3-expressions.md)
 4. [Writing Stub Files](./docs/4-writing-stub-files.md)
 5. [Configuration](./docs/5-configuration.md)
+
+## Roadmap
+
+1. Allowing for more complex features to be generated. For example, a field
+   could be generated for a site and automatically appended to a file rather
+   than generating a whole new file.
+2. Allow NPM packages to automatically be used as sources. The default
+   configuration would become empty and the scaffolder would depend on other
+   generator packages to provide the templates included by default.
 
 ## Changelog
 

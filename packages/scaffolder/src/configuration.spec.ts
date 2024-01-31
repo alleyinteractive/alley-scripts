@@ -14,7 +14,7 @@ import { DEFAULT_CONFIGURATION } from './defaultConfiguration';
 
 jest.mock('node:fs');
 
-const rootDir = path.resolve(__dirname, '../..');
+const rootDir = path.resolve(__dirname, '..');
 
 describe('configuration', () => {
   beforeEach(() => {

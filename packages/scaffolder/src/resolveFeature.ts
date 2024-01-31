@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import prompts from 'prompts';
 
-import { Feature } from '../feature';
+import { Feature } from './feature';
 import handleError from './error';
 import { logger } from './logger';
 

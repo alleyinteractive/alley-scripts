@@ -17,6 +17,8 @@ export const initializeLogger = (debug: boolean) => {
     format: format.printf(({ message }) => message),
   });
 
+  instance.debug('Logger initialized.');
+
   return instance;
 };
 

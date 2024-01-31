@@ -8,7 +8,7 @@ import { logger } from './logger';
 import type { Configuration } from './types';
 import { parseYamlFile, validateConfiguration } from './yaml';
 
-let projectDirectory: string | undefined;
+let _projectDirectory: string | undefined; // eslint-disable-line @typescript-eslint/naming-convention, no-underscore-dangle, max-len
 
 /**
  * Locate the scaffolder project directory, recursively searching up the
@@ -25,13 +25,13 @@ let projectDirectory: string | undefined;
 export function getProjectDirectory(directory?: string) {
   // Set the root directory if it has been passed as an argument.
   if (directory) {
-    projectDirectory = path.resolve(directory);
+    _projectDirectory = path.resolve(directory);
 
-    logger().info(`Set project root to ${chalk.yellow(projectDirectory)} from --root option.\n`);
+    logger().info(`Set project root to ${chalk.yellow(_projectDirectory)} from --root option.\n`);
   }
 
-  if (typeof projectDirectory !== 'undefined') {
-    return projectDirectory;
+  if (typeof _projectDirectory !== 'undefined') {
+    return _projectDirectory;
   }
 
   // Recursively search up the directory tree until a template directory is
@@ -40,9 +40,9 @@ export function getProjectDirectory(directory?: string) {
 
   while (true) { // eslint-disable-line no-constant-condition
     if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
-      projectDirectory = currentDirectory;
+      _projectDirectory = currentDirectory;
 
-      return projectDirectory;
+      return _projectDirectory;
     }
 
     if (!fs.existsSync(currentDirectory)) {
@@ -60,9 +60,9 @@ export function getProjectDirectory(directory?: string) {
   logger().info('No configuration found, using current directory as root.');
   logger().info(chalk.italic(chalk.blueBright('Use the --root option to specify a different project directory or create a .scaffolder directory in the current/parent directory.')));
 
-  projectDirectory = process.cwd();
+  _projectDirectory = process.cwd();
 
-  return projectDirectory;
+  return _projectDirectory;
 }
 
 /**
@@ -81,7 +81,7 @@ export function getProjectScaffolderDirectory() {
  * Used only for testing.
  */
 export function clearProjectDirectory() {
-  projectDirectory = undefined;
+  _projectDirectory = undefined;
 }
 
 /**
@@ -104,12 +104,19 @@ export function getGlobalConfiguration(): Configuration {
 
     try {
       if (!globalConfiguration && fs.existsSync(`${globalConfigDir}/config.yml`)) {
-        globalConfiguration = parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`);
+        globalConfiguration = parseYamlFile<Configuration>(`${globalConfigDir}/config.yml`) || {};
       } else if (!globalConfiguration) {
         globalConfiguration = {};
       }
 
-      validateConfiguration(globalConfiguration);
+      try {
+        if (Object.keys(globalConfiguration).length) {
+          validateConfiguration(globalConfiguration);
+        }
+      } catch (err: any) {
+        logger().error(`Failed to validate global configuration: ${err.message}`);
+        process.exit(1);
+      }
     } catch (err: any) {
       logger().error(`Failed to parse global configuration: ${err.message}`);
       process.exit(1);
@@ -129,7 +136,7 @@ export function getGlobalConfiguration(): Configuration {
       ...DEFAULT_CONFIGURATION.features || [],
       ...globalConfiguration.features || [],
     ]),
-  };
+  } as Configuration;
 
   return globalConfiguration;
 }
@@ -144,16 +151,23 @@ export function getProjectConfiguration(): Configuration {
     return projectConfiguration;
   }
 
-  const rootDirectory = getProjectDirectory();
+  const projectDirectory = getProjectDirectory();
 
   try {
-    if (!projectConfiguration && fs.existsSync(`${rootDirectory}/.scaffolder/config.yml`)) {
-      projectConfiguration = parseYamlFile<Configuration>(`${rootDirectory}/.scaffolder/config.yml`) || {};
+    if (!projectConfiguration && fs.existsSync(`${projectDirectory}/.scaffolder/config.yml`)) {
+      projectConfiguration = parseYamlFile<Configuration>(`${projectDirectory}/.scaffolder/config.yml`) || {};
     } else if (!projectConfiguration) {
       projectConfiguration = {};
     }
 
-    validateConfiguration(projectConfiguration);
+    try {
+      if (Object.keys(projectConfiguration).length) {
+        validateConfiguration(projectConfiguration);
+      }
+    } catch (err: any) {
+      logger().error(`Failed to validate project configuration: ${err.message}`);
+      process.exit(1);
+    }
   } catch (err: any) {
     logger().error(`Failed to retrieve project configuration: ${err.message}`);
     process.exit(1);

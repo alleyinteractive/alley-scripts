@@ -1,6 +1,6 @@
 import { getGlobalDirectory, getProjectDirectory, getProjectScaffolderDirectory } from '../configuration';
 import { logger } from '../logger';
-import collectInputs from '../inputs';
+import { collectInputs } from '../inputs';
 import type { FeatureConfig, FeatureContext } from '../types';
 
 /**

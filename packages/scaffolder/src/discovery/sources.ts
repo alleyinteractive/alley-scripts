@@ -50,14 +50,14 @@ async function resolveSourceToDirectory(source: Source): Promise<DirectorySource
  * The default sources that are always included from the global configuration.
  */
 function getDefaultSources(): DirectorySource[] {
-  const rootDirectory = getProjectDirectory();
+  const projectDirectory = getProjectDirectory();
   const sources: DirectorySource[] = [];
 
   // Include the project's scaffolder directory if it exists.
-  if (fs.existsSync(`${rootDirectory}/.scaffolder`)) {
+  if (fs.existsSync(`${projectDirectory}/.scaffolder`)) {
     sources.push({
-      directory: `${rootDirectory}/.scaffolder`,
-      root: rootDirectory,
+      directory: `${projectDirectory}/.scaffolder`,
+      root: projectDirectory,
     });
   }
 

@@ -3,7 +3,7 @@ import path from 'node:path';
 import { resetConfiguration } from '../configuration';
 import { getFeatures } from './features';
 
-const fixturesDirectory = path.resolve(__dirname, '../../../__tests__/fixtures');
+const fixturesDirectory = path.resolve(__dirname, '../../__tests__/fixtures');
 
 describe('discovery/features', () => {
   beforeEach(() => {

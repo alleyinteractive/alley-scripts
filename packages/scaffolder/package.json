@@ -44,9 +44,10 @@
     "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
   },
   "scripts": {
-    "build": "babel src -d dist --extensions=\".ts\"",
+    "build:types": "npx tsc --declaration --emitDeclarationOnly",
+    "build": "babel src -d dist --extensions=\".ts\" && npm run build:types",
     "watch": "babel src -d dist --watch --source-maps --extensions=\".ts\"",
-    "lint": "eslint src",
+    "lint": "tsc && eslint src",
     "lint:fix": "eslint src --fix",
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",

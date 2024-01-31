@@ -21,6 +21,8 @@ import {
  *
  * Using glob patterns, we can discover all the feature configurations
  * (<feature>/config.yml files) in a directory.
+ *
+ * @todo Allow index.js files to be used as features.
  */
 async function discoverFeatureConfigurations(directory: string, cwd: string): Promise<string[]> {
   return fg.glob(`${directory}/*/config.yml`, {
@@ -70,6 +72,9 @@ async function getConfiguredFeatures(): Promise<Feature[]> {
 
 /**
  * Discover features that can be used.
+ *
+ * This function starts off the discovery process of finding all available
+ * features that can be used by the scaffolder.
  *
  * @todo Add caching to improve performance.
  */
