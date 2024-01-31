@@ -40,10 +40,12 @@ directory of the project.
 
 ## Roadmap
 
-1. Allowing for more complex features to be generated. For example, a field
+1. [x] Creating a scaffolding tool that can generate files from a project.
+2. [x] Allowing remote repositories to be scaffolded.
+3. [ ] Allowing for more complex features to be generated. For example, a field
    could be generated for a site and automatically appended to a file rather
    than generating a whole new file.
-2. Allow NPM packages to automatically be used as sources. The default
+4. [ ] Allow NPM packages to automatically be used as sources. The default
    configuration would become empty and the scaffolder would depend on other
    generator packages to provide the templates included by default.
 
