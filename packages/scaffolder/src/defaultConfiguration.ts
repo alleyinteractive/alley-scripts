@@ -6,21 +6,38 @@ import type { Configuration } from './types';
  */
 export const DEFAULT_CONFIGURATION: Configuration = typeof jest === 'undefined' ? {
   // TODO: Move these to a separate NPM package.
-  features: [{
-    name: 'create-wordpress-plugin',
-    type: 'repository',
-    inputs: [{
-      name: 'name',
-      description: 'The name of the plugin',
-      type: 'string',
-      required: true,
-    }],
-    repository: {
-      github: 'alleyinteractive/create-wordpress-plugin',
-      destination: '{{ dasherize inputs.name }}',
-      postCloneCommand: 'php configure.php',
+  features: [
+    {
+      name: 'create-wordpress-plugin',
+      type: 'repository',
+      inputs: [{
+        name: 'name',
+        description: 'The name of the plugin',
+        type: 'string',
+        required: true,
+      }],
+      repository: {
+        github: 'alleyinteractive/create-wordpress-plugin',
+        destination: '{{ dasherize inputs.name }}',
+        postCloneCommand: 'php configure.php',
+      },
     },
-  }],
+    {
+      name: 'create-wordpress-project',
+      type: 'repository',
+      inputs: [{
+        name: 'name',
+        description: 'The name of the project',
+        type: 'string',
+        required: true,
+      }],
+      repository: {
+        github: 'alleyinteractive/create-wordpress-project',
+        destination: '{{ dasherize inputs.name }}',
+        postCloneCommand: 'php configure.php',
+      },
+    },
+  ],
   sources: [],
 } : {
   features: [],
