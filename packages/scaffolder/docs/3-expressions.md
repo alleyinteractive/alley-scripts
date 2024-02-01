@@ -2,12 +2,12 @@
 
 Expressions are used to reformat the user's input. Alley Scaffolder uses
 [Handlebars](https://handlebarsjs.com/) for expression parsing which is a
-full featured templating language. Scaffodler also includes a
+full featured templating language. Scaffolder also includes a
 [helper package](https://github.com/helpers/handlebars-helpers) to make it
 easier to work with expressions.
 
 For the purposes of Alley Scaffolder, variables and other expressions are
-surrended by `{{ }}`. This syntax is similar to GitHub Actions, but is not
+surrounded by `{{ }}`. This syntax is similar to GitHub Actions, but is not
 compatible with GitHub Actions expressions.
 
 You can see expressions in use in the [Feature Configuration](./2-features.md).
@@ -24,7 +24,7 @@ In this example, the `if` conditional is used to conditionally scaffold a file
 based on the user's input. If the user selects to scaffold tests, the file will
 be scaffolded. If not, the file will be skipped.
 
-## Helper
+## Helpers
 
 Helper are the most powerful part of expressions. Helpers are used to modify
 the user's input. For example, if you want to convert a user's input to a
@@ -135,6 +135,16 @@ namespace.
 ```
 {{ psrNamespace "User Input" prefix="Feature\" }} => "Feature"
 {{ psrNamespace "Folder/User Input" prefix="Feature\" }} => "Feature\\Folder"
+```
+
+### `dasherize`
+
+Converts a string to a dasherized string.
+
+```
+{{ dasherize "User Input" }} => "user-input"
+{{ dasherize "Folder/User Input" }} => "folder-user-input"
+{{ dasherize "Folder/Subfolder/User Input" }} => "folder-subfolder-user-input"
 ```
 
 [Next: Writing Stub Files](./4-writing-stub-files.md) &rarr;

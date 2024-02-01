@@ -1,7 +1,7 @@
 # Getting Started
 
 The scaffolder is a command line tool that helps you create new projects based
-on Alley's best practices. It can scaffold out a new project from scratch, or
+on Alley's best practices. It can scaffold out a new project from scratch or
 add new features to an existing project from a template.
 
 ## Usage

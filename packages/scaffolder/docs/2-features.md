@@ -1,27 +1,29 @@
 # Features
 
-The scaffolder supports local features (project-driven features) and global features.
-Project-driven features are features that are specific to a project and are
-scaffolded from files within. These can include generating new tests, classes,
- features, etc. for a project.
+The scaffolder supports local features (project-driven features) and global
+features. Project-driven features are features that are specific to a project
+and are scaffolded from files within. These can include generating new tests,
+ classes, features, etc. for a project.
 
 Global features are features that are not specific to or even located in a a
 project and can be scaffolded anywhere. These can include new WordPress plugins,
 projects, themes, etc.
 
-## Local Features
+## Feature Source Types
+
+### Local Features
 
 Local features are features that configured and scaffolded from a project
-itself. They require a `.scaffolder` directory in your project to scaffold from.
-For example, Alley's
+itself. They are sourced from a `.scaffolder` directory in your project. For
+example, Alley's
 [`create-wordpress-plugin`](https://github.com/alleyinteractive/create-wordpress-plugin/tree/feature/scaffolder/.scaffolder)
 project has a `.scaffolder` directory that contains a set of features that can
 be scaffolded into the plugin. These can be configured and modified by the
 project to fit their specific needs.
 
-One large benefit of keeping the templates within the project is that the
-project can independently update the templates to match the project's needs
-without having to wait for a new version of the scaffolder to be released.
+A large benefit of keeping the templates within the project is that the project
+can independently update the templates to match the project's needs without
+having to wait for a new version of the scaffolder to be released.
 
 Let's take a project about a fictional company called "Acme" as an example. The
 project has a new feature that is added frequently called "Case Studies". The
@@ -29,7 +31,7 @@ feature has a specific set of files that are similar in structure each time. We
 can create a new feature called "Case Studies" that scaffolds out the files
 needed for the feature instead of needing to copy and paste the files each time.
 
-### Defining a Feature
+#### Defining a Feature
 
 A feature is defined as a directory within the `.scaffolder` directory on a
 project that contains a `config.yml` file:
@@ -70,7 +72,7 @@ selected, the scaffolder will prompt you for the inputs defined in the
 `config.yml` file. Once the inputs are provided and valid, the files will be
 generated and copied over to the configured destination.
 
-### Defining Features without a Subdirectory
+#### Defining Features Without a Subdirectory
 
 Features can also be defined without a subdirectory on the `features` key in the
 project's `.scaffolder/config.yml` file.
@@ -96,27 +98,27 @@ features:
 		destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}
 ```
 
-Subdirectories are strongly recommended to keep the project organized, but
-features can be defined in the root of the `.scaffolder` directory if desired.
+Subdirectories are **strongly recommended** to keep the project organized, but
+features can be defined in the `.scaffolder/config.yml` file if desired.
 
-## Remote Features
+### Remote Features
 
-Remote Features are features that are not specific to or even located in a a
+Remote Features are features that are not specific to or located within a
 project and can be scaffolded anywhere. Out of the box, the scaffolder comes
 with a set of remote features that can be scaffolded. These can include new
 WordPress plugins, projects, themes, etc. Additional remote feature can be
-sourced from a remote repository or a local directory. See
+sourced from a remote repository or a local directory. In the future, we'll be
+using NPM to manage remote features, too. See
 [Configuration](./5-configuration.md) for more information.
 
 Remote Features follow the same syntax as local features, but are not located
 within a project.
 
-## Inputs
+## Feature Inputs
 
-Inputs are a list of values that the user will be prompted for when the feature
-is selected. Inputs are optional, but can be used to customize the feature to
-the user's needs. Inputs are defined as a list of objects with the following
-properties:
+Inputs are a list of values that the user will be prompted before generation.
+Inputs are optional but can be used to customize the feature to the user's
+needs. Inputs are defined as a list of objects with the following properties:
 
 - `name`: Required. The name of the input. This is used to identify the input in the list
   of inputs.
@@ -137,6 +139,11 @@ Once the user has submitted the inputs, the inputs will be available in the
 `inputs` object when evaluating expressions.
 
 ## Feature Types
+
+The scaffolder supports different feature types that can be used to scaffold
+different types of features. For example, a file feature feature is used to copy
+a file from A to B. A repository feature is used to clone a repository and optionally run a
+command after cloning.
 
 ### File Features
 
@@ -185,8 +192,8 @@ Let's break down the configuration file:
 
 ### Repository Feature
 
-You can define a feature that will clone a remote repository and run a command
-after cloning. For example, the scaffolder includes a feature out of the box
+A repository feature is used to clone a repository and optionally run a command
+after cloning. Out of the box, the scaffolder includes a feature out of the box
 that will clone the `create-wordpress-plugin` repository and run the
 configuration script after cloning.
 
@@ -195,10 +202,14 @@ The following is a standard configuration file for a repository feature:
 ```yaml
 name: create-wordpress-plugin
 type: repository
+
+# Inputs, optional.
 inputs:
 - name: pluginName
 	type: string
 	description: "Plugin Name"
+
+# Repository configuration.
 repository:
 	github: alleyinteractive/create-wordpress-plugin
 

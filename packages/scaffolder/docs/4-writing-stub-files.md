@@ -1,11 +1,11 @@
 # Writing Stub Files
 
-Stub files are the templates that are used to scaffold files. Stub files are
-written in [Handlebars](https://handlebarsjs.com/) and
-can contain any valid Handlebar syntax. You also don't _have_ to use Handlebars
-syntax and can simplify scaffold the file over one to one.
+Stub files are the templates that are used to scaffold files in file features.
+They are written in [Handlebars](https://handlebarsjs.com/) and can contain any
+valid Handlebar syntax. You also don't _have_ to use Handlebars syntax and can
+simplify scaffold the file over one to one.
 
-The [expression filters](./3-expressions.md) are also available in stub files.
+The [expression helpers](./3-expressions.md) are also available in stub files.
 
 ## Variables
 
