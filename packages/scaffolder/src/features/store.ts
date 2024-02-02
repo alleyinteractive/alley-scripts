@@ -55,10 +55,13 @@ class FeatureStore {
         this.add(directory, feature);
       });
     } else {
+      // Ensure that the feature is not already registered.
       const registeredNames = Object.values(this.features).flat().map((feature) => feature.name);
 
       if (registeredNames.includes(features.name)) {
-        logger().warn(`The feature "${chalk.yellow(features.name)}" is already registered and will be overwritten.`);
+        logger().warn(`The feature "${chalk.yellow(features.name)}" is already registered. Skipping.`);
+
+        return;
       }
 
       this.features[directory].push(features);
@@ -97,8 +100,6 @@ class FeatureStore {
    * Load the features from the sources defined in the configuration store.
    */
   public async loadSourcesFromStore() {
-    // Sources are the configured sources in each configuration file and the
-    // directory of the configuration file.
     const sources = this.config.pluck('sources');
     const sourcesToResolve: Source[] = [];
 
@@ -119,6 +120,7 @@ class FeatureStore {
       });
     });
 
+    // Resolve all sources (including git/remote ones) to directory sources.
     this.sources.push(
       ...await Promise.all(sourcesToResolve.map(resolveSourceToDirectory)),
     );
@@ -179,16 +181,6 @@ class FeatureStore {
         this.add(path.dirname(file), config);
 
         return config;
-
-        // if (config.type === 'file') {
-        //   return new FileGenerator(config, path.dirname(file));
-        // } if (config.type === 'repository') {
-        //   return new RepositoryGenerator(config, path.dirname(file));
-        // }
-
-        // // Throw an error if an invalid type has reached this far though Joi
-        // // validation should have caught it.
-        // handleError(`The feature "${config.name}" has an invalid type "${chalk.yellow(config.type)}" defined.`);
       }),
     )
       .then((items) => items.filter((feature) => feature !== null)) as FeatureConfig[];

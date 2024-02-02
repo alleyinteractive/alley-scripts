@@ -1,9 +1,6 @@
 import { initializeFeatureStore } from './features/store';
-import { getFeatures } from './discovery';
-import handleError from './error';
 import { logger } from './logger';
-// import { getConfigurationStore } from '.';
-// import resolveFeature from './resolveFeature';
+import { configToGenerator, invokeFeature, promptUserForFeature } from './features';
 
 const welcome = (dryRun: boolean) => {
   const emojis = ['👋', '🌸', '🚀'];
@@ -22,19 +19,9 @@ const welcome = (dryRun: boolean) => {
 export const run = async (argv: string[] | undefined, dryRun = false) => {
   welcome(dryRun);
 
-  const store = await initializeFeatureStore();
+  await initializeFeatureStore();
 
-  // throw new Error('asdad');
+  const feature = await promptUserForFeature(argv ? argv[0] : undefined);
 
-  // const features = await getFeatures();
-
-  // if (!features.length) {
-  //   handleError('No features found to scaffold.\n\nEnsure that your configuration isn\'t inadvertently overriding the built-in sources included with the scaffolder.');
-  // }
-
-  // logger().debug(`Found ${features.length} features to scaffold: ${JSON.stringify(features, null, 2)}`);
-
-  // const feature = await resolveFeature(features, argv ? argv[0] : undefined);
-
-  // return feature.resolveAndInvoke(dryRun);
+  return invokeFeature(configToGenerator(...feature), dryRun);
 };

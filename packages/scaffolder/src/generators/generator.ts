@@ -4,7 +4,7 @@ import { collectInputs } from '../inputs';
 import type { FeatureConfig, FeatureContext } from '../types';
 
 /**
- * Base feature class.
+ * Base generator class.
  */
 export abstract class Generator {
   /* Feature configuration. */

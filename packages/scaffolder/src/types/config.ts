@@ -63,11 +63,10 @@ export type FeatureRepositoryConfig = {
 export type FeatureConfig = {
   name: string;
   type: 'file' | 'repository';
-  config?: {
-    useCwd?: boolean;
-  };
+  // config?: {
+  //   useCwd?: boolean;
+  // };
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;
-  [key: string]: any;
 };
