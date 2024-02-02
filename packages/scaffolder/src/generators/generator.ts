@@ -15,9 +15,6 @@ export abstract class Generator {
   /* Resolved inputs for the feature. */
   public inputs: Record<string, string | boolean> = {};
 
-  /* Root directory for the project. */
-  public rootDir: string;
-
   /* Whether the feature is a dry run. */
   public dryRun: boolean = false;
 

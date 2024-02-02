@@ -5,6 +5,7 @@ import chalk from 'chalk';
 // Services.
 import { logger } from '../logger';
 import { parseYamlFile, validateConfiguration } from '../yaml';
+import { getGlobalDirectory } from './globalDirectory';
 
 // Types.
 import type { Configuration } from '../types/config';
@@ -93,6 +94,29 @@ export class ConfigurationStore {
       if (currentDirectory === '/' || currentDirectory.match(/^[A-Z]:\\$/)) {
         break;
       }
+    }
+
+    const globalConfigurationDirectory = getGlobalDirectory();
+
+    // Ensure the global configuration is loaded if it wasn't already.
+    if (typeof this.configurations[globalConfigurationDirectory] === 'undefined') {
+      try {
+        const globalConfiguration = fs.existsSync(`${globalConfigurationDirectory}/config.yml`)
+          ? (parseYamlFile(`${globalConfigurationDirectory}/config.yml`) || {})
+          : {};
+
+        try {
+          validateConfiguration(globalConfiguration);
+
+          this.add(globalConfigurationDirectory, globalConfiguration);
+        } catch (error: any) {
+          logger().error(`Error loading global configuration from ${chalk.yellow(`${globalConfigurationDirectory}/config.yml`)}: ${chalk.red(error.message)}`);
+        }
+      } catch (error: any) {
+        logger().error(`Error loading global configuration: ${chalk.red(error.message)}`);
+      }
+
+      logger().debug(`Loaded global configuration from ${chalk.blue(globalConfigurationDirectory)}`);
     }
 
     logger().debug(`Loaded ${chalk.blue(Object.keys(this.configurations).length)} configurations.`);

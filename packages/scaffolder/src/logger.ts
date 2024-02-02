@@ -27,7 +27,7 @@ export const initializeLogger = (debug: boolean) => {
  */
 export const logger = () => {
   if (!instance) {
-    instance = initializeLogger(false);
+    throw new Error('Logger not initialized.');
   }
 
   return instance;

@@ -3,17 +3,18 @@ import { parse } from 'ts-command-line-args';
 /**
  * The command line argument types.
  */
-export type EntryArgs = {
+export type Arguments = {
   root?: string;
   debug?: boolean;
   'dry-run'?: boolean;
   help?: boolean;
+  _unknown?: string[];
 };
 
 /**
  * Set the script arguments and defaults.
  */
-const entryArgs = parse<EntryArgs>(
+const commandArguments = parse<Arguments>(
   {
     root: {
       type: String,
@@ -49,4 +50,4 @@ const entryArgs = parse<EntryArgs>(
   },
 );
 
-export default entryArgs;
+export default commandArguments;
