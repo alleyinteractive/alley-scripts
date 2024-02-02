@@ -55,9 +55,9 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "^0.1.0",
-    "@alleyinteractive/stylelint-config": "^0.0.2",
-    "@alleyinteractive/tsconfig": "^0.1.0",
+    "@alleyinteractive/eslint-config": "*",
+    "@alleyinteractive/stylelint-config": "*",
+    "@alleyinteractive/tsconfig": "*",
     "@babel/preset-env": "^7.23.2",
     "@types/wordpress__edit-post": "^7.0.1",
     "@types/wordpress__plugins": "^3.0.0",

@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: build-publish
-      uses: bitovi/github-actions-react-to-ghp@v1.2.0
+      uses: bitovi/github-actions-react-to-ghp@v1.2.2
       with:
         path: storybook-static
         build_command: npm run build-storybook
