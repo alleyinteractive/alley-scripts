@@ -41,6 +41,7 @@ abstract class Feature {
     const { name } = this.config;
 
     return {
+      cwd: process.cwd(),
       feature: { name },
       inputs: this.inputs,
     } as FeatureContext;
@@ -63,12 +64,17 @@ abstract class Feature {
    * If there is a project configuration that is not the global configuration,
    * use the project directory. If not, use the current working directory.
    */
-  public getDestinationDirectory(): string {
-    if (getProjectScaffolderDirectory() === getGlobalDirectory()) {
-      return process.cwd();
+  public getDestinationDirectory(path: string): string {
+    // Determine if path is a relative directory.
+    if (path.startsWith('./') || path.startsWith('../')) {
+      if (getProjectScaffolderDirectory() === getGlobalDirectory()) {
+        return `${process.cwd()}/${path}`;
+      }
+
+      return `${this.rootDir}/${path}`;
     }
 
-    return this.rootDir;
+    return path;
   }
 
   /**
@@ -78,6 +84,9 @@ abstract class Feature {
     this.dryRun = dryRun;
 
     await this.collectInputs();
+
+    logger().debug(`Running feature with config: ${JSON.stringify(this.config, null, 2)}`);
+
     await this.invoke();
   }
 

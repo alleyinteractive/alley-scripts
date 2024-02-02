@@ -84,7 +84,7 @@ class RepositoryFeature extends Feature {
 
     const context = this.collectContextVariables();
 
-    const destination = parseExpression(`${this.getDestinationDirectory()}/${destinationConfig}`, context);
+    const destination = this.getDestinationDirectory(parseExpression(`${destinationConfig}`, context));
 
     // Check if the destination already exists and is not empty.
     if (fs.existsSync(destination) && fs.readdirSync(destination).length) {
