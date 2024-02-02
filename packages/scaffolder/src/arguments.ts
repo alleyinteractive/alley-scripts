@@ -8,7 +8,6 @@ export type Arguments = {
   debug?: boolean;
   'dry-run'?: boolean;
   help?: boolean;
-  _unknown?: string[];
 };
 
 /**

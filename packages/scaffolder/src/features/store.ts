@@ -204,6 +204,8 @@ export function getFeatureStore(): FeatureStore {
 
 /**
  * Initialize the feature store.
+ *
+ * Discovers all configured features, sources, and features from said sources.
  */
 export async function initializeFeatureStore(configStore: ConfigurationStore = getConfigurationStore()) {
   store = new FeatureStore(configStore);

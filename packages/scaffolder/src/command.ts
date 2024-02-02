@@ -5,7 +5,7 @@ import commandArguments from './arguments';
 import { initializeConfigurationStore } from './configuration';
 
 class ScaffolderCommand {
-  private readonly arguments: Arguments;
+  private readonly arguments: typeof commandArguments & { _unknown?: string[] };
 
   private logger: ReturnType<typeof initializeLogger>;
 
@@ -24,9 +24,10 @@ class ScaffolderCommand {
   }
 
   async invoke() {
-    const { _unknown: argv = undefined } = this.arguments;
-
-    this.logger.debug('Starting scaffolder...');
+    const {
+      'dry-run': dryRun = false,
+      _unknown: argv = undefined,
+    } = this.arguments;
 
     this.welcome();
 
@@ -34,7 +35,7 @@ class ScaffolderCommand {
 
     const feature = await promptUserForFeature(argv ? argv[0] : undefined);
 
-    await invokeFeature(configToGenerator(...feature), this.arguments.dryRun);
+    await invokeFeature(configToGenerator(...feature), dryRun);
 
     this.logger.info('🎉 Done. Happy coding!');
   }
@@ -45,7 +46,9 @@ class ScaffolderCommand {
 
     this.logger.info(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
 
-    if (this.arguments.dryRun) {
+    const { 'dry-run': dryRun = false } = this.arguments;
+
+    if (dryRun) {
       this.logger.info('🚨 Running in dry-run mode. No files will be generated.');
     }
   }
