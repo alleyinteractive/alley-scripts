@@ -1,4 +1,3 @@
-import { getGlobalDirectory, getProjectDirectory, getProjectScaffolderDirectory } from '../configuration';
 import { logger } from '../logger';
 import { collectInputs } from '../inputs';
 import type { FeatureConfig, FeatureContext } from '../types';
@@ -31,7 +30,6 @@ export abstract class Generator {
   constructor(config: FeatureConfig, path: string) {
     this.config = config;
     this.path = path;
-    this.rootDir = getProjectDirectory();
   }
 
   /**
