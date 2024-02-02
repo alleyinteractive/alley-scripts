@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'node:fs';
 import { glob } from 'fast-glob';
-import { dirname } from 'node:path';
+import path, { dirname } from 'node:path';
 
 import { FeatureFile } from '../types';
 import { logger } from '../logger';
@@ -21,6 +21,8 @@ class FileFeature extends Feature {
    *
    * Compiles all the expressions from the configuration and returns the list of
    * source files that should be generated for a feature.
+   *
+   * @todo Allow files to be overwritten.
    */
   collectFeatureSourceFiles(): FeatureFile[] { // eslint-disable-line max-len
     const context = this.collectContextVariables();
@@ -46,7 +48,18 @@ class FileFeature extends Feature {
       // Expand any directories into their files that match the glob pattern.
       .flatMap((file) => {
         const { destination, source } = file;
+        const { base = null } = file;
 
+        // if (base) {
+        //   base = fs.existsSync(base) ? base : path.resolve(destination, base);
+        // }
+
+        console.log('destination', destination);
+        console.log('source', source);
+        console.log('base', base);
+        console.log('this.path', this.path);
+        console.log('glob', base ? path.resolve(this.path, base) : this.path);
+        // throw new Error('Not implemented');
         // If the source is a file and it exists, return the file.
         if (fs.existsSync(source) && fs.statSync(source).isFile()) {
           return file;
@@ -55,8 +68,11 @@ class FileFeature extends Feature {
         // Find all files that match the glob pattern.
         const matchedFiles = glob.sync(source, {
           absolute: true,
-          cwd: this.path,
+          cwd: base ? path.resolve(this.path, base) : this.path,
         });
+
+        console.log('matchedFiles', matchedFiles);
+        throw new Error('Not implemented');
 
         // Warn the user if no files were found.
         if (!matchedFiles.length) {
@@ -110,10 +126,15 @@ class FileFeature extends Feature {
         handleError(`Error reading from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
       }
 
-      try {
-        compiledExpression = parseExpression(fileContents, context);
-      } catch (error: any) {
-        handleError(`Error generating template from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
+      // Don't parse the expression of select file extensions.
+      if (source.endsWith('.jsx') || source.endsWith('.tsx')) {
+        compiledExpression = fileContents;
+      } else {
+        try {
+          compiledExpression = parseExpression(fileContents, context);
+        } catch (error: any) {
+          handleError(`Error generating template from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
+        }
       }
 
       try {

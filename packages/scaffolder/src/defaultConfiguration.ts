@@ -18,13 +18,16 @@ export const DEFAULT_CONFIGURATION: Configuration = typeof jest === 'undefined' 
       }],
       repository: {
         github: 'alleyinteractive/create-wordpress-plugin',
-        destination: '{{ cwd }}/{{ dasherize inputs.name }}',
+        destination: '{{ dasherize inputs.name }}',
         postCloneCommand: 'php configure.php',
       },
     },
     {
       name: 'create-wordpress-project',
       type: 'repository',
+      config: {
+        useCwd: true,
+      },
       inputs: [{
         name: 'name',
         description: 'The name of the project',

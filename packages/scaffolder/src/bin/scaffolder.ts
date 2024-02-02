@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 import entryArgs, { EntryArgs } from '../entryArgs';
-import { getProjectDirectory } from '../configuration';
-
 import { initializeLogger } from '../logger';
 import { run } from '../run';
+import { initializeConfigurationStore } from '../configuration';
 
 /**
  * Alley Scaffolder
@@ -16,10 +15,10 @@ import { run } from '../run';
     _unknown: argv = undefined,
   } = entryArgs as EntryArgs & { _unknown?: string[] };
 
-  // Ensure the project directory is calculated first.
-  getProjectDirectory(entryArgs.root);
-
   const logger = initializeLogger(debug);
+
+  // Load all configuration files cascading up from the current working directory.
+  initializeConfigurationStore(entryArgs.root || process.cwd());
 
   logger.debug('Starting scaffolder...');
 

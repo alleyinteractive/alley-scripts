@@ -64,7 +64,16 @@ abstract class Feature {
    * If there is a project configuration that is not the global configuration,
    * use the project directory. If not, use the current working directory.
    */
-  public getDestinationDirectory(path: string): string {
+  public getDestinationDirectory(path: string = ''): string {
+    const {
+      config: { useCwd = false } = {},
+    } = this.config;
+
+    // Use the current working directory if the feature is configured to do so.
+    if (useCwd) {
+      return `${process.cwd()}/${path}`;
+    }
+
     // Determine if path is a relative directory.
     if (path.startsWith('./') || path.startsWith('../')) {
       if (getProjectScaffolderDirectory() === getGlobalDirectory()) {

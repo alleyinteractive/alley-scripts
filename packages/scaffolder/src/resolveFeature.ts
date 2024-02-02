@@ -45,7 +45,7 @@ export default async function resolveFeature(features: Feature[], featureName?: 
     clearFirst: true,
     limit: 50,
     message: featureName
-      ? `Select a feature to scaffold from that includes "${featureName}:`
+      ? `Select a feature to scaffold from that includes "${featureName}":`
       : 'Select a feature to scaffold:',
     name: 'name',
     type: 'autocomplete',

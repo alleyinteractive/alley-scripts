@@ -9,6 +9,9 @@ import yaml from 'js-yaml';
 const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   type: Joi.string().default('file').valid('file', 'repository'),
+  config: Joi.object({
+    destination: Joi.boolean(),
+  }),
   inputs: Joi.array().items(Joi.object({
     name: Joi.string().required(),
     description: Joi.string(),
@@ -18,6 +21,7 @@ const featureConfigSchema = () => Joi.object({
   files: Joi.array().items(Joi.object({
     source: Joi.string().required(),
     destination: Joi.string().required(),
+    base: Joi.string(),
     if: Joi.string(),
   })).when('type', {
     is: 'file',

@@ -22,6 +22,8 @@ export type FeatureFile = {
   destination: string;
   /* Condition to check if the file should be generated. */
   if?: string;
+  /* Base directory for the source file. */
+  base?: string;
 };
 
 /**
@@ -61,6 +63,9 @@ export type FeatureRepositoryConfig = {
 export type FeatureConfig = {
   name: string;
   type: 'file' | 'repository';
+  config?: {
+    useCwd?: boolean;
+  };
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;
