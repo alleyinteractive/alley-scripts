@@ -75,6 +75,9 @@ export class RepositoryGenerator extends Generator {
    * Process a feature and scaffold the files.
    */
   async invoke() {
+    console.log('dryrun', this.dryRun);
+    throw new Error('asdad');
+
     const {
       repository: {
         destination: destinationConfig = undefined,
@@ -91,27 +94,43 @@ export class RepositoryGenerator extends Generator {
       handleError(`Destination directory already exists: ${chalk.yellow(destination)}`);
     }
 
-    logger().debug(`Creating directory ${chalk.yellow(destination)}`);
+    if (!this.dryRun) {
+      logger().debug(`Creating directory ${chalk.yellow(destination)}`);
 
-    // Create the destination directory.
-    fs.mkdirSync(destination, { recursive: true });
+      // Create the destination directory.
+      fs.mkdirSync(destination, { recursive: true });
+    } else {
+      logger().debug(`Would be creating directory ${chalk.yellow(destination)}`);
+    }
 
-    const [gitUrl, revision] = this.resolveGitUrl().split('#');
+    if (!this.dryRun) {
+      const [gitUrl, revision] = this.resolveGitUrl().split('#');
 
-    logger().info(`Cloning ${chalk.green(gitUrl)} to ${chalk.yellow(destination)}`);
+      logger().info(`Cloning ${chalk.green(gitUrl)} to ${chalk.yellow(destination)}`);
 
-    const git = createGit(destination);
+      const git = createGit(destination);
 
-    await git.clone(gitUrl, destination);
+      await git.clone(gitUrl, destination);
 
-    // Checkout a specific revision if one is specified.
-    if (revision) {
-      await git.checkout(revision);
+      // Checkout a specific revision if one is specified.
+      if (revision) {
+        await git.checkout(revision);
+      }
+    } else {
+      logger().info(`Would be cloning ${chalk.green(this.resolveGitUrl())} to ${chalk.yellow(destination)}`);
     }
 
     // Run the post clone command if one is specified.
     if (postCloneCommand) {
-      await this.runPostCloneCommand(destination);
+      if (!this.dryRun) {
+        logger().debug('Running post clone command');
+
+        await this.runPostCloneCommand(destination);
+
+        logger().debug('Post clone command complete');
+      } else {
+        logger().info(`Would be running post clone command: ${chalk.yellow(postCloneCommand)}`);
+      }
     }
   }
 }

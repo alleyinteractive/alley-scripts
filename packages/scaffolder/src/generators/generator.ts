@@ -1,5 +1,11 @@
+import chalk from 'chalk';
+import path from 'node:path';
+
+// Services.
 import { logger } from '../logger';
 import { collectInputs } from '../inputs';
+
+// Types.
 import type { FeatureConfig, FeatureContext } from '../types';
 
 /**
@@ -9,7 +15,7 @@ export abstract class Generator {
   /* Feature configuration. */
   public config: FeatureConfig;
 
-  /* Path to the feature folder. */
+  /* Path to the directory that defined the feature. */
   public path: string;
 
   /* Resolved inputs for the feature. */
@@ -20,9 +26,6 @@ export abstract class Generator {
 
   /**
    * Constructor
-   *
-   * @param {FeatureConfig} config Feature configuration.
-   * @param {string} path Path to the feature folder.
    */
   constructor(config: FeatureConfig, path: string) {
     this.config = config;
@@ -46,7 +49,38 @@ export abstract class Generator {
    * Resolve the inputs for the feature before being run.
    */
   public async collectInputs() {
-    const { inputs: featureInputs = [] } = this.config;
+    const {
+      config: {
+        resolveToPluginDirectory = false,
+        resolveToThemeDirectory = false,
+      } = {},
+      inputs: featureInputs = [],
+    } = this.config;
+
+    const cwd = process.cwd();
+
+    // Intelligently prompt the user if they would like to place their
+    // theme/plugin in the proper destination.
+    if (cwd.includes('wp-content') && (resolveToPluginDirectory || resolveToThemeDirectory)) {
+      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
+
+      // Determine if the destination path should be resolved to a plugin or theme.
+      if (resolveToThemeDirectory && !cwd.endsWith('wp-content/themes')) {
+        featureInputs.push({
+          name: 'resolveToThemeDirectory',
+          description: `Would you like to place the theme in the ${chalk.green(`${wpContentPath}/themes`)} directory?`,
+          type: 'boolean',
+          default: true,
+        });
+      } else if (resolveToPluginDirectory && !cwd.endsWith('wp-content/plugins')) {
+        featureInputs.push({
+          name: 'resolveToPluginDirectory',
+          description: `Would you like to place the plugin in the ${chalk.green(`${wpContentPath}/plugins`)} directory?`,
+          type: 'boolean',
+          default: true,
+        });
+      }
+    }
 
     this.inputs = await collectInputs(featureInputs);
 
@@ -59,26 +93,42 @@ export abstract class Generator {
    * If there is a project configuration that is not the global configuration,
    * use the project directory. If not, use the current working directory.
    */
-  public getDestinationDirectory(path: string = ''): string {
+  public getDestinationDirectory(filePath: string = ''): string {
+    const cwd = process.cwd();
+
     const {
-      config: { useCwd = false } = {},
-    } = this.config;
+      config: {
+        config: {
+          resolveToPluginDirectory = false,
+          resolveToThemeDirectory = false,
+          useCurrentDirectory = false,
+        } = {},
+      } = {},
+      inputs: {
+        resolveToPluginDirectory: inputResolveToPluginDirectory = false,
+        resolveToThemeDirectory: inputResolveToThemeDirectory = false,
+      } = {},
+    } = this;
 
-    // Use the current working directory if the feature is configured to do so.
-    if (useCwd) {
-      return `${process.cwd()}/${path}`;
-    }
+    if (resolveToPluginDirectory && inputResolveToPluginDirectory) {
+      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
 
-    // Determine if path is a relative directory.
-    if (path.startsWith('./') || path.startsWith('../')) {
-      if (getProjectScaffolderDirectory() === getGlobalDirectory()) {
-        return `${process.cwd()}/${path}`;
+      if (resolveToPluginDirectory && inputResolveToPluginDirectory) {
+        return `${wpContentPath}/plugins/${filePath}`;
       }
+    } else if (resolveToThemeDirectory && inputResolveToThemeDirectory) {
+      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
 
-      return `${this.rootDir}/${path}`;
+      if (resolveToThemeDirectory && inputResolveToThemeDirectory) {
+        return `${wpContentPath}/themes/${filePath}`;
+      }
     }
 
-    return path;
+    if (useCurrentDirectory) {
+      return `${cwd}/${filePath}`;
+    }
+
+    return path.resolve(this.path, filePath);
   }
 
   /**

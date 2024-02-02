@@ -3,6 +3,7 @@ import { initializeLogger } from './logger';
 import { configToGenerator, promptUserForFeature } from './features';
 import commandArguments from './arguments';
 import { initializeConfigurationStore } from './configuration';
+import handleError from './error';
 
 class ScaffolderCommand {
   private readonly arguments: typeof commandArguments & { _unknown?: string[] };
@@ -28,6 +29,12 @@ class ScaffolderCommand {
       'dry-run': dryRun = false,
       _unknown: argv = undefined,
     } = this.arguments;
+
+    // Flag if an argument was passed in argv. This handles the edge case of the
+    // user passing --dry-run in argv. In the future, we wouldn't need this check.
+    if (argv && argv.join('').includes('--')) {
+      handleError('🚨 Invalid argument passed. Please pass the --arguments before the <feature-name> you want to generate. For example:\n\n\tscaffolder --dry-run <feature-name>\n');
+    }
 
     this.welcome();
 

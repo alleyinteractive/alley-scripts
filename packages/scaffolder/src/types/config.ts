@@ -63,9 +63,11 @@ export type FeatureRepositoryConfig = {
 export type FeatureConfig = {
   name: string;
   type: 'file' | 'repository';
-  // config?: {
-  //   useCwd?: boolean;
-  // };
+  config?: {
+    resolveToPluginDirectory?: boolean;
+    resolveToThemeDirectory?: boolean;
+    useCurrentDirectory?: boolean;
+  };
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;

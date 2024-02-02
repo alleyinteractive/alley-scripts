@@ -10,7 +10,9 @@ const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   type: Joi.string().default('file').valid('file', 'repository'),
   config: Joi.object({
-    destination: Joi.boolean(),
+    resolveToPluginDirectory: Joi.boolean(),
+    resolveToThemeDirectory: Joi.boolean(),
+    useCurrentDirectory: Joi.boolean(),
   }),
   inputs: Joi.array().items(Joi.object({
     name: Joi.string().required(),
@@ -30,7 +32,7 @@ const featureConfigSchema = () => Joi.object({
   repository: Joi.object({
     github: Joi.string(),
     git: Joi.string(),
-    destination: Joi.string(),
+    destination: Joi.string().required(),
     postCloneCommand: Joi.string(),
   }).when('type', {
     is: 'repository',
