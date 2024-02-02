@@ -7,7 +7,7 @@ let instance: ReturnType<typeof createLogger>;
  *
  * The logger should print to the console in pretty print.
  */
-export const initializeLogger = (debug: boolean) => {
+export const initializeLogger = (debug: boolean = false) => {
   instance = createLogger({
     exitOnError: false,
     level: debug ? 'debug' : 'info',

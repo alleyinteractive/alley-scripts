@@ -7,6 +7,7 @@ import {
   processGitSource,
   remoteSourceToLocalDirectory,
 } from './remoteSources';
+import { initializeLogger } from '../logger';
 
 const simpleGitMock = {
   checkout: jest.fn(),
@@ -25,6 +26,7 @@ jest.mock('simple-git', () => jest.fn(() => simpleGitMock));
 describe('remoteSources', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    initializeLogger();
   });
 
   it('should be able to locate github sources', () => {
