@@ -37,19 +37,25 @@ export default async function resolveFeature(features: Feature[], featureName?: 
 
   // Prompt the user to select a feature.
   const { name } = await prompts({
-    type: 'select',
-    name: 'name',
-    message: featureName
-      ? `Select a feature to scaffold from that includes "${featureName}:`
-      : 'Select a feature to scaffold:',
     choices: availableFeatures.map((item) => ({
       title: item.config.name,
       value: item.config.name,
     })),
+    // @ts-ignore clearFirst is not in the typings
+    clearFirst: true,
+    limit: 50,
+    message: featureName
+      ? `Select a feature to scaffold from that includes "${featureName}:`
+      : 'Select a feature to scaffold:',
+    name: 'name',
+    type: 'autocomplete',
+    suggest: (input, choices) => Promise.resolve(
+      choices.filter((item) => item.title.toLowerCase().includes(input.toLowerCase())),
+    ),
   });
 
   if (!name) {
-    handleError('No feature selected.');
+    handleError('No feature selected 😔.');
   }
 
   const feature = features.find((item) => item.config.name === name);
