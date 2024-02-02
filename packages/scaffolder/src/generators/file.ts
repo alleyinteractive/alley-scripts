@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import fs from 'node:fs';
 import { glob } from 'fast-glob';
-import path, { dirname } from 'node:path';
+import path from 'node:path';
 
 import { FeatureFile } from '../types';
 import { logger } from '../logger';
@@ -24,7 +24,7 @@ export class FileGenerator extends Generator {
    *
    * @todo Allow files to be overwritten.
    */
-  collectFeatureSourceFiles(): FeatureFile[] { // eslint-disable-line max-len
+  collectFeatureSourceFiles(): FeatureFile[] {
     const context = this.collectContextVariables();
     const {
       name: featureName,
@@ -37,42 +37,44 @@ export class FileGenerator extends Generator {
       // Parse the expression of any file attribute.
       .map((file) => parseObjectExpression({
         ...file,
-        // Ensure that destination/source directories are prefixed with the
-        // feature/root directories, respectively, to allow the configuration to
-        // be relative from the config file.
-        destination: parseExpression(this.getDestinationDirectory(file.destination), context),
-        source: `${this.path}/${file.source}`,
+        // Calculate the proper destination directory for the file relative to
+        // the configuration of the feature.
+        destination: this.getDestinationDirectory(
+          parseExpression(file.destination || process.cwd(), context),
+        ),
       }, context))
       // Check if the already-parsed condition is not falsy.
       .filter(({ if: condition = null }) => condition === null || !parseFalsy(condition))
       // Expand any directories into their files that match the glob pattern.
       .flatMap((file) => {
-        const { destination, source } = file;
-        const { base = null } = file;
+        const {
+          base = this.path,
+          destination,
+          source,
+        } = file;
 
-        // if (base) {
-        //   base = fs.existsSync(base) ? base : path.resolve(destination, base);
-        // }
+        const relativeSource = path.resolve(this.path, source);
 
-        console.log('destination', destination);
-        console.log('source', source);
-        console.log('base', base);
-        console.log('this.path', this.path);
-        console.log('glob', base ? path.resolve(this.path, base) : this.path);
-        // throw new Error('Not implemented');
         // If the source is a file and it exists, return the file.
-        if (fs.existsSync(source) && fs.statSync(source).isFile()) {
-          return file;
+        if (fs.existsSync(relativeSource) && fs.statSync(relativeSource).isFile()) {
+          return { ...file, source: relativeSource };
         }
+
+        // Check if it's a glob pattern. Warn the user if no files were found
+        // and it isn't a glob pattern.
+        if (!source.includes('*')) {
+          logger().warn(`No files found against "${chalk.yellow(source)}" for "${chalk.yellow(featureName)}" (calculated source path: ${chalk.yellow(relativeSource)}).`);
+          return [];
+        }
+
+        // Calculate the base directory for the glob pattern.
+        const baseDirectory = base ? path.resolve(this.path, base) : this.path;
 
         // Find all files that match the glob pattern.
         const matchedFiles = glob.sync(source, {
           absolute: true,
-          cwd: base ? path.resolve(this.path, base) : this.path,
+          cwd: baseDirectory,
         });
-
-        console.log('matchedFiles', matchedFiles);
-        throw new Error('Not implemented');
 
         // Warn the user if no files were found.
         if (!matchedFiles.length) {
@@ -81,7 +83,7 @@ export class FileGenerator extends Generator {
         }
 
         return matchedFiles.map((matchedFile) => ({
-          destination: `${destination.replace(/\/$/, '')}/${matchedFile.replace(this.path, '').replace(/^\//, '')}`,
+          destination: matchedFile.replace(baseDirectory, destination),
           source: matchedFile,
         }));
       })
@@ -116,7 +118,8 @@ export class FileGenerator extends Generator {
 
     // Run each file through the expression parser and write the file to their new
     // file destination.
-    files.forEach(async ({ destination, source }) => {
+    files.forEach(({ base = null, destination, source }) => {
+      const baseDirectory = base ? path.resolve(this.path, base) : this.path;
       let fileContents: string;
       let compiledExpression: string;
 
@@ -126,7 +129,9 @@ export class FileGenerator extends Generator {
         handleError(`Error reading from ${chalk.yellow(source)}: ${chalk.white(error.message || '')}`);
       }
 
-      // Don't parse the expression of select file extensions.
+      // Don't parse the expression of select file extensions because they are
+      // cause issues with the Handlebars parser.
+      // Maybe this can be improved in the future.
       if (source.endsWith('.jsx') || source.endsWith('.tsx')) {
         compiledExpression = fileContents;
       } else {
@@ -137,31 +142,40 @@ export class FileGenerator extends Generator {
         }
       }
 
-      try {
-        const destinationDir = dirname(destination);
-
-        // Ensure that the parent directories exist.
-        if (!fs.existsSync(destinationDir) && !this.dryRun) {
-          fs.mkdirSync(destinationDir, { recursive: true });
-        }
-      } catch (error: any) {
-        handleError(`Error creating directory for ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
+      // Ensure that the destination is set to appease TypeScript.
+      if (!destination) {
+        handleError(`No destination for ${chalk.yellow(source)}`);
       }
 
-      try {
-        if (!this.dryRun) {
+      if (!this.dryRun) {
+        try {
+          const destinationDir = path.dirname(destination);
+
+          // Ensure that the parent directories exist.
+          if (!fs.existsSync(destinationDir) && !this.dryRun) {
+            fs.mkdirSync(destinationDir, { recursive: true });
+          }
+        } catch (error: any) {
+          handleError(`Error creating directory for ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
+        }
+      } else {
+        logger().info(`Would create directory: ${chalk.green(destination)}`);
+      }
+
+      if (!this.dryRun) {
+        try {
           fs.writeFileSync(destination, compiledExpression);
 
           logger().info(
-            `${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(this.rootDir, '').replace(/^\//, ''))}`,
+            `${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(baseDirectory, '').replace(/^\//, ''))}`,
           );
-        } else {
-          logger().info(
-            `Would generate ${chalk.green(destination.replace(this.rootDir, '').replace(/^\//, ''))}`,
-          );
+        } catch (error: any) {
+          handleError(`Error generating file from ${chalk.yellow(source)} to ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
         }
-      } catch (error: any) {
-        handleError(`Error writing from ${chalk.yellow(source)} to ${chalk.yellow(destination)}: ${chalk.white(error.message || '')}`);
+      } else {
+        logger().info(
+          `Would generate ${chalk.green(destination.replace(baseDirectory, '').replace(/^\//, ''))}`,
+        );
       }
     });
   }

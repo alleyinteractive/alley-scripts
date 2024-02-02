@@ -10,9 +10,7 @@ const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   type: Joi.string().default('file').valid('file', 'repository'),
   config: Joi.object({
-    resolveToPluginDirectory: Joi.boolean(),
-    resolveToThemeDirectory: Joi.boolean(),
-    useCurrentDirectory: Joi.boolean(),
+    'destination-resolver': Joi.string().valid('cwd', 'theme', 'plugin', 'relative', 'relative-parent').default('cwd'),
   }),
   inputs: Joi.array().items(Joi.object({
     name: Joi.string().required(),
@@ -22,7 +20,7 @@ const featureConfigSchema = () => Joi.object({
   })),
   files: Joi.array().items(Joi.object({
     source: Joi.string().required(),
-    destination: Joi.string().required(),
+    destination: Joi.string(),
     base: Joi.string(),
     if: Joi.string(),
   })).when('type', {

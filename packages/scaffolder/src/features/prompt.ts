@@ -12,7 +12,7 @@ import type { FeatureConfig } from '../types';
  * Allows the user to select a feature by name using a fuzzy search.
  *
  * @returns {Promise<[FeatureConfig, string]>} The selected feature and the path to the
- *                                             configuration file.
+ *                                             configuration directory.
  */
 export async function promptUserForFeature(featureName?: string): Promise<[FeatureConfig, string]> { // eslint-disable-line consistent-return, max-len
   const store = getFeatureStore().all();
@@ -47,6 +47,10 @@ export async function promptUserForFeature(featureName?: string): Promise<[Featu
 
       return [store[configPath][index], configPath];
     }
+  }
+
+  if (!availableFeatures.length) {
+    handleError('No features found to scaffold 😔.');
   }
 
   const { selectedFeature } = await prompts({

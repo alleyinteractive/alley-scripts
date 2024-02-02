@@ -75,9 +75,6 @@ export class RepositoryGenerator extends Generator {
    * Process a feature and scaffold the files.
    */
   async invoke() {
-    console.log('dryrun', this.dryRun);
-    throw new Error('asdad');
-
     const {
       repository: {
         destination: destinationConfig = undefined,
@@ -123,8 +120,6 @@ export class RepositoryGenerator extends Generator {
     // Run the post clone command if one is specified.
     if (postCloneCommand) {
       if (!this.dryRun) {
-        logger().debug('Running post clone command');
-
         await this.runPostCloneCommand(destination);
 
         logger().debug('Post clone command complete');

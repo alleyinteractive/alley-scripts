@@ -27,9 +27,9 @@ export abstract class Generator {
   /**
    * Constructor
    */
-  constructor(config: FeatureConfig, path: string) {
+  constructor(config: FeatureConfig, directory: string) {
     this.config = config;
-    this.path = path;
+    this.path = directory;
   }
 
   /**
@@ -51,8 +51,7 @@ export abstract class Generator {
   public async collectInputs() {
     const {
       config: {
-        resolveToPluginDirectory = false,
-        resolveToThemeDirectory = false,
+        'destination-resolver': destinationResolver = 'cwd',
       } = {},
       inputs: featureInputs = [],
     } = this.config;
@@ -61,20 +60,20 @@ export abstract class Generator {
 
     // Intelligently prompt the user if they would like to place their
     // theme/plugin in the proper destination.
-    if (cwd.includes('wp-content') && (resolveToPluginDirectory || resolveToThemeDirectory)) {
+    if (cwd.includes('wp-content') && ['theme', 'plugin'].includes(destinationResolver)) {
       const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
 
       // Determine if the destination path should be resolved to a plugin or theme.
-      if (resolveToThemeDirectory && !cwd.endsWith('wp-content/themes')) {
+      if (destinationResolver === 'theme' && !cwd.endsWith('wp-content/themes')) {
         featureInputs.push({
-          name: 'resolveToThemeDirectory',
+          name: 'destination-resolver-theme',
           description: `Would you like to place the theme in the ${chalk.green(`${wpContentPath}/themes`)} directory?`,
           type: 'boolean',
           default: true,
         });
-      } else if (resolveToPluginDirectory && !cwd.endsWith('wp-content/plugins')) {
+      } else if (destinationResolver === 'plugin' && !cwd.endsWith('wp-content/plugins')) {
         featureInputs.push({
-          name: 'resolveToPluginDirectory',
+          name: 'destination-resolver-plugin',
           description: `Would you like to place the plugin in the ${chalk.green(`${wpContentPath}/plugins`)} directory?`,
           type: 'boolean',
           default: true,
@@ -89,9 +88,6 @@ export abstract class Generator {
 
   /**
    * Get the destination directory for the feature.
-   *
-   * If there is a project configuration that is not the global configuration,
-   * use the project directory. If not, use the current working directory.
    */
   public getDestinationDirectory(filePath: string = ''): string {
     const cwd = process.cwd();
@@ -99,36 +95,44 @@ export abstract class Generator {
     const {
       config: {
         config: {
-          resolveToPluginDirectory = false,
-          resolveToThemeDirectory = false,
-          useCurrentDirectory = false,
+          'destination-resolver': destinationResolver = 'cwd',
         } = {},
       } = {},
       inputs: {
-        resolveToPluginDirectory: inputResolveToPluginDirectory = false,
-        resolveToThemeDirectory: inputResolveToThemeDirectory = false,
+        'destination-resolver-plugin': inputResolveToPluginDirectory = false,
+        'destination-resolver-theme': inputResolveToThemeDirectory = false,
       } = {},
     } = this;
 
-    if (resolveToPluginDirectory && inputResolveToPluginDirectory) {
+    if (['plugin', 'theme'].includes(destinationResolver)) {
       const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
 
-      if (resolveToPluginDirectory && inputResolveToPluginDirectory) {
+      if (destinationResolver === 'plugin' && inputResolveToPluginDirectory) {
         return `${wpContentPath}/plugins/${filePath}`;
-      }
-    } else if (resolveToThemeDirectory && inputResolveToThemeDirectory) {
-      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
-
-      if (resolveToThemeDirectory && inputResolveToThemeDirectory) {
+      } if (destinationResolver === 'theme' && inputResolveToThemeDirectory) {
         return `${wpContentPath}/themes/${filePath}`;
       }
     }
 
-    if (useCurrentDirectory) {
-      return `${cwd}/${filePath}`;
+    // Resolve the destination directory based on the relative path of the
+    // configuration folder.
+    if (destinationResolver === 'relative') {
+      return path.resolve(this.path, filePath);
     }
 
-    return path.resolve(this.path, filePath);
+    // Resolve the file to the parent folder of the .scaffolder directory. The
+    // configuration file could either be .scaffolder/config.yml or
+    // .scaffolder/<feature>/config.yml so we need to resolve the destination
+    // based on the parent directory of the .scaffolder
+    if (destinationResolver === 'relative-parent') {
+      const [parentDirectory] = this.path.split('/.scaffolder');
+
+      return path.resolve(parentDirectory, filePath);
+    }
+
+    // Resolve the destination directory relative to the current
+    // working directory.
+    return path.resolve(cwd, filePath);
   }
 
   /**

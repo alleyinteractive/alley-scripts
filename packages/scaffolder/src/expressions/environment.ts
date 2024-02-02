@@ -207,14 +207,8 @@ export default function getEnvironment(): typeof Handlebars {
    */
   env.registerHelper(
     'folderName',
-    (value: any) => `${value}`.split('/').map((part) => camelCaseString(part, '-').toLowerCase()).join('-'),
+    (value: any) => `${value}`.toLowerCase().replace(/[^a-z-0-9]/g, '-'),
   );
-
-  /**
-   * Compare two values and determine if they are equal.
-   *
-   *
-   */
 
   return env;
 }

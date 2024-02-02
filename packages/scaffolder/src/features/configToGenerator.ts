@@ -1,4 +1,3 @@
-import path from 'node:path';
 import chalk from 'chalk';
 
 // Services.
@@ -9,14 +8,18 @@ import type { FeatureConfig } from '../types/config';
 
 /**
  * Convert a feature configuration to a generator.
+ *
+ * @param {FeatureConfig} config The feature configuration.
+ * @param {string} configPath The path to the feature configuration
+ *                            directory that defined the feature.
  */
-export const configToGenerator = (config: FeatureConfig, configFilePath: string): Generator => {
+export const configToGenerator = (config: FeatureConfig, configPath: string): Generator => {
   const { name, type = 'file' } = config;
 
   if (type === 'file') {
-    return new FileGenerator(config, path.dirname(configFilePath));
+    return new FileGenerator(config, configPath);
   } if (type === 'repository') {
-    return new RepositoryGenerator(config, path.dirname(configFilePath));
+    return new RepositoryGenerator(config, configPath);
   }
 
   // Throw an error if an invalid type has reached this far (though Joi

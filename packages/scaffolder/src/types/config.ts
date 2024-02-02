@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Source } from './source';
 
 /**
@@ -18,8 +19,8 @@ export type Configuration = {
 export type FeatureFile = {
   /* Source file or glob pattern. */
   source: string;
-  /* Destination file. For folders, this is the base folder. */
-  destination: string;
+  /* Destination location. */
+  destination?: string;
   /* Condition to check if the file should be generated. */
   if?: string;
   /* Base directory for the source file. */
@@ -64,9 +65,8 @@ export type FeatureConfig = {
   name: string;
   type: 'file' | 'repository';
   config?: {
-    resolveToPluginDirectory?: boolean;
-    resolveToThemeDirectory?: boolean;
-    useCurrentDirectory?: boolean;
+    /* Defaults to 'cwd'. */
+    'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';
   };
   files?: FeatureFile[];
   inputs?: FeatureInput[];
