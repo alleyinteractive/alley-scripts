@@ -25,6 +25,7 @@ class FeatureStore {
   public async initialize() {
     this.loadDefinedFeaturesFromStore();
     await this.loadFeaturesFromSources();
+    console.log('done with loadFeaturesFromSources');
 
     logger().debug(`${Object.values(this.all()).flat().length} features loaded.`);
   }
@@ -98,8 +99,9 @@ class FeatureStore {
       });
     });
 
-    await Promise.all(sourcesToResolve.map(resolveSourceToDirectory));
-    console.log('done');
+    this.sources.push(
+      ...await Promise.all(sourcesToResolve.map(resolveSourceToDirectory)),
+    );
 
     logger().debug(`Loaded ${this.sources.length} sources from the configuration store: ${JSON.stringify(this.sources, null, 2)}`);
 
@@ -126,7 +128,11 @@ export function getFeatureStore(): FeatureStore {
 export async function initializeFeatureStore(configStore: ConfigurationStore = getConfigurationStore()) {
   store = new FeatureStore(configStore);
 
-  await store.initialize();
+  try {
+    await store.initialize();
+  } catch (error: any) {
+    logger().error(`Error initializing feature store: ${error.message}`);
+  }
 }
 
 /**

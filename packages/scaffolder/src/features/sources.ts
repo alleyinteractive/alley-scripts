@@ -1,4 +1,4 @@
-import { processGitHubSource, processGitSource } from '..';
+import { processGitHubSource, processGitSource } from './remoteSources';
 import type { DirectorySource, Source } from '../types/source';
 
 /**
