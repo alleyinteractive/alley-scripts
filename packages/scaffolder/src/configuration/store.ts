@@ -76,7 +76,7 @@ export class ConfigurationStore {
 
           validateConfiguration(configuration);
 
-          this.add(currentDirectory, configuration);
+          this.add(`${currentDirectory}/.scaffolder`, configuration);
         } catch (error: any) {
           logger().error(`Error loading configuration from ${chalk.yellow(`${currentDirectory}/.scaffolder/config.yml`)}: ${chalk.red(error.message)}`);
         }
@@ -119,6 +119,8 @@ export function initializeConfigurationStore(rootPath: string) {
   store = new ConfigurationStore();
 
   store.loadFromPath(rootPath);
+
+  logger().debug(`Initialized configuration store with ${chalk.blue(JSON.stringify(store.all(), null, 2))}`);
 }
 
 /**

@@ -6,7 +6,7 @@ import type { FeatureConfig, FeatureContext } from '../types';
 /**
  * Base feature class.
  */
-abstract class Feature {
+export abstract class Generator {
   /* Feature configuration. */
   public config: FeatureConfig;
 
@@ -104,5 +104,3 @@ abstract class Feature {
    */
   abstract invoke(): Promise<void>;
 }
-
-export { Feature };

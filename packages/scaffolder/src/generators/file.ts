@@ -5,7 +5,7 @@ import path, { dirname } from 'node:path';
 
 import { FeatureFile } from '../types';
 import { logger } from '../logger';
-import { Feature } from './feature';
+import { Generator } from './generator';
 import { parseExpression, parseFalsy, parseObjectExpression } from '../expressions';
 import handleError from '../error';
 
@@ -15,7 +15,7 @@ import handleError from '../error';
  * Can generate a set of files/folders in a new source directory while parsing
  * the files/folders for expressions based on the user's input.
  */
-class FileFeature extends Feature {
+export class FileGenerator extends Generator {
   /**
    * Collect the feature source files and parse the expressions.
    *
@@ -166,5 +166,3 @@ class FileFeature extends Feature {
     });
   }
 }
-
-export { FileFeature };

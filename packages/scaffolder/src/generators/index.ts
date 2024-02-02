@@ -1,3 +1,3 @@
-export * from './feature';
+export * from './generator';
 export * from './file';
 export * from './repository';

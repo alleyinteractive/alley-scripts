@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { spawn } from 'node:child_process';
 
 import handleError from '../error';
-import { Feature } from './feature';
+import { Generator } from './generator';
 import { parseExpression } from '../expressions';
 import { createGit } from '../git';
 import { logger } from '../logger';
@@ -11,7 +11,7 @@ import { logger } from '../logger';
 /**
  * Repository-based feature.
  */
-class RepositoryFeature extends Feature {
+export class RepositoryGenerator extends Generator {
   /**
    * Resolve the git URL from the configuration.
    */
@@ -115,5 +115,3 @@ class RepositoryFeature extends Feature {
     }
   }
 }
-
-export { RepositoryFeature };

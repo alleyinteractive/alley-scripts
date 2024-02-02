@@ -3,6 +3,8 @@ import type { Configuration } from './types';
 
 /**
  * Default configuration of the scaffolder.
+ *
+ * @deprecated
  */
 export const DEFAULT_CONFIGURATION: Configuration = typeof jest === 'undefined' ? {
   // TODO: Move these to a separate NPM package.

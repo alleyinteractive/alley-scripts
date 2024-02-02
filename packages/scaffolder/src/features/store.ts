@@ -1,16 +1,27 @@
 /* eslint-disable max-len */
 
+import path from 'node:path';
+import fg from 'fast-glob';
+import chalk from 'chalk';
+
+// Services.
 import { ConfigurationStore, getConfigurationStore } from '../configuration';
 import { logger } from '../logger';
-import type { FeatureConfig, Source } from '../types';
 import { resolveSourceToDirectory } from './sources';
+import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 
+// Types.
+import type { DirectorySource, FeatureConfig, Source } from '../types';
+
+/**
+ * Feature store.
+ */
 class FeatureStore {
   private config: ConfigurationStore;
 
-  private readonly features: Record<string, FeatureConfig[]> = {};
+  private readonly sources: DirectorySource[] = [];
 
-  private readonly sources: Source[] = [];
+  private readonly features: Record<string, FeatureConfig[]> = {};
 
   /**
    * Constructor
@@ -24,10 +35,11 @@ class FeatureStore {
    */
   public async initialize() {
     this.loadDefinedFeaturesFromStore();
-    await this.loadFeaturesFromSources();
-    console.log('done with loadFeaturesFromSources');
 
-    logger().debug(`${Object.values(this.all()).flat().length} features loaded.`);
+    await this.loadSourcesFromStore();
+    await this.loadFeaturesFromSources();
+
+    logger().debug(`${Object.values(this.all()).flat().length} features loaded: ${JSON.stringify(this.all(), null, 2)}`);
   }
 
   /**
@@ -39,8 +51,16 @@ class FeatureStore {
     }
 
     if (Array.isArray(features)) {
-      this.features[directory].push(...features);
+      features.forEach((feature) => {
+        this.add(directory, feature);
+      });
     } else {
+      const registeredNames = Object.values(this.features).flat().map((feature) => feature.name);
+
+      if (registeredNames.includes(features.name)) {
+        logger().warn(`The feature "${chalk.yellow(features.name)}" is already registered and will be overwritten.`);
+      }
+
       this.features[directory].push(features);
     }
   }
@@ -76,7 +96,7 @@ class FeatureStore {
   /**
    * Load the features from the sources defined in the configuration store.
    */
-  public async loadFeaturesFromSources() {
+  public async loadSourcesFromStore() {
     // Sources are the configured sources in each configuration file and the
     // directory of the configuration file.
     const sources = this.config.pluck('sources');
@@ -103,9 +123,77 @@ class FeatureStore {
       ...await Promise.all(sourcesToResolve.map(resolveSourceToDirectory)),
     );
 
-    logger().debug(`Loaded ${this.sources.length} sources from the configuration store: ${JSON.stringify(this.sources, null, 2)}`);
+    logger().debug(`Found ${this.sources.length} sources from the configuration store: ${JSON.stringify(this.sources, null, 2)}`);
+  }
 
-    // Discover all features from the configured sources.
+  /**
+   * Load the features from the sources.
+   */
+  public async loadFeaturesFromSources() {
+    const files = await Promise.all(
+      this.sources.map(({ directory, root = undefined }) => fg.glob(`${directory}/*/config.yml`, {
+        absolute: true,
+        cwd: root,
+        ignore: [
+          '**/.scaffolder/config.yml',
+        ],
+      })),
+    )
+      // Flatten the file index and remove duplicates.
+      .then((item) => item.flat().filter((file, index, arr) => arr.indexOf(file) === index));
+
+    logger().debug(`Found ${files.length} feature configuration files.`);
+
+    const features = await Promise.all(
+      files.map(async (file) => { // eslint-disable-line consistent-return
+        logger().debug(`Parsing feature configuration file: ${chalk.yellow(file)}`);
+
+        let config: FeatureConfig;
+
+        try {
+          config = await parseYamlFile<FeatureConfig>(file);
+        } catch (error: any) {
+          logger().warn(`Error parsing feature configuration file and is not being loaded: ${chalk.yellow(file)}: ${error.message}`);
+          return null;
+        }
+
+        try {
+          validateFeatureConfiguration(config);
+        } catch (err: any) {
+          logger().warn(`The feature "${chalk.italic(file)}" is invalid and is not being loaded: ${chalk.yellow(err.message)}\n`);
+          return null;
+        }
+
+        if (!config.name) {
+          logger().warn(`The feature "${chalk.yellow(file)}" does not have a name defined in the config.yml file. Using the directory name as the feature name.`);
+
+          // Use the directory name as the feature name.
+          config.name = path.basename(path.dirname(file));
+        }
+
+        // Default the feature type to a file feature.
+        if (!config.type) {
+          config.type = 'file';
+        }
+
+        this.add(path.dirname(file), config);
+
+        return config;
+
+        // if (config.type === 'file') {
+        //   return new FileGenerator(config, path.dirname(file));
+        // } if (config.type === 'repository') {
+        //   return new RepositoryGenerator(config, path.dirname(file));
+        // }
+
+        // // Throw an error if an invalid type has reached this far though Joi
+        // // validation should have caught it.
+        // handleError(`The feature "${config.name}" has an invalid type "${chalk.yellow(config.type)}" defined.`);
+      }),
+    )
+      .then((items) => items.filter((feature) => feature !== null)) as FeatureConfig[];
+
+    logger().debug(`Loaded ${features.length} features from sources.`);
   }
 }
 
