@@ -1,6 +1,6 @@
 import { initializeFeatureStore } from './features/store';
 import { initializeLogger } from './logger';
-import { configToGenerator, invokeFeature, promptUserForFeature } from './features';
+import { configToGenerator, promptUserForFeature } from './features';
 import commandArguments from './arguments';
 import { initializeConfigurationStore } from './configuration';
 
@@ -35,7 +35,7 @@ class ScaffolderCommand {
 
     const feature = await promptUserForFeature(argv ? argv[0] : undefined);
 
-    await invokeFeature(configToGenerator(...feature), dryRun);
+    await configToGenerator(...feature).resolveAndInvoke(dryRun);
 
     this.logger.info('🎉 Done. Happy coding!');
   }
