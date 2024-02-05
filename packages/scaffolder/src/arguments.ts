@@ -17,7 +17,7 @@ const commandArguments = parse<Arguments>(
   {
     root: {
       type: String,
-      description: 'The path to a scaffolder configuration directory (.scaffolder).',
+      description: 'The root directory of the project. Defaults to the current working directory.',
       optional: true,
     },
     debug: {
