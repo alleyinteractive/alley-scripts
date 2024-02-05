@@ -113,6 +113,9 @@ export class RepositoryGenerator extends Generator {
       if (revision) {
         await git.checkout(revision);
       }
+
+      // Delete the .git directory.
+      fs.rmSync(`${destination}/.git`, { recursive: true });
     } else {
       logger().info(`Would be cloning ${chalk.green(this.resolveGitUrl())} to ${chalk.yellow(destination)}`);
     }
