@@ -59,7 +59,7 @@ const configurationSchema = () => Joi.object({
  */
 export function parseYamlFile<TData extends object>(filePath: string): TData {
   // Ensure this is a YAML file.
-  if (!filePath.endsWith('.yml')) {
+  if (!filePath.endsWith('.yml') && !filePath.endsWith('.yaml')) {
     throw new Error('The configuration file must be a YAML file.');
   }
 

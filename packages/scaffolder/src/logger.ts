@@ -32,3 +32,12 @@ export const logger = () => {
 
   return instance;
 };
+
+/**
+ * Silence the logger.
+ */
+export const silenceLogger = () => {
+  logger().transports.forEach((t) => {
+    t.silent = true; // eslint-disable-line no-param-reassign
+  });
+};

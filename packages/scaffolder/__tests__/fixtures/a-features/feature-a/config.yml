@@ -7,4 +7,4 @@ inputs:
 
 files:
   - source: feature.stub
-    destination: src/{{ wpClassFilename | inputs.featureName }}
+    destination: src/test-feature-a/{{ wpClassFilename inputs.featureName }}
