@@ -59,9 +59,9 @@ inputs:
 
 files:
   - source: case-study.stub
-    destination: src/case-study/{{ wpClassFilename | inputs.caseStudyName }}
+    destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
   - source: case-study-feed.stub
-    destination: src/feeds/{{ wpClassFilename | inputs.caseStudyName }}.php
+    destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
   - source: test.stub
     if: "{{ inputs.tests }}"
     destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
@@ -90,9 +90,9 @@ features:
 		default: true
 	files:
 	  - source: case-study.stub
-		destination: src/case-study/{{ wpClassFilename | inputs.caseStudyName }}
+		destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
 	  - source: case-study-feed.stub
-		destination: src/feeds/{{ wpClassFilename | inputs.caseStudyName }}.php
+		destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
 	  - source: test.stub
 		if: "{{ inputs.tests }}"
 		destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}

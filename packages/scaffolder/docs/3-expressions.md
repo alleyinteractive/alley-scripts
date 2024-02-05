@@ -17,7 +17,7 @@ Let's use an `if` conditional file as an example:
 files:
   - source: test.stub
     if: "{{ inputs.tests }}"
-    destination: tests/Features/{{ psrClassFilename | inputs.caseStudyName prefix="" suffix="Test.php" }}
+    destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
 ```
 
 In this example, the `if` conditional is used to conditionally scaffold a file

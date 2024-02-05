@@ -1,14 +1,17 @@
 # Configuration
 
-The `.scaffolder` directory contains the configuration for the project. This
-directory is optional if you only want to use global features. If you want to
-define project specific features or any additional sources, you will need to
-create a `.scaffolder` directory in the root of your project.
+The scaffolder will recursively search for scaffolder directories in the current
+and all parent directories. These are defined as a `.scaffolder` directory
+optionally containing a `config.yml` file. All configuration files are loaded by
+default. Scaffolder will discover all features within all `.scaffolder`
+directories. If you wish to define any additional sources to search for
+features, you can do so in the `config.yml` file.
 
-## Project Configuration
+## Source Definitions
 
-The project configuration is defined in the `.scaffolder/config.yml` file. This
-file defines the project's sources (local or remote).
+The `.scaffolder/config.yml` file can define additional sources to search for
+features. This is useful for including features from other projects or
+repositories. Here's an example of how to define sources:
 
 ```yaml
 sources:
@@ -16,23 +19,53 @@ sources:
   - directory: ../project-features
   - ../another-project-features
 
-  # Check a remote repository for features.
+  # Check a remote repository for features. Any .scaffolder/**/config.yml files
+  # will be resolved from within the repository.
   - github: alleyinteractive/scaffolder-features
 
-  # Check a git repository for features.
+  # Check a git repository for features. Any .scaffolder/**/config.yml files
+  # will be resolved from within the repository.
   - git: git@bitbucket.com:alleyinteractive/scaffolder-features.git
 ```
 
-The global configuration and all `node_modules` directories are included as
-sources. This cannot be overridden at this time.
+### Loading Features from NPM Packages
 
-## Global Configuration
+Any installed NPM package that is installed globally will be checked for any
+available scaffolder features. This is useful for sharing features across
+projects. The scaffolder uses this internally to define built-in features that
+are included with the scaffolder package when installed globally.
+
+### Global Configuration
 
 The above configuration file can also be placed in the
 `~/.scaffolder/config.yml` file to apply to all projects. This is useful for
 defining global sources that can be used in any project.
 
 This directory can be set using the `SCAFFOLDER_HOME` environment variable.
+
+### Defining Features in `.scaffolder/config.yml`
+
+Features can be defined in the `.scaffolder/config.yml` file. This is useful for
+lightweight features that clone a remote repository or don't have any stub files.
+
+```yaml
+features:
+  - name: create-wordpress-plugin
+    type: repository
+    config:
+      destination-resolver: plugin
+    inputs:
+      - name: name
+        description: "Name of the Plugin"
+        type: "string"
+    repository:
+      destination: "{{ folderName inputs.name }}"
+      github: alleyinteractive/create-wordpress-plugin
+      postCloneCommand: "php configure.php"
+```
+
+It is still recommended to define features in their own
+`.scaffolder/<feature>config.yml` file for better organization.
 
 ----
 
