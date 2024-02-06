@@ -83,10 +83,10 @@ name: Case Study
 
 files:
   - source: case-study.stub
-	destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
+    destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
 ```
 
-The `case-study.stub` file will be sourced from within the `case-studies`
+The `case-study.stub` file will always be sourced from within the `case-studies`
 directory. The generated file will be copied to the `${CWD}/src/case-study`
 directory. This works well for most cases to allow the scaffolder to be used
 wherever you'd like in the project. However, there are some use cases where
