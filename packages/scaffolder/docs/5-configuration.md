@@ -23,9 +23,22 @@ sources:
   # will be resolved from within the repository.
   - github: alleyinteractive/scaffolder-features
 
+  # Also supports object format to specify a ref and/or directory:
+  - github: alleyinteractive/scaffolder-features
+    ref: main
+    directory: project-features
+
+  - github:
+    url: https://github.com/alleyinteractive/scaffolder-features
+
   # Check a git repository for features. Any .scaffolder/**/config.yml files
   # will be resolved from within the repository.
   - git: git@bitbucket.com:alleyinteractive/scaffolder-features.git
+
+  # Also supports object format to specify a ref and/or directory:
+  - git: git@bitbucket.com:alleyinteractive/scaffolder-features.git
+    ref: main
+    directory: project-features
 ```
 
 ### Loading Features from NPM Packages

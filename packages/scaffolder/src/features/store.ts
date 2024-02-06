@@ -120,9 +120,10 @@ class FeatureStore {
       });
     });
 
-    // Resolve all sources (including git/remote ones) to directory sources.
+    // Resolve all sources including git/github to directory sources.
     this.sources.push(
-      ...await Promise.all(sourcesToResolve.map(resolveSourceToDirectory)),
+      ...await Promise.all(sourcesToResolve.map(resolveSourceToDirectory))
+        .then((resolved) => resolved.filter((source) => source !== null) as DirectorySource[]),
     );
 
     logger().debug(`Found ${this.sources.length} sources from the configuration store: ${JSON.stringify(this.sources, null, 2)}`);

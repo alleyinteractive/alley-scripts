@@ -1,5 +1,5 @@
 import simpleGit from 'simple-git';
-import * as fs from 'node:fs';
+import fs from 'node:fs';
 
 import {
   getCheckoutBaseDirectory,
@@ -23,29 +23,82 @@ jest.mock('node:fs');
 jest.mock('simple-git', () => jest.fn(() => simpleGitMock));
 
 describe('remoteSources', () => {
+  const baseDir = getCheckoutBaseDirectory();
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should be able to locate github sources', () => {
-    const baseDir = getCheckoutBaseDirectory();
+  test.each([
+    [
+      {
+        github: 'alleyinteractive/scaffolder-features',
+      },
+      `${baseDir}/github/alleyinteractive/scaffolder-features`,
+    ],
+    [
+      {
+        github: {
+          name: 'alleyinteractive/scaffolder-features',
+        },
+      },
+      `${baseDir}/github/alleyinteractive/scaffolder-features`,
+    ],
+    [
+      {
+        // Support YAML object keys with dashes
+        github: {
+          github: 'alleyinteractive/scaffolder-features',
+        },
+      },
+      `${baseDir}/github/alleyinteractive/scaffolder-features`,
+    ],
+    [
+      {
+        github: 'alleyinteractive/scaffolder-features#abc1234',
+      },
+      `${baseDir}/github/alleyinteractive/scaffolder-features`,
+    ],
+    [
+      {
+        github: {
+          name: 'alleyinteractive/scaffolder-features',
+          ref: 'abc1234',
+        },
+      },
+      `${baseDir}/github/alleyinteractive/scaffolder-features`,
+    ],
+    [
+      {
+        github: 'git@github.com:alleyinteractive/example-repository.git',
+      },
+      `${baseDir}/github/alleyinteractive/example-repository`,
+    ],
+    [
+      {
+        github: {
+          url: 'git@github.com:alleyinteractive/example-repository.git',
+        },
+      },
+      `${baseDir}/github/alleyinteractive/example-repository`,
+    ],
+    [
+      {
+        github: 'https://github.com/example-org/example-repo0_1',
+      },
+      `${baseDir}/github/example-org/example-repo0-1`,
+    ],
+    [
+      {
+        github: 'https://github.com/example-org/example-repo0_1.git',
+      },
+      `${baseDir}/github/example-org/example-repo0-1`,
+    ],
+  ])('GitHub: remoteSourceToLocalDirectory(%j) returns %s', (source, expected) => {
+    expect(remoteSourceToLocalDirectory(source)).toEqual(expected);
+  });
 
-    expect(remoteSourceToLocalDirectory({
-      github: 'alleyinteractive/scaffolder-features',
-    })).toEqual(`${baseDir}/github/alleyinteractive/scaffolder-features`);
-
-    expect(remoteSourceToLocalDirectory({
-      github: 'alleyinteractive/scaffolder-features#master',
-    })).toEqual(`${baseDir}/github/alleyinteractive/scaffolder-features`);
-
-    expect(remoteSourceToLocalDirectory({
-      github: 'https://github.com/example-org/example-repo0_1',
-    })).toEqual(`${baseDir}/github/example-org/example-repo0-1`);
-
-    expect(remoteSourceToLocalDirectory({
-      github: 'https://github.com/example-org/example-repo0_1.git',
-    })).toEqual(`${baseDir}/github/example-org/example-repo0-1`);
-
+  it('should be able handle errors when parsing GitHub URLs', () => {
     expect(() => remoteSourceToLocalDirectory({
       github: 'invalid url',
     })).toThrow('Invalid GitHub URL: invalid url');
@@ -55,38 +108,91 @@ describe('remoteSources', () => {
     })).toThrow('Invalid GitHub URL: https://github.com/example-org');
   });
 
-  it('should be able to locate git sources', () => {
-    expect(remoteSourceToLocalDirectory({
-      git: 'git@github.com:alleyinteractive/example.git',
-    })).toEqual(`${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-git`);
+  test.each([
+    [
+      {
+        git: 'git@github.com:alleyinteractive/example.git',
+      },
+      `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-git`,
+    ],
+    [
+      {
+        git: 'https://bitbucket.com/alleyinteractive/other-example.git',
+      },
+      `${getCheckoutBaseDirectory()}/git/bitbucket-com/alleyinteractive/other-example-git`,
+    ],
+    [
+      {
+        git: {
+          git: 'https://bitbucket.com/alleyinteractive/other-example.git',
+        },
+      },
+      `${getCheckoutBaseDirectory()}/git/bitbucket-com/alleyinteractive/other-example-git`,
+    ],
+    [
+      {
+        git: {
+          url: 'https://bitbucket.com/alleyinteractive/other-example.git',
+        },
+      },
+      `${getCheckoutBaseDirectory()}/git/bitbucket-com/alleyinteractive/other-example-git`,
+    ],
+    [
+      {
+        git: 'https://bitbucket.com/alleyinteractive/other-example.git#master',
+      },
+      `${getCheckoutBaseDirectory()}/git/bitbucket-com/alleyinteractive/other-example-git`,
+    ],
+  ])('Git: remoteSourceToLocalDirectory(%j) returns %s', (source, expected) => {
+    expect(remoteSourceToLocalDirectory(source)).toEqual(expected);
+  });
 
-    expect(remoteSourceToLocalDirectory({
-      git: 'https://bitbucket.com/alleyinteractive/other-example.git',
-    })).toEqual(`${getCheckoutBaseDirectory()}/git/bitbucket-com/alleyinteractive/other-example-git`);
-
-    expect(remoteSourceToLocalDirectory({
-      git: 'https://bitbucket.com/alleyinteractive/other-example.git#master',
-    })).toEqual(`${getCheckoutBaseDirectory()}/git/bitbucket-com/alleyinteractive/other-example-git`);
-
+  it('should be able to handle errors when parsing Git URLs', () => {
     expect(() => remoteSourceToLocalDirectory({
       git: 'invalid url',
     })).toThrow('Invalid Git URL: invalid url');
   });
 
-  it('should be able to checkout a new git repository', async () => {
+  // Test each of the different ways to define a git source.
+  test.each([
+    [
+      {
+        git: 'https://github.com/alleyinteractive/example-generators.git',
+      },
+      {
+        baseDir: `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-generators-git`,
+      },
+    ],
+    [
+      {
+        git: {
+          git: 'https://github.com/alleyinteractive/example-generators.git',
+        },
+      },
+      {
+        baseDir: `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-generators-git`,
+      },
+    ],
+    [
+      {
+        git: {
+          url: 'https://github.com/alleyinteractive/example-generators.git',
+        },
+      },
+      {
+        baseDir: `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-generators-git`,
+      },
+    ],
+  ])('Git: processGitSource(%j) returns %j', async (source, expected) => {
     (fs.existsSync as jest.Mock).mockReturnValue(false);
 
     simpleGitMock.clone.mockResolvedValue('');
 
-    await processGitSource({
-      git: 'https://github.com/alleyinteractive/example-generators.git',
-    });
+    await processGitSource(source);
 
     // Only check the baseDir object property. the rest is tested in the simple-git package.
     expect(simpleGit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        baseDir: `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-generators-git`,
-      }),
+      expect.objectContaining(expected),
     );
     expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
     expect(simpleGitMock.pull).not.toHaveBeenCalled();
@@ -109,6 +215,32 @@ describe('remoteSources', () => {
     expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
     expect(simpleGitMock.pull).not.toHaveBeenCalled();
     expect(simpleGitMock.checkout).toHaveBeenCalledWith('8defe001');
+  });
+
+  it('should be able to checkout a new git repository with a specific branch and subdirectory', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true).mockReturnValueOnce(false);
+
+    const result = await processGitSource({
+      git: {
+        url: 'https://github.com/alleyinteractive/example-generators.git#8defe001',
+        ref: 'asd3223',
+        directory: 'subdirectory/path/here',
+      },
+    });
+
+    expect(result).toEqual({
+      directory: `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-generators-git/subdirectory/path/here`,
+    });
+
+    expect(simpleGit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baseDir: `${getCheckoutBaseDirectory()}/git/github-com/alleyinteractive/example-generators-git`,
+      }),
+    );
+
+    expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
+    expect(simpleGitMock.pull).not.toHaveBeenCalled();
+    expect(simpleGitMock.checkout).toHaveBeenCalledWith('asd3223');
   });
 
   it('should be able to update an existing git repository', async () => {
@@ -147,17 +279,43 @@ describe('remoteSources', () => {
     expect(simpleGitMock.fetch).not.toHaveBeenCalled();
   });
 
-  it('should be able to checkout a github repository', async () => {
+  // Test each of the different ways to define a github source.
+  test.each([
+    [
+      {
+        github: 'alleyinteractive/example-generators',
+      },
+      {
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
+      },
+    ],
+    [
+      {
+        github: {
+          name: 'alleyinteractive/example-generators',
+        },
+      },
+      {
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
+      },
+    ],
+    [
+      {
+        github: {
+          github: 'alleyinteractive/example-generators',
+        },
+      },
+      {
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
+      },
+    ],
+  ])('GitHub: processGitHubSource(%j) returns %j', async (source, expected) => {
     (fs.existsSync as jest.Mock).mockReturnValue(false);
 
-    await processGitHubSource({
-      github: 'alleyinteractive/example-generators',
-    });
+    await processGitHubSource(source);
 
     expect(simpleGit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
-      }),
+      expect.objectContaining(expected),
     );
 
     expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
@@ -165,11 +323,15 @@ describe('remoteSources', () => {
     expect(simpleGitMock.checkout).not.toHaveBeenCalled();
   });
 
-  it('should be able to checkout a github repository with a specific branch', async () => {
-    (fs.existsSync as jest.Mock).mockReturnValue(false);
+  it('should be able to checkout a github repository with a specific ref', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true).mockReturnValueOnce(false);
 
-    await processGitHubSource({
+    const result = await processGitHubSource({
       github: 'alleyinteractive/example-generators#8defe001',
+    });
+
+    expect(result).toEqual({
+      directory: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
     });
 
     expect(simpleGit).toHaveBeenCalledWith(
@@ -181,6 +343,44 @@ describe('remoteSources', () => {
     expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
     expect(simpleGitMock.pull).not.toHaveBeenCalled();
     expect(simpleGitMock.checkout).toHaveBeenCalledWith('8defe001');
+  });
+
+  it('should be able to checkout a github repository with a specific ref and subdirectory', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(true).mockReturnValueOnce(false);
+
+    const result = await processGitHubSource({
+      github: {
+        name: 'alleyinteractive/example-generators',
+        ref: 'asd3223',
+        directory: 'subdirectory/path/here',
+      },
+    });
+
+    expect(result).toEqual({
+      directory: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators/subdirectory/path/here`,
+    });
+
+    expect(simpleGit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baseDir: `${getCheckoutBaseDirectory()}/github/alleyinteractive/example-generators`,
+      }),
+    );
+
+    expect(simpleGitMock.clone).toHaveBeenCalledTimes(1);
+    expect(simpleGitMock.pull).not.toHaveBeenCalled();
+    expect(simpleGitMock.checkout).toHaveBeenCalledWith('asd3223');
+  });
+
+  it('should throw an error if the subdirectory does not exist', async () => {
+    (fs.existsSync as jest.Mock).mockReturnValue(false);
+
+    await expect(processGitHubSource({
+      github: {
+        name: 'alleyinteractive/example-generators',
+        ref: 'asd3223',
+        directory: 'invalid-subdirectory',
+      },
+    })).rejects.toThrow('The subdirectory invalid-subdirectory does not exist in the cloned repository');
   });
 
   it('should be able to update an existing github repository', async () => {

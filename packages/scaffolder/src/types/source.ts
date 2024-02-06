@@ -7,11 +7,24 @@ export type DirectorySource = {
 
 export type GithubSource = {
   /* Repository to clone from (organization/repository with an optional branch). */
-  github: string;
+  github: string | {
+    github?: string;
+    name?: string;
+    url?: string;
+    ref?: string;
+    /* The subdirectory within the repository to use as the root. */
+    directory?: string;
+  };
 };
 
 export type GitSource = {
-  git: string;
+  git: string | {
+    url?: string;
+    git?: string;
+    ref?: string;
+    /* The subdirectory within the repository to use as the root. */
+    directory?: string;
+  };
 };
 
 /**

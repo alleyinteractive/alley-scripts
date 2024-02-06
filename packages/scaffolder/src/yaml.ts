@@ -47,8 +47,25 @@ const configurationSchema = () => Joi.object({
     Joi.string(),
     Joi.object({
       directory: Joi.string(),
-      github: Joi.string(),
-      git: Joi.string(),
+      github: Joi.alternatives(
+        Joi.string(),
+        Joi.object({
+          github: Joi.string(),
+          name: Joi.string(),
+          url: Joi.string(),
+          directory: Joi.string(),
+          ref: Joi.string(),
+        }).xor('github', 'name', 'url'),
+      ),
+      git: Joi.alternatives(
+        Joi.string(),
+        Joi.object({
+          git: Joi.string(),
+          url: Joi.string(),
+          directory: Joi.string(),
+          ref: Joi.string(),
+        }).xor('git', 'url'),
+      ),
     }).xor('directory', 'github', 'git'),
   ])),
   features: Joi.array().items(featureConfigSchema()),

@@ -37,9 +37,9 @@ A feature is defined as a directory within the `.scaffolder` directory on a
 project that contains a `config.yml` file:
 
     .scaffolder/
-	  case-studies/
-		config.yml
-		[...files]
+      case-studies/
+        config.yml
+        [...files]
 
 The `config.yml` file will have the following structure
 (see [Feature Configuration](#feature-configuration) and
@@ -80,22 +80,22 @@ project's `.scaffolder/config.yml` file.
 ```yaml
 features:
   - name: Case Study
-	inputs:
-	  - name: caseStudyName
-		description: "Case Study Name"
-		type: string
-	  - name: tests
-		description: "Include Tests?"
-		type: boolean
-		default: true
-	files:
-	  - source: case-study.stub
-		destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
-	  - source: case-study-feed.stub
-		destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
-	  - source: test.stub
-		if: "{{ inputs.tests }}"
-		destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}
+    inputs:
+      - name: caseStudyName
+        description: "Case Study Name"
+        type: string
+      - name: tests
+        description: "Include Tests?"
+        type: boolean
+        default: true
+    files:
+      - source: case-study.stub
+        destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
+      - source: case-study-feed.stub
+        destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
+      - source: test.stub
+        if: "{{ inputs.tests }}"
+        destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}
 ```
 
 Subdirectories are **strongly recommended** to keep the project organized, but
@@ -128,8 +128,8 @@ needs. Inputs are defined as a list of objects with the following properties:
   following types are supported:
     - `string`: A string value.
     - `boolean`: A boolean value. The input will be a checkbox.
-	- `select`: (Not yet supported!) A select value. The input will be a select
-	box. Options are defined in the `options` property.
+    - `select`: (Not yet supported!) A select value. The input will be a select
+    box. Options are defined in the `options` property.
 - `default`: Optional. The default value of the input. If not provided, the
   default value is an empty string.
 - `required`: Optional. Whether the input is required. If not provided, the
@@ -206,24 +206,24 @@ type: repository
 # Inputs, optional.
 inputs:
 - name: pluginName
-	type: string
-	description: "Plugin Name"
+    type: string
+    description: "Plugin Name"
 
 # Repository configuration.
 repository:
-	github: alleyinteractive/create-wordpress-plugin
+    github: alleyinteractive/create-wordpress-plugin
 
-	# Supports a specific revision with a `#` divider.
-	# github: alleyinteractive/create-wordpress-plugin#main
+    # Supports a specific revision with a `#` divider.
+    # github: alleyinteractive/create-wordpress-plugin#main
 
-	# Supports git repositories as well.
-	# git: https://github.com/
+    # Supports git repositories as well.
+    # git: https://github.com/
 
-	# The destination of the repository after cloning. Supports expressions.
-	destination: "{{ dasherize inputs.pluginName }}"
+    # The destination of the repository after cloning. Supports expressions.
+    destination: "{{ dasherize inputs.pluginName }}"
 
-	# The command to run after cloning the repository. Supports expressions.
-	postCloneCommand: "php configure.php"
+    # The command to run after cloning the repository. Supports expressions.
+    postCloneCommand: "php configure.php"
 ```
 
 [Next: Expressions](./3-expressions.md) &rarr;

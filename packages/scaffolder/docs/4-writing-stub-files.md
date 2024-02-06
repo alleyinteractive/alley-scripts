@@ -13,13 +13,13 @@ The [feature's input](./2-features.md#input) is available as a variable in the
 stub file. For example, if you have a feature with an input named `name`, you
 can use that input in the stub file:
 
-	<?php
-	/**
-	 * {{ replace (psrClassName inputs.featureName) "_" " " }} Feature
-	 */
-	class {{ wpClassName inputs.name }} {
-		// ...
-	}
+    <?php
+    /**
+     * {{ replace (psrClassName inputs.featureName) "_" " " }} Feature
+     */
+    class {{ wpClassName inputs.name }} {
+        // ...
+    }
 
 With the filters included with Alley Scaffolder and the [built-in ones from
 handlebar-helpers](https://github.com/helpers/handlebars-helpers) and

@@ -24,25 +24,77 @@ export function getCheckoutBaseDirectory() {
 const escapeNonAlphanumeric = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '-');
 
 /**
+ * Parse a GitHub URL into its components.
+ *
+ * Match the organization, repository, and revision from the URL.
+ * Example: https://github.com/organization/repository.git#revision
+ */
+const parseGitHubUrl = (url: string) => {
+  const [, org, repo, revision] = url.match(/^(?:(?:https:\/\/github.com\/)|(?:git@github.com:))?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-/]*)?$/) || [];
+
+  return {
+    org,
+    repo: repo ? repo.replace(/\.git$/, '') : undefined,
+    revision: revision ? revision.slice(1) : undefined,
+  };
+};
+
+/**
  * Retrieve the local directory for a remote source.
  */
 export function remoteSourceToLocalDirectory(source: Source): string {
   if ('github' in source) {
-    // Retrieve the organization and repository name. Support either a full URL
-    // being passed or just the organization and repository.
-    const { github: url } = source;
+    if (typeof source.github === 'string') {
+      // Retrieve the organization and repository name. Support either a full URL
+      // being passed or just the organization and repository.
+      const { org, repo } = parseGitHubUrl(source.github);
 
-    const [, org, repo] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(?:#[A-Za-z0-9_.-/]*)?$/) || [];
+      if (!org || !repo) {
+        throw new Error(`Invalid GitHub URL: ${source.github}`);
+      }
 
-    if (!org || !repo) {
-      throw new Error(`Invalid GitHub URL: ${url}`);
+      return `${getCheckoutBaseDirectory()}/github/${escapeNonAlphanumeric(org)}/${escapeNonAlphanumeric(repo.replace(/\.git$/, ''))}`;
     }
 
-    return `${getCheckoutBaseDirectory()}/github/${escapeNonAlphanumeric(org)}/${escapeNonAlphanumeric(repo.replace(/\.git$/, ''))}`;
+    const {
+      github = undefined,
+      name = undefined,
+      url = undefined,
+    } = source.github;
+
+    if (url) {
+      const { org, repo } = parseGitHubUrl(url);
+
+      if (!org || !repo) {
+        throw new Error(`Invalid GitHub URL: ${url}`);
+      }
+
+      return `${getCheckoutBaseDirectory()}/github/${escapeNonAlphanumeric(org)}/${escapeNonAlphanumeric(repo)}`;
+    } if (name) {
+      const [org, repo] = name.split('/');
+
+      return `${getCheckoutBaseDirectory()}/github/${escapeNonAlphanumeric(org)}/${escapeNonAlphanumeric(repo)}`;
+    } if (github) {
+      const [org, repo] = github.split('/');
+
+      return `${getCheckoutBaseDirectory()}/github/${escapeNonAlphanumeric(org)}/${escapeNonAlphanumeric(repo)}`;
+    }
+
+    throw new Error(`Invalid GitHub source: ${JSON.stringify(source.github)}`);
   }
 
   if ('git' in source) {
-    const { git: url } = source;
+    let url: string;
+
+    if (typeof source.git === 'string') {
+      url = source.git;
+    } else {
+      url = source.git.git || source.git.url || '';
+    }
+
+    if (!url) {
+      throw new Error(`Invalid Git source: ${JSON.stringify(source.git)}`);
+    }
 
     const [, protocol, host, org, repo] = url.match(/^(git@|https:\/\/)([A-Za-z0-9_.-]*)[/|:]([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(?:#[A-Za-z0-9_.-/]*)?$/) || [];
 
@@ -65,8 +117,16 @@ export function remoteSourceToLocalDirectory(source: Source): string {
 async function updateLocalRepository(source: GitSource, directory: string) {
   const { git: cloneUrl } = source;
 
-  // Extract the branch/commit from the clone URL.
-  const [cleanUrl, revision] = cloneUrl.split('#', 2);
+  let cleanUrl: string;
+  let revision: string | undefined;
+
+  if (typeof cloneUrl === 'string') {
+    // Extract the branch/commit from the clone URL.
+    [cleanUrl, revision] = cloneUrl.split('#', 2);
+  } else {
+    cleanUrl = cloneUrl.url || cloneUrl.git || '';
+    revision = cloneUrl.ref || undefined;
+  }
 
   const git = createGit(directory);
 
@@ -106,10 +166,18 @@ async function updateLocalRepository(source: GitSource, directory: string) {
  * Clone a fresh copy of a repository.
  */
 async function cloneFreshRepository(source: GitSource, directory: string) {
-  const { git: cloneUrl } = source;
+  const { git: gitSource } = source;
 
-  // Extract the branch/commit from the clone URL.
-  const [cleanUrl, revision] = cloneUrl.split('#', 2);
+  let cleanUrl: string;
+  let revision: string | undefined;
+
+  if (typeof gitSource === 'string') {
+    // Extract the branch/commit from the clone URL.
+    [cleanUrl, revision] = gitSource.split('#', 2);
+  } else {
+    cleanUrl = gitSource.url || gitSource.git || '';
+    revision = gitSource.ref || undefined;
+  }
 
   logger().debug(`Cloning ${chalk.green(cleanUrl)} [${chalk.yellow(revision || 'default branch')}]`);
 
@@ -137,6 +205,11 @@ async function cloneFreshRepository(source: GitSource, directory: string) {
  */
 export async function processGitSource(source: GitSource, directory?: string): Promise<DirectorySource> {
   const checkoutDirectory = directory || remoteSourceToLocalDirectory(source);
+  let subDirectory: string | undefined;
+
+  if (typeof source.git === 'object') {
+    subDirectory = source.git.directory || undefined;
+  }
 
   // Check if the directory exists. If it does, update the repository.
   if (fs.existsSync(checkoutDirectory)) {
@@ -145,8 +218,14 @@ export async function processGitSource(source: GitSource, directory?: string): P
     await cloneFreshRepository(source, checkoutDirectory);
   }
 
+  // Check if the subdirectory exists and throw an error if it doesn't to
+  // prevent the source from being used.
+  if (subDirectory && !fs.existsSync(`${checkoutDirectory}/${subDirectory}`)) {
+    throw new Error(`The subdirectory ${subDirectory} does not exist in the cloned repository`);
+  }
+
   return {
-    directory: checkoutDirectory,
+    directory: `${checkoutDirectory}${subDirectory ? `/${subDirectory}` : ''}`,
   };
 }
 
@@ -156,17 +235,33 @@ export async function processGitSource(source: GitSource, directory?: string): P
  * @see processGitSource()
  */
 export async function processGitHubSource(source: GithubSource): Promise<DirectorySource> {
-  const { github: url } = source;
+  const { github: githubSource } = source;
 
-  if (url.startsWith('https://' || url.startsWith('git@'))) {
+  if (typeof githubSource === 'string') {
+    const { org, repo, revision } = parseGitHubUrl(githubSource);
+
     return processGitSource({
-      git: url,
-    });
+      git: {
+        url: `https://github.com/${org}/${repo}.git`,
+        ref: revision,
+      },
+    }, remoteSourceToLocalDirectory(source));
   }
 
-  const [, org, repo, revision] = url.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-/]*)?$/) || [];
+  const {
+    github = undefined,
+    name = undefined,
+    url = undefined,
+  } = githubSource;
+
+  if (!github && !name && !url) {
+    throw new Error('GitHub source requires either a name or a URL to be specified');
+  }
 
   return processGitSource({
-    git: `https://github.com/${org}/${repo}.git${revision || ''}`,
+    git: {
+      url: github || url || `https://github.com/${name}.git`,
+      ...githubSource,
+    },
   }, remoteSourceToLocalDirectory(source));
 }
