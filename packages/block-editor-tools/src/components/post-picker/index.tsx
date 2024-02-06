@@ -132,7 +132,6 @@ const PostPicker = ({
       <Spinner />
     );
   }
-  console.log('post', post);
 
   return (
     <Container className={className}>
