@@ -106,14 +106,14 @@ const PostList = ({
         ...result as any as WP_REST_API_Search_Results,
       ];
     }
-    if (cancelled) {
+    if (cancelled || params.searchValue !== debouncedSearchText) {
       return;
     }
     // @ts-ignore
     // eslint-disable-next-line camelcase
     setListposts(posts as any as WP_REST_API_Search_Results);
     setIsUpdating(false);
-  }, [listposts, baseUrl, suppressPostIds]);
+  }, [listposts, baseUrl, suppressPostIds, debouncedSearchText]);
 
   /**
    * Loads more posts.
