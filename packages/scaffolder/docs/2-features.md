@@ -72,6 +72,65 @@ selected, the scaffolder will prompt you for the inputs defined in the
 `config.yml` file. Once the inputs are provided and valid, the files will be
 generated and copied over to the configured destination.
 
+#### Resolving Source and Destination Paths
+
+By default, the scaffolder will use relative paths from the `config.yml` file to
+source files. The destination will default to the current working directory of
+the scaffolder. Given a `config.yml` file in the `case-studies` directory:
+
+```yaml
+name: Case Study
+
+files:
+  - source: case-study.stub
+	destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
+```
+
+The `case-study.stub` file will be sourced from within the `case-studies`
+directory. The generated file will be copied to the `${CWD}/src/case-study`
+directory. This works well for most cases to allow the scaffolder to be used
+wherever you'd like in the project. However, there are some use cases where
+features should be more prescriptive about where their generated files are
+placed.
+
+The scaffolder supports a `destination-resolver` configuration option that can
+be used to resolve the destination of the files. The `destination-resolver` can
+be set to the following values:
+
+- `cwd`: (default) The destination will be resolved to the current working
+  directory of the scaffolder.
+
+  If the user is running the scaffolder from the `/example/project` directory,
+  the destination will be resolved to `/example/project/:destination`.
+- `relative`: The destination will be resolved to the relative path of the
+  `config.yml` file.
+
+  If the `config.yml` file is located in the
+  `/example/project/.scaffolder/case-studies` directory and the file's
+  `destination` is `../../src/case-study`, the destination will be resolved to
+  `/example/project/src/case-study`.
+- `relative-parent`: The destination will be resolved to the parent directory of
+  the `.scaffolder` directory. If the `config.yml` file is located in the
+  `/example/project/.scaffolder/case-studies` directory and the file's
+  `destination` is `src/case-study`, the destination will be resolved to
+  `/example/project/src/case-study`.
+
+- `plugin`: The destination will be resolved to the WordPress plugin directory.
+  This is used for WordPress plugins that want to automatically place
+  themselves at `wp-content/plugins/<plugin-name>`.
+- `theme`: The destination will be resolved to the WordPress theme directory.
+  This is used for WordPress themes that want to automatically place
+  themselves at `wp-content/themes/<theme-name>`.
+
+The `destination-resolver` can be set in the `config.yml` file of the feature:
+
+```yaml
+name: Case Study
+
+config:
+  destination-resolver: plugin
+```
+
 #### Defining Features Without a Subdirectory
 
 Features can also be defined without a subdirectory on the `features` key in the
