@@ -69,17 +69,17 @@ export class ConfigurationStore {
     let currentDirectory = directory;
 
     while (true) { // eslint-disable-line no-constant-condition
-      if (fs.existsSync(`${currentDirectory}/.scaffolder`)) {
+      if (fs.existsSync(path.join(currentDirectory, '.scaffolder'))) {
         try {
-          const configuration = fs.existsSync(`${currentDirectory}/.scaffolder/config.yml`)
-            ? (parseYamlFile(`${currentDirectory}/.scaffolder/config.yml`) || {})
+          const configuration = fs.existsSync(path.join(currentDirectory, '.scaffolder', 'config.yml'))
+            ? (parseYamlFile(path.join(currentDirectory, '.scaffolder', 'config.yml')) || {})
             : {};
 
           validateConfiguration(configuration);
 
-          this.add(`${currentDirectory}/.scaffolder`, configuration);
+          this.add(path.join(currentDirectory, '.scaffolder'), configuration);
         } catch (error: any) {
-          logger().error(`Error loading configuration from ${chalk.yellow(`${currentDirectory}/.scaffolder/config.yml`)}: ${chalk.red(error.message)}`);
+          logger().error(`Error loading configuration from ${chalk.yellow(path.join(currentDirectory, '.scaffolder', 'config.yml'))}: ${chalk.red(error.message)}`);
         }
       }
 
@@ -110,8 +110,8 @@ export class ConfigurationStore {
     // Ensure the global configuration is loaded if it wasn't already.
     if (typeof this.configurations[globalConfigurationDirectory] === 'undefined') {
       try {
-        const globalConfiguration = fs.existsSync(`${globalConfigurationDirectory}/config.yml`)
-          ? (parseYamlFile(`${globalConfigurationDirectory}/config.yml`) || {})
+        const globalConfiguration = fs.existsSync(path.join(globalConfigurationDirectory, 'config.yml'))
+          ? (parseYamlFile(path.join(globalConfigurationDirectory, 'config.yml')) || {})
           : {};
 
         try {
@@ -119,7 +119,7 @@ export class ConfigurationStore {
 
           this.add(globalConfigurationDirectory, globalConfiguration);
         } catch (error: any) {
-          logger().error(`Error loading global configuration from ${chalk.yellow(`${globalConfigurationDirectory}/config.yml`)}: ${chalk.red(error.message)}`);
+          logger().error(`Error loading global configuration from ${chalk.yellow(path.join(globalConfigurationDirectory, 'config.yml'))}: ${chalk.red(error.message)}`);
         }
       } catch (error: any) {
         logger().error(`Error loading global configuration: ${chalk.red(error.message)}`);
