@@ -2,21 +2,21 @@
   "name": "@alleyinteractive/scaffolder-features",
   "version": "0.0.0",
   "description": "Base features included with the Alley Scaffolder",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
-  },
   "keywords": [
     "alley",
     "scaffolder"
   ],
-  "author": "Alley",
-  "license": "GPL-2.0-or-later",
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "bugs": {
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
   },
-  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "license": "GPL-2.0-or-later",
+  "author": "Alley",
+  "main": "index.js",
   "files": [
     "scaffolder",
     "LICENSE",
