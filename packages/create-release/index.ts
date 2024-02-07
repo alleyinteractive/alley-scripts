@@ -17,7 +17,9 @@ import { ReleaseType } from './src/options.js';
 import {
   bumpVersion,
   exitError,
+  getComposerVersion,
   getCurrentVersion,
+  getNpmPackageVersion,
   getReleaseType,
   upgradeComposerVersion,
   upgradeNpmPackageVersion,
@@ -44,17 +46,21 @@ import {
     console.log(`Using plugin path: ${chalk.yellow(basePath)}`);
   }
 
+  const currentVersion = getCurrentVersion(basePath);
+
   const {
     'dry-run': dryRun = false,
-    composer: updateComposer = false,
-    npm: updateNpm = false,
+    // Infer if we should update Composer/NPM by default if the current version
+    // set in Composer/NPM is the same as the current version in the plugin
+    // header. It can still be overridden by passing --composer=false or
+    // --npm=false to prevent updating Composer/NPM.
+    composer: updateComposer = currentVersion === getComposerVersion(basePath),
+    npm: updateNpm = currentVersion === getNpmPackageVersion(basePath),
   } = entryArgs;
 
   if (dryRun) {
     console.log(chalk.yellow('Dry Run: No changes will be made.'));
   }
-
-  const currentVersion = getCurrentVersion(basePath);
 
   if (currentVersion) {
     console.log(`Current Plugin Version: ${chalk.yellow(currentVersion)}`);

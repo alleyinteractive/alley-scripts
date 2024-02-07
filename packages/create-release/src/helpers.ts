@@ -165,6 +165,21 @@ function bumpVersion(version: string, releaseType: ReleaseType): string {
 }
 
 /**
+ * Get the version number from the composer.json file.
+ */
+function getComposerVersion(basePath: string): string | undefined {
+  try {
+    const contents = JSON.parse(
+      fs.readFileSync(`${basePath}/composer.json`, 'utf8'),
+    );
+
+    return contents.version || undefined;
+  } catch (error) {
+    return undefined;
+  }
+}
+
+/**
  * Upgrade the version number in the composer.json file.
  */
 function upgradeComposerVersion(basePath: string, version: string): void {
@@ -207,6 +222,21 @@ function upgradeComposerVersion(basePath: string, version: string): void {
     exitError(
       'There was an error upgrading the version number in the composer.json file.',
     );
+  }
+}
+
+/**
+ * Get the version number from the package.json file.
+ */
+function getNpmPackageVersion(basePath: string): string | undefined {
+  try {
+    const contents = JSON.parse(
+      fs.readFileSync(`${basePath}/package.json`, 'utf8'),
+    );
+
+    return contents.version || undefined;
+  } catch (error) {
+    return undefined;
   }
 }
 
@@ -276,7 +306,7 @@ function upgradePluginVersion(basePath: string, version: string): void {
     const contents = fs.readFileSync(file, 'utf8');
 
     const newContents = contents.replace(
-      /(\* Version: )(.*)/g,
+      /((^|\s)Version:\s*)(.*)/g,
       `$1${version}`,
     );
 
@@ -310,7 +340,7 @@ function upgradeReadmeVersion(basePath: string, version: string): void {
     const contents = fs.readFileSync(file, 'utf8');
 
     const newContents = contents.replace(
-      /(Stable tag: )(.*)/g,
+      /(Stable tag:\s*)(.*)/g,
       `$1${version}`,
     );
 
@@ -325,7 +355,9 @@ export {
   getCurrentVersion,
   getReleaseType,
   bumpVersion,
+  getComposerVersion,
   upgradeComposerVersion,
+  getNpmPackageVersion,
   upgradeNpmPackageVersion,
   upgradePluginVersion,
   upgradeReadmeVersion,
