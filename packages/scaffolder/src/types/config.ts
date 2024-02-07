@@ -63,6 +63,7 @@ export type FeatureRepositoryConfig = {
  */
 export type FeatureConfig = {
   name: string;
+  description?: string;
   type: 'file' | 'repository';
   config?: {
     /* Defaults to 'cwd'. */

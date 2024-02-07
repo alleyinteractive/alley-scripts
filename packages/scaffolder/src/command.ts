@@ -1,4 +1,6 @@
-import { initializeFeatureStore } from './features/store';
+import chalk from 'chalk';
+
+import { getFeatureStore, initializeFeatureStore } from './features/store';
 import { initializeLogger } from './logger';
 import { configToGenerator, promptUserForFeature } from './features';
 import commandArguments from './arguments';
@@ -27,6 +29,7 @@ class ScaffolderCommand {
   async invoke() {
     const {
       'dry-run': dryRun = false,
+      list = false,
       _unknown: argv = undefined,
     } = this.arguments;
 
@@ -40,6 +43,16 @@ class ScaffolderCommand {
 
     await initializeFeatureStore();
 
+    if (list) {
+      this.logger.info('Available features:');
+
+      Object.values(getFeatureStore().all()).flat().forEach((feature) => {
+        this.logger.info(`- ${chalk.green(feature.name)}: ${feature.description || 'No description available'}`);
+      });
+
+      process.exit(0);
+    }
+
     const feature = await promptUserForFeature(argv ? argv[0] : undefined);
 
     await configToGenerator(...feature).resolveAndInvoke(dryRun);
@@ -51,7 +64,7 @@ class ScaffolderCommand {
     const emojis = ['👋', '🌸', '🚀'];
     const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
 
-    this.logger.info(`${randomEmoji} Welcome to @alleyinteractive/scaffolder!`);
+    this.logger.info(`${randomEmoji} Welcome to ${chalk.magenta('@alleyinteractive/scaffolder')}!`);
 
     const { 'dry-run': dryRun = false } = this.arguments;
 

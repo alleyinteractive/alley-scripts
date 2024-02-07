@@ -64,6 +64,7 @@ lightweight features that clone a remote repository or don't have any stub files
 ```yaml
 features:
   - name: create-wordpress-plugin
+    description: An optional description of the feature.
     type: repository
     config:
       destination-resolver: plugin

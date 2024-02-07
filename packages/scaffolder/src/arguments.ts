@@ -8,6 +8,7 @@ export type Arguments = {
   debug?: boolean;
   'dry-run'?: boolean;
   help?: boolean;
+  list?: boolean;
 };
 
 /**
@@ -35,6 +36,12 @@ const commandArguments = parse<Arguments>(
       optional: true,
       alias: 'h',
       description: 'Prints this usage guide',
+    },
+    list: {
+      alias: 'l',
+      type: Boolean,
+      description: 'List available features.',
+      optional: true,
     },
   },
   {

@@ -47,7 +47,7 @@ The `config.yml` file will have the following structure
 
 ```yaml
 name: Case Study
-
+description: An optional description of the feature.
 inputs:
   - name: caseStudyName
     description: "Case Study Name"
@@ -56,7 +56,6 @@ inputs:
     description: "Include Tests?"
     type: boolean
     default: true
-
 files:
   - source: case-study.stub
     destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
@@ -80,7 +79,7 @@ the scaffolder. Given a `config.yml` file in the `case-studies` directory:
 
 ```yaml
 name: Case Study
-
+description: An optional description of the feature.
 files:
   - source: case-study.stub
     destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
@@ -126,7 +125,7 @@ The `destination-resolver` can be set in the `config.yml` file of the feature:
 
 ```yaml
 name: Case Study
-
+description: An optional description of the feature.
 config:
   destination-resolver: plugin
 ```
@@ -139,6 +138,7 @@ project's `.scaffolder/config.yml` file.
 ```yaml
 features:
   - name: Case Study
+    description: An optional description of the feature.
     inputs:
       - name: caseStudyName
         description: "Case Study Name"
@@ -216,7 +216,7 @@ The following is a standard configuration file for a feature:
 
 ```yaml
 name: Plugin Feature
-
+description: An optional description of the feature.
 inputs:
   - name: featureName
     description: "Feature Name"
@@ -260,6 +260,7 @@ The following is a standard configuration file for a repository feature:
 
 ```yaml
 name: create-wordpress-plugin
+description: An optional description of the feature.
 type: repository
 
 # Inputs, optional.

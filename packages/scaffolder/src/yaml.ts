@@ -8,6 +8,7 @@ import yaml from 'js-yaml';
  */
 const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
+  description: Joi.string(),
   type: Joi.string().default('file').valid('file', 'repository'),
   config: Joi.object({
     'destination-resolver': Joi.string().valid('cwd', 'theme', 'plugin', 'relative', 'relative-parent').default('cwd'),
