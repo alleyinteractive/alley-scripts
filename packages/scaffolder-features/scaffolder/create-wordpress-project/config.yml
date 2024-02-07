@@ -7,6 +7,4 @@ inputs:
 repository:
   github: alleyinteractive/create-wordpress-project
   destination: "{{ dasherize inputs.projectName }}"
-  postCloneCommand: |
-    # If pvm exists, run pvm 8.2
-    php configure.php
+  postCloneCommand: php configure.php
