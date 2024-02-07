@@ -5,9 +5,10 @@ import { JSX } from 'react';
 import {
   Button,
   ButtonGroup,
+  Notice,
   Spinner,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Post } from 'wp-types';
@@ -16,6 +17,8 @@ import { usePostById } from '../../hooks';
 
 import SearchModal from './search-modal';
 import Post from './post';
+
+import './style.scss';
 
 interface PostPickerProps {
   allowedTypes?: string[];
@@ -137,7 +140,21 @@ const PostPicker = ({
           {pickerTitle}
         </h4>
       ) : null}
-      {value !== 0 && post !== null ? (
+      {value !== 0 && post === undefined ? (
+        <>
+          <Notice
+            status="error"
+            isDismissible={false}
+            className="post-picker-notice"
+          >
+            <p>
+              {sprintf(__('Post %d is no longer available; it has been unpublished or deleted', 'alley-scripts'), value)}
+            </p>
+          </Notice>
+          {controls()}
+        </>
+      ) : null}
+      {value !== 0 && post !== undefined ? (
         <>
           {previewRender !== undefined ? (
             previewRender(post)
@@ -152,14 +169,15 @@ const PostPicker = ({
           )}
           {controls()}
         </>
-      ) : (
+      ) : null}
+      {value === 0 ? (
         <Button
           onClick={openModal}
           variant="secondary"
         >
           {selectText}
         </Button>
-      )}
+      ) : null}
       {showModal ? (
         <SearchModal
           closeModal={closeModal}
