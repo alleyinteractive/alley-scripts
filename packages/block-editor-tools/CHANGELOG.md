@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.6.2
+
+### Patch Changes
+
+- 7086f9d: Bug fix: a previously selected post that has been unpublished or deleted will no longer crash the `usePostById` hook or the `PostPicker` component.
+
+## 0.6.1
+
+### Patch Changes
+
+- 931181d: Updated README that documents components, hooks, and services usage.
+
+## 0.6.0
+
+### Minor Changes
+
+- cb1a57f: Extending support for Node 20.
+
 ## 0.5.1
 
 ### Patch Changes
