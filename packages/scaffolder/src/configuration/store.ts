@@ -96,6 +96,15 @@ export class ConfigurationStore {
       }
     }
 
+    this.ensureGlobalConfigurationLoaded();
+
+    logger().debug(`Loaded ${chalk.blue(Object.keys(this.configurations).length)} configurations.`);
+  }
+
+  /**
+   * Ensure the global configuration is always loaded.
+   */
+  private ensureGlobalConfigurationLoaded() {
     const globalConfigurationDirectory = getGlobalDirectory();
 
     // Ensure the global configuration is loaded if it wasn't already.
@@ -118,8 +127,6 @@ export class ConfigurationStore {
 
       logger().debug(`Loaded global configuration from ${chalk.blue(globalConfigurationDirectory)}`);
     }
-
-    logger().debug(`Loaded ${chalk.blue(Object.keys(this.configurations).length)} configurations.`);
   }
 }
 
