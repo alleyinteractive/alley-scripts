@@ -5,7 +5,8 @@ export type DirectorySource = {
   root?: string;
 };
 
-export type GithubSourceConfig = {
+// Configuration of a GitHub source.
+export type GithubSourceConfig = string | {
   github?: string;
   name?: string;
   url?: string;
@@ -16,10 +17,11 @@ export type GithubSourceConfig = {
 
 export type GithubSource = {
   /* Repository to clone from (organization/repository with an optional branch). */
-  github: string | GithubSourceConfig;
+  github: GithubSourceConfig;
 };
 
-export type GitSourceConfig = {
+// Configuration of a Git source.
+export type GitSourceConfig = string | {
   url?: string;
   git?: string;
   ref?: string;
@@ -28,7 +30,7 @@ export type GitSourceConfig = {
 };
 
 export type GitSource = {
-  git: string | GitSourceConfig;
+  git: GitSourceConfig;
 };
 
 /**

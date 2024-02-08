@@ -30,7 +30,7 @@ const gitSchema = Joi.alternatives(
 const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   description: Joi.string(),
-  type: Joi.string().default('file').valid('file', 'repository'),
+  type: Joi.string().default('file').valid('composer', 'file', 'repository'),
   config: Joi.object({
     'destination-resolver': Joi.string().valid('cwd', 'theme', 'plugin', 'relative', 'relative-parent').default('cwd'),
   }),
@@ -56,6 +56,16 @@ const featureConfigSchema = () => Joi.object({
     postCloneCommand: Joi.string(),
   }).when('type', {
     is: 'repository',
+    then: Joi.required(),
+  }),
+  composer: Joi.object({
+    package: Joi.string().required(),
+    destination: Joi.string().required(),
+    version: Joi.string(),
+    args: Joi.string(),
+    postCommand: Joi.string(),
+  }).when('type', {
+    is: 'composer',
     then: Joi.required(),
   }),
 });

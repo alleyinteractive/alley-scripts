@@ -1,3 +1,5 @@
+import { spawn } from 'node:child_process';
+
 /**
  * Parse a GitHub URL into its components.
  *
@@ -13,3 +15,22 @@ export const parseGitHubUrl = (url: string) => {
     revision: revision ? revision.slice(1) : undefined,
   };
 };
+
+/**
+ * Run a command with child_process.spawn().
+ */
+export const runCommand = (command: string, cwd: string) => new Promise<void>((resolve, reject) => {
+  const run = spawn(command, [], {
+    cwd,
+    shell: true,
+    stdio: 'inherit',
+  });
+
+  run.on('close', (code) => {
+    if (code === 0) {
+      resolve();
+    } else {
+      reject(new Error(`Command failed with code ${code}`));
+    }
+  });
+});

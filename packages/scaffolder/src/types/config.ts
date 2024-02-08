@@ -47,13 +47,26 @@ export type FeatureInput = {
 
 export type FeatureRepositoryConfig = {
   /* Destination directory for the repository. */
-  destination?: string;
+  destination: string;
   /* Git URL for the repository. */
   git?: GitSourceConfig;
   /* GitHub configuration for the repository. */
   github?: GithubSourceConfig;
   /* Command to run after the repository is cloned. */
   postCloneCommand?: string;
+};
+
+export type FeatureComposerConfig = {
+  /* Arguments to pass to the composer command. */
+  args?: string;
+  /* Name of the package to install. */
+  package: string;
+  /* Destination directory for the repository. */
+  destination: string;
+  /* Version of the package to install. */
+  version?: string;
+  /* Command to run after the project is done scaffolding. */
+  postCommand?: string;
 };
 
 /**
@@ -69,6 +82,7 @@ export type FeatureConfig = {
     /* Defaults to 'cwd'. */
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';
   };
+  composer?: FeatureComposerConfig;
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;

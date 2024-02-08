@@ -1,13 +1,12 @@
 import chalk from 'chalk';
 import fs from 'node:fs';
-import { spawn } from 'node:child_process';
 
 import handleError from '../error';
 import { Generator } from './generator';
 import { parseExpression } from '../expressions';
 import { createGit } from '../git';
 import { logger } from '../logger';
-import { parseGitHubUrl } from '../helpers';
+import { parseGitHubUrl, runCommand } from '../helpers';
 
 /**
  * Repository-based feature.
@@ -46,7 +45,7 @@ export class RepositoryGenerator extends Generator {
 
     if (github) {
       if (typeof github === 'string') {
-        return github;
+        return `https://github.com/${github}.git`;
       }
 
       const {
@@ -77,21 +76,7 @@ export class RepositoryGenerator extends Generator {
 
     logger().info(`Running post clone command: ${chalk.yellow(postCloneCommand)}`);
 
-    return new Promise((resolve, reject) => {
-      const run = spawn(postCloneCommand, [], {
-        cwd: destination,
-        shell: true,
-        stdio: 'inherit',
-      });
-
-      run.on('close', (code) => {
-        if (code === 0) {
-          resolve();
-        } else {
-          reject(new Error(`Command failed with code ${code}`));
-        }
-      });
-    });
+    return runCommand(postCloneCommand, destination);
   }
 
   /**
@@ -106,7 +91,6 @@ export class RepositoryGenerator extends Generator {
     } = this.config;
 
     const context = this.collectContextVariables();
-
     const destination = this.getDestinationDirectory(parseExpression(`${destinationConfig}`, context));
 
     // Check if the destination already exists and is not empty.
