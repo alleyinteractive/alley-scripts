@@ -3,15 +3,17 @@
 import fs from 'node:fs';
 import chalk from 'chalk';
 
-import {
+import { parseGitHubUrl } from '../helpers';
+import { getGlobalDirectory } from '../configuration';
+import { logger } from '../logger';
+import { createGit } from '../git';
+
+import type {
   DirectorySource,
   GitSource,
   GithubSource,
   Source,
 } from '../types';
-import { getGlobalDirectory } from '../configuration';
-import { logger } from '../logger';
-import { createGit } from '../git';
 
 /**
  * Handle remote sources that are checked out from a git repository.
@@ -22,22 +24,6 @@ export function getCheckoutBaseDirectory() {
 
 // Escape all non alphanumeric characters in a string and replace it with a dash.
 const escapeNonAlphanumeric = (str: string) => str.replace(/[^a-zA-Z0-9]/g, '-');
-
-/**
- * Parse a GitHub URL into its components.
- *
- * Match the organization, repository, and revision from the URL.
- * Example: https://github.com/organization/repository.git#revision
- */
-const parseGitHubUrl = (url: string) => {
-  const [, org, repo, revision] = url.match(/^(?:(?:https:\/\/github.com\/)|(?:git@github.com:))?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-/]*)?$/) || [];
-
-  return {
-    org,
-    repo: repo ? repo.replace(/\.git$/, '') : undefined,
-    revision: revision ? revision.slice(1) : undefined,
-  };
-};
 
 /**
  * Retrieve the local directory for a remote source.

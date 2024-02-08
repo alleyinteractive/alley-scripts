@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Source } from './source';
+import type { GitSourceConfig, GithubSourceConfig, Source } from './source';
 
 /**
  * Type representation of the parsed root configuration.
@@ -49,9 +49,9 @@ export type FeatureRepositoryConfig = {
   /* Destination directory for the repository. */
   destination?: string;
   /* Git URL for the repository. */
-  git?: string;
+  git?: GitSourceConfig;
   /* GitHub configuration for the repository. */
-  github?: string;
+  github?: GithubSourceConfig;
   /* Command to run after the repository is cloned. */
   postCloneCommand?: string;
 };
@@ -64,7 +64,7 @@ export type FeatureRepositoryConfig = {
 export type FeatureConfig = {
   name: string;
   description?: string;
-  type: 'file' | 'repository';
+  type: 'file' | 'repository' | 'composer';
   config?: {
     /* Defaults to 'cwd'. */
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';

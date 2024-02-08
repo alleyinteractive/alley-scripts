@@ -5,26 +5,30 @@ export type DirectorySource = {
   root?: string;
 };
 
+export type GithubSourceConfig = {
+  github?: string;
+  name?: string;
+  url?: string;
+  ref?: string;
+  /* The subdirectory within the repository to use as the root. */
+  directory?: string;
+};
+
 export type GithubSource = {
   /* Repository to clone from (organization/repository with an optional branch). */
-  github: string | {
-    github?: string;
-    name?: string;
-    url?: string;
-    ref?: string;
-    /* The subdirectory within the repository to use as the root. */
-    directory?: string;
-  };
+  github: string | GithubSourceConfig;
+};
+
+export type GitSourceConfig = {
+  url?: string;
+  git?: string;
+  ref?: string;
+  /* The subdirectory within the repository to use as the root. */
+  directory?: string;
 };
 
 export type GitSource = {
-  git: string | {
-    url?: string;
-    git?: string;
-    ref?: string;
-    /* The subdirectory within the repository to use as the root. */
-    directory?: string;
-  };
+  git: string | GitSourceConfig;
 };
 
 /**
