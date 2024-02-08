@@ -275,9 +275,15 @@ repository:
 
     # Supports a specific revision with a `#` divider.
     # github: alleyinteractive/create-wordpress-plugin#main
+    #
+    # github: alleyinteractive/create-wordpress-plugin
+    #  ref: main
 
     # Supports git repositories as well.
     # git: https://github.com/
+    #
+    # git: https://github.com/
+    #  ref: main
 
     # The destination of the repository after cloning. Supports expressions.
     destination: "{{ dasherize inputs.pluginName }}"
