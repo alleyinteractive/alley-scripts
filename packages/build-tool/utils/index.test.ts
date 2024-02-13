@@ -115,7 +115,7 @@ describe('getUserWebpackConfigFilePath', () => {
       fs.unlinkSync(rootWebpackConfigPath);
       // file removed
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   });
 });
@@ -130,7 +130,7 @@ describe('getUserWebpackConfig', () => {
       fs.unlinkSync(rootWebpackConfigPath);
       // file removed
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   });
 
@@ -143,7 +143,7 @@ describe('getUserWebpackConfig', () => {
       fs.writeFileSync(rootWebpackConfigPath, fileContents);
       // file written successfully
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
     const mockConfig = { entry: './src/index.js' };
     jest.spyOn(require, 'resolve').mockImplementation(() => rootWebpackConfigPath);

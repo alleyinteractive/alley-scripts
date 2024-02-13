@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import deepExtend from 'deep-extend';
 
 import config from './webpack.config';
