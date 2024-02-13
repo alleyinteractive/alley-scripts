@@ -101,6 +101,8 @@ const getUserWebpackConfig = (): webpack.Configuration | {} => {
     const webpackConfig = require(require.resolve(webpackConfigFilePath));
     return webpackConfig;
   } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Failed to load webpack config from ${webpackConfigFilePath}:`, error);
     return {};
   }
 };
