@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { cwd } from 'node:process';
 import path from 'path';
-import webpack from 'webpack';
+import { Configuration } from 'webpack';
 
 type CliArg = string | undefined;
 type PathToConfig = CliArg;
@@ -89,7 +89,7 @@ const getWebpackConfig = (): PathToConfig => path.join(__dirname, '../config/ext
 /**
  * Get the user's webpack configuration.
  */
-const getUserWebpackConfig = (): webpack.Configuration | {} => {
+const getUserWebpackConfig = (): Configuration | {} => {
   const webpackConfigFilePath = getUserWebpackConfigFilePath();
 
   if (typeof webpackConfigFilePath === 'undefined') {
