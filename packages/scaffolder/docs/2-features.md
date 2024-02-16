@@ -313,7 +313,8 @@ repository:
 
 ### Composer Feature
 
-A composer feature is used to install a Composer package from Packagist.
+A Composer feature is used to install a Composer package and optionally run a
+command after installing the package.
 
 ```yaml
 name: create-wordpress-theme
@@ -322,22 +323,22 @@ type: composer
 
 # Inputs, optional.
 inputs:
-  - name: pluginName
+  - name: themeName
     type: string
-    description: "Plugin Name"
+    description: "Theme Name"
 
 # Composer configuration.
 composer:
   package: alleyinteractive/create-wordpress-theme
-  destination: "{{ dasherize inputs.pluginName }}"
+  destination: "{{ dasherize inputs.themeName }}"
 
-  # Supports a specific version.
+  # Optional. Supports a specific version.
   version: "^1.0.0"
 
-  # Support additional arguments to pass to the composer command.
+  # Optional. Support additional arguments to pass to the composer command.
   args: "--no-dev"
 
-  # The command to run after installing the package. Supports expressions.
+  # Optional. The command to run after installing the package. Supports expressions.
   postCommand: "php configure.php"
 ```
 
