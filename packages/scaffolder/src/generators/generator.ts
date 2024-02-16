@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import path from 'node:path';
+import fs from 'node:fs';
 
 // Services.
 import { logger } from '../logger';
@@ -60,8 +61,10 @@ export abstract class Generator {
 
     // Intelligently prompt the user if they would like to place their
     // theme/plugin in the proper destination.
-    if (cwd.includes('wp-content') && ['theme', 'plugin'].includes(destinationResolver)) {
-      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
+    if ((cwd.includes('wp-content') || fs.existsSync(`${cwd}/wp-content`)) && ['theme', 'plugin'].includes(destinationResolver)) {
+      const wpContentPath = cwd.includes('wp-content')
+        ? `${cwd.split('/wp-content')[0]}/wp-content`
+        : `${cwd}/wp-content`;
 
       // Determine if the destination path should be resolved to a plugin or theme.
       if (destinationResolver === 'theme' && !cwd.endsWith('wp-content/themes')) {
@@ -105,7 +108,9 @@ export abstract class Generator {
     } = this;
 
     if (['plugin', 'theme'].includes(destinationResolver)) {
-      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
+      const wpContentPath = fs.existsSync(`${cwd}/wp-content`)
+        ? `${cwd}/wp-content`
+        : `${cwd.split('/wp-content')[0]}/wp-content`;
 
       if (destinationResolver === 'plugin' && inputResolveToPluginDirectory) {
         return `${wpContentPath}/plugins/${filePath}`;
