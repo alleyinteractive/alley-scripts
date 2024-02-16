@@ -255,7 +255,7 @@ after cloning. Out of the box, the scaffolder includes a feature out of the box
 that will clone the `create-wordpress-plugin` repository and run the
 configuration script after cloning.
 
-The following is a standard configuration file for a repository feature:
+The following is a standard configuration file for a GitHub repository feature:
 
 ```yaml
 name: create-wordpress-plugin
@@ -264,25 +264,81 @@ type: repository
 
 # Inputs, optional.
 inputs:
-- name: pluginName
+  - name: pluginName
     type: string
     description: "Plugin Name"
 
 # Repository configuration.
 repository:
-    github: alleyinteractive/create-wordpress-plugin
+  # The destination to clone the repository to. Supports expressions and required.
+  destination: "{{ dasherize inputs.pluginName }}"
+  # The command to run after cloning the repository. Supports expressions.
+  postCloneCommand: "php configure.php"
 
-    # Supports a specific revision with a `#` divider.
-    # github: alleyinteractive/create-wordpress-plugin#main
+  # The repository configuration. Supports GitHub and Git.
+  github:
+    # The repository to clone. Supports expressions.
+    name: alleyinteractive/create-wordpress-plugin
+```
 
-    # Supports git repositories as well.
-    # git: https://github.com/
+You can also use a Git repository feature to clone a repository from a Git
+repository. The following is a standard configuration file for a Git repository
+feature:
 
-    # The destination of the repository after cloning. Supports expressions.
-    destination: "{{ dasherize inputs.pluginName }}"
+```yaml
+name: create-wordpress-plugin
+description: An optional description of the feature.
+type: repository
 
-    # The command to run after cloning the repository. Supports expressions.
-    postCloneCommand: "php configure.php"
+# Inputs, optional.
+inputs:
+  - name: pluginName
+    type: string
+    description: "Plugin Name"
+
+# Repository configuration.
+repository:
+  # The destination to clone the repository to. Supports expressions and required.
+  destination: "{{ dasherize inputs.pluginName }}"
+  # The command to run after cloning the repository. Supports expressions.
+  postCloneCommand: "php configure.php"
+
+  # The repository configuration. Supports GitHub and Git.
+  git:
+    # The URL of the repository to clone. Supports expressions.
+    url: git@bitbucket.com:alleyinteractive/scaffolder-features.git
+
+```
+
+### Composer Feature
+
+A Composer feature is used to install a Composer package and optionally run a
+command after installing the package.
+
+```yaml
+name: create-wordpress-theme
+description: An optional description of the feature.
+type: composer
+
+# Inputs, optional.
+inputs:
+  - name: themeName
+    type: string
+    description: "Theme Name"
+
+# Composer configuration.
+composer:
+  package: alleyinteractive/create-wordpress-theme
+  destination: "{{ dasherize inputs.themeName }}"
+
+  # Optional. Supports a specific version.
+  version: "^1.0.0"
+
+  # Optional. Support additional arguments to pass to the composer command.
+  args: "--no-dev"
+
+  # Optional. The command to run after installing the package. Supports expressions.
+  postCommand: "php configure.php"
 ```
 
 [Next: Expressions](./3-expressions.md) &rarr;

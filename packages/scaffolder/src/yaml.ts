@@ -2,6 +2,27 @@ import fs from 'node:fs';
 import Joi from 'joi';
 import yaml from 'js-yaml';
 
+const githubSchema = Joi.alternatives(
+  Joi.string(),
+  Joi.object({
+    github: Joi.string(),
+    name: Joi.string(),
+    url: Joi.string(),
+    directory: Joi.string(),
+    ref: Joi.string(),
+  }).xor('github', 'name', 'url'),
+);
+
+const gitSchema = Joi.alternatives(
+  Joi.string(),
+  Joi.object({
+    git: Joi.string(),
+    url: Joi.string(),
+    directory: Joi.string(),
+    ref: Joi.string(),
+  }).xor('git', 'url'),
+);
+
 /**
  * Retrieve the structure for a scaffolder feature configuration file for
  * validation with Joi.
@@ -9,7 +30,7 @@ import yaml from 'js-yaml';
 const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   description: Joi.string(),
-  type: Joi.string().default('file').valid('file', 'repository'),
+  type: Joi.string().default('file').valid('composer', 'file', 'repository'),
   config: Joi.object({
     'destination-resolver': Joi.string().valid('cwd', 'theme', 'plugin', 'relative', 'relative-parent').default('cwd'),
   }),
@@ -29,12 +50,22 @@ const featureConfigSchema = () => Joi.object({
     then: Joi.required(),
   }),
   repository: Joi.object({
-    github: Joi.string(),
-    git: Joi.string(),
+    github: githubSchema,
+    git: gitSchema,
     destination: Joi.string().required(),
     postCloneCommand: Joi.string(),
   }).when('type', {
     is: 'repository',
+    then: Joi.required(),
+  }),
+  composer: Joi.object({
+    package: Joi.string().required(),
+    destination: Joi.string().required(),
+    version: Joi.string(),
+    args: Joi.string(),
+    postCommand: Joi.string(),
+  }).when('type', {
+    is: 'composer',
     then: Joi.required(),
   }),
 });
@@ -48,25 +79,8 @@ const configurationSchema = () => Joi.object({
     Joi.string(),
     Joi.object({
       directory: Joi.string(),
-      github: Joi.alternatives(
-        Joi.string(),
-        Joi.object({
-          github: Joi.string(),
-          name: Joi.string(),
-          url: Joi.string(),
-          directory: Joi.string(),
-          ref: Joi.string(),
-        }).xor('github', 'name', 'url'),
-      ),
-      git: Joi.alternatives(
-        Joi.string(),
-        Joi.object({
-          git: Joi.string(),
-          url: Joi.string(),
-          directory: Joi.string(),
-          ref: Joi.string(),
-        }).xor('git', 'url'),
-      ),
+      github: githubSchema,
+      git: gitSchema,
     }).xor('directory', 'github', 'git'),
   ])),
   features: Joi.array().items(featureConfigSchema()),
