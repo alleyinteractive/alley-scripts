@@ -81,12 +81,13 @@ export type FeatureComposerConfig = {
 export type FeatureConfig = {
   name: string;
   description?: string;
-  type: 'file' | 'repository' | 'composer';
+  type: 'file' | 'repository' | 'composer' | 'composite';
   config?: {
     /* Defaults to 'cwd'. */
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';
   };
   composer?: FeatureComposerConfig;
+  features?: FeatureConfig[];
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;
