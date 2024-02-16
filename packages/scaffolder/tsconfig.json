@@ -1,0 +1,28 @@
+{
+  "extends": "@alleyinteractive/tsconfig/base.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "baseUrl": ".",
+    "checkJs": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "lib": [ "ES2022" ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "*.spec.ts"
+  ],
+  "include": [
+    "src/**/*",
+    "index.ts",
+  ]
+}
