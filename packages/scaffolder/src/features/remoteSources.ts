@@ -127,8 +127,8 @@ async function updateLocalRepository(source: GitSource, directory: string) {
   } else {
     cleanUrl = cloneUrl.url || cloneUrl.git || '';
     revision = cloneUrl.ref || undefined;
-    updateThreshold = cloneUrl.updateThreshold
-      ? parseInt(`${cloneUrl.updateThreshold}`, 10) || updateThreshold
+    updateThreshold = typeof cloneUrl.updateThreshold !== 'undefined'
+      ? (parseInt(`${cloneUrl.updateThreshold}`, 10) || updateThreshold)
       : updateThreshold;
   }
 
