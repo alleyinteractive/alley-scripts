@@ -12,7 +12,6 @@ jest.mock('node:fs', () => {
 
   return {
     ...actual,
-    // existsSync: jest.fn((...args) => actual.existsSync(...args)),
     mkdirSync: jest.fn(),
     writeFileSync: jest.fn(),
   };

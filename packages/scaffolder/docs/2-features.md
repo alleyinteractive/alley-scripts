@@ -47,7 +47,7 @@ The `config.yml` file will have the following structure
 
 ```yaml
 name: Case Study
-
+description: An optional description of the feature.
 inputs:
   - name: caseStudyName
     description: "Case Study Name"
@@ -56,7 +56,6 @@ inputs:
     description: "Include Tests?"
     type: boolean
     default: true
-
 files:
   - source: case-study.stub
     destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
@@ -64,7 +63,7 @@ files:
     destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
   - source: test.stub
     if: "{{ inputs.tests }}"
-    destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
+    destination: tests/Features/{{ psr4ClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
 ```
 
 Run the scaffolder and you will be prompted for the "Case Study" feature. If
@@ -80,7 +79,7 @@ the scaffolder. Given a `config.yml` file in the `case-studies` directory:
 
 ```yaml
 name: Case Study
-
+description: An optional description of the feature.
 files:
   - source: case-study.stub
     destination: src/case-study/{{ wpClassFilename inputs.caseStudyName }}
@@ -126,7 +125,7 @@ The `destination-resolver` can be set in the `config.yml` file of the feature:
 
 ```yaml
 name: Case Study
-
+description: An optional description of the feature.
 config:
   destination-resolver: plugin
 ```
@@ -139,6 +138,7 @@ project's `.scaffolder/config.yml` file.
 ```yaml
 features:
   - name: Case Study
+    description: An optional description of the feature.
     inputs:
       - name: caseStudyName
         description: "Case Study Name"
@@ -154,7 +154,7 @@ features:
         destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
       - source: test.stub
         if: "{{ inputs.tests }}"
-        destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}
+        destination: tests/Features/{{ psr4ClassFilename inputs.caseStudyName prefix="" suffix="" }}
 ```
 
 Subdirectories are **strongly recommended** to keep the project organized, but
@@ -187,7 +187,6 @@ needs. Inputs are defined as a list of objects with the following properties:
   following types are supported:
     - `string`: A string value.
     - `boolean`: A boolean value. The input will be a checkbox.
-    - `select`: (Not yet supported!) A select value. The input will be a select
     box. Options are defined in the `options` property.
 - `default`: Optional. The default value of the input. If not provided, the
   default value is an empty string.
@@ -216,7 +215,7 @@ The following is a standard configuration file for a feature:
 
 ```yaml
 name: Plugin Feature
-
+description: An optional description of the feature.
 inputs:
   - name: featureName
     description: "Feature Name"
@@ -231,7 +230,7 @@ files:
     destination: src/features/{{ wpClassFilename inputs.featureName }}
   - source: test.stub
     if: {{ inputs.tests }}
-    destination: tests/Features/{{ psrClassFilename inputs.featureName suffix="Test.php" }}
+    destination: tests/Features/{{ psr4ClassFilename inputs.featureName suffix="Test.php" }}
 ```
 
 Let's break down the configuration file:
@@ -256,33 +255,90 @@ after cloning. Out of the box, the scaffolder includes a feature out of the box
 that will clone the `create-wordpress-plugin` repository and run the
 configuration script after cloning.
 
-The following is a standard configuration file for a repository feature:
+The following is a standard configuration file for a GitHub repository feature:
 
 ```yaml
 name: create-wordpress-plugin
+description: An optional description of the feature.
 type: repository
 
 # Inputs, optional.
 inputs:
-- name: pluginName
+  - name: pluginName
     type: string
     description: "Plugin Name"
 
 # Repository configuration.
 repository:
-    github: alleyinteractive/create-wordpress-plugin
+  # The destination to clone the repository to. Supports expressions and required.
+  destination: "{{ dasherize inputs.pluginName }}"
+  # The command to run after cloning the repository. Supports expressions.
+  postCloneCommand: "php configure.php"
 
-    # Supports a specific revision with a `#` divider.
-    # github: alleyinteractive/create-wordpress-plugin#main
+  # The repository configuration. Supports GitHub and Git.
+  github:
+    # The repository to clone. Supports expressions.
+    name: alleyinteractive/create-wordpress-plugin
+```
 
-    # Supports git repositories as well.
-    # git: https://github.com/
+You can also use a Git repository feature to clone a repository from a Git
+repository. The following is a standard configuration file for a Git repository
+feature:
 
-    # The destination of the repository after cloning. Supports expressions.
-    destination: "{{ dasherize inputs.pluginName }}"
+```yaml
+name: create-wordpress-plugin
+description: An optional description of the feature.
+type: repository
 
-    # The command to run after cloning the repository. Supports expressions.
-    postCloneCommand: "php configure.php"
+# Inputs, optional.
+inputs:
+  - name: pluginName
+    type: string
+    description: "Plugin Name"
+
+# Repository configuration.
+repository:
+  # The destination to clone the repository to. Supports expressions and required.
+  destination: "{{ dasherize inputs.pluginName }}"
+  # The command to run after cloning the repository. Supports expressions.
+  postCloneCommand: "php configure.php"
+
+  # The repository configuration. Supports GitHub and Git.
+  git:
+    # The URL of the repository to clone. Supports expressions.
+    url: git@bitbucket.com:alleyinteractive/scaffolder-features.git
+
+```
+
+### Composer Feature
+
+A Composer feature is used to install a Composer package and optionally run a
+command after installing the package.
+
+```yaml
+name: create-wordpress-theme
+description: An optional description of the feature.
+type: composer
+
+# Inputs, optional.
+inputs:
+  - name: themeName
+    type: string
+    description: "Theme Name"
+
+# Composer configuration.
+composer:
+  package: alleyinteractive/create-wordpress-theme
+  destination: "{{ dasherize inputs.themeName }}"
+
+  # Optional. Supports a specific version.
+  version: "^1.0.0"
+
+  # Optional. Support additional arguments to pass to the composer command.
+  args: "--no-dev"
+
+  # Optional. The command to run after installing the package. Supports expressions.
+  postCommand: "php configure.php"
 ```
 
 [Next: Expressions](./3-expressions.md) &rarr;
