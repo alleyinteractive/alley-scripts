@@ -87,7 +87,11 @@ export type FeatureConfig = {
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';
   };
   composer?: FeatureComposerConfig;
-  features?: FeatureConfig[];
+  composite?: {
+    features: FeatureConfig[];
+    /* Command to run after the project is done scaffolding. */
+    postCommand?: string;
+  };
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;

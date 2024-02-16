@@ -30,7 +30,7 @@ const gitSchema = Joi.alternatives(
 const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   description: Joi.string(),
-  type: Joi.string().default('file').valid('composer', 'file', 'repository'),
+  type: Joi.string().default('file').valid('composer', 'composite', 'file', 'repository'),
   config: Joi.object({
     'destination-resolver': Joi.string().valid('cwd', 'theme', 'plugin', 'relative', 'relative-parent').default('cwd'),
   }),
@@ -66,6 +66,13 @@ const featureConfigSchema = () => Joi.object({
     postCommand: Joi.string(),
   }).when('type', {
     is: 'composer',
+    then: Joi.required(),
+  }),
+  composite: Joi.object({
+    features: Joi.array().required(), // TODO: Recursively validate the features.
+    postCommand: Joi.string(),
+  }).when('type', {
+    is: 'composite',
     then: Joi.required(),
   }),
 });
