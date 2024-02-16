@@ -1,0 +1,12 @@
+name: create-wordpress-plugin
+type: repository
+config:
+  destination-resolver: plugin
+inputs:
+  - name: pluginName
+    type: string
+    description: "Plugin Name"
+repository:
+  github: alleyinteractive/create-wordpress-plugin
+  destination: "{{ dasherize inputs.pluginName }}"
+  postCloneCommand: "php configure.php"

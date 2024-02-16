@@ -273,6 +273,11 @@ export class FeatureStore {
       }
     }
 
+    // Check if we're developing on the scaffolder locally.
+    if (__dirname.includes('packages/scaffolder') && fs.existsSync(path.join(__dirname, '..', '..', '..', '..', 'node_modules'))) {
+      paths.push(path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
+    }
+
     return uniq(paths);
   }
 

@@ -1,9 +1,11 @@
 import chalk from 'chalk';
 import path from 'node:path';
+import fs from 'node:fs';
 
 // Services.
 import { logger } from '../logger';
 import { collectInputs } from '../inputs';
+import { runCommand } from '../helpers';
 
 // Types.
 import type { FeatureConfig, FeatureContext } from '../types';
@@ -30,6 +32,19 @@ export abstract class Generator {
   constructor(config: FeatureConfig, directory: string) {
     this.config = config;
     this.path = directory;
+  }
+
+  /**
+   * Run the post command if one is specified with child_process.spawn().
+   */
+  runPostCommand(destination: string): Promise<void> {
+    const {
+      composer: { postCommand = '' } = {},
+    } = this.config;
+
+    logger().info(`Running post command: ${chalk.yellow(postCommand)}`);
+
+    return runCommand(postCommand, destination);
   }
 
   /**
@@ -60,8 +75,10 @@ export abstract class Generator {
 
     // Intelligently prompt the user if they would like to place their
     // theme/plugin in the proper destination.
-    if (cwd.includes('wp-content') && ['theme', 'plugin'].includes(destinationResolver)) {
-      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
+    if ((cwd.includes('wp-content') || fs.existsSync(`${cwd}/wp-content`)) && ['theme', 'plugin'].includes(destinationResolver)) {
+      const wpContentPath = cwd.includes('wp-content')
+        ? `${cwd.split('/wp-content')[0]}/wp-content`
+        : `${cwd}/wp-content`;
 
       // Determine if the destination path should be resolved to a plugin or theme.
       if (destinationResolver === 'theme' && !cwd.endsWith('wp-content/themes')) {
@@ -81,9 +98,19 @@ export abstract class Generator {
       }
     }
 
-    this.inputs = await collectInputs(featureInputs);
+    // Filter out any inputs that have already been resolved to prevent them
+    // from being prompted again.
+    const resolvedInputs = Object.keys(this.inputs);
+    const unresolvedInputs = featureInputs.filter((input) => !resolvedInputs.includes(input.name));
 
-    logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
+    if (unresolvedInputs.length) {
+      this.inputs = {
+        ...this.inputs,
+        ...await collectInputs(unresolvedInputs),
+      };
+
+      logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
+    }
   }
 
   /**
@@ -105,7 +132,9 @@ export abstract class Generator {
     } = this;
 
     if (['plugin', 'theme'].includes(destinationResolver)) {
-      const wpContentPath = `${cwd.split('/wp-content')[0]}/wp-content`;
+      const wpContentPath = fs.existsSync(`${cwd}/wp-content`)
+        ? `${cwd}/wp-content`
+        : `${cwd.split('/wp-content')[0]}/wp-content`;
 
       if (destinationResolver === 'plugin' && inputResolveToPluginDirectory) {
         return `${wpContentPath}/plugins/${filePath}`;
