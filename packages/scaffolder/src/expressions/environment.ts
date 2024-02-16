@@ -79,7 +79,7 @@ export default function getEnvironment(): typeof Handlebars {
    *   example-feature -> ExampleFeature.php
    */
   env.registerHelper(
-    'psrClassFilename',
+    'psr4ClassFilename',
     (value: any, options: { hash: Record<string, string> }) => {
       const {
         hash: {
@@ -126,7 +126,7 @@ export default function getEnvironment(): typeof Handlebars {
    *   Folder/Example Feature -> ExampleFeature
    */
   env.registerHelper(
-    'psrClassName',
+    'psr4ClassName',
     (value: any, options: { hash: Record<string, string> }) => {
       const {
         hash: {
