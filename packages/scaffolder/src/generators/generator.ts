@@ -125,7 +125,7 @@ export abstract class Generator {
     // .scaffolder/<feature>/config.yml so we need to resolve the destination
     // based on the parent directory of the .scaffolder
     if (destinationResolver === 'relative-parent') {
-      const [parentDirectory] = this.path.split('/.scaffolder');
+      const [parentDirectory] = this.path.split(`${path.sep}.scaffolder`);
 
       return path.resolve(parentDirectory, filePath);
     }
