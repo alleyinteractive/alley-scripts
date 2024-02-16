@@ -17,7 +17,7 @@ Let's use an `if` conditional file as an example:
 files:
   - source: test.stub
     if: "{{ inputs.tests }}"
-    destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
+    destination: tests/Features/{{ psr4ClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
 ```
 
 In this example, the `if` conditional is used to conditionally scaffold a file
@@ -26,9 +26,9 @@ be scaffolded. If not, the file will be skipped.
 
 ## Helpers
 
-Helper are the most powerful part of expressions. Helpers are used to modify
-the user's input. For example, if you want to convert a user's input to a
-valid WordPress file name, you can use the `wpClassFilename` helper.
+Helpers are the most powerful part of expressions. Helpers are used to modify
+the user's input. For example, if you want to convert a user's input to a valid
+WordPress file name, you can use the `wpClassFilename` helper.
 
 ### `wpClassFilename`
 
@@ -81,42 +81,42 @@ namespace.
 {{ wpNamespace "Folder/User Input" prefix="Feature\" }} => "Feature\\Folder"
 ```
 
-### `psrClassFilename`
+### `psr4ClassFilename`
 
 Converts a string to a valid PSR-4 file name. By default, the file name will be
 suffixed with `.php` but can be overridden with the `suffix` argument.
 
 ```
-{{ psrClassFilename "User Input" }} => "UserInput.php"
-{{ psrClassFilename "Folder/User Input" }} => "Folder/UserInput.php"
-{{ psrClassFilename "Folder/Subfolder/User Input" }} => "Folder/Subfolder/UserInput.php"
+{{ psr4ClassFilename "User Input" }} => "UserInput.php"
+{{ psr4ClassFilename "Folder/User Input" }} => "Folder/UserInput.php"
+{{ psr4ClassFilename "Folder/Subfolder/User Input" }} => "Folder/Subfolder/UserInput.php"
 ```
 
 The filter also supports a `prefix` and `suffix` argument to add a prefix or
 suffix to the string.
 
 ```
-{{ psrClassFilename "User Input" prefix="Prefix" }} => "PrefixUserInput.php"
-{{ psrClassFilename "User Input" prefix="Prefix" suffix="Test.php" }} => "PrefixUserInputTest.php"
+{{ psr4ClassFilename "User Input" prefix="Prefix" }} => "PrefixUserInput.php"
+{{ psr4ClassFilename "User Input" prefix="Prefix" suffix="Test.php" }} => "PrefixUserInputTest.php"
 ```
 
-### `psrClassName`
+### `psr4ClassName`
 
 Converts a string to a valid PSR-4 class name. This filter will strip any
 preceding folder (which becomes a namespace) along with any invalid characters
 and converts the string to PascalCase.
 
 ```
-{{ psrClassName "User Input" }} => "UserInput"
-{{ psrClassName "Folder/User Input" }} => "UserInput"
-{{ psrClassName "Folder/Subfolder/User Input" }} => "UserInput"
+{{ psr4ClassName "User Input" }} => "UserInput"
+{{ psr4ClassName "Folder/User Input" }} => "UserInput"
+{{ psr4ClassName "Folder/Subfolder/User Input" }} => "UserInput"
 ```
 
 The filter also supports a `prefix` and `suffix` argument to add a prefix or
 suffix to the string.
 
 ```
-{{ psrClassName "User Input" prefix="Prefix" suffix="Suffix" }} => "PrefixUserInputSuffix"
+{{ psr4ClassName "User Input" prefix="Prefix" suffix="Suffix" }} => "PrefixUserInputSuffix"
 ```
 
 ### `psrNamespace`

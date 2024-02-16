@@ -34,7 +34,7 @@ export default function getEnvironment(): typeof Handlebars {
   const camelCaseString = (value: any, join: string = '_') => `${value}`.split(/[\s-]/).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(join);
 
   /**
-   * Register a filter that covnerts a string to a dasherized string:
+   * Register a filter that converts a string to a dasherized string:
    *
    *   Example Feature -> example-feature
    *   example-feature -> example-feature
@@ -79,7 +79,7 @@ export default function getEnvironment(): typeof Handlebars {
    *   example-feature -> ExampleFeature.php
    */
   env.registerHelper(
-    'psrClassFilename',
+    'psr4ClassFilename',
     (value: any, options: { hash: Record<string, string> }) => {
       const {
         hash: {
@@ -126,7 +126,7 @@ export default function getEnvironment(): typeof Handlebars {
    *   Folder/Example Feature -> ExampleFeature
    */
   env.registerHelper(
-    'psrClassName',
+    'psr4ClassName',
     (value: any, options: { hash: Record<string, string> }) => {
       const {
         hash: {

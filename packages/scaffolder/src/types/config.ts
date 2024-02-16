@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import { Source } from './source';
+import type { GitConfig, GitHubConfig } from './remoteSource';
+import type { Source } from './source';
 
 /**
  * Type representation of the parsed root configuration.
@@ -45,15 +46,31 @@ export type FeatureInput = {
   type?: 'string' | 'boolean';
 };
 
+/**
+ * @todo Add support for directory support when cloning a repository.
+ */
 export type FeatureRepositoryConfig = {
   /* Destination directory for the repository. */
-  destination?: string;
+  destination: string;
   /* Git URL for the repository. */
-  git?: string;
+  git?: string | GitConfig;
   /* GitHub configuration for the repository. */
-  github?: string;
+  github?: string | GitHubConfig;
   /* Command to run after the repository is cloned. */
   postCloneCommand?: string;
+};
+
+export type FeatureComposerConfig = {
+  /* Arguments to pass to the composer command. */
+  args?: string;
+  /* Name of the package to install. */
+  package: string;
+  /* Destination directory for the repository. */
+  destination: string;
+  /* Version of the package to install. */
+  version?: string;
+  /* Command to run after the project is done scaffolding. */
+  postCommand?: string;
 };
 
 /**
@@ -63,11 +80,13 @@ export type FeatureRepositoryConfig = {
  */
 export type FeatureConfig = {
   name: string;
-  type: 'file' | 'repository';
+  description?: string;
+  type: 'file' | 'repository' | 'composer';
   config?: {
     /* Defaults to 'cwd'. */
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';
   };
+  composer?: FeatureComposerConfig;
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;

@@ -19,7 +19,7 @@ sources:
   - directory: ../project-features
   - ../another-project-features
 
-  # Check a remote repository for features. Any .scaffolder/**/config.yml files
+  # Check a remote repository for features. Any scaffolder/**/config.yml files
   # will be resolved from within the repository.
   - github: alleyinteractive/scaffolder-features
 
@@ -28,10 +28,10 @@ sources:
     ref: main
     directory: project-features
 
-  - github:
-    url: https://github.com/alleyinteractive/scaffolder-features
+  # Clone a git repository and check it for features. Any scaffolder/**/config.yml
+  - github: https://github.com/alleyinteractive/scaffolder-features
 
-  # Check a git repository for features. Any .scaffolder/**/config.yml files
+  # Check a git repository for features. Any scaffolder/**/config.yml files
   # will be resolved from within the repository.
   - git: git@bitbucket.com:alleyinteractive/scaffolder-features.git
 
@@ -64,6 +64,7 @@ lightweight features that clone a remote repository or don't have any stub files
 ```yaml
 features:
   - name: create-wordpress-plugin
+    description: An optional description of the feature.
     type: repository
     config:
       destination-resolver: plugin

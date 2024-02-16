@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 import fs from 'node:fs';
-import { spawn } from 'node:child_process';
 
 import handleError from '../error';
 import { Generator } from './generator';
 import { parseExpression } from '../expressions';
 import { createGit } from '../git';
 import { logger } from '../logger';
+import { parseGitHubUrl, runCommand } from '../helpers';
 
 /**
  * Repository-based feature.
@@ -14,31 +14,53 @@ import { logger } from '../logger';
 export class RepositoryGenerator extends Generator {
   /**
    * Resolve the git URL from the configuration.
+   *
+   * Will return the Git URL with the revision (if specified) appended with a hash.
    */
   resolveGitUrl(): string { // eslint-disable-line consistent-return
     const {
       repository: {
-        git: gitUrl = undefined,
+        git = undefined,
         github = undefined,
       } = {},
     } = this.config;
 
-    if (!gitUrl && !github) {
+    if (!git && !github) {
       handleError(`No git or github configuration found for ${chalk.yellow(this.config.name)}`);
     }
 
-    if (github && (github.startsWith('https://') || github.startsWith('git@'))) {
-      return github;
+    if (git) {
+      if (typeof git === 'string') {
+        return git;
+      }
+
+      const {
+        git: gitUrl = undefined,
+        url: gitUrlAlias = undefined,
+        ref: gitRef = undefined,
+      } = git;
+
+      return `${gitUrl || gitUrlAlias || ''}${gitRef ? `#${gitRef}` : ''}`;
     }
 
     if (github) {
-      const [, org, repo, revision] = github.match(/^(?:https:\/\/github.com\/)?([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)(?:\.git)?(#[A-Za-z0-9_.-/]*)?$/) || [];
+      if (typeof github === 'string') {
+        return `https://github.com/${github}.git`;
+      }
 
-      return `https://github.com/${org}/${repo}.git${revision || ''}`;
-    }
+      const {
+        github: githubName = undefined,
+        url: githubUrl = undefined,
+        ref: githubRef = undefined,
+      } = github;
 
-    if (gitUrl) {
-      return gitUrl;
+      if (githubName) {
+        return `https://github.com/${githubName}.git${githubRef ? `#${githubRef}` : ''}`;
+      }
+
+      const { revision } = parseGitHubUrl(githubUrl || '');
+
+      return `${githubUrl}${revision ? `#${revision}` : ''}`;
     }
 
     handleError(`No git or github configuration found for ${chalk.yellow(this.config.name)}`);
@@ -54,21 +76,7 @@ export class RepositoryGenerator extends Generator {
 
     logger().info(`Running post clone command: ${chalk.yellow(postCloneCommand)}`);
 
-    return new Promise((resolve, reject) => {
-      const run = spawn(postCloneCommand, [], {
-        cwd: destination,
-        shell: true,
-        stdio: 'inherit',
-      });
-
-      run.on('close', (code) => {
-        if (code === 0) {
-          resolve();
-        } else {
-          reject(new Error(`Command failed with code ${code}`));
-        }
-      });
-    });
+    return runCommand(postCloneCommand, destination);
   }
 
   /**
@@ -83,7 +91,6 @@ export class RepositoryGenerator extends Generator {
     } = this.config;
 
     const context = this.collectContextVariables();
-
     const destination = this.getDestinationDirectory(parseExpression(`${destinationConfig}`, context));
 
     // Check if the destination already exists and is not empty.

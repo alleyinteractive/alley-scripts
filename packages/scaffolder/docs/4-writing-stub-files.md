@@ -15,7 +15,7 @@ can use that input in the stub file:
 
     <?php
     /**
-     * {{ replace (psrClassName inputs.featureName) "_" " " }} Feature
+     * {{ replace (psr4ClassName inputs.featureName) "_" " " }} Feature
      */
     class {{ wpClassName inputs.name }} {
         // ...
