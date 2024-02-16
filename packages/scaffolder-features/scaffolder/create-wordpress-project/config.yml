@@ -1,0 +1,10 @@
+name: create-wordpress-project
+type: repository
+inputs:
+  - name: projectName
+    type: string
+    description: "Project Name"
+repository:
+  github: alleyinteractive/create-wordpress-project
+  destination: "{{ dasherize inputs.projectName }}"
+  postCloneCommand: php configure.php
