@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import type { GitSourceConfig, GithubSourceConfig, Source } from './source';
+import type { GitConfig, GitHubConfig } from './remoteSource';
+import type { Source } from './source';
 
 /**
  * Type representation of the parsed root configuration.
@@ -45,13 +46,16 @@ export type FeatureInput = {
   type?: 'string' | 'boolean';
 };
 
+/**
+ * @todo Add support for directory support when cloning a repository.
+ */
 export type FeatureRepositoryConfig = {
   /* Destination directory for the repository. */
   destination: string;
   /* Git URL for the repository. */
-  git?: GitSourceConfig;
+  git?: string | GitConfig;
   /* GitHub configuration for the repository. */
-  github?: GithubSourceConfig;
+  github?: string | GitHubConfig;
   /* Command to run after the repository is cloned. */
   postCloneCommand?: string;
 };

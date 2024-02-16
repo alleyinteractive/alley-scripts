@@ -63,7 +63,7 @@ files:
     destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
   - source: test.stub
     if: "{{ inputs.tests }}"
-    destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
+    destination: tests/Features/{{ psr4ClassFilename inputs.caseStudyName prefix="" suffix="Test.php" }}
 ```
 
 Run the scaffolder and you will be prompted for the "Case Study" feature. If
@@ -154,7 +154,7 @@ features:
         destination: src/feeds/{{ wpClassFilename inputs.caseStudyName }}.php
       - source: test.stub
         if: "{{ inputs.tests }}"
-        destination: tests/Features/{{ psrClassFilename inputs.caseStudyName prefix="" suffix="" }}
+        destination: tests/Features/{{ psr4ClassFilename inputs.caseStudyName prefix="" suffix="" }}
 ```
 
 Subdirectories are **strongly recommended** to keep the project organized, but
@@ -187,7 +187,6 @@ needs. Inputs are defined as a list of objects with the following properties:
   following types are supported:
     - `string`: A string value.
     - `boolean`: A boolean value. The input will be a checkbox.
-    - `select`: (Not yet supported!) A select value. The input will be a select
     box. Options are defined in the `options` property.
 - `default`: Optional. The default value of the input. If not provided, the
   default value is an empty string.
@@ -231,7 +230,7 @@ files:
     destination: src/features/{{ wpClassFilename inputs.featureName }}
   - source: test.stub
     if: {{ inputs.tests }}
-    destination: tests/Features/{{ psrClassFilename inputs.featureName suffix="Test.php" }}
+    destination: tests/Features/{{ psr4ClassFilename inputs.featureName suffix="Test.php" }}
 ```
 
 Let's break down the configuration file:

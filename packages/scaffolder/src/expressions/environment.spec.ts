@@ -24,21 +24,21 @@ describe('environment', () => {
     ).toEqual('class-example-feature.bak');
   });
 
-  test('filter:psrClassFilename', () => {
+  test('filter:psr4ClassFilename', () => {
     expect(
-      render('{{ psrClassFilename "Example Feature" }}'),
+      render('{{ psr4ClassFilename "Example Feature" }}'),
     ).toEqual('ExampleFeature.php');
 
     expect(
-      render('{{ psrClassFilename "Folder/Example Feature" }}'),
+      render('{{ psr4ClassFilename "Folder/Example Feature" }}'),
     ).toEqual('Folder/ExampleFeature.php');
 
     expect(
-      render('{{ psrClassFilename "Example Feature" prefix="Test" }}'),
+      render('{{ psr4ClassFilename "Example Feature" prefix="Test" }}'),
     ).toEqual('TestExampleFeature.php');
 
     expect(
-      render('{{ psrClassFilename "Example Feature" prefix="" suffix="Test.php" }}'),
+      render('{{ psr4ClassFilename "Example Feature" prefix="" suffix="Test.php" }}'),
     ).toEqual('ExampleFeatureTest.php');
   });
 
@@ -60,21 +60,21 @@ describe('environment', () => {
     ).toBe('Test_Example_Feature_Test');
   });
 
-  test('filter:psrClassName', () => {
+  test('filter:psr4ClassName', () => {
     expect(
-      render('{{ psrClassName "Example Feature" }}'),
+      render('{{ psr4ClassName "Example Feature" }}'),
     ).toBe('ExampleFeature');
 
     expect(
-      render('{{ psrClassName "Folder/Example Feature" }}'),
+      render('{{ psr4ClassName "Folder/Example Feature" }}'),
     ).toBe('ExampleFeature');
 
     expect(
-      render('{{ psrClassName "Example Feature" prefix="Test" }}'),
+      render('{{ psr4ClassName "Example Feature" prefix="Test" }}'),
     ).toBe('TestExampleFeature');
 
     expect(
-      render('{{ psrClassName "Example Feature" prefix="" suffix="Test" }}'),
+      render('{{ psr4ClassName "Example Feature" prefix="" suffix="Test" }}'),
     ).toBe('ExampleFeatureTest');
   });
 

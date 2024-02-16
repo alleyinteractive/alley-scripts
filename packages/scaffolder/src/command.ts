@@ -17,7 +17,7 @@ class ScaffolderCommand {
 
     const {
       debug = false,
-      root = process.cwd(),
+      root = false,
     } = this.arguments;
 
     this.logger = initializeLogger(debug || false);

@@ -1,3 +1,5 @@
+import type { GitHubConfig, GitConfig } from './remoteSource';
+
 export type DirectorySource = {
   /* Directory to use as the source. Can be a relative path. */
   directory: string;
@@ -5,32 +7,22 @@ export type DirectorySource = {
   root?: string;
 };
 
-// Configuration of a GitHub source.
-export type GithubSourceConfig = string | {
-  github?: string;
-  name?: string;
-  url?: string;
-  ref?: string;
-  /* The subdirectory within the repository to use as the root. */
+type GitSourceConfiguration = {
+  /* The subdirectory within the repository to use as the root for sources. */
   directory?: string;
+  /* The number of seconds to wait before updating the repository. Defaults to  */
+  updateThreshold?: number;
 };
 
+/* Configuration of a GitHub source within a source/feature configuration. */
 export type GithubSource = {
   /* Repository to clone from (organization/repository with an optional branch). */
-  github: GithubSourceConfig;
+  github: string | (GitHubConfig & GitSourceConfiguration);
 };
 
-// Configuration of a Git source.
-export type GitSourceConfig = string | {
-  url?: string;
-  git?: string;
-  ref?: string;
-  /* The subdirectory within the repository to use as the root. */
-  directory?: string;
-};
-
+/* Configuration of a Git source within a source/feature configuration. */
 export type GitSource = {
-  git: GitSourceConfig;
+  git: string | (GitConfig & GitSourceConfiguration);
 };
 
 /**
