@@ -90,7 +90,7 @@ export class FileGenerator extends Generator {
       // Filter out any files that already exist.
       .filter(({ destination: destinationPath }) => {
         if (fs.existsSync(destinationPath)) {
-          logger().error(`Destination file already exists: ${destinationPath}. Skipping generation.`);
+          logger().error(`Destination file already exists: ${chalk.yellow(destinationPath)}. Skipping generation.`);
 
           return false;
         }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.2
+
+### Patch Changes
+
+- 7086f9d: Bug fix: a previously selected post that has been unpublished or deleted will no longer crash the `usePostById` hook or the `PostPicker` component.
+
 ## 0.6.1
 
 ### Patch Changes

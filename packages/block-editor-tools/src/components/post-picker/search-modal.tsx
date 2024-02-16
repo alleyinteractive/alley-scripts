@@ -39,6 +39,7 @@ const SearchModal = ({
 
   return (
     <Modal
+      className="alley-scripts-post-picker__modal"
       isDismissible
       title={modalTitle}
       onRequestClose={closeModal}

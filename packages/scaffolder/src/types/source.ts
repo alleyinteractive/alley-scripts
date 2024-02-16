@@ -24,6 +24,8 @@ export type GitSource = {
     ref?: string;
     /* The subdirectory within the repository to use as the root. */
     directory?: string;
+    /* The number of seconds to wait before updating the repository. Defaults to  */
+    updateThreshold?: number;
   };
 };
 
