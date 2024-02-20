@@ -126,7 +126,7 @@ import defaultConfig from '@alleyinteractive/build-tool/dist/esm/config/webpack.
 #### Using Webpack `extends` property
 
 Similar to the spread operator, you can also use the `extends` property in the `webpack.config.js` file to extend the default configuration.
-> The extends property allows you to extend an existing configuration to use as the base. It internally uses the webpack-merge package to merge the configurations and helps you to avoid duplicating configurations between multiple configurations.
+> The extends property allows you to extend an existing configuration to use as the base. It internally uses the webpack-merge package to merge the configurations and helps you to avoid duplicating configurations.
 -- See the [webpack extending configurations](https://webpack.js.org/configuration/extending-configurations/) documentation for more information.
 
 **NOTE**: The `extends` property is only available in webpack `v5.82.0` and later.
