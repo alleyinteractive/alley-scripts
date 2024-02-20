@@ -22,7 +22,9 @@
     "build:esm": "tsc -p ./config/tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs",
     "build:cjs": "tsc -p ./config/tsconfig.cjs.json",
     "prepublishOnly": "npm run build",
-    "prebuild": "npm run clean"
+    "prebuild": "npm run clean",
+    "start:cjs": "tsc -p ./config/tsconfig.cjs.json --watch",
+    "start:esm": "tsc -p ./config/tsconfig.esm.json --watch"
   },
   "repository": {
     "type": "git",
@@ -45,13 +47,15 @@
     "@wordpress/scripts": "^26.6.4",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
+    "deep-extend": "^0.6.0",
     "mini-css-extract-plugin": "^2.7.6",
-    "webpack": "^5.88.2",
+    "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "*"
+    "@alleyinteractive/eslint-config": "*",
+    "@types/deep-extend": "^0.6.2"
   },
   "exports": {
     ".": {

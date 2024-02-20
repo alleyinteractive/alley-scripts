@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.4 -- @alleyinteractive/build-tool
+
+- Updated README with new instructions for extending the webpack config.
+- New file for passing the extended webpack config, containing the base config with the user config, to `wp-scripts`.
+- Set the base config as a variable not a function.
+- `getUserWebpackConfigFilePath` to get the user's `webpack.config.js` file path from the project root or with the `—config` arg.
+- `getUserWebpackConfig` gets the user's webpack config object.
+- `getWebpackConfig` updated to get the extended webpack config that contains the merged configuration from the build tool and the user's config.
+- Added Jest unit tests for `getUserWebpackConfigFilePath` and `getUserWebpackConfig`.
+
 ## v0.1.3 -- @alleyinteractive/build-tool
 
 - In the `tsconfig.esm.json` file, when `moduleResolution` is set to `NodeNext`, the `module` field must be set to `NodeNext` as well.
