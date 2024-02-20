@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.3
+
+### Patch Changes
+
+- 8b21cc1: - Bug Fix: Post Picker causes all Block Editor modals to be too wide
+
 ## 0.6.2
 
 ### Patch Changes
