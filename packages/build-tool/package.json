@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/build-tool",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "An opinionated set of build configurations for wp-scripts",
   "bin": {
     "alley-build": "./dist/cjs/index.js"
