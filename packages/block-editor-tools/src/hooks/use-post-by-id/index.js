@@ -38,7 +38,7 @@ const usePostById = (postId, getPostType = null) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
 
-  return usePost(postId, postTypeCache[postId] ?? '');
+  return usePost(postId, postTypeCache[postId] ?? null);
 };
 
 export default usePostById;
