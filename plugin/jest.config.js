@@ -1,4 +1,4 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
   transform: {
     // For transformations with .ts and .tsx files.
     ...tsjPreset.transform,
-    // For transformations with .js and .jsx files.
+    // For transformations with .js and .jsx filxwes.
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
   moduleNameMapper: {
