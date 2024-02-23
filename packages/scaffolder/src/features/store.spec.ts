@@ -4,7 +4,7 @@ import { FeatureStore } from './store';
 
 describe('features/store', () => {
   const fixturesPath = path.resolve(__dirname, '../../__tests__/fixtures');
-  const scaffolderFeaturesPackagePath = path.join(__dirname, '..', '..', '..', '..', 'node_modules');
+  // const scaffolderFeaturesPackagePath = path.join(process.cwd(), 'node_modules');
 
   const configStore = new ConfigurationStore();
   configStore.add(__dirname, {
@@ -28,8 +28,11 @@ describe('features/store', () => {
       `${fixturesPath}/a-features/feature-a`,
       `${fixturesPath}/a-features/feature-b`,
       // The local scaffolder-features are always loaded during development.
-      `${scaffolderFeaturesPackagePath}/@alleyinteractive/scaffolder-features/scaffolder/create-wordpress-project`,
-      `${scaffolderFeaturesPackagePath}/@alleyinteractive/scaffolder-features/scaffolder/create-wordpress-plugin`,
+      // TODO: Enable this in a follow up.
+      /* eslint-disable max-len */
+      // `${scaffolderFeaturesPackagePath}/@alleyinteractive/scaffolder-features/scaffolder/create-wordpress-project`,
+      // `${scaffolderFeaturesPackagePath}/@alleyinteractive/scaffolder-features/scaffolder/create-wordpress-plugin`,
+      /* eslint-enable max-len */
     ]);
 
     expect(items[__dirname]).toEqual([{ // eslint-disable-line no-underscore-dangle

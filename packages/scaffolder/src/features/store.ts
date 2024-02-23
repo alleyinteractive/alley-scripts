@@ -273,10 +273,14 @@ export class FeatureStore {
       }
     }
 
+    // TODO: Enable this in a follow up PR.
+    /* eslint-disable */
     // Check if we're developing on the scaffolder locally.
-    if (__dirname.includes('packages/scaffolder') && fs.existsSync(path.join(__dirname, '..', '..', '..', '..', 'node_modules'))) {
-      paths.push(path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
-    }
+    // if (__dirname.includes('packages/scaffolder') && fs.existsSync(path.join(__dirname, '..', '..', '..', '..', 'node_modules'))) {
+      // console.log('adding', path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
+      // paths.push(path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
+    // }
+    /* eslint-enable */
 
     return uniq(paths);
   }
@@ -344,7 +348,9 @@ export function getFeatureStore(): FeatureStore {
  *
  * Discovers all configured features, sources, and features from said sources.
  */
-export async function initializeFeatureStore(configStore: ConfigurationStore = getConfigurationStore()) {
+export async function initializeFeatureStore(
+  configStore: ConfigurationStore = getConfigurationStore(),
+) {
   store = new FeatureStore(configStore);
 
   try {
