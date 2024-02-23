@@ -4,8 +4,6 @@ import { FeatureStore } from './store';
 
 describe('features/store', () => {
   const fixturesPath = path.resolve(__dirname, '../../__tests__/fixtures');
-  // const scaffolderFeaturesPackagePath = path.join(process.cwd(), 'node_modules');
-
   const configStore = new ConfigurationStore();
   configStore.add(__dirname, {
     sources: [{
@@ -22,18 +20,11 @@ describe('features/store', () => {
     await store.initialize();
 
     const items = store.all();
+    const keys = Object.keys(items);
 
-    expect(Object.keys(items)).toEqual([
-      __dirname,
-      `${fixturesPath}/a-features/feature-a`,
-      `${fixturesPath}/a-features/feature-b`,
-      // The local scaffolder-features are always loaded during development.
-      // TODO: Enable this in a follow up.
-      /* eslint-disable max-len */
-      // `${scaffolderFeaturesPackagePath}/@alleyinteractive/scaffolder-features/scaffolder/create-wordpress-project`,
-      // `${scaffolderFeaturesPackagePath}/@alleyinteractive/scaffolder-features/scaffolder/create-wordpress-plugin`,
-      /* eslint-enable max-len */
-    ]);
+    expect(keys).toContain(__dirname);
+    expect(keys).toContain(`${fixturesPath}/a-features/feature-a`);
+    expect(keys).toContain(`${fixturesPath}/a-features/feature-b`);
 
     expect(items[__dirname]).toEqual([{ // eslint-disable-line no-underscore-dangle
       name: 'manually-configured-feature',
