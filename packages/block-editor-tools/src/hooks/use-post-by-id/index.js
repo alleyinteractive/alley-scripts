@@ -17,8 +17,8 @@ const usePostById = (postId, getPostType = null) => {
   const [working, setWorking] = useState(true);
 
   useEffect(() => {
+    setWorking(true);
     if (postId && !postTypeCache[postId]) {
-      setWorking(true);
       (async () => {
         if (getPostType) {
           const result = await getPostType(postId);
