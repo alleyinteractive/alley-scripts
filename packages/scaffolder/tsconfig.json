@@ -4,6 +4,8 @@
     "allowJs": false,
     "baseUrl": ".",
     "checkJs": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
