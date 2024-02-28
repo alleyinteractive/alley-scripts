@@ -58,30 +58,63 @@ By default the following command options are applied when running the `build` an
 * `--webpack-entries-dir` `<string>` - The directory where wp-scripts will detect entry point directories that are not blocks. These entries can be slotfills or webpack entry points (Default: `entries`)
 * `--webpack-blocks-only` - This option will disable the entries directory and only compile blocks set in the `blocks` directory. This is useful for projects that do not use slotfills or separate entry points.
 
+### Fast refresh in the block editor
+By running the `alley-build start --hot` command this enables “Fast Refresh” in the block editor!
+
+See the [start command](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/#start) documentation for more information.
+
+_For fast refresh to work it requires that WordPress has the [`SCRIPT_DEBUG`](https://wordpress.org/documentation/article/debugging-in-wordpress/#script_debug) flag enabled and the [Gutenberg](https://wordpress.org/plugins/gutenberg/) plugin installed._
 
 ### Extending the config
 
-Extending the Alley Build Tool webpack configuration is possible and uses the same approach as [extending the webpack config in wp-scripts](https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/README.md#extending-the-webpack-config).
+Extending the Alley Build Tool webpack configuration is possible by providing a `webpack.config.js` file in the root directory of your project. The Alley Build Tool will look for this file and use it to extend the default configuration.
 
-There are several ways to extend the webpack configuration. One uses the common JS `require` syntax and the other uses the ESM `import` syntax. The following examples use the common JS `require` syntax.
-* Provide a `webpack.config.js` file in the root of your project.
-* `require` the webpack config from `@alleyinteractive/build-tool` in the `webpack.config.js` file in your project.
-* Use the spread operator to import all of or part of the provided configuration.
+Example:
+```js
+// webpack.config.js
+const config = {
+  output: {
+    asyncChunks: true,
+  },
+  resolve: {
+    alias: {
+      // Adding a custom alias for file path resolution.
+      '@': 'path/to/some/folder',
+    },
+  },
+};
+
+module.exports = config;
+```
+
+The Alley Build Tool will deep merge the provided configuration with the default configuration. The `webpack.config.js` file must use the standard webpack configuration format. You can override configurations from the extended configuration by passing the same property in the configuration that extends it.
+
+**Important**: **The Alley Build Tool will not deeply merge all webpack configuration options.**
+For example, if you are adding additional entry points or adding plugins to the plugins array you will need to extend the default configuration using the spread operator. This is because adding entries or plugins to the configuration will override the default configuration resulting in the loss of the WP Scripts and Alley Build Tool configurations.
+
+#### Using the spread operator to extend the default configuration
+
+It is also possible to import the default extend the default configuration using the spread operator.
+
+The following config files are available for import with these paths:
+* `@alleyinteractive/build-tool/dist/cjs/config/webpack.config` - CommonJS
+* `@alleyinteractive/build-tool/dist/esm/config/webpack.config` - ESM
+
+Example of extending the default configuration using the spread operator:
 
 ```js
+// webpack.config.js
 const path = require('path');
 const defaultConfig = require('@alleyinteractive/build-tool/dist/cjs/config/webpack.config');
 
+/**
+ * Extend the default entry configuration to add a custom entry point.
+ */
 module.exports = {
-  ...defaultConfig,
-
-  resolve: {
-    ...defaultConfig.resolve,
-    alias: {
-      ...defaultConfig.resolve?.alias,
-      // Custom alias to resolve paths to the project root. Example: 'root/client/index.js'.
-      root: path.resolve(__dirname),
-    },
+  entry: {
+    // The entry is a function that returns the default entry object.
+    ...defaultConfig.default.entry(),
+    'my-entry': path.resolve(__dirname, 'path/to/entry.js'),
   },
 };
 ```
@@ -90,6 +123,34 @@ module.exports = {
 ```js
 import defaultConfig from '@alleyinteractive/build-tool/dist/esm/config/webpack.config';
 ```
+#### Using Webpack `extends` property
+
+Similar to the spread operator, you can also use the `extends` property in the `webpack.config.js` file to extend the default configuration.
+> The extends property allows you to extend an existing configuration to use as the base. It internally uses the webpack-merge package to merge the configurations and helps you to avoid duplicating configurations.
+-- See the [webpack extending configurations](https://webpack.js.org/configuration/extending-configurations/) documentation for more information.
+
+**NOTE**: The `extends` property is only available in webpack `v5.82.0` and later.
+
+Example of extending the default configuration using the `extends` property:
+
+```js
+// webpack.config.js
+const config = {
+  extends: require.resolve('@alleyinteractive/build-tool/dist/cjs/config/webpack.config'),
+  output: {
+    asyncChunks: true,
+  },
+  resolve: {
+    alias: {
+      // Adding a custom alias for file path resolution.
+      '@': 'path/to/some/folder',
+    },
+  },
+};
+```
+
+**If you need to add entry points or plugins to the configuration, you will still need to use the spread operator to extend the default configuration.**
+
 ### From Source
 
 To work on this repository:
