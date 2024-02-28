@@ -42,11 +42,11 @@ const usePostById = (postId, getPostType = null) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
-  const Post = usePost(postId, postTypeCache[postId] ?? '');
+  const post = usePost(postId, postTypeCache[postId] ?? '');
   // If we're still fetching the post type, working is true - return null.
   // If we've got the post type, but no post yet (usePost is still working), return null.
   // If we've got the post, return it - or return undefined as returned by usePost.
-  return working || (!Post && postTypeCache[postId]) ? null : Post;
+  return working || (!post && postTypeCache[postId]) ? null : post;
 };
 
 export default usePostById;
