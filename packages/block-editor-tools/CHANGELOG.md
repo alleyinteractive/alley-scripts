@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.4
+
+### Patch Changes
+
+- 840ec15: Reduces the time usePostById returns undefined while looking up the post type.
+
 ## 0.6.3
 
 ### Patch Changes
