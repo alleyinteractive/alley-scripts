@@ -253,6 +253,13 @@ export class FeatureStore {
   private static getLocalNpmPaths(): string[] {
     const paths: string[] = [];
 
+    // Retrieve the path to the node_modules using a known package.
+    const nodeModulesPath = require.resolve('chalk').match(/(.*node_modules)/)?.[0];
+
+    if (nodeModulesPath && fs.existsSync(nodeModulesPath)) {
+      paths.push(nodeModulesPath);
+    }
+
     let currentDirectory = process.cwd();
 
     while (true) { // eslint-disable-line no-constant-condition
