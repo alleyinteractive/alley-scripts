@@ -14,8 +14,10 @@ import usePost from '../use-post';
  */
 const usePostById = (postId, getPostType = null) => {
   const [postTypeCache, setPostTypeCache] = useState({});
+  const [working, setWorking] = useState(true);
 
   useEffect(() => {
+    setWorking(true);
     if (postId && !postTypeCache[postId]) {
       (async () => {
         if (getPostType) {
@@ -33,12 +35,18 @@ const usePostById = (postId, getPostType = null) => {
             setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0]?.subtype }));
           }
         }
+        setWorking(false);
       })();
+    } else if (postId && postTypeCache[postId]) {
+      setWorking(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
-
-  return usePost(postId, postTypeCache[postId] ?? '');
+  const post = usePost(postId, postTypeCache[postId] ?? '');
+  // If we're still fetching the post type, working is true - return null.
+  // If we've got the post type, but no post yet (usePost is still working), return null.
+  // If we've got the post, return it - or return undefined as returned by usePost.
+  return working || (!post && postTypeCache[postId]) ? null : post;
 };
 
 export default usePostById;
