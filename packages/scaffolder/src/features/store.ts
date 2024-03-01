@@ -254,10 +254,10 @@ export class FeatureStore {
     const paths: string[] = [];
 
     // Retrieve the path to the node_modules using a known package.
-    const nodeModulesPath = require.resolve('chalk').match(/(.*node_modules)/)?.[0];
+    const resolvedNodeModulesPath = require.resolve('chalk').match(/(.*node_modules)/)?.[0];
 
-    if (nodeModulesPath && fs.existsSync(nodeModulesPath)) {
-      paths.push(nodeModulesPath);
+    if (resolvedNodeModulesPath && fs.existsSync(resolvedNodeModulesPath)) {
+      paths.push(resolvedNodeModulesPath);
     }
 
     let currentDirectory = process.cwd();
