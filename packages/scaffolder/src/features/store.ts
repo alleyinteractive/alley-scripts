@@ -226,8 +226,10 @@ export class FeatureStore {
     logger().debug(`Loading configurations from NPM paths: ${chalk.blue(paths.join(', '))}`);
 
     const features = await Promise.all(
-      paths.map(async (nodeModulesPath) => fg.glob(
+      paths.map((nodeModulesPath) => fg.glob(
         [
+          // Same-level (e.g. scaffolder/config.yml)
+          'scaffolder/*/config.yml',
           // One-level (e.g. package/scaffolder/<feature>/config.yml)
           '*/scaffolder/*/config.yml',
           // Two-level (e.g. @organization/package/scaffolder/<feature>/config.yml)
@@ -273,14 +275,14 @@ export class FeatureStore {
       }
     }
 
-    // TODO: Enable this in a follow up PR.
-    /* eslint-disable */
     // Check if we're developing on the scaffolder locally.
-    // if (__dirname.includes('packages/scaffolder') && fs.existsSync(path.join(__dirname, '..', '..', '..', '..', 'node_modules'))) {
-      // console.log('adding', path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
-      // paths.push(path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
-    // }
-    /* eslint-enable */
+    if (__dirname.includes('packages/scaffolder')) {
+      const projectRoot = path.join(__dirname, '..', '..');
+
+      if (fs.existsSync(path.join(projectRoot, '..', 'scaffolder-features'))) {
+        paths.push(path.join(projectRoot, '..', 'scaffolder-features'));
+      }
+    }
 
     return uniq(paths);
   }
