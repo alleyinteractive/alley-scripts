@@ -5,6 +5,7 @@ export { default as useInnerBlocks } from './use-inner-blocks';
 export { default as useInnerBlocksAttributes } from './use-inner-blocks-attributes';
 export { default as useInnerBlocksCount } from './use-inner-blocks-count';
 export { default as useMedia } from './use-media';
+export { default as useOption } from './use-option';
 export { default as useParentBlock } from './use-parent-block';
 export { default as useParentBlockAttributes } from './use-parent-block-attributes';
 export { default as usePost } from './use-post';
