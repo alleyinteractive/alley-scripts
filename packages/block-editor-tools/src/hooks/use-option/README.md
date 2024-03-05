@@ -93,3 +93,21 @@ return (
   </>
 );
 ```
+
+## TypeScript Support
+
+`useOption` will infer the option value type for built-in WordPress core options. When using `useOption` with a custom option, it accepts a type variable to assist you with your usage of its return properties. Below are examples of the types of `value` for core options (`title`, `page_on_front`) and custom options (one with a provided type variable and one without).
+
+```ts
+useOption('title').value
+// --> string | undefined
+
+useOption<boolean>('my_custom_option').value
+// --> boolean | undefined
+
+useOption('page_on_front').value
+// --> number | undefined
+
+useOption('my_custom_option').value
+// --> unknown
+```
