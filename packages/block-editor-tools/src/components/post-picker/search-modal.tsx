@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { JSX } from 'react';
+import { useState, JSX } from 'react';
 import {
   Button,
   Modal,
