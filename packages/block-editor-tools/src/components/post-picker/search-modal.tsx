@@ -1,5 +1,4 @@
-import { useState } from '@wordpress/element';
-import { JSX } from 'react';
+import { useState, JSX } from 'react';
 import {
   Button,
   Modal,

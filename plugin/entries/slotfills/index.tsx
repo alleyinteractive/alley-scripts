@@ -4,7 +4,7 @@
  * Register slotfills for testing the `@alleyinteractive/block-editor-tools` package.
  */
 
-import { useState } from '@wordpress/element';
+import { useState } from 'react';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginSidebar } from '@wordpress/edit-post';
 import { PanelBody } from '@wordpress/components';

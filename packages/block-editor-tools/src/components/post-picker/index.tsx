@@ -1,6 +1,5 @@
-import { useState } from '@wordpress/element';
+import { useState, JSX } from 'react';
 import styled from 'styled-components';
-import { JSX } from 'react';
 
 import {
   Button,

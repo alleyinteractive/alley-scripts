@@ -5,7 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
-} from '@wordpress/element';
+} from 'react';
 import apiFetch from '@wordpress/api-fetch';
 import classNames from 'classnames';
 import { Button } from '@wordpress/components';
