@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.0
+
+### Minor Changes
+
+- 37ff706: Adds a useOption hook for reading/writing options
+
+### Patch Changes
+
+- 89a2447: Move away from wordpress/element to React
+
 ## 0.6.4
 
 ### Patch Changes
