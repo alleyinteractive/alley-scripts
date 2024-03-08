@@ -32,7 +32,7 @@
     "@babel/preset-env": "^7.23.3",
     "@changesets/cli": "^2.26.2",
     "@storybook/addon-essentials": "^7.5.3",
-    "@storybook/addon-interactions": "^7.4.6",
+    "@storybook/addon-interactions": "^7.6.17",
     "@storybook/addon-links": "^7.6.10",
     "@storybook/blocks": "^7.5.2",
     "@storybook/react": "^7.6.1",
