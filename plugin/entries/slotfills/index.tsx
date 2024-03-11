@@ -20,8 +20,14 @@ import {
   PostSelector,
   TermSelector,
   usePostMeta,
-// Importing the relative path so that when developing in the watch mode in the plugin,
-// block-editor-tools will rebuild.
+/**
+ * Importing the relative path so that when developing in the watch mode,
+ * the block-editor-tools will rebuild. This is necessary as the block-editor-tools
+ * need to be built and compiled before the plugin can be built and compiled.
+ *
+ * https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-packages.md
+ */
+// eslint-disable-next-line import/no-relative-packages
 } from '../../../packages/block-editor-tools/src';
 
 // Create a new Gutenberg sidebar
