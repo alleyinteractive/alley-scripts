@@ -20,4 +20,4 @@ To develop the plugin and see changes in real-time:
 
 ### Testing new features in the alley scripts plugin
 If you want to test any new components or hooks in a block in the plugin you can scaffold a new block, entry, or slotfill in the `alley-scripts/plugin` directory.
-To test the new feature with fast refresh be sure to import the scripts using a _relative path_ so that the development server can watch for changes. You may need to disable the [ESLint no relative packages rule (`import/no-relative-packages`)](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-packages.md) to allow linting to pass. Follow the instructions above to see the changes apply in real time in the editor.
+To test the new feature with fast refresh, be sure to import the scripts using a _relative path_ so that the development server can watch for changes. You may need to disable the [ESLint no relative packages rule (`import/no-relative-packages`)](https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-packages.md) to allow linting to pass. Follow the instructions above to see the changes apply in real time in the editor.
