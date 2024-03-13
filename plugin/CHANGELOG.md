@@ -1,5 +1,11 @@
 # alley-scripts-demo-plugin
 
+## 1.0.3
+
+### Patch Changes
+
+- b6c99b0: Add support and documentation for fast refresh in demo plugin"
+
 ## 1.0.2
 
 ### Patch Changes
