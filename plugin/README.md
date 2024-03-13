@@ -14,7 +14,7 @@ be used in production.
 
 ## Development for block editor tools with fast refresh.
 To develop the plugin and see changes in real-time:
-1. Install the Gutenberg plugin in your WordPress installation.
+1. Install the [Gutenberg plugin](https://wordpress.org/plugins/gutenberg/) in your WordPress installation.
 2. Ensure that `define( 'SCRIPT_DEBUG', true );` is defined in your `wp-config.php` file.
 1. Run `npm run start:hot` in the `alley-scripts/plugin` directory. This will start a development server and watch for changes in the block-editor-tools package files.
 
