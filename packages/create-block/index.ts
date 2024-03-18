@@ -48,6 +48,12 @@ const options: Options[] = [
     type: String,
   },
   {
+    name: 'hasViewScript',
+    alias: 'v',
+    description: 'Whether the block will have a frontend scripts definition. (viewScript in block.json)',
+    type: Boolean,
+  },
+  {
     name: 'help',
     alias: 'h',
     description: 'Display this usage guide.',
@@ -104,19 +110,29 @@ if (help) {
   // If there is no command line argument for the block language,
   // allow the user to select one with a prompt.
   if (!blockLanguage) {
-    const { blockLanguagePrompt }: {
+    const { blockLanguagePrompt, hasViewScript }: {
       blockLanguagePrompt: LanguageType;
-    } = await prompts({
-      type: 'select',
-      name: 'blockLanguagePrompt',
-      message: 'Create a block in TypeScript or JavaScript?',
-      choices: [
-        { title: 'TypeScript', value: 'typescript' },
-        { title: 'JavaScript', value: 'javascript' },
-      ],
-      initial: 0,
-    });
+      hasViewScript: boolean;
+    } = await prompts([
+      {
+        type: 'select',
+        name: 'blockLanguagePrompt',
+        message: 'Create a block in TypeScript or JavaScript?',
+        choices: [
+          { title: 'TypeScript', value: 'typescript' },
+          { title: 'JavaScript', value: 'javascript' },
+        ],
+        initial: 0,
+      },
+      {
+        type: 'confirm',
+        name: 'hasViewScript',
+        message: 'Will this block have a front end view script?',
+        initial: false,
+      },
+    ]);
     process.env.blockLanguage = validateBlockLanguage(blockLanguagePrompt);
+    process.env.hasViewScript = String(hasViewScript);
   } else {
     process.env.blockLanguage = validateBlockLanguage(blockLanguage);
   }
