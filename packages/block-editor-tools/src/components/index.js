@@ -7,5 +7,6 @@ export { default as SafeHtml } from './safe-html';
 export { default as PostPicker } from './post-picker';
 export { default as PostSelector } from './post-selector';
 export { default as Selector } from './selector';
+export { default as Sortable } from './sortable';
 export { default as TermSelector } from './term-selector';
 export { default as VideoPicker } from './video-picker';
