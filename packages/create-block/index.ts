@@ -50,7 +50,7 @@ const options: Options[] = [
   {
     name: 'hasViewScript',
     alias: 'v',
-    description: 'Will this block have a front end view script? (default: false)',
+    description: 'Whether the block will have a frontend scripts definition. (viewScript in block.json)',
     type: Boolean,
   },
   {
