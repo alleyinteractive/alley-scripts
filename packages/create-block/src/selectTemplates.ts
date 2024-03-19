@@ -1,9 +1,19 @@
 const path = require('path');
 
-const templateDirectory = process.env.blockLanguage || 'typescript';
+const {
+  hasViewScript = false,
+  blockLanguage = 'typescript',
+} = process.env;
+
+// The javascript or typescript script suffix or filetype based on the block language.
+const scriptSuffix: string = blockLanguage === 'typescript' ? 'ts' : 'js';
 
 // This path should be relative to the dist folder.
-const blockTemplatesPath: string = path.join(__dirname, '../../templates', templateDirectory);
+const blockTemplatesPath: string = path.join(__dirname, '../../templates', blockLanguage);
+
+const viewScript = hasViewScript === 'true' ? {
+  viewScript: [`file:view.${scriptSuffix}`],
+} : {};
 
 /**
  * Custom variants for scaffolding blocks.
@@ -26,9 +36,10 @@ module.exports = {
     description: '',
     dashicon: 'palmtree',
     category: 'widgets',
-    editorScript: 'file:index.ts',
+    editorScript: `file:index.${scriptSuffix}`,
     editorStyle: 'file:index.css',
     style: ['file:style-index.css'],
+    ...viewScript,
   },
   variants: {
     dynamic: {
