@@ -68,6 +68,22 @@ function main() {
 			'type' => 'integer',
 		]
 	);
+
+	register_meta_helper(
+		'post',
+		[ 'post' ],
+		'alley_scripts_repeater',
+		[
+			'type' => 'array',
+			'show_in_rest' => [
+				'schema' => [
+					'items' => [
+						'type' => 'string',
+					]
+				],
+			],
+		]
+	);
 }
 main();
 

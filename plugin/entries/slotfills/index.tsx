@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginSidebar } from '@wordpress/edit-post';
-import { PanelBody } from '@wordpress/components';
+import { PanelBody, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import {
@@ -18,6 +18,8 @@ import {
   MediaPicker,
   PostPicker,
   PostSelector,
+  Sortable,
+  SortableItem,
   TermSelector,
   usePostMeta,
 /**
@@ -44,6 +46,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_image_picker_id: imageId = '',
       alley_scripts_media_picker_id: mediaId = 0,
       alley_scripts_post_picker_id: postId = 0,
+      alley_scripts_repeater: repeater = [],
     } = meta;
 
     return (
@@ -137,6 +140,33 @@ registerPlugin('alley-scripts-plugin-sidebar', {
               callback={(data: any) => console.log('CSVUploader callback', data)} // eslint-disable-line no-console
               setAttributes={(data: any) => console.log('CSVUploader setAttributes', data)} // eslint-disable-line no-console
             />
+          </PanelBody>
+          <PanelBody initialOpen title={__('Sortable', 'alley-scripts')}>
+            <Sortable
+              emptyItem=""
+              list={repeater}
+              setList={(newList: any[]) => setMeta({ alley_scripts_repeater: newList })}
+            >
+              {repeater && repeater.length
+                ? repeater.map((repeaterItem: string, index: number) => (
+                  <SortableItem
+                    index={index}
+                    key={index} // eslint-disable-line react/no-array-index-key
+                    list={repeater}
+                    setList={(newList: any[]) => setMeta({ alley_scripts_repeater: newList })}
+                  >
+                    <TextControl
+                      label={__('Item Text', 'alley-scripts')}
+                      onChange={(next: string) => {
+                        const newList = [...repeater];
+                        newList[index] = next;
+                        setMeta({ alley_scripts_repeater: newList });
+                      }}
+                      value={repeaterItem}
+                    />
+                  </SortableItem>
+                )) : null}
+            </Sortable>
           </PanelBody>
         </PluginSidebar>
       </>
