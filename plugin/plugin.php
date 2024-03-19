@@ -74,7 +74,7 @@ function main() {
 		[ 'post' ],
 		'alley_scripts_repeater',
 		[
-			'type' => 'array',
+			'type'         => 'array',
 			'show_in_rest' => [
 				'schema' => [
 					'items' => [

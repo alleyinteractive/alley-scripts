@@ -32,10 +32,8 @@ Used in conjuction with SortableItem to allow for a sortable list where users ca
 </Sortable>
 ```
 
-There are additional options for the PostPicker that can be configured via the
-props listed below. For example, the PostPicker also supports customizing the arguments
-sent to the search endpoint, a custom renderer for previews, a custom renderer for search
-results, and a custom function for fetching post data given a post ID.
+There are additional options for the SortableItem that can be configured via the
+props listed below.
 
 ## Props
 
