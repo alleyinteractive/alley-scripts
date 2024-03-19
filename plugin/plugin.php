@@ -79,7 +79,7 @@ function main() {
 				'schema' => [
 					'items' => [
 						'type' => 'string',
-					]
+					],
 				],
 			],
 		]
