@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+### Minor Changes
+
+- fb51636: Adds Sortable and SortableItem components
+
 ## 0.7.0
 
 ### Minor Changes
