@@ -9,7 +9,7 @@ import { useSelect } from '@wordpress/data';
  *                   and the returned post object.
  */
 const usePost = (postId, postType = 'post') => useSelect(
-  (select) => select('core').getEntityRecord('postType', postType, postId),
+  (select) => select('core').getEntityRecord('postType', postType, postId, { context: 'view' }),
   [postId, postType],
 );
 
