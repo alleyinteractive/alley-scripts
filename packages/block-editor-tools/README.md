@@ -113,7 +113,7 @@ Render a CSV upload component with a callback to further process the JSON data.
     attributeName="data"
     callback={transformData}
     setAttributes={setAttributes}
-  /> 
+  />
 ```
 #### Callback Function
 
@@ -579,8 +579,10 @@ A custom React hook to retrieve post data given a post ID and post type.
 ```jsx
 const MyBlock = ({
  postID,
+ postType = 'post',
+ options = { context: 'view' }
 }) => {
-  const post = usePost(postID, postType);
+  const post = usePost(postID, postType, options);
 
   if (post) {
     ...
@@ -608,6 +610,7 @@ const MyBlock = ({
 ```
 
 You can also pass a function to lookup the post type when passed the post id.
+This function must return a string that is the post type.
 
 ```jsx
 const MyBlock = ({
@@ -625,7 +628,20 @@ const MyBlock = ({
 };
 ```
 
-This function must return a string that is the post type.
+You are also able to pass options to the underlying API query. For example,
+here is how we would get a post with the Edit context.
+
+```jsx
+const MyBlock = ({
+ postID,
+}) => {
+  const post = usePostById(postID, null, { context: 'edit' });
+
+  if (post) {
+    ...
+  }
+};
+```
 
 ### usePostMeta
 
