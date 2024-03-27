@@ -9,10 +9,11 @@ import usePost from '../use-post';
  *
  * @param {int}      postId   The ID for the post to return.
  * @param {function} getPostType Optional custom function that returns a post type string.
+ * @param {object}   options Optional object containing parameters to pass to getEntityRecord.
  * @returns {object} An object containing a hasResolved property
  *                   and the returned post object.
  */
-const usePostById = (postId, getPostType = null) => {
+const usePostById = (postId, getPostType = null, options = { context: 'view' }) => {
   const [postTypeCache, setPostTypeCache] = useState({});
   const [working, setWorking] = useState(true);
 
@@ -42,7 +43,7 @@ const usePostById = (postId, getPostType = null) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
-  const post = usePost(postId, postTypeCache[postId] ?? '');
+  const post = usePost(postId, postTypeCache[postId] ?? '', options);
   // If we're still fetching the post type, working is true - return null.
   // If we've got the post type, but no post yet (usePost is still working), return null.
   // If we've got the post, return it - or return undefined as returned by usePost.
