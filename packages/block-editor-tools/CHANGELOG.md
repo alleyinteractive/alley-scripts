@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.0
+
+### Minor Changes
+
+- 3ad4c4e: Updated `usePostById` and `usePost` to allow overriding context value for `getEntityRecord`
+
 ## 0.8.0
 
 ### Minor Changes
