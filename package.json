@@ -41,7 +41,7 @@
     "@types/cross-spawn": "^6.0.6",
     "@types/jest": "^29.5.8",
     "@types/mustache": "^4.2.5",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.12.2",
     "@types/prompts": "^2.4.9",
     "@types/webpack": "^5.28.5",
     "jest": "^29.7.0",
