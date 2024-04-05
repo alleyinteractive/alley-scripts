@@ -1,4 +1,3 @@
-import { store } from '@wordpress/editor';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -9,7 +8,7 @@ import { useSelect } from '@wordpress/data';
  *                    is not initialized.
  */
 const useCurrentPostId = () => useSelect((select) => {
-  const editorStore = select(store);
+  const editorStore = select('core/editor');
   return editorStore ? editorStore.getCurrentPostId() : null;
 }, []);
 

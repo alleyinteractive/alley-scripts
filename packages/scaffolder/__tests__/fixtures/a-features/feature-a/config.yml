@@ -1,0 +1,10 @@
+name: Test Feature A
+
+inputs:
+  - name: featureName
+    description: "Feature Name"
+    type: string
+
+files:
+  - source: feature.stub
+    destination: src/test-feature-a/{{ wpClassFilename inputs.featureName }}

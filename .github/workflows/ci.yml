@@ -1,49 +1,52 @@
 name: CI
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request:
 
 jobs:
-  build:
-      if: github.event.pull_request.draft == false
-      name: Build and Test
-      timeout-minutes: 15
-      runs-on: ubuntu-latest
-      # To use Remote Caching, uncomment the next lines and follow the steps below.
-      # env:
-      #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-      #  TURBO_REMOTE_ONLY: true
+  node-tests:
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [16, 18, 20]
+    name: "Build and Test: Node ${{ matrix.node }}"
+    runs-on: ubuntu-latest
+    # To use Remote Caching, uncomment the next lines and follow the steps below.
+    # env:
+    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    #  TURBO_REMOTE_ONLY: true
 
-      steps:
-        - name: Check out code
-          uses: actions/checkout@v4
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
 
-        - name: Cache turbo build setup
-          uses: actions/cache@v3
-          with:
-            path: .turbo
-            key: ${{ runner.os }}-turbo-${{ github.sha }}
-            restore-keys: |
-              ${{ runner.os }}-turbo-
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-${{ matrix.node }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.node }}-turbo-
 
-        - name: Setup Node.js environment
-          uses: actions/setup-node@v4
-          with:
-            node-version: 18
-            cache: 'npm'
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
 
-        - name: Install dependencies
-          run: npm install
+      - name: Install dependencies
+        run: npm install
 
-        - name: Build
-          run: npm run build
+      - name: Build
+        run: npm run build
 
-        - name: Test
-          run: npm run test
+      - name: Test
+        run: npm run test
 
-        - name: Lint
-          run: npm run lint
+      - name: Lint
+        run: npm run lint

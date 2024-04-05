@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import { chdir, cwd } from 'node:process';
+import { spawn } from 'node:child_process';
 
 /* eslint-disable no-console */
-const fs = require('fs');
-const prompts = require('prompts');
-const path = require('path');
-const spawn = require('cross-spawn');
-const commandLineArgs = require('command-line-args');
-const commandLineUsage = require('command-line-usage');
+import fs from 'fs';
+import prompts from 'prompts';
+import path from 'path';
+import commandLineArgs, { OptionDefinition } from 'command-line-args';
+import commandLineUsage from 'command-line-usage';
 
 type Options = {
   name: string;
@@ -48,6 +48,12 @@ const options: Options[] = [
     type: String,
   },
   {
+    name: 'hasViewScript',
+    alias: 'v',
+    description: 'Whether the block will have a frontend scripts definition. (viewScript in block.json)',
+    type: Boolean,
+  },
+  {
     name: 'help',
     alias: 'h',
     description: 'Display this usage guide.',
@@ -76,12 +82,7 @@ const {
   blocksDir: blocksDirectory,
   blockLanguage,
   help,
-} : {
-  namespace: string;
-  blocksDir: string;
-  blockLanguage: LanguageType | undefined;
-  help: boolean;
-} = commandLineArgs(options);
+} = commandLineArgs(options as OptionDefinition[]);
 
 // Display the help text if the --help option is used.
 const usage = commandLineUsage([
@@ -91,7 +92,7 @@ const usage = commandLineUsage([
   },
   {
     header: 'Options',
-    optionList: options,
+    optionList: options as OptionDefinition[],
   },
 ]);
 
@@ -109,19 +110,29 @@ if (help) {
   // If there is no command line argument for the block language,
   // allow the user to select one with a prompt.
   if (!blockLanguage) {
-    const { blockLanguagePrompt }: {
+    const { blockLanguagePrompt, hasViewScript }: {
       blockLanguagePrompt: LanguageType;
-    } = await prompts({
-      type: 'select',
-      name: 'blockLanguagePrompt',
-      message: 'Create a block in TypeScript or JavaScript?',
-      choices: [
-        { title: 'TypeScript', value: 'typescript' },
-        { title: 'JavaScript', value: 'javascript' },
-      ],
-      initial: 0,
-    });
+      hasViewScript: boolean;
+    } = await prompts([
+      {
+        type: 'select',
+        name: 'blockLanguagePrompt',
+        message: 'Create a block in TypeScript or JavaScript?',
+        choices: [
+          { title: 'TypeScript', value: 'typescript' },
+          { title: 'JavaScript', value: 'javascript' },
+        ],
+        initial: 0,
+      },
+      {
+        type: 'confirm',
+        name: 'hasViewScript',
+        message: 'Will this block have a front end view script?',
+        initial: false,
+      },
+    ]);
     process.env.blockLanguage = validateBlockLanguage(blockLanguagePrompt);
+    process.env.hasViewScript = String(hasViewScript);
   } else {
     process.env.blockLanguage = validateBlockLanguage(blockLanguage);
   }
@@ -148,7 +159,7 @@ if (help) {
   }
 
   // Create a block using the @wordpress/create-block package.
-  spawn.sync(
+  spawn(
     'wp-create-block',
     [
       /**

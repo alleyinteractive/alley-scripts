@@ -18,6 +18,7 @@ const MyBlock = ({
 ```
 
 You can also pass a function to lookup the post type when passed the post id.
+This function must return a string that is the post type.
 
 ```jsx
 const MyBlock = ({
@@ -35,4 +36,18 @@ const MyBlock = ({
 };
 ```
 
-This function must return a string that is the post type.
+You are also able to pass options to the underlying API query. For example,
+here is how we would get a post with the Edit context.
+
+```jsx
+const MyBlock = ({
+ postID,
+}) => {
+  const post = usePostById(postID, null, { context: 'edit' });
+
+  if (post) {
+    ...
+  }
+};
+```
+

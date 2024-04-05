@@ -4,19 +4,19 @@
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
   },
   "dependencies": {
-    "@babel/core": ">= 7",
-    "@babel/eslint-parser": "^7.22.15",
-    "@babel/preset-env": "^7.23.2",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.3",
-    "eslint": "^8.49.0",
+    "@babel/core": "^7.23.9",
+    "@babel/eslint-parser": "^7.23.10",
+    "@babel/preset-env": "^7.23.9",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-import-resolver-babel-module": "^5.3.2",
-    "eslint-import-resolver-webpack": "^0.13.7",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-import-resolver-webpack": "^0.13.8",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0"
   },
@@ -47,11 +47,7 @@
   "main": "index.js",
   "name": "@alleyinteractive/eslint-config",
   "peerDependencies": {
-    "@babel/core": "^7.22.17",
-    "eslint": "^8.49.0",
-    "eslint-import-resolver-webpack": "^0.13.7",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "repository": {
@@ -61,8 +57,5 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "version": "0.1.4",
-  "devDependencies": {
-    "@types/node": "^20.8.3"
-  }
+  "version": "0.1.6"
 }

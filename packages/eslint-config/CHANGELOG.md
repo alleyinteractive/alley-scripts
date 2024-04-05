@@ -1,9 +1,19 @@
 # Changelog
 
+## 0.1.6
+
+### Patch Changes
+
+- 4fc0ae6: Update dependencies and plugin scripts
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.1.4 - 2023-11-20
+
+- Update dependencies and consolidated shared devDependencies into the root `package.json` file.
 
 ## 0.1.3 - 2023-09-12
 

@@ -1,0 +1,74 @@
+{
+  "author": "Alley <info@alley.com> (https://alley.com)",
+  "description": "Quickly scaffold project template files.",
+  "license": "GPL-2.0-or-later",
+  "name": "@alleyinteractive/scaffolder",
+  "version": "0.1.3",
+  "engines": {
+    "node": ">=16.0.0 <21.0.0",
+    "npm": ">=8"
+  },
+  "devDependencies": {
+    "@alleyinteractive/eslint-config": "*",
+    "@alleyinteractive/tsconfig": "*",
+    "@babel/cli": "7.23.4",
+    "@babel/core": "7.23.7",
+    "@babel/preset-env": "7.23.8",
+    "@babel/preset-typescript": "7.23.3",
+    "@types/cli-progress": "^3.11.5",
+    "@types/handlebars-helpers": "^0.5.6",
+    "@types/js-yaml": "^4.0.9"
+  },
+  "dependencies": {
+    "@alleyinteractive/scaffolder-features": "*",
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.12.0",
+    "fast-glob": "^3.3.2",
+    "handlebars": "^4.7.8",
+    "handlebars-helpers": "^0.10.0",
+    "joi": "^17.12.0",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "prompts": "^2.4.2",
+    "simple-git": "^3.22.0",
+    "ts-command-line-args": "^2.5.1",
+    "winston": "^3.11.0"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "./dist/bin/scaffolder.js",
+  "bin": {
+    "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
+  },
+  "scripts": {
+    "build:types": "npx tsc --declaration --emitDeclarationOnly",
+    "build": "babel src -d dist --extensions=\".ts\" && npm run build:types",
+    "watch": "babel src -d dist --watch --source-maps --extensions=\".ts\"",
+    "lint": "tsc && eslint src",
+    "lint:fix": "eslint src --fix",
+    "prepublish": "npm run build",
+    "pretest": "check-node-version --package",
+    "test:watch": "jest --watchAll",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./*": "./build/*"
+  }
+}

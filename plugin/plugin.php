@@ -6,8 +6,8 @@
  * Version: 0.1.0
  * Author: Alley
  * Author URI: https://github.com/alleyinteractive/alley-scripts
- * Requires at least: 6.3
- * Tested up to: 6.3
+ * Requires at least: 6.4
+ * Tested up to: 6.4
  *
  * Text Domain: alley-scripts-demo-plugin
  * Domain Path: /languages/
@@ -66,6 +66,22 @@ function main() {
 		'alley_scripts_post_picker_id',
 		[
 			'type' => 'integer',
+		]
+	);
+
+	register_meta_helper(
+		'post',
+		[ 'post' ],
+		'alley_scripts_repeater',
+		[
+			'type'         => 'array',
+			'show_in_rest' => [
+				'schema' => [
+					'items' => [
+						'type' => 'string',
+					],
+				],
+			],
 		]
 	);
 }

@@ -4,10 +4,10 @@
  * Register slotfills for testing the `@alleyinteractive/block-editor-tools` package.
  */
 
-import { useState } from '@wordpress/element';
+import { useState } from 'react';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginSidebar } from '@wordpress/edit-post';
-import { PanelBody } from '@wordpress/components';
+import { PanelBody, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import {
@@ -18,9 +18,19 @@ import {
   MediaPicker,
   PostPicker,
   PostSelector,
+  Sortable,
+  SortableItem,
   TermSelector,
   usePostMeta,
-} from '@alleyinteractive/block-editor-tools';
+/**
+ * Importing the relative path so that when developing in the watch mode,
+ * the block-editor-tools will rebuild. This is necessary as the block-editor-tools
+ * need to be built and compiled before the plugin can be built and compiled.
+ *
+ * https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-packages.md
+ */
+// eslint-disable-next-line import/no-relative-packages
+} from '../../../packages/block-editor-tools/src';
 
 // Create a new Gutenberg sidebar
 registerPlugin('alley-scripts-plugin-sidebar', {
@@ -36,6 +46,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_image_picker_id: imageId = '',
       alley_scripts_media_picker_id: mediaId = 0,
       alley_scripts_post_picker_id: postId = 0,
+      alley_scripts_repeater: repeater = [],
     } = meta;
 
     return (
@@ -129,6 +140,33 @@ registerPlugin('alley-scripts-plugin-sidebar', {
               callback={(data: any) => console.log('CSVUploader callback', data)} // eslint-disable-line no-console
               setAttributes={(data: any) => console.log('CSVUploader setAttributes', data)} // eslint-disable-line no-console
             />
+          </PanelBody>
+          <PanelBody initialOpen title={__('Sortable', 'alley-scripts')}>
+            <Sortable
+              emptyItem=""
+              list={repeater}
+              setList={(newList: any[]) => setMeta({ alley_scripts_repeater: newList })}
+            >
+              {repeater && repeater.length
+                ? repeater.map((repeaterItem: string, index: number) => (
+                  <SortableItem
+                    index={index}
+                    key={index} // eslint-disable-line react/no-array-index-key
+                    list={repeater}
+                    setList={(newList: any[]) => setMeta({ alley_scripts_repeater: newList })}
+                  >
+                    <TextControl
+                      label={__('Item Text', 'alley-scripts')}
+                      onChange={(next: string) => {
+                        const newList = [...repeater];
+                        newList[index] = next;
+                        setMeta({ alley_scripts_repeater: newList });
+                      }}
+                      value={repeaterItem}
+                    />
+                  </SortableItem>
+                )) : null}
+            </Sortable>
           </PanelBody>
         </PluginSidebar>
       </>

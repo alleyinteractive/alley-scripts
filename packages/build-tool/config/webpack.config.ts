@@ -1,16 +1,21 @@
 import path from 'path';
 import { cwd } from 'node:process';
-import webpack from 'webpack';
+import { Configuration, type PathData } from 'webpack';
+import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 // eslint-disable-next-line import/no-unresolved
-import { getEntries, processFilename, type PathData } from '../utils/webpack';
+import { getEntries, processFilename } from '../utils/webpack';
+
+interface WPScriptsConfig extends Configuration {
+  devServer?: WebpackDevServerConfiguration;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const defaultConfig: webpack.Configuration = require('@wordpress/scripts/config/webpack.config');
+const defaultConfig: WPScriptsConfig = require('@wordpress/scripts/config/webpack.config');
 
 /**
  * Check if the build is running in production mode.
@@ -44,12 +49,14 @@ const mode: string = isProduction ? 'production' : 'development';
  * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#extending-the-webpack-config
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/config/webpack.config.js
  */
-const config = (): webpack.Configuration => ({
+const config: Configuration = (defaultConfig ? {
   ...defaultConfig,
 
   // Dynamically produce entries from the slotfills index file and all blocks.
   entry: () => {
-    const blocks = defaultConfig.entry();
+    let blocks = typeof defaultConfig.entry === 'function' ? defaultConfig.entry() : {};
+    blocks = blocks && typeof blocks === 'object' ? blocks : {};
+
     const entries = blocksOnly === true ? {} : getEntries(entriesDir);
 
     return {
@@ -76,7 +83,7 @@ const config = (): webpack.Configuration => ({
 
   // Configure plugins.
   plugins: [
-    ...defaultConfig.plugins,
+    ...(Array.isArray(defaultConfig.plugins) ? defaultConfig.plugins : []),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -114,7 +121,7 @@ const config = (): webpack.Configuration => ({
   resolve: {
     ...defaultConfig.resolve,
     alias: {
-      ...defaultConfig.resolve.alias,
+      ...defaultConfig?.resolve?.alias,
       // Custom alias to resolve paths to the project root. Example: '@/client/src/index.js'.
       '@': path.resolve(cwd()),
     },
@@ -127,6 +134,6 @@ const config = (): webpack.Configuration => ({
       directory: '/build',
     },
   },
-});
+} : {});
 
 export default config;

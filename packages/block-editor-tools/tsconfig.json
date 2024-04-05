@@ -3,11 +3,15 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "declaration": true,
     "outDir": "build",
     "paths": {
       "@/*": ["*"]
     }
   },
+  "exclude": [
+    "**/*.stories.tsx"
+  ],
   "include": [
     "src/**/*"
   ]

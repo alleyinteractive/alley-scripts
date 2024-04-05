@@ -3,21 +3,17 @@
   "description": "Alley's script for scaffolding code for entry points in projects that use @wordpress/scripts",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/create-entry",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
-    "@alleyinteractive/tsconfig": "*",
-    "@types/mustache": "^4.2.4",
-    "@types/node": "^20.8.3",
-    "@types/prompts": "^2.4.5"
+    "@alleyinteractive/tsconfig": "*"
   },
   "dependencies": {
     "chalk": "^5.3.0",
     "glob": "^10.3.10",
     "mustache": "^4.2.0",
     "prompts": "^2.4.2",
-    "ts-command-line-args": "^2.5.1",
-    "typescript": "^5.1.6"
+    "ts-command-line-args": "^2.5.1"
   },
   "files": [
     "dist",

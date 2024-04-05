@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from '@wordpress/element';
+import {
+  useCallback, useEffect, useState, JSX,
+} from 'react';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
@@ -6,7 +8,6 @@ import { Button, TextControl, Spinner } from '@wordpress/components';
 import classNames from 'classnames';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Search_Results } from 'wp-types';
-import { JSX } from 'react';
 
 import './post-list.scss';
 import Post from './post';

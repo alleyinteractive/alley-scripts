@@ -1,7 +1,5 @@
-import { store } from '@wordpress/editor';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
-import { cloneDeep } from 'lodash';
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
@@ -17,7 +15,7 @@ import { cloneDeep } from 'lodash';
  */
 const usePostMeta = (postType = null, postId = null) => {
   // Ensures that we have a post type, since we need it as an argument to useEntityProp.
-  const type = useSelect((select) => postType || select(store).getCurrentPostType(), []);
+  const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
 
   // Get the return value from useEntityProp so we can wrap it for safety.
   const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', postId);
@@ -32,16 +30,10 @@ const usePostMeta = (postType = null, postId = null) => {
     : () => console.error(`Error attempting to set post meta for post type ${type}. Does it have support for custom-fields?`); // eslint-disable-line no-console
 
   /**
-   * Define a wrapper for the setMeta function that performs a recursive clone
-   * of the meta object to ensure that there are no issues related to updating
-   * objects or array values within meta keys not triggering React or
-   * Gutenberg's state management system realizing that there is a change due
-   * to the fact that sub-items are stored as object references. These bugs are
-   * extremely difficult to find and correct, so it makes sense to include this
-   * functionality here as a catch-all on updates.
+   * Define a wrapper for the setMeta function that spreads the next meta value into a new object.
    * @param {object} next - The new value for meta.
    */
-  const setMetaSafe = (next) => setMeta(cloneDeep(next));
+  const setMetaSafe = (next) => setMeta({ ...next });
 
   return [meta, setMetaSafe];
 };
