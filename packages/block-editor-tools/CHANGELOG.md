@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.0
+
+### Minor Changes
+
+- 0138b99: Introducing new hooks
+
+### Patch Changes
+
+- 0390423: Feature: Allow override of post preview lookup function in PostPicker.
+
 ## 0.9.0
 
 ### Minor Changes
