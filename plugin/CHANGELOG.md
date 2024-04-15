@@ -1,5 +1,17 @@
 # alley-scripts-demo-plugin
 
+## 1.1.0
+
+### Minor Changes
+
+- 0138b99: Introducing new hooks
+
+### Patch Changes
+
+- Updated dependencies [0138b99]
+- Updated dependencies [0390423]
+  - @alleyinteractive/block-editor-tools@0.10.0
+
 ## 1.0.3
 
 ### Patch Changes

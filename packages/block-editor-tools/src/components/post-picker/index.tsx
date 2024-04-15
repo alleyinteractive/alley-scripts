@@ -28,6 +28,8 @@ interface PostPickerProps {
   onUpdate: (id: number) => void;
   params?: object;
   // eslint-disable-next-line camelcase
+  previewLookup?: (id: number) => WP_REST_API_Post;
+  // eslint-disable-next-line camelcase
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
   replaceText?: string;
   resetText?: string;
@@ -62,6 +64,7 @@ const PostPicker = ({
   onReset,
   onUpdate,
   params = {},
+  previewLookup,
   previewRender,
   replaceText = __('Replace', 'alley-scripts'),
   resetText = __('Reset', 'alley-scripts'),
@@ -83,8 +86,9 @@ const PostPicker = ({
     },
   );
 
-  // eslint-disable-next-line camelcase
-  const post = usePostById(value, getPostType) as any as WP_REST_API_Post;
+  const post = previewLookup
+    ? previewLookup(value)
+    : usePostById(value, getPostType) as any as WP_REST_API_Post; // eslint-disable-line react-hooks/rules-of-hooks, camelcase, max-len
 
   const {
     featured_media: featuredMediaId,
