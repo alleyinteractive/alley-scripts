@@ -78,13 +78,15 @@ Each package/workspace contains a changelog file that documents the changes for 
 
 Feel free to dive in! [Open an issue](https://github.com/alleyinteractive/alley-scripts/issues/new/choose) or [submit PRs](https://github.com/alleyinteractive/alley-scripts/compare). Standard Readme follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/1/3/0/code-of-conduct/).
 
-## Credits
+## Maintainers
 
 This project is actively maintained by [Alley
 Interactive](https://github.com/alleyinteractive). Like what you see? [Come work
 with us](https://alley.com/careers/).
 
 - [All Contributors](../../contributors)
+
+![Alley logo](https://avatars.githubusercontent.com/u/1733454?s=200&v=4)
 
 ## License
 
