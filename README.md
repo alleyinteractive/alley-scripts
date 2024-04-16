@@ -7,9 +7,10 @@ for projects to speed up development.
 
 - [Packages](#packages)
 - [Adding and Managing Packages](#adding-and-managing-packages)
-- [Releasing a New Version](#releasing-a-new-version)
+- [Versioning and Publishing Packages in this Monorepo](##versioning-and-publishing-packages-in-this-monorepo)
 - [Changelog](#changelog)
-- [Credits](#credits)
+- [Contributing](#contributing)
+- [Maintainers](#maintainers)
 - [License](#license)
 
 ## Packages
