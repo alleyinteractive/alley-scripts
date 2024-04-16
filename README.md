@@ -29,7 +29,7 @@ This monorepo contains the following packages:
 
 ## Adding and Managing Packages
 
-This project uses Turborepo with NPM to add and manage packages in this monorepo. To add a new package, you can add the package manually or run a command.
+This project uses [Turborepo](https://turbo.build/repo/docs) with NPM to add and manage packages in this monorepo. To add a new package, you can add the package manually or run a command.
 
 **NOTE**: _If the workspace is to be created in a location other than the default `packages` directory, the path to the directory needs to be provided in the root `package.json` workspaces configuration._
 
