@@ -46,6 +46,7 @@ including:
 * `outDir`: `build` - The output directory for the transpiled files.
 * `preserveWatchOutput`: `true` - Ensures that the output is cleared before
   each build.
+* `resolveJsonModule`: `true` - Allows importing JSON files as modules.
 * `skipLibCheck`: `true` - Skips type checking of `.d.ts` files.
 * `sourceMap`: `true` - Generates source maps for the transpiled files.
 * `strict`: `true` - Enables all strict type checking options.
