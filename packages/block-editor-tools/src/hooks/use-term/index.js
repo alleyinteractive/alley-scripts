@@ -1,4 +1,3 @@
-import { store } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -11,7 +10,7 @@ import { useSelect } from '@wordpress/data';
  *                   and the returned term object.
  */
 const useTerm = (termId, taxonomy = 'category', options = { context: 'view' }) => useSelect(
-  (select) => select(store).getEntityRecord('taxonomy', taxonomy, termId, options),
+  (select) => select('core').getEntityRecord('taxonomy', taxonomy, termId, options),
   [termId, taxonomy],
 );
 

@@ -1,4 +1,3 @@
-import { store } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -8,7 +7,7 @@ import { useSelect } from '@wordpress/data';
  *                    or null if the redux store is not initialized.
  */
 const useCurrentTheme = () => useSelect((select) => {
-  const editorStore = select(store);
+  const editorStore = select('core');
   return editorStore ? editorStore.getCurrentTheme()?.stylesheet : null;
 }, []);
 
