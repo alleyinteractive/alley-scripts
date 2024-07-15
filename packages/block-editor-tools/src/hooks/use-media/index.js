@@ -1,4 +1,3 @@
-import { store } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -8,7 +7,7 @@ import { useSelect } from '@wordpress/data';
  * @returns {object} Media data.
  */
 const useMedia = (mediaId) => useSelect(
-  (select) => select(store).getMedia(mediaId),
+  (select) => select('core').getMedia(mediaId),
   [mediaId],
 );
 
