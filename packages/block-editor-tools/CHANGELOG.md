@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.2
+
+### Patch Changes
+
+- eb6e2dc: Hard code all references to the core-data store.
+
 ## 0.10.1
 
 ### Patch Changes
