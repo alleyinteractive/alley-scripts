@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.1
+
+### Patch Changes
+
+- 2dad703: Switch usePost back to core store to fix error in wp-curate
+
 ## 0.10.0
 
 ### Minor Changes
