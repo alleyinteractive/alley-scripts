@@ -47,7 +47,11 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_media_picker_id: mediaId = 0,
       alley_scripts_post_picker_id: postId = 0,
       alley_scripts_repeater: repeater = [],
+      alley_scripts_repeater_no_add_delete: repeaterNoAddDelete = [],
     } = meta;
+    if (repeaterNoAddDelete.length === 0) {
+      setMeta({ alley_scripts_repeater_no_add_delete: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'] });
+    }
 
     return (
       <>
@@ -161,6 +165,39 @@ registerPlugin('alley-scripts-plugin-sidebar', {
                         const newList = [...repeater];
                         newList[index] = next;
                         setMeta({ alley_scripts_repeater: newList });
+                      }}
+                      value={repeaterItem}
+                    />
+                  </SortableItem>
+                )) : null}
+            </Sortable>
+          </PanelBody>
+          <PanelBody initialOpen title={__('Sortable - No Add or Delete', 'alley-scripts')}>
+            <Sortable
+              emptyItem=""
+              list={repeaterNoAddDelete}
+              setList={(newList: any[]) => setMeta(
+                { alley_scripts_repeater_no_add_delete: newList },
+              )}
+              allowAddDelete={false}
+            >
+              {repeaterNoAddDelete && repeaterNoAddDelete.length
+                ? repeaterNoAddDelete.map((repeaterItem: string, index: number) => (
+                  <SortableItem
+                    index={index}
+                    key={index} // eslint-disable-line react/no-array-index-key
+                    list={repeaterNoAddDelete}
+                    setList={(newList: any[]) => setMeta(
+                      { alley_scripts_repeater_no_add_delete: newList },
+                    )}
+                    allowAddDelete={false}
+                  >
+                    <TextControl
+                      label={__('Item Text', 'alley-scripts')}
+                      onChange={(next: string) => {
+                        const newList = [...repeater];
+                        newList[index] = next;
+                        setMeta({ alley_scripts_repeater_no_add_delete: newList });
                       }}
                       value={repeaterItem}
                     />

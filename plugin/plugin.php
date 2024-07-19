@@ -84,6 +84,22 @@ function main() {
 			],
 		]
 	);
+
+	register_meta_helper(
+		'post',
+		[ 'post' ],
+		'alley_scripts_repeater_no_add_delete',
+		[
+			'type'         => 'array',
+			'show_in_rest' => [
+				'schema' => [
+					'items' => [
+						'type' => 'string',
+					],
+				],
+			],
+		]
+	);
 }
 main();
 

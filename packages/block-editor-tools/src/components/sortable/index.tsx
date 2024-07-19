@@ -7,25 +7,29 @@ interface SortableProps {
   emptyItem: any;
   list: any[];
   setList: (list: any[]) => void;
+  allowAddDelete?: boolean;
 }
 export default function Sortable({
   children,
   emptyItem,
   list,
   setList,
+  allowAddDelete = true,
 }: SortableProps) {
   return (
     <>
       {children}
-      <div style={{ margin: '1em 0' }}>
-        <Button
-          icon="plus"
-          onClick={() => setList([...list, emptyItem])}
-          variant="primary"
-        >
-          {__('Add Item', 'alley-scripts')}
-        </Button>
-      </div>
+      {allowAddDelete ? (
+        <div style={{ margin: '1em 0' }}>
+          <Button
+            icon="plus"
+            onClick={() => setList([...list, emptyItem])}
+            variant="primary"
+          >
+            {__('Add Item', 'alley-scripts')}
+          </Button>
+        </div>
+      ) : null}
     </>
   );
 }

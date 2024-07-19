@@ -7,12 +7,14 @@ interface SortableItemProps {
   index: number;
   list: any[];
   setList: (list: any[]) => void;
+  allowAddDelete?: boolean;
 }
 export default function SortableItem({
   children,
   index,
   list,
   setList,
+  allowAddDelete = true,
 }: SortableItemProps) {
   return (
     <div>
@@ -37,15 +39,17 @@ export default function SortableItem({
             setList(newList);
           }}
         />
-        <Button
-          icon="trash"
-          label={__('Remove', 'alley-scripts')}
-          onClick={() => {
-            const newList = [...list];
-            newList.splice(index, 1);
-            setList(newList);
-          }}
-        />
+        {allowAddDelete ? (
+          <Button
+            icon="trash"
+            label={__('Remove', 'alley-scripts')}
+            onClick={() => {
+              const newList = [...list];
+              newList.splice(index, 1);
+              setList(newList);
+            }}
+          />
+        ) : null}
       </div>
       <div>{children}</div>
     </div>

@@ -42,3 +42,4 @@ props listed below.
 | emptyItem |         | Yes      | any      | Empty array item to use when adding a new item to the array |
 | list      |         | Yes      | array    | The array to sort and modify                                |
 | setList   |         | Yes      | function | Function to update the array                                |
+| allowAddDelete | true | No | boolean | Whether to allow the adding and deleting of items. |
