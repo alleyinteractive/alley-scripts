@@ -43,3 +43,4 @@ props listed below.
 | key     |         | No       | number   | string                                       |
 | list    |         | Yes      | array    | The array we iterating through.              |
 | setList |         | Yes      | function | The function to update the array.            |
+| allowAddDelete | true | No | boolean | Whether to allow the adding and deleting of items. |
