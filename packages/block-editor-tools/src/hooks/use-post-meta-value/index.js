@@ -24,7 +24,7 @@ const usePostMetaValue = (metaKey, postType = null, postId = null) => {
    * responsible for.
    * @param {*} value - The value to set for the key.
    */
-  const setPostMetaValue = (value) => setMeta(metaKey, value);
+  const setPostMetaValue = (value) => setMeta({ ...meta, [metaKey]: value });
 
   return [meta[metaKey], setPostMetaValue];
 };
