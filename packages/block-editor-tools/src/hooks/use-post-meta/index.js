@@ -1,6 +1,8 @@
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
+const dirtyMetaState = {};
+
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
  * hook is intended to reduce boilerplate code in components that need to read
@@ -20,6 +22,10 @@ const usePostMeta = (postType = null, postId = null) => {
   // Get the return value from useEntityProp so we can wrap it for safety.
   const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', postId);
 
+  // console.log('Initializing meta');
+  dirtyMetaState[type] = dirtyMetaState[type] || {};
+  dirtyMetaState[type][postId || 0] = {};
+
   /*
    * Ensure meta is an object and set meta is a function. useEntityProp can
    * return `undefined` if the post type doesn't have support for custom-fields.
@@ -33,7 +39,19 @@ const usePostMeta = (postType = null, postId = null) => {
    * Define a wrapper for the setMeta function that spreads the next meta value into a new object.
    * @param {object} next - The new value for meta.
    */
-  const setMetaSafe = (next) => setMeta({ ...next });
+  const setMetaSafe = (next, value) => {
+    if (typeof next === 'string') {
+      dirtyMetaState[type][postId || 0][next] = value;
+      // console.log(`setting metaState[${type}][${postId || 0}][${next}] = ${value};`);
+      setMeta({ ...meta, ...dirtyMetaState[type][postId || 0], [next]: value });
+    } else if (typeof next === 'function') {
+      setMeta(next({ ...meta, ...dirtyMetaState[type][postId || 0] }));
+    } else {
+      setMeta({ ...next });
+      dirtyMetaState[type][postId || 0] = { ...next };
+    }
+    // console.log('metaState:', dirtyMetaState.post[0]);
+  };
 
   return [meta, setMetaSafe];
 };
