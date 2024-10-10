@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
@@ -20,22 +21,28 @@ const usePostMeta = (postType = null, postId = null) => {
   // Get the return value from useEntityProp so we can wrap it for safety.
   const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', postId);
 
+  // Create a ref to store the current value of meta.
+  const metaRef = React.useRef(typeof metaRaw === 'object' ? metaRaw : {});
+
   /*
-   * Ensure meta is an object and set meta is a function. useEntityProp can
-   * return `undefined` if the post type doesn't have support for custom-fields.
+   * Ensure set meta is a function. useEntityProp can return `undefined` if the post type doesn't
+   * have support for custom-fields.
    */
-  const meta = typeof metaRaw === 'object' ? metaRaw : {};
   const setMeta = typeof setMetaRaw === 'function'
     ? setMetaRaw
     : () => console.error(`Error attempting to set post meta for post type ${type}. Does it have support for custom-fields?`); // eslint-disable-line no-console
 
   /**
-   * Define a wrapper for the setMeta function that spreads the next meta value into a new object.
+   * Wrapper for the setMeta function that updates the ref as well as the entity prop.
+   *
    * @param {object} next - The new value for meta.
    */
-  const setMetaSafe = (next) => setMeta({ ...next });
+  const setMetaSafe = (next) => {
+    metaRef.current = { ...next };
+    setMeta(metaRef.current);
+  };
 
-  return [meta, setMetaSafe];
+  return [metaRef.current, setMetaSafe];
 };
 
 export default usePostMeta;
