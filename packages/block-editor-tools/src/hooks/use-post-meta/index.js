@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEntityProp } from '@wordpress/core-data';
+import { useEntityProp, useEntityId } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -15,11 +15,23 @@ import { useSelect } from '@wordpress/data';
  * @returns {array} An array containing an object representing postmeta and an update function.
  */
 const usePostMeta = (postType = null, postId = null) => {
-  // Ensures that we have a post type, since we need it as an argument to useEntityProp.
+  // Ensure that we have a post type.
   const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
 
+  // Ensure that we have a post ID.
+  const providerId = useEntityId('postType', type);
+  const id = postId ?? providerId;
+
+  const getLatestMeta = useSelect(
+    (select) => {
+      const { getEditedEntityRecord } = select('core');
+      return () => getEditedEntityRecord('postType', type, id)?.meta;
+    },
+    [type, id],
+  );
+
   // Get the return value from useEntityProp so we can wrap it for safety.
-  const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', postId);
+  const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', id);
 
   // Create a ref to store the current value of meta.
   const metaRef = React.useRef(typeof metaRaw === 'object' ? metaRaw : {});
@@ -38,7 +50,11 @@ const usePostMeta = (postType = null, postId = null) => {
    * @param {object} next - The new value for meta.
    */
   const setMetaSafe = (next) => {
-    metaRef.current = { ...next };
+    if (typeof next === 'object') {
+      metaRef.current = { ...next };
+    } else if (typeof next === 'function') {
+      metaRef.current = next(getLatestMeta());
+    }
     setMeta(metaRef.current);
   };
 
