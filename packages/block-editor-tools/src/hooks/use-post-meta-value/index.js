@@ -14,7 +14,7 @@ import { usePostMeta } from '..';
  *                            Defaults to the post type of the current post.
  * @param {number} postId - Optional. The post ID to get and set meta for.
  *                          Defaults to the ID of the current post.
- * @returns {array} An array containing the post meta value and an update function.
+ * @returns {array} A tuple containing the post meta value and a setter function.
  */
 const usePostMetaValue = (metaKey, postType = null, postId = null) => {
   const [meta, setMeta] = usePostMeta(postType, postId);
@@ -22,9 +22,14 @@ const usePostMetaValue = (metaKey, postType = null, postId = null) => {
   /**
    * A helper function for setting the value for the meta key that this hook is
    * responsible for.
-   * @param {*} value - The value to set for the key.
+   * @param {*} value - The value to set for the key. Optionally, this can be a
+   *                    function that receives the current value and returns a new
+   *                    value.
    */
-  const setPostMetaValue = (value) => setMeta((oldMeta) => ({ ...oldMeta, [metaKey]: value }));
+  const setPostMetaValue = (value) => setMeta((oldMeta) => {
+    const newValue = typeof value === 'function' ? value(oldMeta[metaKey]) : value;
+    return { ...oldMeta, [metaKey]: newValue };
+  });
 
   return [meta[metaKey], setPostMetaValue];
 };
