@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEntityProp, useEntityId } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 
@@ -12,7 +11,7 @@ import { useSelect } from '@wordpress/data';
  *                            Defaults to the post type of the current post.
  * @param {number} postId - Optional. The post ID to get and set meta for.
  *                          Defaults to the ID of the current post.
- * @returns {array} An array containing an object representing postmeta and an update function.
+ * @returns {array} A tuple containing an object representing postmeta and a setter function.
  */
 const usePostMeta = (postType = null, postId = null) => {
   // Ensure that we have a post type.
@@ -22,6 +21,7 @@ const usePostMeta = (postType = null, postId = null) => {
   const providerId = useEntityId('postType', type);
   const id = postId ?? providerId;
 
+  // Create a selector for the latest meta for the setter to optionally use.
   const getLatestMeta = useSelect(
     (select) => {
       const { getEditedEntityRecord } = select('core');
@@ -32,9 +32,6 @@ const usePostMeta = (postType = null, postId = null) => {
 
   // Get the return value from useEntityProp so we can wrap it for safety.
   const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', id);
-
-  // Create a ref to store the current value of meta.
-  const metaRef = React.useRef(typeof metaRaw === 'object' ? metaRaw : {});
 
   /*
    * Ensure set meta is a function. useEntityProp can return `undefined` if the post type doesn't
@@ -51,14 +48,13 @@ const usePostMeta = (postType = null, postId = null) => {
    */
   const setMetaSafe = (next) => {
     if (typeof next === 'object') {
-      metaRef.current = { ...next };
+      setMeta({ ...next });
     } else if (typeof next === 'function') {
-      metaRef.current = next(getLatestMeta());
+      setMeta(next(getLatestMeta()));
     }
-    setMeta(metaRef.current);
   };
 
-  return [metaRef.current, setMetaSafe];
+  return [metaRaw, setMetaSafe];
 };
 
 export default usePostMeta;
