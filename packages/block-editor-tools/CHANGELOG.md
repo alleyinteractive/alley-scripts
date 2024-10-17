@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.3
+
+### Patch Changes
+
+- 2ada8ed: Improve stability of usePostMeta hooks
+
 ## 0.10.2
 
 ### Patch Changes
