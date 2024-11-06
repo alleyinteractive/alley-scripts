@@ -5,7 +5,7 @@
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "engines": {
-    "node": ">=16.0.0 <22.0.0",
+    "node": ">=16.0.0 <23.0.0",
     "npm": ">=8"
   },
   "scripts": {
