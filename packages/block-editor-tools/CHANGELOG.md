@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.0
+
+### Minor Changes
+
+- 2900b04: Extending support for Node 22.
+
 ## 0.10.3
 
 ### Patch Changes
