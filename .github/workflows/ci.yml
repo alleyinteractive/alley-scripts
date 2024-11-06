@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16, 18, 20]
+        node: [16, 18, 20, 22]
     name: "Build and Test: Node ${{ matrix.node }}"
     runs-on: ubuntu-latest
     # To use Remote Caching, uncomment the next lines and follow the steps below.
