@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- a7e32b5: Upgrading `@wordpress/scripts` to 6.7
+
 ## 0.1.4
 
 ### Patch Changes
