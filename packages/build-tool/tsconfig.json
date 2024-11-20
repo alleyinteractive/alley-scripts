@@ -6,6 +6,9 @@
     "lib": ["ES2022", "DOM"],
     "outDir": "dist",
     "target": "ES2022",
+    "paths": {
+      "webpack": ["../../node_modules/webpack/types"]
+    }
   },
   "ts-node": {
     "compilerOptions": {
