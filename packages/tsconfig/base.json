@@ -26,10 +26,11 @@
   },
   "exclude": [
     "build",
+    "dist",
     "jest.config.js",
     "node_modules",
     "tests",
     "webpack.config.js",
-    "vendor"
+    "vendor",
   ]
 }
