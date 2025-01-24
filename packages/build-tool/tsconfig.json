@@ -15,6 +15,10 @@
       "module": "CommonJS"
     }
   },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
   "include": [
     "config/extended.config.test.ts",
     "config/extended.config.ts",
