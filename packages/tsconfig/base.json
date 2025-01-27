@@ -26,6 +26,7 @@
   },
   "exclude": [
     "build",
+    "dist",
     "jest.config.js",
     "node_modules",
     "tests",
