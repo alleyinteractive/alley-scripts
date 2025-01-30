@@ -68,7 +68,13 @@
         "default": "./dist/cjs/index.js"
       }
     },
-    "./dist/cjs/config/webpack.config": "./dist/cjs/config/webpack.config.js",
-    "./dist/esm/config/webpack.config": "./dist/esm/config/webpack.config.js"
+    "./dist/cjs/config/webpack.config": {
+      "types": "./dist/cjs/types/config/webpack.config.d.ts",
+      "default": "./dist/cjs/config/webpack.config.js"
+    },
+    "./dist/esm/config/webpack.config": {
+      "types": "./dist/esm/types/config/webpack.config.d.ts",
+      "default": "./dist/esm/config/webpack.config.js"
+    }
   }
 }
