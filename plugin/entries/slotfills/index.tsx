@@ -107,10 +107,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
             />
           </PanelBody>
           <PanelBody initialOpen title={__('Term Selector', 'alley-scripts')}>
-            {/*
-              // @ts-ignore Handle error with TermSelector not working in Typescript */}
             <TermSelector
-              multiple={false}
               onSelect={(value: any) => console.log('TermSelector onSelect', value)} // eslint-disable-line no-console
             />
           </PanelBody>
