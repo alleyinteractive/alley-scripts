@@ -2,7 +2,7 @@
 import { __ } from '@wordpress/i18n';
 import { Selector } from '..';
 
-interface SelectedTerms {
+interface SelectedTerm {
   id: number;
   title: string;
   type: string;
@@ -15,10 +15,10 @@ interface TermSelectorProps {
   label?: string;
   maxPages?: number;
   multiple?: boolean;
-  onSelect: (terms: SelectedTerms[]) => void;
+  onSelect: (terms: SelectedTerm[]) => void;
   placeholder?: string;
   subTypes?: string[];
-  selected?: SelectedTerms[];
+  selected?: SelectedTerm[];
   threshold?: number;
 }
 
