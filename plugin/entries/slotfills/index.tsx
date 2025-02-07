@@ -47,6 +47,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_media_picker_id: mediaId = 0,
       alley_scripts_post_picker_id: postId = 0,
       alley_scripts_repeater: repeater = [],
+      alley_scripts_term_selector: termSelector = [],
     } = meta;
 
     return (
@@ -108,7 +109,28 @@ registerPlugin('alley-scripts-plugin-sidebar', {
           </PanelBody>
           <PanelBody initialOpen title={__('Term Selector', 'alley-scripts')}>
             <TermSelector
-              onSelect={(value: any) => console.log('TermSelector onSelect', value)} // eslint-disable-line no-console
+              onSelect={(value) => {
+                // eslint-disable-next-line no-console
+                console.log('TermSelector onSelect', value);
+
+                if (!Array.isArray(value) || value.length === 0) {
+                  setMeta({ alley_scripts_term_selector: [] });
+                  return;
+                }
+
+                setMeta({
+                  alley_scripts_term_selector: value.map(
+                    (term) => ({
+                      id: term.id,
+                      title: term.title,
+                      type: term.type,
+                      url: term.url,
+                    }),
+                  ),
+                });
+              }}
+              multiple
+              selected={termSelector}
             />
           </PanelBody>
         </PluginSidebar>
