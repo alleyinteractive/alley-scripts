@@ -2,7 +2,7 @@
 import { __ } from '@wordpress/i18n';
 import { Selector } from '..';
 
-interface SelectedTerm {
+export interface SelectedTerm {
   id: number;
   title: string;
   type: string;
