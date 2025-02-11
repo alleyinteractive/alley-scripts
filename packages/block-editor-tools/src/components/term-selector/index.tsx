@@ -17,8 +17,8 @@ interface TermSelectorProps {
   multiple?: boolean;
   onSelect: (terms: SelectedTerm[]) => void;
   placeholder?: string;
-  subTypes?: string[];
   selected?: SelectedTerm[];
+  subTypes?: string[];
   threshold?: number;
 }
 
@@ -33,12 +33,11 @@ const TermSelector = ({
   multiple = false,
   onSelect,
   placeholder = __('Search for terms', 'alley-scripts'),
-  subTypes = [],
   selected = [],
+  subTypes = [],
   threshold = 3,
 }: TermSelectorProps) => (
   <Selector
-    type="term"
     className={className}
     emptyLabel={emptyLabel}
     label={label}
@@ -46,9 +45,10 @@ const TermSelector = ({
     multiple={multiple}
     onSelect={onSelect}
     placeholder={placeholder}
-    subTypes={subTypes}
     selected={selected}
+    subTypes={subTypes}
     threshold={threshold}
+    type="term"
   />
 );
 
