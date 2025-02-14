@@ -1,4 +1,5 @@
 import { useState, JSX } from 'react';
+import classNames from 'classnames';
 import {
   Button,
   Modal,
@@ -12,6 +13,7 @@ import PostList from './post-list';
 interface SearchModalProps {
   baseUrl: string;
   closeModal: () => void;
+  format?: 'grid' | 'list';
   modalTitle: string;
   onUpdate: (id: number) => void;
   searchRender?: (post: object) => JSX.Element;
@@ -21,6 +23,7 @@ interface SearchModalProps {
 const SearchModal = ({
   baseUrl,
   closeModal,
+  format = 'grid',
   modalTitle,
   onUpdate,
   searchRender,
@@ -36,9 +39,14 @@ const SearchModal = ({
     closeModal();
   };
 
+  const modalClasses = classNames(
+    'alley-scripts-post-picker__modal',
+    format === 'list' ? 'is-format-list' : 'is-format-grid',
+  );
+
   return (
     <Modal
-      className="alley-scripts-post-picker__modal"
+      className={modalClasses}
       isDismissible
       title={modalTitle}
       onRequestClose={closeModal}
@@ -46,6 +54,7 @@ const SearchModal = ({
     >
       <PostList
         baseUrl={baseUrl}
+        format={format}
         selected={selected ?? 0}
         setSelected={setSelected}
         searchRender={searchRender}

@@ -14,6 +14,7 @@ import Post from './post';
 
 interface PostListProps {
   baseUrl: string;
+  format?: 'grid' | 'list';
   searchRender?: (post: object) => JSX.Element;
   selected?: number;
   setSelected: (id: number) => void;
@@ -32,6 +33,7 @@ interface Params {
  */
 const PostList = ({
   baseUrl,
+  format,
   searchRender,
   selected,
   setSelected,
@@ -149,52 +151,71 @@ const PostList = ({
     };
   }, [getPosts, initialLoad, pathParams]);
 
+  const postListClasses = classNames(
+    'alley-scripts-post-picker__post-list',
+    format === 'list' ? 'is-format-list' : 'is-format-grid',
+  );
+
   return (
     <>
       <TextControl
+        className="post-list-search"
         value={pathParams.searchValue}
         placeholder={__('Search...', 'alley-scripts')}
         label={__('Search', 'alley-scripts')}
         // @ts-ignore
         onChange={handleSearchTextChange}
       />
-      <div className="alley-scripts-post-picker__post-list">
-        {listposts ? (
-          listposts.map((t) => (
-            <Button
-              key={t.id}
-              className={classNames({
-                'alley-scripts-post-picker__post': true,
-                'is-selected': t.id === selected,
-              })}
-              onClick={() => setSelected(t.id as number)}
-            >
-              {searchRender ? (
-                searchRender(t)
-              ) : (
-                <Post
-                  title={t.title}
-                  postType={t.subtype}
-                    // eslint-disable-next-line no-underscore-dangle
-                  attachmentID={t?._embedded?.self[0]?.featured_media}
-                />
-              )}
-            </Button>
-          ))
-        ) : null}
-        {isUpdating ? (
-          <Spinner />
-        ) : null}
-        {totalPages > 0 && pathParams.page < totalPages ? (
-          <div className="alley-scripts-post-picker__load-more">
-            <Button
-              variant="secondary"
-              onClick={loadMore}
-            >
-              {__('Load More', 'alley-scripts')}
-            </Button>
-          </div>
-        ) : null}
+      <div className="alley-scripts-post-picker__container">
+        <div className={postListClasses}>
+          <h2 id="post-picker-results-heading" className="screen-reader-text">
+            {__('Search Results', 'alley-scripts')}
+          </h2>
+          {listposts ? (
+            // eslint-disable-next-line jsx-a11y/no-redundant-roles
+            <ul aria-labelledby="post-picker-results-heading" role="list">
+              {listposts.map((t) => (
+                <li>
+                  <Button
+                    key={t.id}
+                    className={classNames({
+                      'alley-scripts-post-picker__post': true,
+                      'is-selected': t.id === selected,
+                    })}
+                    onClick={() => setSelected(t.id as number)}
+                  >
+                    {searchRender ? (
+                      searchRender(t)
+                    ) : (
+                      <Post
+                        format={format}
+                        title={t.title}
+                        postType={t.subtype}
+                          // eslint-disable-next-line no-underscore-dangle
+                        attachmentID={t?._embedded?.self[0]?.featured_media}
+                      />
+                    )}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {isUpdating ? (
+            <div className="post-picker-spinner">
+              <Spinner onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+            </div>
+          ) : null}
+          {totalPages > 0 && pathParams.page < totalPages && !isUpdating ? (
+            <div className="alley-scripts-post-picker__load-more">
+              <Button
+                variant="secondary"
+                onClick={loadMore}
+              >
+                {__('Load More', 'alley-scripts')}
+              </Button>
+            </div>
+          ) : null}
+        </div>
       </div>
     </>
   );
