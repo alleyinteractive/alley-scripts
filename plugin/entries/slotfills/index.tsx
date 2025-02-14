@@ -109,7 +109,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
           </PanelBody>
           <PanelBody initialOpen title={__('Post Picker (List)', 'alley-scripts')}>
             <PostPicker
-              modalFormat='list'
+              modalFormat="list"
               onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_list_id: id })}
               onReset={() => setMeta({ alley_scripts_post_picker_list_id: 0 })}
               value={listPostId}
