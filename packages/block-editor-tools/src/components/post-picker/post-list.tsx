@@ -175,9 +175,8 @@ const PostList = ({
             // eslint-disable-next-line jsx-a11y/no-redundant-roles
             <ul aria-labelledby="post-picker-results-heading" role="list">
               {listposts.map((t) => (
-                <li>
+                <li key={t.id}>
                   <Button
-                    key={t.id}
                     className={classNames({
                       'alley-scripts-post-picker__post': true,
                       'is-selected': t.id === selected,
