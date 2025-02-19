@@ -1,5 +1,16 @@
 # alley-scripts-demo-plugin
 
+## 1.2.0
+
+### Minor Changes
+
+- 34e0875: Remove exclude keys/values already defined in the extended base config
+
+### Patch Changes
+
+- Updated dependencies [df2e0f2]
+  - @alleyinteractive/block-editor-tools@0.12.0
+
 ## 1.1.0
 
 ### Minor Changes

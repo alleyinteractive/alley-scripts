@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6
+
+### Patch Changes
+
+- daf4557: Fix ESM import types for Webpack configs.
+
 ## 0.1.5
 
 ### Patch Changes

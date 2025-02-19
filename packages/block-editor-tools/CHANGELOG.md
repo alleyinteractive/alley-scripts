@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0
+
+### Minor Changes
+
+- df2e0f2: Add list view option to PostPicker component
+
 ## 0.11.0
 
 ### Minor Changes
