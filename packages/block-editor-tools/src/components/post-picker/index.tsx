@@ -24,6 +24,7 @@ interface PostPickerProps {
   className?: string;
   getPostType?: (id: number) => string;
   modalTitle?: string;
+  modalFormat?: 'grid' | 'list';
   onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;
@@ -51,9 +52,8 @@ const Preview = styled.div`
   border: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  margin: 5px 0;
-  padding: 0.5rem 0.75rem;
-  text-align: center;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem;
 `;
 
 const PostPicker = ({
@@ -61,6 +61,7 @@ const PostPicker = ({
   className,
   getPostType,
   modalTitle = __('Select Post', 'alley-scripts'),
+  modalFormat = 'grid',
   onReset,
   onUpdate,
   params = {},
@@ -112,7 +113,7 @@ const PostPicker = ({
         variant="secondary"
         onClick={onReset}
         style={{
-          margin: '0 4px',
+          margin: '0 0.5rem 0 0',
         }}
       >
         {resetText}
@@ -120,9 +121,6 @@ const PostPicker = ({
       <Button
         variant="secondary"
         onClick={openModal}
-        style={{
-          margin: '0 4px',
-        }}
       >
         {replaceText}
       </Button>
@@ -132,7 +130,7 @@ const PostPicker = ({
   // getEntityRecord returns `null` if the load is in progress.
   if (value !== 0 && post === null) {
     return (
-      <Spinner />
+      <Spinner onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
     );
   }
 
@@ -162,7 +160,7 @@ const PostPicker = ({
           {previewRender !== undefined ? (
             previewRender(post)
           ) : (
-            <Preview>
+            <Preview className="alley-scripts-post-picker__preview">
               <Post
                 title={title}
                 postType={type}
@@ -185,6 +183,7 @@ const PostPicker = ({
         <SearchModal
           closeModal={closeModal}
           baseUrl={baseUrl}
+          format={modalFormat}
           modalTitle={modalTitle}
           onUpdate={onUpdate}
           searchRender={searchRender}

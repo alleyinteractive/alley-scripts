@@ -72,6 +72,15 @@ function main() {
 	register_meta_helper(
 		'post',
 		[ 'post' ],
+		'alley_scripts_post_picker_list_id',
+		[
+			'type' => 'integer',
+		]
+	);
+
+	register_meta_helper(
+		'post',
+		[ 'post' ],
 		'alley_scripts_repeater',
 		[
 			'type'         => 'array',
