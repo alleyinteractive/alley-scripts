@@ -1,3 +1,4 @@
+import React from 'react';
 import { usePostMeta } from '..';
 
 /**
@@ -26,10 +27,13 @@ const usePostMetaValue = (metaKey, postType = null, postId = null) => {
    *                    function that receives the current value and returns a new
    *                    value.
    */
-  const setPostMetaValue = (value) => setMeta((oldMeta) => {
-    const newValue = typeof value === 'function' ? value(oldMeta[metaKey]) : value;
-    return { ...oldMeta, [metaKey]: newValue };
-  });
+  const setPostMetaValue = React.useCallback(
+    (value) => setMeta((oldMeta) => {
+      const newValue = typeof value === 'function' ? value(oldMeta[metaKey]) : value;
+      return { ...oldMeta, [metaKey]: newValue };
+    }),
+    [metaKey, setMeta],
+  );
 
   return [meta[metaKey], setPostMetaValue];
 };
