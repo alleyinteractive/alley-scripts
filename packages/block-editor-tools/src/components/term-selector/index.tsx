@@ -2,30 +2,27 @@
 import { __ } from '@wordpress/i18n';
 import { Selector } from '..';
 
-export interface SelectedTerm {
+type BaseSelectedTerm = {
   id: number;
   title: string;
-  type: string;
-  url: string;
-}
+};
 
-interface TermSelectorProps {
+type SelectedTerm<T extends Record<string, unknown> = {}> = BaseSelectedTerm & T;
+
+type TermSelectorProps<T extends Record<string, unknown> = {}> = {
   className?: string;
   emptyLabel?: string;
   label?: string;
   maxPages?: number;
   multiple?: boolean;
-  onSelect: (terms: SelectedTerm[]) => void;
+  onSelect: (terms: SelectedTerm<T>[]) => void;
   placeholder?: string;
-  selected?: SelectedTerm[];
+  selected?: SelectedTerm<T>[];
   subTypes?: string[];
   threshold?: number;
-}
+};
 
-/**
- * Render term selector component.
- */
-const TermSelector = ({
+const TermSelector = <T extends Record<string, unknown>>({
   className = '',
   emptyLabel = __('No terms found', 'alley-scripts'),
   label = __('Search for terms', 'alley-scripts'),
@@ -36,7 +33,7 @@ const TermSelector = ({
   selected = [],
   subTypes = [],
   threshold = 3,
-}: TermSelectorProps) => (
+}: TermSelectorProps<T>) => (
   <Selector
     className={className}
     emptyLabel={emptyLabel}
@@ -50,6 +47,6 @@ const TermSelector = ({
     threshold={threshold}
     type="term"
   />
-);
+  );
 
 export default TermSelector;
