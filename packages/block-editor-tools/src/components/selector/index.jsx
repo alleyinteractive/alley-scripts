@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -52,6 +53,9 @@ const Selector = ({
   // Create ref.
   const ref = useRef();
 
+  // Memoize subType string.
+  const selectedSubTypes = useMemo(() => (subTypes.length > 0 ? subTypes.join(',') : 'any'), [subTypes]);
+
   // Debounce search string from input.
   const debouncedSearchString = useDebounce(searchString, 750);
 
@@ -85,7 +89,7 @@ const Selector = ({
       {
         page,
         search: debouncedSearchString,
-        subtype: subTypes.length > 0 ? subTypes.join(',') : 'any',
+        subtype: selectedSubTypes,
         type,
       },
     );
@@ -115,7 +119,15 @@ const Selector = ({
         }
       })
       .catch((err) => setError(err.message));
-  }, [debouncedSearchString, type, maxPages, multiple, subTypes, selectedItems.length, threshold]);
+  }, [
+    debouncedSearchString,
+    maxPages,
+    multiple,
+    selectedItems.length,
+    selectedSubTypes,
+    threshold,
+    type,
+  ]);
 
   /**
    * On Mount, pre-fill selected buttons, if they exist.
