@@ -129,7 +129,6 @@ registerPlugin('alley-scripts-plugin-sidebar', {
                   ),
                 });
               }}
-              multiple
               selected={termSelector}
             />
           </PanelBody>
