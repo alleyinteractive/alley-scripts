@@ -108,7 +108,13 @@ registerPlugin('alley-scripts-plugin-sidebar', {
             />
           </PanelBody>
           <PanelBody initialOpen title={__('Term Selector', 'alley-scripts')}>
-            <TermSelector
+            {
+              /**
+               * TermSelector is generic.
+               * The example below also adds a type and url to selected terms.
+               */
+            }
+            <TermSelector<{ type: string; url: string }>
               onSelect={(value) => {
                 // eslint-disable-next-line no-console
                 console.log('TermSelector onSelect', value);
