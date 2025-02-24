@@ -94,18 +94,18 @@ function main() {
 			'show_in_rest' => [
 				'schema' => [
 					'items' => [
-						'type' => 'object',
+						'type'       => 'object',
 						'properties' => [
-							'id'   => [
+							'id'    => [
 								'type' => 'integer',
 							],
 							'title' => [
 								'type' => 'string',
 							],
-							'type' => [
+							'type'  => [
 								'type' => 'string',
 							],
-							'url' => [
+							'url'   => [
 								'type' => 'string',
 							],
 						],
