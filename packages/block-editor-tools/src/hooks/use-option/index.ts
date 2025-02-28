@@ -1,3 +1,4 @@
+import React from 'react';
 import { Settings } from '@wordpress/core-data';
 import { useSelect, useDispatch } from '@wordpress/data';
 
@@ -46,21 +47,21 @@ function useOption<K extends keyof Settings | string, T>(
       isEdited: !!edits?.[key],
       isSaving: isSavingEntityRecord('root', 'site'),
     };
-  }, []);
+  }, [key]);
 
   const { editEntityRecord, saveEntityRecord } = useDispatch('core');
 
-  function onChange(newValue:T) {
+  const onChange = React.useCallback((newValue:T) => {
     editEntityRecord('root', 'site', undefined, {
       [key]: newValue,
     });
-  }
+  }, [key, editEntityRecord]);
 
-  async function onSave() {
+  const onSave = React.useCallback(async () => {
     await saveEntityRecord('root', 'site', {
       [key]: selectors.value,
     });
-  }
+  }, [key, saveEntityRecord, selectors.value]);
 
   return {
     ...selectors,
