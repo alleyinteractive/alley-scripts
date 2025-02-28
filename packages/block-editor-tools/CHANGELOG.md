@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.1
+
+### Patch Changes
+
+- 0022bb9: Memoize functions returned by hooks
+
 ## 0.12.0
 
 ### Minor Changes
