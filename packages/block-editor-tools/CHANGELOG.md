@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.2
+
+### Patch Changes
+
+- 5985d15: Convert TermSelector to TypeScript
+
 ## 0.12.1
 
 ### Patch Changes
