@@ -46,6 +46,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_image_picker_id: imageId = '',
       alley_scripts_media_picker_id: mediaId = 0,
       alley_scripts_post_picker_id: postId = 0,
+      alley_scripts_post_picker_list_id: listPostId = 0,
       alley_scripts_repeater: repeater = [],
       alley_scripts_term_selector: termSelector = [],
     } = meta;
@@ -100,11 +101,19 @@ registerPlugin('alley-scripts-plugin-sidebar', {
               onSelect={(value: any) => console.log('PostSelector onSelect', value)} // eslint-disable-line no-console
             />
           </PanelBody>
-          <PanelBody initialOpen title={__('Post Picker', 'alley-scripts')}>
+          <PanelBody initialOpen title={__('Post Picker (Grid)', 'alley-scripts')}>
             <PostPicker
               onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_id: id })}
               onReset={() => setMeta({ alley_scripts_post_picker_id: 0 })}
               value={postId}
+            />
+          </PanelBody>
+          <PanelBody initialOpen title={__('Post Picker (List)', 'alley-scripts')}>
+            <PostPicker
+              modalFormat="list"
+              onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_list_id: id })}
+              onReset={() => setMeta({ alley_scripts_post_picker_list_id: 0 })}
+              value={listPostId}
             />
           </PanelBody>
           <PanelBody initialOpen title={__('Term Selector', 'alley-scripts')}>
