@@ -48,6 +48,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_post_picker_id: postId = 0,
       alley_scripts_post_picker_list_id: listPostId = 0,
       alley_scripts_repeater: repeater = [],
+      alley_scripts_term_selector: termSelector = [],
     } = meta;
 
     return (
@@ -116,11 +117,34 @@ registerPlugin('alley-scripts-plugin-sidebar', {
             />
           </PanelBody>
           <PanelBody initialOpen title={__('Term Selector', 'alley-scripts')}>
-            {/*
-              // @ts-ignore Handle error with TermSelector not working in Typescript */}
-            <TermSelector
-              multiple={false}
-              onSelect={(value: any) => console.log('TermSelector onSelect', value)} // eslint-disable-line no-console
+            {
+              /**
+               * TermSelector is generic.
+               * The example below also adds a type and url to selected terms.
+               */
+            }
+            <TermSelector<{ type: string; url: string }>
+              onSelect={(value) => {
+                // eslint-disable-next-line no-console
+                console.log('TermSelector onSelect', value);
+
+                if (!Array.isArray(value) || value.length === 0) {
+                  setMeta({ alley_scripts_term_selector: [] });
+                  return;
+                }
+
+                setMeta({
+                  alley_scripts_term_selector: value.map(
+                    (term) => ({
+                      id: term.id,
+                      title: term.title,
+                      type: term.type,
+                      url: term.url,
+                    }),
+                  ),
+                });
+              }}
+              selected={termSelector}
             />
           </PanelBody>
         </PluginSidebar>
