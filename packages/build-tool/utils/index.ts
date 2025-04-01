@@ -129,6 +129,11 @@ const getDefaultArgs = (): string[] => {
       defaultArgs.push('--webpack-copy-php');
     }
 
+    // Include the --experimental-modules flag explicitly.
+    if (hasArgInCLI('--experimental-modules')) {
+      defaultArgs.push('--experimental-modules');
+    }
+
     /**
      * The default directory where wp-scripts will detect block.json files.
      * Explicitly set the webpack source directory to "blocks" unless specified.
