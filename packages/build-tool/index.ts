@@ -24,7 +24,7 @@ process.env.BLOCKS_ONLY = hasArgInCLI('--webpack-blocks-only') ? 'true' : 'false
 
 // Call wp-scripts with the default arguments.
 spawn(
-  'wp-scripts',
+  require.resolve('@wordpress/scripts/bin/wp-scripts.js'),
   [
     ...argv.slice(2),
     ...defaultArgs,
