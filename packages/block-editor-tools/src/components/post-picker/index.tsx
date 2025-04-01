@@ -17,8 +17,6 @@ import { usePostById } from '../../hooks';
 import SearchModal from './search-modal';
 import Post from './post';
 
-import './style.scss';
-
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
@@ -54,6 +52,10 @@ const Preview = styled.div`
   flex-direction: column;
   margin: 0 0 0.75rem;
   padding: 0.75rem;
+`;
+
+const StyledNotice = styled(Notice)`
+  margin: 0 0 0.5rem 0;
 `;
 
 const PostPicker = ({
@@ -143,15 +145,14 @@ const PostPicker = ({
       ) : null}
       {value !== 0 && post === undefined ? (
         <>
-          <Notice
+          <StyledNotice
             status="error"
             isDismissible={false}
-            className="post-picker-notice"
           >
             <p>
               {sprintf(__('Post %d is no longer available; it has been unpublished or deleted', 'alley-scripts'), value)}
             </p>
-          </Notice>
+          </StyledNotice>
           {controls()}
         </>
       ) : null}
@@ -160,7 +161,7 @@ const PostPicker = ({
           {previewRender !== undefined ? (
             previewRender(post)
           ) : (
-            <Preview className="alley-scripts-post-picker__preview">
+            <Preview>
               <Post
                 title={title}
                 postType={type}
