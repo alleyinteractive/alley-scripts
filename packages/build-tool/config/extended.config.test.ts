@@ -54,6 +54,4 @@ describe('Test merging webpack configs', () => {
     // @ts-ignore
     expect(config?.output).toHaveProperty('asyncChunks', fileContents.output.asyncChunks);
   });
-
-  test.todo('getUserWebpackConfig should be able to handle an array of webpack configs.');
 });
