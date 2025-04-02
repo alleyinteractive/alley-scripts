@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import styled, { css } from 'styled-components';
 import { decodeEntities } from '@wordpress/html-entities';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Attachment } from 'wp-types';
@@ -24,6 +24,96 @@ interface Media extends WP_REST_API_Attachment {
   };
 }
 
+const Container = styled.div <{ $format?: string }>`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  ${(props) => props.$format === 'list'
+    && css`
+      align-items: center;
+      column-gap: 1rem;
+      flex-direction: row;
+      width: 100%;
+    `};
+`;
+
+const Image = styled.div <{ $format?: string }>`
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  background-color: #d6d6d6;
+  border-radius: 0.125rem;
+  display: flex;
+  height: 4.6875rem;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  width: 4.6875rem;
+
+  img {
+    aspect-ratio: 1 / 1;
+    border-radius: 0.125rem;
+    height: 4.6875rem;
+    width: 4.6875rem;
+  }
+
+  ${(props) => props.$format === 'list'
+    && css`
+      height: 2rem;
+      margin: 0;
+      width: 2rem;
+
+      img {
+        height: 2rem;
+        width: 2rem;
+      }
+    `};
+`;
+
+const ImageFallback = styled.div <{ $format?: string }>`
+  svg {
+    fill: #bdbdbd;
+    height: 3rem;
+    width: 3rem;
+  }
+
+  ${(props) => props.$format === 'list'
+    && css`
+      svg {
+        height: 1.4rem;
+        width: 1.4rem;
+      }
+    `};
+`;
+
+const StyledSafeHTML = styled(SafeHTML) <{ $format?: string }>`
+  // Increase specificity to override core.
+  && {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.3rem;
+    text-transform: none;
+    word-break: break-word;
+
+    ${(props) => props.$format === 'list'
+      && css`
+        margin-bottom: 0;
+      `};
+  }
+`;
+
+const ResultType = styled.p <{ $format?: string }>`
+  color: inherit;
+  font-weight: 500;
+  margin: 0;
+  text-transform: capitalize;
+
+  ${(props) => props.$format === 'list'
+    && css`
+      margin-left: auto;
+    `};
+`;
+
 /**
  * Displays a single post.
  *
@@ -39,14 +129,9 @@ const Post = ({
   const thumbUrl = media?.media_details?.sizes?.thumbnail?.source_url;
   const thumbAlt = media?.alt_text ?? '';
 
-  const postClasses = classNames(
-    'post-item',
-    format === 'list' ? 'is-format-list' : '',
-  );
-
   return (
-    <div className={postClasses}>
-      <div className="post-picker-result-image">
+    <Container $format={format}>
+      <Image $format={format}>
         {thumbUrl ? (
           <img
             style={{ maxWidth: '100%', height: 'auto' }}
@@ -55,18 +140,18 @@ const Post = ({
             alt={thumbAlt}
           />
         ) : (
-          <div className="result-image-fallback">
+          <ImageFallback $format={format}>
             {image}
-          </div>
+          </ImageFallback>
         )}
-      </div>
-      <SafeHTML
+      </Image>
+      <StyledSafeHTML
         html={decodeEntities(title)}
-        className="post-picker-result-title"
         tag="h3"
+        $format={format}
       />
-      <p className="post-picker-result-type">{postType}</p>
-    </div>
+      <ResultType $format={format}>{postType}</ResultType>
+    </Container>
   );
 };
 
