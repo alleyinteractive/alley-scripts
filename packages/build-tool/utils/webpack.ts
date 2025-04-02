@@ -1,9 +1,10 @@
 import { existsSync, readdirSync } from 'fs';
 import { cwd } from 'node:process';
 import { join } from 'path';
-import { type PathData, type Chunk } from 'webpack';
+import { type PathData, type Chunk, Configuration } from 'webpack';
 
 type DirectorySrcName = 'name' | 'runtime';
+type ConfigType = 'script' | 'module';
 
 /**
  * Get the entry points from a directory.
@@ -84,7 +85,31 @@ function processFilename(
   return `${srcDirname}/${filename}.${ext}`;
 }
 
+/**
+ * Returns the appropriate webpack configuration based on the requested type.
+ *
+ * @param type    - The type of configuration to return ('script' or 'module').
+ * @param configs - Array of webpack configurations from @wordpress/scripts.
+ * @returns         The selected webpack configuration.
+ */
+function getConfigByType(type: ConfigType, configs: Configuration[]): Configuration {
+  const isModuleConfig = (config: Configuration): boolean => config.output?.module === true;
+
+  // If we want module config, find the one with output.module === true
+  // Otherwise, find the one without output.module === true
+  const desiredConfig = configs.find(
+    type === 'module' ? isModuleConfig : (config) => !isModuleConfig(config),
+  );
+
+  if (!desiredConfig) {
+    return {};
+  }
+
+  return desiredConfig;
+}
+
 export {
+  getConfigByType,
   getEntries,
   processFilename,
 };
