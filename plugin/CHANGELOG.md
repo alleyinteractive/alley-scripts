@@ -1,5 +1,14 @@
 # alley-scripts-demo-plugin
 
+## 1.2.1
+
+### Patch Changes
+
+- 5985d15: Convert TermSelector to TypeScript
+- Updated dependencies [c35bdd4]
+- Updated dependencies [5985d15]
+  - @alleyinteractive/block-editor-tools@0.12.2
+
 ## 1.2.0
 
 ### Minor Changes

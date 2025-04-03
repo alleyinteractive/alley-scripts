@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.2
+
+### Patch Changes
+
+- c35bdd4: Convert PostPicker styles to styled components
+- 5985d15: Convert TermSelector to TypeScript
+
 ## 0.12.1
 
 ### Patch Changes
