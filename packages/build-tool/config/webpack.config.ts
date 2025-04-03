@@ -7,14 +7,13 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
-// eslint-disable-next-line import/no-unresolved
-import { getEntries, processFilename } from '../utils/webpack';
+import { getConfigByType, getEntries, processFilename } from '../utils/webpack';
 
 interface WPScriptsConfig extends Configuration {
   devServer?: WebpackDevServerConfiguration;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires,max-len
 const wpScriptsConfig: WPScriptsConfig | WPScriptsConfig[] = require('@wordpress/scripts/config/webpack.config');
 
 /**
@@ -143,7 +142,36 @@ function generateBaseConfig(defaultConfig: WPScriptsConfig): Configuration {
 }
 
 /**
- * webpack configuration.
+ * Create the final webpack configuration.
+ */
+function createWebpackConfig(): Configuration | Configuration[] {
+  // If we don't have a configuration, return an empty object.
+  if (!wpScriptsConfig) {
+    return {};
+  }
+
+  // If we're supporting experimental modules and have an array of configs.
+  if (experimentalModules && Array.isArray(wpScriptsConfig)) {
+    return [
+      generateBaseConfig(getConfigByType('script', wpScriptsConfig)),
+      getConfigByType('module', wpScriptsConfig),
+    ];
+  }
+
+  /**
+   * Generate the base configuration.
+   *
+   * The additional ternary is to help TypeScript infer the proper type of wpScriptsConfig.
+   */
+  return generateBaseConfig(
+    Array.isArray(wpScriptsConfig)
+      ? wpScriptsConfig[0]
+      : wpScriptsConfig,
+  );
+}
+
+/**
+ * Webpack configuration.
  *
  * This webpack configuration is an extension of the default configuration
  * provided by @wordpress/scripts. Read the documentation for
@@ -152,8 +180,5 @@ function generateBaseConfig(defaultConfig: WPScriptsConfig): Configuration {
  * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#extending-the-webpack-config
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/config/webpack.config.js
  */
-const config: Configuration | Configuration[] = (wpScriptsConfig && Array.isArray(wpScriptsConfig)
-  ? [generateBaseConfig(wpScriptsConfig[0]), wpScriptsConfig[1]]
-  : generateBaseConfig(wpScriptsConfig));
-
+const config = createWebpackConfig();
 export default config;
