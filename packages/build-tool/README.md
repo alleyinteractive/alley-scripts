@@ -57,6 +57,7 @@ By default the following command options are applied when running the `build` an
 
 * `--webpack-entries-dir` `<string>` - The directory where wp-scripts will detect entry point directories that are not blocks. These entries can be slotfills or webpack entry points (Default: `entries`)
 * `--webpack-blocks-only` - This option will disable the entries directory and only compile blocks set in the `blocks` directory. This is useful for projects that do not use slotfills or separate entry points.
+* `--experimental-modules` - This option will enable the use of the interactivity API. Note that you will need to install `@wordpress/interactivity` into your project and configure the `block.json` to enable the interactivity API.
 
 ### Fast refresh in the block editor
 By running the `alley-build start --hot` command this enables “Fast Refresh” in the block editor!
