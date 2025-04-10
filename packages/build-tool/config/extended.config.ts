@@ -10,10 +10,19 @@ import { getUserWebpackConfig } from '../utils';
  * and extends it with the user's config here with deepExtend.
  *
  * The config path to this built file is passed to webpack as the --config flag.
+ *
+ * If using --experimental-modules, then the config given to webpack will be an array. Each config
+ * needs to be extended with the user's config.
  */
-deepExtend(
-  config,
-  getUserWebpackConfig(),
-);
+if (Array.isArray(config)) {
+  config.forEach((configItem) => {
+    deepExtend(configItem, getUserWebpackConfig());
+  });
+} else {
+  deepExtend(
+    config,
+    getUserWebpackConfig(),
+  );
+}
 
 export default config;
