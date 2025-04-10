@@ -43,8 +43,6 @@ const experimentalModules: boolean = process.env.WP_EXPERIMENTAL_MODULES === 'tr
  */
 const mode: string = isProduction ? 'production' : 'development';
 
-// const defaultConfig = Array.isArray(wpScriptsConfig) ? wpScriptsConfig[0] : wpScriptsConfig;
-
 /**
  * Generate the base webpack configuration.
  *
