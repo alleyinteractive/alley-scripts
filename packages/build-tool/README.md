@@ -57,6 +57,7 @@ By default the following command options are applied when running the `build` an
 
 * `--webpack-entries-dir` `<string>` - The directory where wp-scripts will detect entry point directories that are not blocks. These entries can be slotfills or webpack entry points (Default: `entries`)
 * `--webpack-blocks-only` - This option will disable the entries directory and only compile blocks set in the `blocks` directory. This is useful for projects that do not use slotfills or separate entry points.
+* `--experimental-modules` - This option will enable the use of the interactivity API. Please see [configuration notes](#interactivity-api) below for more information.
 
 ### Fast refresh in the block editor
 By running the `alley-build start --hot` command this enables “Fast Refresh” in the block editor!
@@ -177,6 +178,34 @@ In order to test the build-tool with another project, you will need to point to 
 ```
 
 Then run `npm link ../path/to/alley-scripts/packages/build-tool` and npm will symlink to this folder, and you can work on your changes.
+
+### Interactivity API
+
+#### Requirements
+- `@wordpress/scripts` version `>= 30.8.0`
+- `@wordpress/interactivity`
+
+#### Configure `block.json`
+To enable the interactivity API, you will need to add the following configuration to your `block.json` file:
+
+```json
+{
+  "supports": {
+    "interactivity": true
+  },
+  "viewScriptModule": "file:./view.ts"
+}
+```
+#### Configure Build Script
+For the interactivity API to work, you will need to add the `--experimental-modules` flag to the build script in your `package.json` file:
+
+```json
+{
+  "scripts": {
+    "build": "alley-build build --experimental-modules"
+  }
+}
+```
 
 ### Changelog
 
