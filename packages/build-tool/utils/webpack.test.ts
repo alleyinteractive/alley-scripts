@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import path from 'path';
 import fs from 'fs';
-import { type PathData } from 'webpack';
+import { Configuration, type PathData } from 'webpack';
 
-import { getEntries, processFilename } from './webpack';
+import { getConfigByType, getEntries, processFilename } from './webpack';
 
 describe('getEntries', () => {
   const testEntryPath = path.join(process.cwd(), 'test-entries');
@@ -117,5 +117,69 @@ describe('processFilename', () => {
     };
     const result = processFilename(pathData as PathData, false, 'js');
     expect(result).toBe('[name].js');
+  });
+});
+
+describe('getScriptOrModuleConfig', () => {
+  const scriptsConfig: Configuration = {
+    mode: 'production',
+    target: 'browserslist',
+    output: {
+      filename: '[name].js',
+      chunkFilename: '[name].js?ver=[chunkhash]',
+      path: '/Users/efuller/broadway/www/alley-scripts/wp-content/plugins/alley-scripts/plugin/build',
+    },
+    resolve: {
+      alias: {
+        'lodash-es': 'lodash',
+      },
+      extensions: [
+        '.jsx',
+        '.ts',
+        '.tsx',
+        '...',
+      ],
+    },
+  };
+
+  const moduleConfig: Configuration = {
+    mode: 'production',
+    target: 'browserslist',
+    output: {
+      filename: '[name].js',
+      chunkFilename: '[name].js?ver=[chunkhash]',
+      path: '/Users/efuller/broadway/www/alley-scripts/wp-content/plugins/alley-scripts/plugin/build',
+      module: true,
+      chunkFormat: 'module',
+      environment: {
+        module: true,
+      },
+      library: {
+        type: 'module',
+      },
+    },
+    resolve: {
+      alias: {
+        'lodash-es': 'lodash',
+      },
+      extensions: [
+        '.jsx',
+        '.ts',
+        '.tsx',
+        '...',
+      ],
+    },
+  };
+
+  it('Returns the scripts config', () => {
+    const configs = [moduleConfig, scriptsConfig];
+    const config = getConfigByType('script', configs);
+    expect(config).toEqual(scriptsConfig);
+  });
+
+  it('Returns the modules config', () => {
+    const configs = [moduleConfig, scriptsConfig];
+    const config = getConfigByType('module', configs);
+    expect(config).toEqual(moduleConfig);
   });
 });
