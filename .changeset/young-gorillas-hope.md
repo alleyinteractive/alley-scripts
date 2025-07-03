@@ -3,4 +3,4 @@
 "@alleyinteractive/create-entry": patch
 ---
 
-Improve the phpstan typings
+Improve the phpstan typings.
