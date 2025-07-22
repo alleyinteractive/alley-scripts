@@ -3,7 +3,7 @@
   "description": "Alley's script for scaffolding code for entry points in projects that use @wordpress/scripts",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/create-entry",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*"
