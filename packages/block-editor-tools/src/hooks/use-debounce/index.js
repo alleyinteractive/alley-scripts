@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
  */
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
+  console.warn('This custom useBounce hook has been deprecated. Please use the version from @wordpress/compose instead.');
 
   /**
    * Update value at a delay.
