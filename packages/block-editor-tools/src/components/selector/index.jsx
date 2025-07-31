@@ -16,7 +16,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 // Custom hooks.
 import { useDebounce } from '@wordpress/compose';
-// import { useDebounce } from '../../hooks';
 
 // Components.
 import SearchResults from './components/search-results';
