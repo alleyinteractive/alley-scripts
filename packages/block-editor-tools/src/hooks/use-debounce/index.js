@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
  * @param {string} value value to set at a delay
  * @param {int} delay delay in ms
  *
- * @deprecated Use the version from `@uidotdev/usehooks`.
+ * @deprecated Use the version from `@wordpress/compose`.
  */
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
