@@ -47,7 +47,7 @@
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
-    "@babel/preset-react": "^7.23.3",
+    "@babel/preset-react": "^7.27.1",
     "@storybook/react": "^7.6.1",
     "@types/styled-components": "^5.1.30",
     "@wordpress/api-fetch": "^6.42.0",
