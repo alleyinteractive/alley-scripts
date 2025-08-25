@@ -1,13 +1,11 @@
 import { useState, JSX } from 'react';
-import classNames from 'classnames';
+import styled, { css } from 'styled-components';
+import { __ } from '@wordpress/i18n';
 import {
   Button,
   Modal,
 } from '@wordpress/components';
 
-import { __ } from '@wordpress/i18n';
-
-import './search-modal.scss';
 import PostList from './post-list';
 
 interface SearchModalProps {
@@ -19,6 +17,35 @@ interface SearchModalProps {
   searchRender?: (post: object) => JSX.Element;
   suppressPostIds?: number[];
 }
+
+const StyledModal = styled(Modal) <{ $format?: string }>`
+  .components-modal__content {
+    width: 85vw;
+  }
+
+  .post-list-search {
+    margin: 0 0 1rem;
+  }
+
+  ${(props) => props.$format === 'list'
+    && css`
+      .components-modal__content {
+        max-width: 37.5rem;
+      }
+    `}
+`;
+
+const Buttons = styled.div`
+  clear: both;
+  display: block;
+  padding-top: 0.75rem;
+  text-align: right;
+  width: 100%;
+
+  button {
+    margin: 0 0 0 0.5rem;
+  }
+`;
 
 const SearchModal = ({
   baseUrl,
@@ -39,18 +66,13 @@ const SearchModal = ({
     closeModal();
   };
 
-  const modalClasses = classNames(
-    'alley-scripts-post-picker__modal',
-    format === 'list' ? 'is-format-list' : 'is-format-grid',
-  );
-
   return (
-    <Modal
-      className={modalClasses}
+    <StyledModal
       isDismissible
       title={modalTitle}
       onRequestClose={closeModal}
       closeButtonLabel="Close"
+      $format={format}
     >
       <PostList
         baseUrl={baseUrl}
@@ -60,7 +82,7 @@ const SearchModal = ({
         searchRender={searchRender}
         suppressPostIds={suppressPostIds}
       />
-      <div className="alley-scripts-post-picker__buttons">
+      <Buttons>
         <Button
           variant="secondary"
           onClick={closeModal}
@@ -74,8 +96,8 @@ const SearchModal = ({
         >
           {__('Select', 'alley-scripts')}
         </Button>
-      </div>
-    </Modal>
+      </Buttons>
+    </StyledModal>
   );
 };
 

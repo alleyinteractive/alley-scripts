@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/block-editor-tools",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
   "types": "./build/index.d.ts",
@@ -10,7 +10,7 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=16.0.0 <23.0.0",
+    "node": ">=16.0.0 <25.0.0",
     "npm": ">=8.0.0"
   },
   "scripts": {

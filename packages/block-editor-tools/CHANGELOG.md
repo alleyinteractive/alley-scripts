@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.13.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+## 0.12.2
+
+### Patch Changes
+
+- c35bdd4: Convert PostPicker styles to styled components
+- 5985d15: Convert TermSelector to TypeScript
+
 ## 0.12.1
 
 ### Patch Changes

@@ -1,5 +1,25 @@
 # alley-scripts-demo-plugin
 
+## 1.3.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+### Patch Changes
+
+- Updated dependencies [88bd605]
+  - @alleyinteractive/block-editor-tools@0.13.0
+
+## 1.2.1
+
+### Patch Changes
+
+- 5985d15: Convert TermSelector to TypeScript
+- Updated dependencies [c35bdd4]
+- Updated dependencies [5985d15]
+  - @alleyinteractive/block-editor-tools@0.12.2
+
 ## 1.2.0
 
 ### Minor Changes
