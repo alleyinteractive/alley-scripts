@@ -1,5 +1,14 @@
 # alley-scripts-demo-plugin
 
+## 1.3.1
+
+### Patch Changes
+
+- 244a618: Add Node 24 support
+- Updated dependencies [e2235d7]
+- Updated dependencies [244a618]
+  - @alleyinteractive/block-editor-tools@0.13.1
+
 ## 1.3.0
 
 ### Minor Changes
