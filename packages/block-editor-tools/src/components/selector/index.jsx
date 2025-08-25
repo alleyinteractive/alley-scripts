@@ -15,7 +15,7 @@ import { addQueryArgs } from '@wordpress/url';
 import { v4 as uuidv4 } from 'uuid';
 
 // Custom hooks.
-import { useDebounce } from '../../hooks';
+import { useDebounce } from '@wordpress/compose';
 
 // Components.
 import SearchResults from './components/search-results';
@@ -48,6 +48,7 @@ const Selector = ({
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoadState] = useState(false);
   const [searchString, setSearchString] = useState('');
+  const [debouncedSearchString, setDebouncedSearchString] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
 
   // Create ref.
@@ -56,8 +57,14 @@ const Selector = ({
   // Memoize subType string.
   const selectedSubTypes = useMemo(() => (subTypes.length > 0 ? subTypes.join(',') : 'any'), [subTypes]);
 
+  const debouncedSetSearchString = useDebounce((value) => {
+    setDebouncedSearchString(value);
+  }, 750);
+
   // Debounce search string from input.
-  const debouncedSearchString = useDebounce(searchString, 750);
+  useEffect(() => {
+    debouncedSetSearchString(searchString);
+  }, [searchString, debouncedSetSearchString]);
 
   /**
    * Make API request for items by search string.
