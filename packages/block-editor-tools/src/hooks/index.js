@@ -1,3 +1,4 @@
+export { default as useBlockName } from './use-block-name';
 export { default as useCurrentPostId } from './use-current-post-id';
 export { default as useCurrentTheme } from './use-current-theme';
 export { default as useDebounce } from './use-debounce';
@@ -10,6 +11,7 @@ export { default as useMedia } from './use-media';
 export { default as useOption } from './use-option';
 export { default as useParentBlock } from './use-parent-block';
 export { default as useParentBlockAttributes } from './use-parent-block-attributes';
+export { default as useParentClientId } from './use-parent-client-id';
 export { default as usePost } from './use-post';
 export { default as usePostById } from './use-post-by-id';
 export { default as usePostMeta } from './use-post-meta';
