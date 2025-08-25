@@ -5,12 +5,13 @@
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "engines": {
-    "node": ">=16.0.0 <23.0.0",
+    "node": ">=16.0.0 <25.0.0",
     "npm": ">=8"
   },
   "scripts": {
     "prebuild": "check-node-version --package",
     "build": "turbo run build --cache-dir=.turbo",
+    "changeset": "npx @changesets/cli",
     "preinstall": "check-node-version --package",
     "prelint": "check-node-version --package",
     "lint": "turbo run lint --cache-dir=.turbo",

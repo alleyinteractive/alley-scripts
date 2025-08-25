@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+## 0.0.5
+
+### Patch Changes
+
+- 397a80a: Improve the phpstan typings.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

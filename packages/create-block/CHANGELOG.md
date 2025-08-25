@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+## 0.2.1
+
+### Patch Changes
+
+- 397a80a: Improve the phpstan typings.
+
 ## 0.2.0
 
 ### Minor Changes
