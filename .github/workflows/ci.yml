@@ -57,6 +57,7 @@ jobs:
           skip-audit: 'true'
           skip-core-test-suite: 'true'
           skip-wordpress-install: 'true'
+          working-directory: 'plugin'
 
   all-pr-checks-passed:
     name: All PR checks passed
