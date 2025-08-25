@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- a4a181b: Ensure that parent process exits with same code as child process
+
 ## 0.3.0
 
 ### Minor Changes
