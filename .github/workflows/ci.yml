@@ -46,10 +46,23 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  php-tests:
+    name: "PHP Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run PHP Tests
+        uses: alleyinteractive/action-test-php@develop
+        with:
+          php-version: '8.3'
+          skip-audit: 'true'
+          skip-core-test-suite: 'true'
+          skip-wordpress-install: 'true'
+
   all-pr-checks-passed:
     name: All PR checks passed
     needs:
       - node-tests
+      - php-tests
     runs-on: ubuntu-latest
     if: always()
     steps:
