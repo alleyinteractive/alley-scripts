@@ -32,6 +32,7 @@ import {
  */
 (async () => {
   let basePath: string = entryArgs.path || process.cwd();
+  const force = entryArgs.force || false;
 
   // Check if this is a valid path to a plugin.
   if (!fs.existsSync(`${basePath}/composer.json`)) {
@@ -129,7 +130,7 @@ import {
   }
 
   // Validate the version number with the user.
-  if (!entryArgs.version || entryArgs.version !== releaseVersion) {
+  if (!force && (!entryArgs.version || entryArgs.version !== releaseVersion)) {
     releaseVersion = await promptForReleaseVersion(releaseVersion, currentVersion);
 
     if (!releaseVersion) {
@@ -144,16 +145,19 @@ import {
     );
   }
 
-  // Confirm the user is OK with the release.
-  const { confirmRelease } = await prompts({
-    type: 'confirm',
-    name: 'confirmRelease',
-    message: `Are you sure you want to release version ${releaseVersion}?`,
-    initial: true,
-  });
+  if (force) {
+    console.log('Not confirming since --force was passed.');
+  } else {
+    const { confirmRelease } = await prompts({
+      type: 'confirm',
+      name: 'confirmRelease',
+      message: `Are you sure you want to release version ${releaseVersion}?`,
+      initial: true,
+    });
 
-  if (!confirmRelease) {
-    process.exit(1);
+    if (!confirmRelease) {
+      process.exit(1);
+    }
   }
 
   // Update the version in composer.json.
@@ -179,8 +183,6 @@ import {
         basePath,
         releaseVersion,
       );
-
-      console.log(`Updated "version" in ${chalk.yellow('package.json')} to ${chalk.yellow(releaseVersion)}`);
     }
   }
 
@@ -192,8 +194,6 @@ import {
       basePath,
       releaseVersion,
     );
-
-    console.log(`Updated "Version" plugin header to ${chalk.yellow(releaseVersion)}`);
   }
 
   // Update the version in the README.md/README.txt.
@@ -204,15 +204,13 @@ import {
       basePath,
       releaseVersion,
     );
-
-    console.log(`Updated "Stable tag" in ${chalk.yellow('README.txt/md')} to ${chalk.yellow(releaseVersion)} if they exist.`);
   }
 
   if (dryRun) {
     process.exit(0);
   }
 
-  console.log(`✅ Ready to release version ${chalk.yellow(releaseVersion)}!`);
+  console.log(`\n✅ Ready to release version ${chalk.yellow(releaseVersion)}!\n`);
   console.log('Commit the changes and the GitHub actions will handle creating a tag/release on GitHub.'); // eslint-disable-line max-len
 
   process.exit(0);

@@ -35,6 +35,7 @@ following arguments are available:
   --composer           Update the version in the plugin's composer.json file.
   --npm                Update the version in the plugin's package.json file.
   --dry-run            Run the command without making any changes.
+  -f, --force          Accept any changes without confirmation.
   -h, --help           Prints help information.
 ```
 
