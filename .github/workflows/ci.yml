@@ -12,14 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16, 18, 20, 22, 24]
+        node: [18, 20, 22, 24]
     name: "Build and Test: Node ${{ matrix.node }}"
     runs-on: ubuntu-latest
-    # To use Remote Caching, uncomment the next lines and follow the steps below.
-    # env:
-    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-    #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-    #  TURBO_REMOTE_ONLY: true
 
     steps:
       - name: Check out code
@@ -50,3 +45,39 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+  php-tests:
+    name: "PHP Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run PHP Tests
+        uses: alleyinteractive/action-test-php@develop
+        with:
+          php-version: '8.3'
+          skip-audit: 'true'
+          skip-core-test-suite: 'true'
+          skip-wordpress-install: 'true'
+          working-directory: 'plugin'
+
+  all-pr-checks-passed:
+    name: All PR checks passed
+    needs:
+      - node-tests
+      - php-tests
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check job statuses
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" ]]; then
+            echo "One or more jobs failed"
+            exit 1
+          elif [[ "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "One or more jobs were cancelled"
+            exit 1
+          else
+            echo "All jobs passed or were skipped"
+            exit 0
+          fi
