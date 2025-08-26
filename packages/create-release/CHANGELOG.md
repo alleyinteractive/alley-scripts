@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- 39a76a8: Adding force, adjusting logic to make console output more accurate.
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- ef73f89: Drop Node 16 support.
+
 ## 0.2.0
 
 ### Minor Changes
