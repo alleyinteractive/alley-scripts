@@ -186,5 +186,11 @@ if (help) {
       cwd: cwd(),
       stdio: 'inherit',
     },
-  );
+  ).on('exit', (code, signal) => {
+    if (signal) {
+      process.exit(1);
+    } else {
+      process.exit(code ?? 0);
+    }
+  });
 })();

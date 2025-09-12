@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.1
+
+### Patch Changes
+
+- ef73f89: Drop Node 16 support.
+- e2235d7: Deprecate useDebounce in favor of the version in @wordpress/compose.
+- 244a618: Add Node 24 support
+
 ## 0.13.0
 
 ### Minor Changes
