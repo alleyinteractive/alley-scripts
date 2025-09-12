@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.2
+
+### Patch Changes
+
+- b98204b: Export missing useBlockName and useParentClientId hooks.
+
 ## 0.13.1
 
 ### Patch Changes
