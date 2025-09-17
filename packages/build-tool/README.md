@@ -182,7 +182,7 @@ Then run `npm link ../path/to/alley-scripts/packages/build-tool` and npm will sy
 ### Interactivity API
 
 #### Requirements
-- `@wordpress/scripts` version `>= 30.8.0`
+- `@wordpress/scripts` version `>= 27.1.0`
 - `@wordpress/interactivity`
 
 #### Configure `block.json`
