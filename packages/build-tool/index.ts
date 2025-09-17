@@ -26,14 +26,24 @@ process.env.BLOCKS_ONLY = hasArgInCLI('--webpack-blocks-only') ? 'true' : 'false
  * Set the environment variable for the path to the WordPress source directory.
  *
  * This has been added to support backwards compatibility when using a version of wp-scripts
- * less than version 30.8.0.
+ * less than version 27.1.0. Older versions use WP_SRC_DIRECTORY, newer versions use WP_SOURCE_PATH.
  */
 if (hasArgInCLI('--source-path')) {
+  process.env.WP_SRC_DIRECTORY = getArgFromCLI('--source-path') || 'blocks';
   process.env.WP_SOURCE_PATH = getArgFromCLI('--source-path') || 'blocks';
 } else if (hasArgInCLI('--webpack-src-dir')) {
+  process.env.WP_SRC_DIRECTORY = getArgFromCLI('--webpack-src-dir') || 'blocks';
   process.env.WP_SOURCE_PATH = getArgFromCLI('--webpack-src-dir') || 'blocks';
 } else {
+  process.env.WP_SRC_DIRECTORY = 'blocks';
   process.env.WP_SOURCE_PATH = 'blocks';
+}
+
+/**
+ * Set environment variable for experimental modules if flag is present.
+ */
+if (hasArgInCLI('--experimental-modules')) {
+  process.env.WP_EXPERIMENTAL_MODULES = 'true';
 }
 
 // Call wp-scripts with the default arguments.
