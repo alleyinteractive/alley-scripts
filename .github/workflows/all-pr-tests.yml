@@ -39,16 +39,11 @@ jobs:
 
       - name: Debug binary installation
         run: |
-          echo "Checking if alley-build exists:"
-          ls -la ./plugin/node_modules/.bin/ | grep alley || echo "No alley binaries found"
-          echo "Checking build-tool installation:"
-          ls -la ./plugin/node_modules/@alleyinteractive/build-tool/ || echo "build-tool not found"
-          echo "Checking PATH:"
-          echo $PATH
-          echo "Checking which node:"
-          which node
-          echo "Checking npm version:"
-          npm --version
+          echo "GitHub workspace: ${{ github.workspace }}"
+          echo "Contents of workspace:"
+          ls -la ${{ github.workspace }}
+          echo "Contents of bin directory:"
+          ls -la ${{ github.workspace }}/node_modules/.bin || echo "bin directory not found"
 
       - name: Build
         run: npm run build
