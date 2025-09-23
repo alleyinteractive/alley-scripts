@@ -48,7 +48,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@alleyinteractive/build-tool": "*",
+    "@alleyinteractive/build-tool": "^0.2.1",
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/stylelint-config": "*",
     "@alleyinteractive/tsconfig": "*",
