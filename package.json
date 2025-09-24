@@ -25,7 +25,8 @@
     "build-storybook": "storybook build"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "plugin"
   ],
   "devDependencies": {
     "@babel/core": "^7.23.3",
