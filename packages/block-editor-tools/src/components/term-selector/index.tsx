@@ -109,6 +109,7 @@ const TermSelector = <T extends Record<string, unknown>>({
   }, [fetchItems]);
 
   const onChange = (tokens: string[]) => {
+    if (!multiple && tokens.length > 1) return;
     const tokensWithIds = tokens.map((token) => ({
       id: foundItems.find((item) => item.title === token)?.id ?? 0,
       title: token,
@@ -132,7 +133,7 @@ const TermSelector = <T extends Record<string, unknown>>({
       placeholder={placeholder}
       suggestions={foundItems.map((item) => item.title)}
       value={selectedItems}
-      maxLength={multiple ? 1 : undefined}
+      maxLength={multiple ? undefined : 1}
       maxSuggestions={999}
     />
   );
