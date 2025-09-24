@@ -37,14 +37,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug binary installation
-        run: |
-          echo "GitHub workspace: ${{ github.workspace }}"
-          echo "Contents of workspace:"
-          ls -la ${{ github.workspace }}
-          echo "Contents of bin directory:"
-          ls -la ${{ github.workspace }}/node_modules/.bin || echo "bin directory not found"
-
       - name: Build
         run: npm run build
 
