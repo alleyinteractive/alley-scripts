@@ -30,9 +30,6 @@
     "test:watch": "jest --watch",
     "test": "jest --passWithNoTests"
   },
-  "overrides": {
-    "ajv": "^8.17.1"
-  },
   "dependencies": {
     "@alleyinteractive/block-editor-tools": "*",
     "@types/jest": "^29.5.5",
