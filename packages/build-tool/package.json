@@ -55,7 +55,9 @@
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
-    "@types/deep-extend": "^0.6.2"
+    "@types/deep-extend": "^0.6.2",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0"
   },
   "exports": {
     ".": {
