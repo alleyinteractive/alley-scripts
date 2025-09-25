@@ -20,6 +20,7 @@ import Post from './post';
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
+  filters?: React.ReactNode;
   getPostType?: (id: number) => string;
   modalTitle?: string;
   modalFormat?: 'grid' | 'list';
@@ -61,6 +62,7 @@ const StyledNotice = styled(Notice)`
 const PostPicker = ({
   allowedTypes,
   className,
+  filters,
   getPostType,
   modalTitle = __('Select Post', 'alley-scripts'),
   modalFormat = 'grid',
@@ -189,6 +191,7 @@ const PostPicker = ({
           onUpdate={onUpdate}
           searchRender={searchRender}
           suppressPostIds={suppressPostIds}
+          filters={filters}
         />
       ) : null}
     </Container>

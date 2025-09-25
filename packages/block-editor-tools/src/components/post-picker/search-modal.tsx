@@ -1,4 +1,4 @@
-import { useState, JSX } from 'react';
+import React, { useState, JSX } from 'react';
 import styled, { css } from 'styled-components';
 import { __ } from '@wordpress/i18n';
 import {
@@ -11,6 +11,7 @@ import PostList from './post-list';
 interface SearchModalProps {
   baseUrl: string;
   closeModal: () => void;
+  filters?: React.ReactNode;
   format?: 'grid' | 'list';
   modalTitle: string;
   onUpdate: (id: number) => void;
@@ -50,6 +51,7 @@ const Buttons = styled.div`
 const SearchModal = ({
   baseUrl,
   closeModal,
+  filters,
   format = 'grid',
   modalTitle,
   onUpdate,
@@ -81,6 +83,7 @@ const SearchModal = ({
         setSelected={setSelected}
         searchRender={searchRender}
         suppressPostIds={suppressPostIds}
+        filters={filters}
       />
       <Buttons>
         <Button

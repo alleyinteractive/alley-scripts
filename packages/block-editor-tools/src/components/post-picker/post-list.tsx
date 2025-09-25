@@ -1,5 +1,9 @@
-import {
-  useCallback, useEffect, useState, JSX,
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  JSX,
 } from 'react';
 import styled, { css } from 'styled-components';
 import apiFetch from '@wordpress/api-fetch';
@@ -14,6 +18,7 @@ import Post from './post';
 
 interface PostListProps {
   baseUrl: string;
+  filters?: React.ReactNode;
   format?: 'grid' | 'list';
   searchRender?: (post: object) => JSX.Element;
   selected?: number;
@@ -27,15 +32,10 @@ interface Params {
 }
 
 const Container = styled.div`
-  height: calc(90vh - 220px);
   // Allow space for focus state.
   margin: 0 -0.5rem;
   overflow-y: auto;
   padding: 0 0.5rem;
-
-  @media (min-width: 600px) {
-    height: calc(70vh - 230px);
-  }
 `;
 
 const Wrapper = styled.div<{ $format?: string; }>`
@@ -126,6 +126,7 @@ const LoadMore = styled.div`
  */
 const PostList = ({
   baseUrl,
+  filters,
   format,
   searchRender,
   selected,
@@ -244,6 +245,12 @@ const PostList = ({
     };
   }, [getPosts, initialLoad, pathParams]);
 
+  useEffect(() => {
+    handleSearchTextChange(pathParams.searchValue);
+  }, [baseUrl]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const filterDiv = useRef<HTMLDivElement>(null);
+  const modalHeight = window.innerWidth < 600 ? '95vh' : '70vh';
   return (
     <>
       <TextControl
@@ -253,7 +260,8 @@ const PostList = ({
         // @ts-ignore
         onChange={handleSearchTextChange}
       />
-      <Container>
+      {filters ? <div ref={filterDiv}>{filters}</div> : null}
+      <Container style={{ height: filterDiv.current?.offsetHeight ? `calc(${modalHeight} - ${filterDiv.current?.offsetHeight}px - 254px)` : `calc(${modalHeight} - 254px)` }}>
         <Wrapper $format={format}>
           <h2 id="post-picker-results-heading" className="screen-reader-text">
             {__('Search Results', 'alley-scripts')}
