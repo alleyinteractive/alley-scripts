@@ -25,6 +25,8 @@ results, and a custom function for fetching post data given a post ID.
 |----------------|----------------|----------|----------|-----------------------------------------------------------------------------------------------------------------|
 | allowedTypes   | `[]`         | No       | array    | Array with the post types to select from. Defaults to empty array (all types). |
 | className      | `''`           | No       | string   | Class name for the post picker container.                                                                      |
+| filters        |                | No       | JSX Node(s) | Optional JSX to display between the search field and post list in the modal, to add
+instructions or filters. It is up to the implementer to handle changes and adjust the other props (such as allowedTypes or params) accordingly. |
 | getPostType    |                | No       | function | Function to retrieve the post type for a post ID. This function must return a string. |
 | modalTitle     | `Select Post`  | No       | string   | Title of the modal that shows posts. |
 | onReset        |                | Yes      | function | Function to reset the post ID to 0.                          |
