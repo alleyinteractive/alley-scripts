@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- 3a40f53: Add ajv and ajv-keywords as dev dependencies. This fixes dependency issue when running the build
+  tool via `npx`.
+
 ## 0.2.1
 
 ### Patch Changes

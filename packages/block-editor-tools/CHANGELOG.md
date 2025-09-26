@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.14.0
+
+### Minor Changes
+
+- dbe18ee: Update TermSelector component to use FormTokenField
+- b9ce351: Adds filters prop to PostSelector to allow custom filters or instructions in the modal.
+
 ## 0.13.2
 
 ### Patch Changes
