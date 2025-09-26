@@ -326,12 +326,39 @@ Importantly, this component does not save the selected item, it just returns it 
 | threshold   | 3                | false    | integer  | If specified, this overrides the default minimum number of characters that must be entered in order for the search to fire. |
 
 
-### TermSelect
+### TermSelector
 
-A component for selecting terms.
+Allows users to select an term or multiple terms using a search query against the REST API. Optionally, accepts a list of subtypes to which to restrict the search. Utilizes the search endpoint, so terms must have the appropriate visibility within the REST API to appear in the result list.
+
+Importantly, this component does not save the selected term, it just returns it in the `onSelect` method. The enclosing block or component is responsible for managing the selected terms in some way, and using this component as a method for picking a new one.
 
 **Usage**
-See the Selector component for usage details. The `type` prop is preset to `term`.
+
+``` js
+  <TermSelector
+    className="custom-termselector-classname"
+    label="Select a category"
+    multiple
+    onSelect={onSelect}
+    placeholder="Select a category..."
+    subTypes={['category', 'post_tag']}
+    selected={[{
+      id: 123,
+      title: 'Title of Category',
+    }]}
+  />
+```
+**Props**
+
+| Prop        | Default          | Required | Type     | Description                                                                                                                 |
+|-------------|------------------|----------|----------|-----------------------------------------------------------------------------------------------------------------------------|
+| className   |                  | false    | string   | If specified, the className is prepended to the top-level container.                                                        |
+| label       | Search for items | false    | string   | If specified, this overrides the default label text for the item selection search input.                                    |
+| multiple    | false            | false    | boolean  | If set to true the component allows for the ability to select multiple terms returned through the `onSelect` callback.      |
+| onSelect    | NA               | true     | function | Callback to receive the selected item array, as it is returned from the `search` REST endpoint. Required.                   |
+| placeholder | Search for items | false    | string   | If specified, this overrides the default input placeholder value.                                                           |
+| subTypes   | []               | false    | array    | All queryable subtypes that will be included in the form of a comma-separated array. The default query is "any" subtype.     |
+| selected    | []               | false    | array    | Optional array of objects with id and title keys to auto-hydrate selections on load.                                        |
 
 ### VideoPicker
 
