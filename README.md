@@ -8,6 +8,7 @@ for projects to speed up development.
 - [Packages](#packages)
 - [Adding and Managing Packages](#adding-and-managing-packages)
 - [Versioning and Publishing Packages in this Monorepo](##versioning-and-publishing-packages-in-this-monorepo)
+- [Snapshot Releases](#snapshot-releases)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [Maintainers](#maintainers)
@@ -80,6 +81,91 @@ The command above will walk through some prompts and create a new changeset file
 Once merged into the `main` branch, the changeset Github action will automatically create a new branch, e.g. `changeset-release/main` and pull request titled "Version Packages". A new version of this package is not published until this pull request is merged.
 
 **You do not need to manually bump the version of the package in the `package.json` file. The changeset Github actions will handle this for you.**
+
+## Snapshot Releases
+
+Snapshot releases allow you to create and test pre-release versions of packages without affecting the main release workflow. These are useful for testing bug fixes, new features, or dependency updates before cutting an official release.
+
+### What are Snapshot Releases?
+
+Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` that are intended for testing purposes only. They are published with a custom npm tag to avoid interfering with the `latest` tag that users install by default.
+
+### When to Use Snapshot Releases
+
+- **Testing Bug Fixes**: Test dependency fixes or critical bug fixes before official release
+- **Feature Development**: Test new features in real projects before merging to main
+- **Dependency Updates**: Verify that dependency updates don't break downstream projects
+- **Cross-Package Testing**: Test changes that affect multiple packages in the monorepo
+
+### Requirements
+
+1. **Branch Naming**: Your branch must start with `snapshot/`
+   - ✅ `snapshot/fix-ajv-deps`
+   - ✅ `snapshot/test-new-feature`
+   - ❌ `feature/fix-ajv` (will be rejected)
+
+2. **GitHub Permissions**: You need write access to the repository to trigger the workflow
+
+3. **Changes**: Your snapshot branch should contain the changes you want to test
+
+### How to Create a Snapshot Release
+
+1. **Create a snapshot branch**:
+   ```bash
+   git checkout -b snapshot/fix-build-tool-deps
+   # Make your changes
+   git add .
+   git commit -m "Fix ajv dependency conflict in build-tool"
+   git push origin snapshot/fix-build-tool-deps
+   ```
+
+2. **Trigger the snapshot workflow**:
+   - Go to the **Actions** tab in GitHub
+   - Click on **"Snapshot Release"** workflow
+   - Click **"Run workflow"**
+   - Select your `snapshot/` branch from the dropdown
+   - Enter a descriptive **tag slug** (e.g., `fix-ajv`, `test-feature`)
+   - Optionally select a specific **package** to snapshot (or leave empty for all changed packages)
+   - Click **"Run workflow"**
+
+3. **Test the snapshot**:
+   ```bash
+   # Install the snapshot version
+   npm install @alleyinteractive/build-tool@fix-ajv
+
+   # Test your changes
+   npm run build
+   ```
+
+4. **Clean up** (after testing):
+   ```bash
+   # Remove snapshot version and reinstall latest
+   npm uninstall @alleyinteractive/build-tool
+   npm install @alleyinteractive/build-tool@latest
+
+   # Delete the snapshot branch (optional)
+   git branch -D snapshot/fix-build-tool-deps
+   git push origin --delete snapshot/fix-build-tool-deps
+   ```
+
+### Snapshot Workflow Parameters
+
+- **Tag**: A descriptive slug for your snapshot (required)
+  - Examples: `fix-ajv`, `test-webpack-config`, `debug-build`
+  - Will create versions like: `0.2.3-fix-ajv-20250929142301`
+
+- **Package**: Choose which package to snapshot (optional)
+  - Leave empty to snapshot all packages with changes
+  - Select specific package to snapshot only that package
+  - Available options: `build-tool`, `eslint-config`, `create-block`, etc.
+
+### Best Practices
+
+- **Use descriptive tag names** that clearly indicate what you're testing
+- **Test thoroughly** before creating an official release
+- **Don't merge snapshot branches** to main - they're for testing only
+- **Clean up snapshot branches** after testing is complete
+- **Use snapshots sparingly** - they're for testing, not regular development
 
 ## Changelog
 
