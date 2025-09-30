@@ -68,14 +68,15 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create and Publish Snapshot
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: npx changeset version --snapshot ${{ inputs.tag }}
-          publish: npm run build && npx changeset publish --tag ${{ inputs.tag }} --no-git-tag
+      - name: Create Snapshot Version
+        run: npx changeset version --snapshot ${{ inputs.tag }}
+
+      - name: Build Packages
+        run: npm run build
+
+      - name: Publish Snapshot
+        run: npx changeset publish --tag ${{ inputs.tag }} --no-git-tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Output Snapshot Info
