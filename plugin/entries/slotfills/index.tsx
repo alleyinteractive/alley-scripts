@@ -35,6 +35,7 @@ import {
 // Create a new Gutenberg sidebar
 registerPlugin('alley-scripts-plugin-sidebar', {
   icon: 'shield',
+  // @ts-ignore // TODO: Fix this TypeScript error.
   render: () => {
     const [meta, setMeta] = usePostMeta(); // eslint-disable-line react-hooks/rules-of-hooks
     const [
