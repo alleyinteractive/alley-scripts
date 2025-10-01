@@ -7,22 +7,6 @@ on:
         description: 'Tag slug for snapshot (e.g., "fix-ajv", "test-feature")'
         required: true
         type: string
-      package:
-        description: 'Package to snapshot (leave empty for all changed packages)'
-        required: false
-        type: choice
-        options:
-          - ''
-          - 'build-tool'
-          - 'block-editor-tools'
-          - 'create-block'
-          - 'create-entry'
-          - 'create-release'
-          - 'eslint-config'
-          - 'scaffolder'
-          - 'scaffolder-features'
-          - 'stylelint-config'
-          - 'tsconfig'
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -40,14 +24,6 @@ jobs:
             exit 1
           fi
           echo "✅ Valid snapshot branch: ${{ github.ref_name }}"
-
-      - name: Display package selection
-        run: |
-          if [[ -n "${{ inputs.package }}" ]]; then
-            echo "📦 Creating snapshot for package: @alleyinteractive/${{ inputs.package }}"
-          else
-            echo "📦 Creating snapshot for all changed packages"
-          fi
 
       - name: Checkout Repo
         uses: actions/checkout@v5
@@ -82,9 +58,5 @@ jobs:
       - name: Output Snapshot Info
         run: |
           echo "🚀 Snapshot published with tag: ${{ inputs.tag }}"
-          if [[ -n "${{ inputs.package }}" ]]; then
-            echo "📦 Install with: npm install @alleyinteractive/${{ inputs.package }}@${{ inputs.tag }}"
-          else
-            echo "📦 Install any package with: npm install @alleyinteractive/PACKAGE@${{ inputs.tag }}"
-          fi
+          echo "📦 Install with: npm install @alleyinteractive/PACKAGE@${{ inputs.tag }}"
           echo "⚠️  This is a snapshot release for testing only"
