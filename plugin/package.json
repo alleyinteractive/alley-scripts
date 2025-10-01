@@ -13,7 +13,7 @@
     "not IE 11"
   ],
   "scripts": {
-    "build": "alley-build build",
+    "build": "node ../packages/build-tool/dist/cjs/index.js build",
     "dev": "npm run start",
     "create-block": "alley-create-block -n alley-scripts-demo-plugin",
     "create-entry": "npx @alleyinteractive/create-entry@latest -n alley-scripts-demo-plugin -t alley-scripts-demo-plugin",
