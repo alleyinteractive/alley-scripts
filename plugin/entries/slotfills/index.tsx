@@ -40,6 +40,10 @@ registerPlugin('alley-scripts-plugin-sidebar', {
     const [
       selectedCheckboxes, setSelectedCheckboxes,
     ] = useState<string[]>([]); // eslint-disable-line react-hooks/rules-of-hooks
+    const [
+      testFilterPostTypes,
+      setTestFilterPostTypes,
+    ] = useState<String[]>(['post']); // eslint-disable-line react-hooks/rules-of-hooks
 
     const {
       alley_scripts_audio_picker_id: audioPickerId = '',
@@ -50,6 +54,20 @@ registerPlugin('alley-scripts-plugin-sidebar', {
       alley_scripts_repeater: repeater = [],
       alley_scripts_term_selector: termSelector = [],
     } = meta;
+
+    function TestFilter() {
+      return (
+        <Checkboxes
+          label={__('Filter Post Types', 'alley-scripts')}
+          value={testFilterPostTypes}
+          onChange={(newValue: string[]) => setTestFilterPostTypes(newValue.length ? newValue : ['post'])}
+          options={[
+            { value: 'post', label: __('Posts', 'alley-scripts') },
+            { value: 'page', label: __('Pages', 'alley-scripts') },
+          ]}
+        />
+      );
+    }
 
     return (
       <>
@@ -106,6 +124,8 @@ registerPlugin('alley-scripts-plugin-sidebar', {
               onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_id: id })}
               onReset={() => setMeta({ alley_scripts_post_picker_id: 0 })}
               value={postId}
+              filters={<TestFilter />}
+              allowedTypes={testFilterPostTypes.length ? testFilterPostTypes : []}
             />
           </PanelBody>
           <PanelBody initialOpen title={__('Post Picker (List)', 'alley-scripts')}>

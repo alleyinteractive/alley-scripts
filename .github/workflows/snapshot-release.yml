@@ -1,0 +1,89 @@
+name: Snapshot Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag slug for snapshot (e.g., "fix-ajv", "test-feature")'
+        required: true
+        type: string
+      package:
+        description: 'Package to snapshot (leave empty for all changed packages)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - 'build-tool'
+          - 'block-editor-tools'
+          - 'create-block'
+          - 'create-entry'
+          - 'create-release'
+          - 'eslint-config'
+          - 'scaffolder'
+          - 'scaffolder-features'
+          - 'stylelint-config'
+          - 'tsconfig'
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  snapshot:
+    name: Create Snapshot Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch naming
+        run: |
+          if [[ ! "${{ github.ref_name }}" =~ ^snapshot/ ]]; then
+            echo "❌ Snapshot releases must be created from branches starting with 'snapshot/'"
+            echo "Current branch: ${{ github.ref_name }}"
+            echo "Please create a branch like: snapshot/fix-ajv-deps"
+            exit 1
+          fi
+          echo "✅ Valid snapshot branch: ${{ github.ref_name }}"
+
+      - name: Display package selection
+        run: |
+          if [[ -n "${{ inputs.package }}" ]]; then
+            echo "📦 Creating snapshot for package: @alleyinteractive/${{ inputs.package }}"
+          else
+            echo "📦 Creating snapshot for all changed packages"
+          fi
+
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Creating .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create and Publish Snapshot
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: npx changeset version --snapshot ${{ inputs.tag }}
+          publish: npm run build && npx changeset publish --tag ${{ inputs.tag }} --no-git-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Output Snapshot Info
+        run: |
+          echo "🚀 Snapshot published with tag: ${{ inputs.tag }}"
+          if [[ -n "${{ inputs.package }}" ]]; then
+            echo "📦 Install with: npm install @alleyinteractive/${{ inputs.package }}@${{ inputs.tag }}"
+          else
+            echo "📦 Install any package with: npm install @alleyinteractive/PACKAGE@${{ inputs.tag }}"
+          fi
+          echo "⚠️  This is a snapshot release for testing only"

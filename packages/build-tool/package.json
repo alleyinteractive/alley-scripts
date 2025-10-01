@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/build-tool",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "An opinionated set of build configurations for wp-scripts",
   "bin": {
     "alley-build": "./dist/cjs/index.js"
@@ -55,7 +55,9 @@
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
-    "@types/deep-extend": "^0.6.2"
+    "@types/deep-extend": "^0.6.2",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0"
   },
   "exports": {
     ".": {
