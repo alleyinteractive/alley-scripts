@@ -43,7 +43,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
     const [
       testFilterPostTypes,
       setTestFilterPostTypes,
-    ] = useState<String[]>(['post']); // eslint-disable-line react-hooks/rules-of-hooks
+    ] = useState<string[]>(['post']); // eslint-disable-line react-hooks/rules-of-hooks
 
     const {
       alley_scripts_audio_picker_id: audioPickerId = '',
