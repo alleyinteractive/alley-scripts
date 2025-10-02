@@ -35,6 +35,7 @@ import {
 // Create a new Gutenberg sidebar
 registerPlugin('alley-scripts-plugin-sidebar', {
   icon: 'shield',
+  // @ts-ignore // TODO: Fix this TypeScript error.
   render: () => {
     const [meta, setMeta] = usePostMeta(); // eslint-disable-line react-hooks/rules-of-hooks
     const [
@@ -43,7 +44,7 @@ registerPlugin('alley-scripts-plugin-sidebar', {
     const [
       testFilterPostTypes,
       setTestFilterPostTypes,
-    ] = useState<String[]>(['post']); // eslint-disable-line react-hooks/rules-of-hooks
+    ] = useState<string[]>(['post']); // eslint-disable-line react-hooks/rules-of-hooks
 
     const {
       alley_scripts_audio_picker_id: audioPickerId = '',
