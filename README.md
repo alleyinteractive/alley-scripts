@@ -25,6 +25,7 @@ This monorepo contains the following packages:
 - [`@alleyinteractive/create-release`](./packages/create-release/README.md)
 - [`@alleyinteractive/eslint-config`](./packages/eslint-config/README.md)
 - [`@alleyinteractive/scaffolder`](./packages/scaffolder/README.md)
+- [`@alleyinteractive/scaffolder-features`](./packages/scaffolder-features/README.md)
 - [`@alleyinteractive/stylelint-config`](./packages/stylelint-config/README.md)
 - [`@alleyinteractive/tsconfig`](./packages/tsconfig/README.md)
 
@@ -166,6 +167,12 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
 - **Don't merge snapshot branches** to main - they're for testing only
 - **Clean up snapshot branches** after testing is complete
 - **Use snapshots sparingly** - they're for testing, not regular development
+
+## Trusted Publishers
+
+This repository uses NPM's [Trusted Publishers](https://docs.npmjs.com/trusted-publishers#for-github-actions)
+feature to publish to NPM. Please ensure that any newly created packages are
+properly configured to use the `release.yml` GitHub action for publishing.
 
 ## Changelog
 
