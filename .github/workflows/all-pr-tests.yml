@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Cache turbo build setup
         uses: actions/cache@v4
