@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- cec7f508: No changes. Re-releasing to test deployments.
+- 4e90828f: - Add the demo plugin back in as a workspace.
+  - Fix a TypeScript error in the scaffolder package.
+
 ## 0.2.1
 
 ### Patch Changes
