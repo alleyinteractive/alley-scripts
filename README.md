@@ -85,6 +85,10 @@ Once merged into the `main` branch, the changeset Github action will automatical
 
 ## Snapshot Releases
 
+> [!NOTE]
+> With the migration to [Trusted Publishers and other changes at GitHub/NPM](https://github.blog/changelog/2025-09-29-strengthening-npm-security-important-changes-to-authentication-and-token-management/)
+> the snapshot release workflow may not work in the future.
+
 Snapshot releases allow you to create and test pre-release versions of packages without affecting the main release workflow. These are useful for testing bug fixes, new features, or dependency updates before cutting an official release.
 
 ### What are Snapshot Releases?
