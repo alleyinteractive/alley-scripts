@@ -39,7 +39,6 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          commitMode: "github-api"
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
