@@ -1,5 +1,12 @@
 # alley-scripts-demo-plugin
 
+## 1.3.2
+
+### Patch Changes
+
+- 4e90828: - Add the demo plugin back in as a workspace.
+  - Fix a TypeScript error in the scaffolder package.
+
 ## 1.3.1
 
 ### Patch Changes
