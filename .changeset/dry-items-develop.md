@@ -1,5 +1,5 @@
 ---
-"@alleyinteractive/build-tool": patch
+"@alleyinteractive/build-tool": minor
 ---
 
 Bump @wordpress/scripts
