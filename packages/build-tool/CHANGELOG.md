@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- a01fe7b7: Bump @wordpress/scripts
+
 ## 0.2.2
 
 ### Patch Changes
