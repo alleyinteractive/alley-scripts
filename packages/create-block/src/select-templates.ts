@@ -1,8 +1,9 @@
 const path = require('path');
 
 const {
-  hasViewScript = false,
   blockLanguage = 'typescript',
+  hasViewScript = 'false',
+  shouldRegisterBlock = 'false',
 } = process.env;
 
 // The javascript or typescript script suffix or filetype based on the block language.
@@ -48,4 +49,10 @@ module.exports = {
     },
   },
   blockTemplatesPath,
+  transformer: (view: object) => { // eslint-disable-line arrow-body-style
+    return {
+      ...view,
+      shouldRegisterBlock: shouldRegisterBlock === 'false',
+    };
+  },
 };

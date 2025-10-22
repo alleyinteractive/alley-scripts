@@ -5,21 +5,19 @@ import { spawn } from 'node:child_process';
 
 /* eslint-disable no-console */
 import fs from 'fs';
-import prompts from 'prompts';
 import path from 'path';
 import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
+import setupEnvironmentVariables from './src/setup-environment-variables';
 
 type Options = {
   name: string;
   alias?: string;
   type: StringConstructor | BooleanConstructor;
-  defaultValue?: string;
+  defaultValue?: any;
   defaultOption?: string;
   description: string;
 };
-
-type LanguageType = 'typescript' | 'javascript';
 
 /**
  * Define the command line options.
@@ -54,6 +52,12 @@ const options: Options[] = [
     type: Boolean,
   },
   {
+    name: 'shouldRegisterBlock',
+    alias: 'r',
+    description: 'Specifies whether the block should register itself with a call to register_block_type().',
+    type: Boolean,
+  },
+  {
     name: 'help',
     alias: 'h',
     description: 'Display this usage guide.',
@@ -61,26 +65,13 @@ const options: Options[] = [
   },
 ];
 
-/**
- * Validate the block language.
- *
- * @param value - The block language.
- * @return      - The block language if it is valid.
- *
- * @throws {Error} If the block language is not one of the accepted values.
- */
-function validateBlockLanguage(value: string) {
-  if (value !== 'typescript' && value !== 'javascript') {
-    throw new Error('The block language must be one of \'typescript\' or \'javascript\'\n');
-  }
-  return value;
-}
-
 // Get the options from the command line.
 const {
   namespace,
   blocksDir: blocksDirectory,
   blockLanguage,
+  hasViewScript,
+  shouldRegisterBlock,
   help,
 } = commandLineArgs(options as OptionDefinition[]);
 
@@ -107,35 +98,7 @@ if (help) {
  * and then create a block using the @wordpress/create-block package.
  */
 (async () => {
-  // If there is no command line argument for the block language,
-  // allow the user to select one with a prompt.
-  if (!blockLanguage) {
-    const { blockLanguagePrompt, hasViewScript }: {
-      blockLanguagePrompt: LanguageType;
-      hasViewScript: boolean;
-    } = await prompts([
-      {
-        type: 'select',
-        name: 'blockLanguagePrompt',
-        message: 'Create a block in TypeScript or JavaScript?',
-        choices: [
-          { title: 'TypeScript', value: 'typescript' },
-          { title: 'JavaScript', value: 'javascript' },
-        ],
-        initial: 0,
-      },
-      {
-        type: 'confirm',
-        name: 'hasViewScript',
-        message: 'Will this block have a front end view script?',
-        initial: false,
-      },
-    ]);
-    process.env.blockLanguage = validateBlockLanguage(blockLanguagePrompt);
-    process.env.hasViewScript = String(hasViewScript);
-  } else {
-    process.env.blockLanguage = validateBlockLanguage(blockLanguage);
-  }
+  await setupEnvironmentVariables({ blockLanguage, hasViewScript, shouldRegisterBlock });
 
   // Assign the namespace as an environment variable if there is one.
   process.env.namespace = namespace;
@@ -164,11 +127,11 @@ if (help) {
     [
       /**
        * This argument specifies an external npm package as a template.
-       * In this case, the selectTemplates.js file is used as a the entry for the template.
+       * In this case, the select-templates.js file is used as a the entry for the template.
        * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
        */
       '--template',
-      path.join(__dirname, 'src/selectTemplates.js'),
+      path.join(__dirname, 'src/select-templates.js'),
       /**
        * With this argument, the create-block package runs in
        * "No plugin mode" which only scaffolds block files into the current directory.
