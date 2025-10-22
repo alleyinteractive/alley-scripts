@@ -11,8 +11,6 @@ import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import setupEnvironmentVariables from './src/setup-environment-variables';
 
-console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-block'))} 🚀\n`);
-
 type Options = {
   name: string;
   alias?: string;
@@ -95,6 +93,8 @@ if (help) {
   console.log(usage);
   process.exit(0);
 }
+
+console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-block'))} 🚀\n`);
 
 /**
  * Prompts the user to select a block language (TypeScript or JavaScript)
