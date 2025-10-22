@@ -33,7 +33,7 @@ const options: Options[] = [
     description: 'The namespace for the block. (default: create-block)',
   },
   {
-    name: 'blocksDir',
+    name: 'blocks-dir',
     alias: 'b',
     description: 'The directory where the blocks will be created relative to the current working directory. (default: blocks)',
     type: String,
@@ -41,19 +41,19 @@ const options: Options[] = [
     defaultOption: 'blocks',
   },
   {
-    name: 'blockLanguage',
+    name: 'block-language',
     alias: 'l',
     description: 'The language for the block. Accepts `typescript` or `javascript`',
     type: String,
   },
   {
-    name: 'hasViewScript',
+    name: 'has-view-script',
     alias: 'v',
     description: 'Whether the block will have a frontend scripts definition. (viewScript in block.json)',
     type: Boolean,
   },
   {
-    name: 'skipRegistration',
+    name: 'skip-registration',
     alias: 'r',
     description: 'Specifies whether the block should skip registration in PHP.',
     type: Boolean,
@@ -69,10 +69,10 @@ const options: Options[] = [
 // Get the options from the command line.
 const {
   namespace,
-  blocksDir: blocksDirectory,
-  blockLanguage,
-  hasViewScript,
-  skipRegistration: shouldRegisterBlock,
+  'blocks-dir': blocksDirectory,
+  'block-language': blockLanguage,
+  'has-view-script': hasViewScript,
+  'skip-registration': skipBlockRegistration,
   help,
 } = commandLineArgs(options as OptionDefinition[]);
 
@@ -101,7 +101,7 @@ console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-b
  * and then create a block using the @wordpress/create-block package.
  */
 (async () => {
-  await setupEnvironmentVariables({ blockLanguage, hasViewScript, shouldRegisterBlock });
+  await setupEnvironmentVariables({ blockLanguage, hasViewScript, skipBlockRegistration });
 
   // Assign the namespace as an environment variable if there is one.
   process.env.namespace = namespace;

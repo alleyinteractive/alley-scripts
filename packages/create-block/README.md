@@ -21,15 +21,15 @@ Without providing any options the tool will prompt the user through several opti
 
 ### `CLI options`
 ```bash
-  -n, --namespace <string>     The namespace for the block. (default: create-block)
-  -b, --blocksDir <string>     The directory where the blocks will be created
-                               relative to the current working directory.
-                               (default: blocks)
-  -l, --blockLanguage <string> The language for the block. Accepts `typescript`
-                               or `javascript`. (default: typescript)
-  -r, --skipRegistration       Skip registering the block in PHP with register_block_type().
-                               (default: false)
-  -h, --help                   Display the help usage guide.
+  -n, --namespace <string>      The namespace for the block. (default: create-block)
+  -b, --blocks-dir <string>     The directory where the blocks will be created
+                                relative to the current working directory.
+                                (default: blocks)
+  -l, --block-language <string> The language for the block. Accepts `typescript`
+                                or `javascript`. (default: typescript)
+  -r, --skip-registration       Skip registering the block in PHP with register_block_type().
+                                (default: false)
+  -h, --help                    Display the help usage guide.
 ```
 
 ### Prompt options

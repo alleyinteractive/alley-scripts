@@ -55,7 +55,8 @@ module.exports = {
 
       return {
         ...view,
-        // Set the variable that is used in the templates to conditionally register the block.
+        // Set the variable that is used in the templates to conditionally
+        // register the block in the index.php file.
         shouldRegisterBlock: process.env.shouldRegisterBlock === 'true',
       };
     },

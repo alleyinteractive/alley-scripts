@@ -7,7 +7,7 @@ type LanguageType = 'typescript' | 'javascript';
 type PromptInput = {
   blockLanguage: any;
   hasViewScript: any;
-  shouldRegisterBlock: any;
+  skipBlockRegistration: any;
 };
 
 /**
@@ -34,7 +34,6 @@ function validateBlockLanguage(value: string): LanguageType {
 export default async function setupEnvironmentVariables(input: PromptInput): Promise<void> {
   const questions: prompts.PromptObject<any>[] = [];
 
-  // Process the arguments passed to the script and prompt for any missing values.
   if (!input.blockLanguage) {
     questions.push({
       type: 'select',
@@ -63,15 +62,16 @@ export default async function setupEnvironmentVariables(input: PromptInput): Pro
     process.env.hasViewScript = String(input.hasViewScript);
   }
 
-  if (typeof input.shouldRegisterBlock === 'undefined') {
+  if (typeof input.skipBlockRegistration === 'undefined') {
     questions.push({
       type: 'confirm',
       name: 'shouldRegisterBlock',
-      message: `Does this block need to register itself with a call to ${chalk.yellow('register_block_type()')}?\n\nIf you are using a recent version of create-wordpress-plugin that includes ${chalk.yellow('wp_register_block_metadata_collection()')}, you can skip the block registration file.\n\nFor more information, see: ${chalk.underline('https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/')}`,
-      initial: false,
+      message: `Does this block need to register itself with a call to ${chalk.yellow('register_block_type()')}?\n\nIf you are using a recent version of create-wordpress-plugin that includes ${chalk.yellow('wp_register_block_metadata_collection()')}, you can select "yes" and skip the block registration file.\n\nFor more information, see: ${chalk.underline('https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/')}`,
+      initial: true,
     });
   } else {
-    process.env.shouldRegisterBlock = String(input.shouldRegisterBlock);
+    // Invert the skipBlockRegistration input to set shouldRegisterBlock.
+    process.env.shouldRegisterBlock = String(input.skipBlockRegistration) === 'true' ? 'false' : 'true';
   }
 
   if (questions.length) {
