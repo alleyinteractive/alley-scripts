@@ -55,9 +55,9 @@ const options: Options[] = [
     type: Boolean,
   },
   {
-    name: 'shouldRegisterBlock',
+    name: 'skipRegistration',
     alias: 'r',
-    description: 'Specifies whether the block should register itself with a call to register_block_type().',
+    description: 'Specifies whether the block should skip registration in PHP.',
     type: Boolean,
   },
   {
@@ -74,7 +74,7 @@ const {
   blocksDir: blocksDirectory,
   blockLanguage,
   hasViewScript,
-  shouldRegisterBlock,
+  skipRegistration: shouldRegisterBlock,
   help,
 } = commandLineArgs(options as OptionDefinition[]);
 

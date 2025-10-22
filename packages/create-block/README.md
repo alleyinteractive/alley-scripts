@@ -27,7 +27,7 @@ Without providing any options the tool will prompt the user through several opti
                                (default: blocks)
   -l, --blockLanguage <string> The language for the block. Accepts `typescript`
                                or `javascript`. (default: typescript)
-  -r, --skip-registration      Skip registering the block in PHP with register_block_type().
+  -r, --skipRegistration       Skip registering the block in PHP with register_block_type().
                                (default: false)
   -h, --help                   Display the help usage guide.
 ```
