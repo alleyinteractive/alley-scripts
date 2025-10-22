@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import prompts from 'prompts';
+import chalk from 'chalk';
 
 type LanguageType = 'typescript' | 'javascript';
 
@@ -66,7 +67,7 @@ export default async function setupEnvironmentVariables(input: PromptInput): Pro
     questions.push({
       type: 'confirm',
       name: 'shouldRegisterBlock',
-      message: 'Does this block need to register itself with a call to register_block_type()?\n\nIf you are using a recent version of create-wordpress-plugin that includes wp_register_block_metadata_collection(), you can skip the block registration file.',
+      message: `Does this block need to register itself with a call to ${chalk.yellow('register_block_type()')}?\n\nIf you are using a recent version of create-wordpress-plugin that includes ${chalk.yellow('wp_register_block_metadata_collection()')}, you can skip the block registration file.\n\nFor more information, see: ${chalk.underline('https://make.wordpress.org/core/2024/10/17/new-block-type-registration-apis-to-improve-performance-in-wordpress-6-7/')}`,
       initial: false,
     });
   } else {
@@ -76,14 +77,14 @@ export default async function setupEnvironmentVariables(input: PromptInput): Pro
   if (questions.length) {
     const answers = await prompts(questions, {
       onCancel: () => {
-        console.log('\nPrompt cancelled. Exiting...\n');
+        console.log(chalk.red('\nPrompt cancelled. Exiting...\n'));
         process.exit(1);
       },
     });
 
     // Ensure all prompts were answered.
     if (Object.keys(answers).length !== questions.length) {
-      console.error('\nError: Prompt cancelled. Exiting...\n');
+      console.error(chalk.red('\nError: Prompt cancelled. Exiting...\n'));
       process.exit(1);
     }
 

@@ -4,11 +4,14 @@ import { chdir, cwd } from 'node:process';
 import { spawn } from 'node:child_process';
 
 /* eslint-disable no-console */
+import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import setupEnvironmentVariables from './src/setup-environment-variables';
+
+console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-block'))} 🚀\n`);
 
 type Options = {
   name: string;
