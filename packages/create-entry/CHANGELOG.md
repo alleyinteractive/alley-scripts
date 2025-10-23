@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- fa4f8d9f: Change default hook for registering entries to wp_enqueue_scripts.
+
 ## 0.1.0
 
 ### Minor Changes
