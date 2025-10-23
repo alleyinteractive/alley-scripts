@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- cf23a72e: - Change all command options to be kebab-case. Existing aliases such as -b are unchanged.
+  - Allow blocks to be generated without registering themselves.
+
 ## 0.3.1
 
 ### Patch Changes
