@@ -1,8 +1,9 @@
+/* eslint-disable no-console, no-param-reassign */
 const path = require('path');
 
 const {
-  hasViewScript = false,
   blockLanguage = 'typescript',
+  hasViewScript = 'false',
 } = process.env;
 
 // The javascript or typescript script suffix or filetype based on the block language.
@@ -40,6 +41,25 @@ module.exports = {
     editorStyle: 'file:index.css',
     style: ['file:style-index.css'],
     ...viewScript,
+    transformer: (view: {
+      title?: string;
+      slug?: string;
+    }) => {
+      // Ensure the block has a generated title.
+      if (!view.title && view.slug) {
+        view.title = view.slug
+          .split('-')
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+
+      return {
+        ...view,
+        // Set the variable that is used in the templates to conditionally
+        // register the block in the index.php file.
+        shouldRegisterBlock: process.env.shouldRegisterBlock === 'true',
+      };
+    },
   },
   variants: {
     dynamic: {

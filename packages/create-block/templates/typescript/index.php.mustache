@@ -4,6 +4,9 @@
  *
  * @package {{namespace}}
  */
+{{#shouldRegisterBlock}}
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Registers the {{namespace}}/{{slug}} block using the metadata loaded from the `block.json` file.
@@ -15,3 +18,4 @@ function {{namespaceSnakeCase}}_{{slugSnakeCase}}_block_init(): void {
 	);
 }
 add_action( 'init', '{{namespaceSnakeCase}}_{{slugSnakeCase}}_block_init' );
+{{/shouldRegisterBlock}}
