@@ -26,7 +26,7 @@ jobs:
           echo "✅ Valid snapshot branch: ${{ github.ref_name }}"
 
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js 22.x
         uses: actions/setup-node@v4

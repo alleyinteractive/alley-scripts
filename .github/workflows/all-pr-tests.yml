@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
 
@@ -52,7 +52,7 @@ jobs:
     name: "PHP Tests"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Run PHP Tests
         uses: alleyinteractive/action-test-php@develop
