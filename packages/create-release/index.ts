@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
+/* eslint-disable no-console, no-await-in-loop */
 
 import { lt, valid } from 'semver';
 import chalk from 'chalk';
@@ -26,6 +26,7 @@ import {
   upgradePluginVersion,
   upgradeReadmeVersion,
 } from './src/helpers.js';
+import promptToEditChangelog from './src/changelog.js';
 
 /**
  * Prompts the user to create a release.
@@ -209,6 +210,9 @@ import {
   if (dryRun) {
     process.exit(0);
   }
+
+  // Prompt to edit the CHANGELOG.md if needed
+  await promptToEditChangelog(basePath, releaseVersion);
 
   console.log(`\n✅ Ready to release version ${chalk.yellow(releaseVersion)}!\n`);
   console.log('Commit the changes and the GitHub actions will handle creating a tag/release on GitHub.'); // eslint-disable-line max-len
