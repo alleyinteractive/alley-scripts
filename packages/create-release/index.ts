@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-console, no-await-in-loop */
+/* eslint-disable no-console */
 
 import { lt, valid } from 'semver';
 import chalk from 'chalk';
