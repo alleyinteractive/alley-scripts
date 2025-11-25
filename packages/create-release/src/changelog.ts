@@ -32,6 +32,9 @@ export default async function promptToEditChangelog(
     return;
   }
 
+  // Check if the changelog uses 'v' prefixes for version headers.
+  const useVPrefixes = contents.match(/^##\s+v/im) !== null;
+
   console.log(chalk.blue(`\n⏳ Checking changelog for version ${releaseVersion}...\n`));
 
   // Check if there's an Unreleased section
@@ -46,11 +49,16 @@ export default async function promptToEditChangelog(
       initial: true,
     });
 
+    if (convertUnreleased === undefined) {
+      console.log(chalk.yellow('\n⚠️  Changelog update cancelled.'));
+      return;
+    }
+
     if (convertUnreleased) {
       // Replace the Unreleased header with the new version
       updatedContents = updatedContents.replace(
         /^##\s+\[?Unreleased\]?.*$/im,
-        `## ${releaseVersion}`,
+        `## ${useVPrefixes ? `v${releaseVersion}` : releaseVersion}`,
       );
 
       // Write the updated contents back to the file
@@ -68,6 +76,11 @@ export default async function promptToEditChangelog(
     message: `Enter changelog entry for version ${releaseVersion} (or leave empty to open editor):`,
     initial: '',
   });
+
+  if (changelogEntry === undefined) {
+    console.log(chalk.yellow('\n⚠️  Changelog update cancelled.'));
+    return;
+  }
 
   // If they provided a changelog entry, append it to the changelog.
   if (changelogEntry && changelogEntry.trim()) {
@@ -115,9 +128,6 @@ export default async function promptToEditChangelog(
     if (insertIndex === -1) {
       insertIndex = 0;
     }
-
-    // Check if the changelog uses 'v' prefixes for version headers.
-    const useVPrefixes = contents.match(/^##\s+v/im) !== null;
 
     const newEntry = [
       `## ${useVPrefixes ? `v${releaseVersion}` : releaseVersion}`,
@@ -192,7 +202,7 @@ export default async function promptToEditChangelog(
       initial: true,
     });
 
-    if (!tryAgain) {
+    if (tryAgain === undefined || !tryAgain) {
       console.log(chalk.yellow('\n⚠️  Remember to update the changelog before releasing!'));
       break;
     }
