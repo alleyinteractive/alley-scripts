@@ -211,7 +211,7 @@ import promptToEditChangelog from './src/changelog.js';
     process.exit(0);
   }
 
-  // Prompt to edit the CHANGELOG.md if needed
+  // Prompt to edit the CHANGELOG.md if needed.
   await promptToEditChangelog(basePath, releaseVersion);
 
   console.log(`\n✅ Ready to release version ${chalk.yellow(releaseVersion)}!\n`);

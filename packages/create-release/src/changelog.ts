@@ -33,19 +33,80 @@ export default async function promptToEditChangelog(
 
   console.log(chalk.yellow(`\n⚠️  Remember to update ${chalk.yellow('CHANGELOG.md')} with the changes for version ${releaseVersion}!\n`)); // eslint-disable-line max-len
 
-  const { editChangelog } = await prompts({
-    type: 'confirm',
-    name: 'editChangelog',
-    message: 'Would you like to edit the changelog now?',
-    initial: true,
+  // First, prompt the user to enter the changelog entry
+  const { changelogEntry } = await prompts({
+    type: 'text',
+    name: 'changelogEntry',
+    message: `Enter changelog entry for version ${releaseVersion} (or leave empty to open editor):`,
+    initial: '',
   });
 
-  if (!editChangelog) {
+  // If they provided a changelog entry, append it to the changelog.
+  if (changelogEntry && changelogEntry.trim()) {
+    const lines = contents.split('\n');
+    let insertIndex = -1;
+
+    // Find the first ## entry (existing changelog entry) to insert before it.
+    for (let i = 0; i < lines.length; i += 1) {
+      if (lines[i].match(/^##\s+/)) {
+        insertIndex = i;
+        break;
+      }
+    }
+
+    // If no existing entry found, find the Changelog header and insert after any intro text.
+    if (insertIndex === -1) {
+      for (let i = 0; i < lines.length; i += 1) {
+        if (lines[i].match(/^#\s+changelog/i)) {
+          // Skip past the header and any intro paragraph/empty lines
+          insertIndex = i + 1;
+
+          // Skip empty lines immediately after header
+          while (insertIndex < lines.length && lines[insertIndex].trim() === '') {
+            insertIndex += 1;
+          }
+
+          // Skip intro paragraph if it exists (any non-heading text)
+          while (insertIndex < lines.length
+                 && lines[insertIndex].trim() !== ''
+                 && !lines[insertIndex].match(/^##?\s+/)) {
+            insertIndex += 1;
+          }
+
+          // Skip any trailing empty lines after intro
+          while (insertIndex < lines.length && lines[insertIndex].trim() === '') {
+            insertIndex += 1;
+          }
+
+          break;
+        }
+      }
+    }
+
+    // If still no position found, insert at the beginning
+    if (insertIndex === -1) {
+      insertIndex = 0;
+    }
+
+    const newEntry = [
+      `## ${releaseVersion}`,
+      '',
+      changelogEntry.trim(),
+      '',
+    ];
+
+    // Insert the new entry
+    lines.splice(insertIndex, 0, ...newEntry);
+
+    const updatedContents = lines.join('\n');
+
+    fs.writeFileSync(changelogPath, updatedContents, 'utf8');
+    console.log(chalk.green('\n✓ Changelog updated successfully.\n'));
     return;
   }
 
+  // If we're still here, they didn't provide an entry, so open the editor directly.
   while (true) { // eslint-disable-line no-constant-condition
-    // Create a temporary file with the changelog content
     const tmpDir = os.tmpdir();
     const tmpFile = path.join(tmpDir, `CHANGELOG-${Date.now()}.md`);
     fs.copyFileSync(changelogPath, tmpFile);
