@@ -26,12 +26,40 @@ export default async function promptToEditChangelog(
 
   const contents = fs.readFileSync(changelogPath, 'utf8');
 
-  // If the changelog already includes the release version, no need to prompt
-  if (contents.includes(releaseVersion)) {
+  // If the changelog already includes the release version (with or without 'v' prefix),
+  // no need to prompt.
+  if (contents.includes(releaseVersion) || contents.includes(`v${releaseVersion}`)) {
     return;
   }
 
-  console.log(chalk.yellow(`\n⚠️  Remember to update ${chalk.yellow('CHANGELOG.md')} with the changes for version ${releaseVersion}!\n`)); // eslint-disable-line max-len
+  console.log(chalk.blue(`\n⏳ Checking changelog for version ${releaseVersion}...\n`));
+
+  // Check if there's an Unreleased section
+  let updatedContents = contents;
+  const unreleasedMatch = contents.match(/^##\s+\[?Unreleased\]?/im);
+
+  if (unreleasedMatch) {
+    const { convertUnreleased } = await prompts({
+      type: 'confirm',
+      name: 'convertUnreleased',
+      message: `Found an "Unreleased" section. Would you like to convert it to version ${releaseVersion}?`,
+      initial: true,
+    });
+
+    if (convertUnreleased) {
+      // Replace the Unreleased header with the new version
+      updatedContents = updatedContents.replace(
+        /^##\s+\[?Unreleased\]?.*$/im,
+        `## ${releaseVersion}`,
+      );
+
+      // Write the updated contents back to the file
+      fs.writeFileSync(changelogPath, updatedContents, 'utf8');
+      console.log(chalk.green(`\n✓ Converted "Unreleased" section to version ${releaseVersion}.\n`));
+      console.log(chalk.green('\n✓ Changelog updated successfully.\n'));
+      return;
+    }
+  }
 
   // First, prompt the user to enter the changelog entry
   const { changelogEntry } = await prompts({
@@ -88,8 +116,11 @@ export default async function promptToEditChangelog(
       insertIndex = 0;
     }
 
+    // Check if the changelog uses 'v' prefixes for version headers.
+    const useVPrefixes = contents.match(/^##\s+v/im) !== null;
+
     const newEntry = [
-      `## ${releaseVersion}`,
+      `## ${useVPrefixes ? `v${releaseVersion}` : releaseVersion}`,
       '',
       changelogEntry.trim(),
       '',
@@ -98,9 +129,9 @@ export default async function promptToEditChangelog(
     // Insert the new entry
     lines.splice(insertIndex, 0, ...newEntry);
 
-    const updatedContents = lines.join('\n');
+    const finalContents = lines.join('\n');
 
-    fs.writeFileSync(changelogPath, updatedContents, 'utf8');
+    fs.writeFileSync(changelogPath, finalContents, 'utf8');
     console.log(chalk.green('\n✓ Changelog updated successfully.\n'));
     return;
   }
@@ -139,13 +170,13 @@ export default async function promptToEditChangelog(
     }
 
     // Read the edited content from the temporary file
-    const updatedContents = fs.readFileSync(tmpFile, 'utf8');
+    const editedContents = fs.readFileSync(tmpFile, 'utf8');
 
-    if (updatedContents.includes(releaseVersion)) {
+    if (editedContents.includes(releaseVersion) || editedContents.includes(`v${releaseVersion}`)) {
       // Copy the edited content back to the actual CHANGELOG.md
       fs.copyFileSync(tmpFile, changelogPath);
       fs.unlinkSync(tmpFile);
-      console.log(chalk.green('\n✓ Changelog updated successfully.\n'));
+      console.log(chalk.green('\n✓ Changelog updated successfully.'));
       break;
     }
 
@@ -162,7 +193,7 @@ export default async function promptToEditChangelog(
     });
 
     if (!tryAgain) {
-      console.log(chalk.yellow('\n⚠️  Remember to update the changelog before releasing!\n'));
+      console.log(chalk.yellow('\n⚠️  Remember to update the changelog before releasing!'));
       break;
     }
   }
