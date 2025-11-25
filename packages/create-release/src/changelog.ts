@@ -2,6 +2,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import crypto from 'crypto';
 import chalk from 'chalk';
 import prompts from 'prompts';
 import { spawnSync } from 'child_process';
@@ -145,11 +146,11 @@ export default async function promptToEditChangelog(
     console.log(chalk.green('\n✓ Changelog updated successfully.\n'));
     return;
   }
-
   // If we're still here, they didn't provide an entry, so open the editor directly.
   while (true) { // eslint-disable-line no-constant-condition
     const tmpDir = os.tmpdir();
-    const tmpFile = path.join(tmpDir, `CHANGELOG-${Date.now()}.md`);
+    const tmpFile = path.join(tmpDir, `CHANGELOG-${crypto.randomUUID()}.md`);
+    fs.copyFileSync(changelogPath, tmpFile);
     fs.copyFileSync(changelogPath, tmpFile);
 
     const editorCmd = process.env.EDITOR || 'vi';
