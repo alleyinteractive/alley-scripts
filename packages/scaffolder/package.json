@@ -23,7 +23,7 @@
     "@alleyinteractive/scaffolder-features": "*",
     "chalk": "^4.1.2",
     "cli-progress": "^3.12.0",
-    "fast-glob": "^3.3.2",
+    "fast-glob": "^3.3.3",
     "handlebars": "^4.7.8",
     "handlebars-helpers": "^0.10.0",
     "joi": "^17.12.0",
