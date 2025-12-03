@@ -29,14 +29,15 @@ export default async function promptToEditChangelog(
 
   // If the changelog already includes the release version (with or without 'v' prefix),
   // no need to prompt.
-  if (contents.includes(releaseVersion) || contents.includes(`v${releaseVersion}`)) {
+  if (contents.match(new RegExp(`^##\\s+\\[?v?${releaseVersion.replace(/\./g, '\\.')}\\]?`, 'im'))) {
+    console.log(chalk.green(`✓ Changelog already includes version ${releaseVersion}!`));
     return;
   }
 
   // Check if the changelog uses 'v' prefixes for version headers.
   const useVPrefixes = contents.match(/^##\s+v/im) !== null;
 
-  console.log(chalk.blue(`\n⏳ Checking changelog for version ${releaseVersion}...\n`));
+  console.log(chalk.blue(`\n⏳ Adding version ${releaseVersion} to changelog...\n`));
 
   // Check if there's an Unreleased section
   let updatedContents = contents;
