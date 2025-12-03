@@ -57,10 +57,10 @@ export default async function promptToEditChangelog(
     }
 
     if (convertUnreleased) {
-      // Replace the Unreleased header with the new version
+      // Replace the Unreleased header with the new version.
       updatedContents = updatedContents.replace(
         /^##\s+\[?Unreleased\]?.*$/im,
-        `## ${useVPrefixes ? `v${releaseVersion}` : releaseVersion}`,
+        `## Unreleased\n\nNothing yet.\n\n## ${useVPrefixes ? `v${releaseVersion}` : releaseVersion}`,
       );
 
       // Write the updated contents back to the file
