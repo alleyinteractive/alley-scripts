@@ -9,6 +9,7 @@ Used in conjuction with SortableItem to allow for a sortable list where users ca
   emptyItem=""
   list={myList}
   setList={setMyList}
+  buttonText=""
 >
   {mylist && mylist.length
     ? mylist.map((mylistItem: string, index: number) => (
@@ -37,8 +38,9 @@ props listed below.
 
 ## Props
 
-| Prop      | Default | Required | Type     | Description                                                 |
-|-----------|---------|----------|----------|-------------------------------------------------------------|
-| emptyItem |         | Yes      | any      | Empty array item to use when adding a new item to the array |
-| list      |         | Yes      | array    | The array to sort and modify                                |
-| setList   |         | Yes      | function | Function to update the array                                |
+| Prop       | Default  | Required | Type     | Description                                                 |
+|------------|----------|----------|----------|-------------------------------------------------------------|
+| emptyItem  |          | Yes      | any      | Empty array item to use when adding a new item to the array |
+| list       |          | Yes      | array    | The array to sort and modify                                |
+| setList    |          | Yes      | function | Function to update the array                                |
+| buttonText | Add Item | No       | string   | String for the button to add a new sortable item            |
