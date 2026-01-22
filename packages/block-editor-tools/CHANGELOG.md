@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+
+### Minor Changes
+
+- afc4ff9b: Add a buttonText prop to the Sortable component to allow developers to customize the "add item" button text.
+
 ## 0.14.0
 
 ### Minor Changes
