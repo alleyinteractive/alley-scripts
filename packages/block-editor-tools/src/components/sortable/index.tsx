@@ -7,12 +7,14 @@ interface SortableProps {
   emptyItem: any;
   list: any[];
   setList: (list: any[]) => void;
+  buttonText?: string;
 }
 export default function Sortable({
   children,
   emptyItem,
   list,
   setList,
+  buttonText,
 }: SortableProps) {
   return (
     <>
@@ -23,7 +25,7 @@ export default function Sortable({
           onClick={() => setList([...list, emptyItem])}
           variant="primary"
         >
-          {__('Add Item', 'alley-scripts')}
+          {buttonText ?? __('Add Item', 'alley-scripts')}
         </Button>
       </div>
     </>
