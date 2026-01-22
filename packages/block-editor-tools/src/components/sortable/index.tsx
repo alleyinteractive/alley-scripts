@@ -14,7 +14,7 @@ export default function Sortable({
   emptyItem,
   list,
   setList,
-  buttonText = '',
+  buttonText,
 }: SortableProps) {
   return (
     <>
@@ -25,7 +25,7 @@ export default function Sortable({
           onClick={() => setList([...list, emptyItem])}
           variant="primary"
         >
-          {buttonText || __('Add Item', 'alley-scripts')}
+          {buttonText ?? __('Add Item', 'alley-scripts')}
         </Button>
       </div>
     </>

@@ -9,7 +9,7 @@ Used in conjuction with SortableItem to allow for a sortable list where users ca
   emptyItem=""
   list={myList}
   setList={setMyList}
-  buttonText=""
+  buttonText="Add New Item"
 >
   {mylist && mylist.length
     ? mylist.map((mylistItem: string, index: number) => (
