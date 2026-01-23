@@ -81,12 +81,17 @@ export type FeatureComposerConfig = {
 export type FeatureConfig = {
   name: string;
   description?: string;
-  type: 'file' | 'repository' | 'composer';
+  type: 'file' | 'repository' | 'composer' | 'composite';
   config?: {
     /* Defaults to 'cwd'. */
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';
   };
   composer?: FeatureComposerConfig;
+  composite?: {
+    features: FeatureConfig[];
+    /* Command to run after the project is done scaffolding. */
+    postCommand?: string;
+  };
   files?: FeatureFile[];
   inputs?: FeatureInput[];
   repository?: FeatureRepositoryConfig;

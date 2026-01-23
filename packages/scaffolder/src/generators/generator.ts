@@ -5,6 +5,7 @@ import fs from 'node:fs';
 // Services.
 import { logger } from '../logger';
 import { collectInputs } from '../inputs';
+import { runCommand } from '../helpers';
 
 // Types.
 import type { FeatureConfig, FeatureContext } from '../types';
@@ -31,6 +32,19 @@ export abstract class Generator {
   constructor(config: FeatureConfig, directory: string) {
     this.config = config;
     this.path = directory;
+  }
+
+  /**
+   * Run the post command if one is specified with child_process.spawn().
+   */
+  runPostCommand(destination: string): Promise<void> {
+    const {
+      composer: { postCommand = '' } = {},
+    } = this.config;
+
+    logger().info(`Running post command: ${chalk.yellow(postCommand)}`);
+
+    return runCommand(postCommand, destination);
   }
 
   /**
@@ -84,9 +98,19 @@ export abstract class Generator {
       }
     }
 
-    this.inputs = await collectInputs(featureInputs);
+    // Filter out any inputs that have already been resolved to prevent them
+    // from being prompted again.
+    const resolvedInputs = Object.keys(this.inputs);
+    const unresolvedInputs = featureInputs.filter((input) => !resolvedInputs.includes(input.name));
 
-    logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
+    if (unresolvedInputs.length) {
+      this.inputs = {
+        ...this.inputs,
+        ...await collectInputs(unresolvedInputs),
+      };
+
+      logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
+    }
   }
 
   /**
