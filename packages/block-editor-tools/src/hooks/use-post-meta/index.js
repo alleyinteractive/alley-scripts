@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEntityProp, useEntityId } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
+import { useSelect, useRegistry } from '@wordpress/data';
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
@@ -23,17 +23,10 @@ const usePostMeta = (postType = null, postId = null) => {
   const id = postId ?? providerId;
 
   // Create a selector for the latest meta for the setter to optionally use.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const { getEditedEntityRecord } = useRegistry().select('core');
   const getLatestMeta = React.useCallback(
-    useSelect(
-      (select) => {
-        const { getEditedEntityRecord } = select('core');
-        return () => getEditedEntityRecord('postType', type, id)?.meta;
-      },
-      [type, id],
-    ),
-    // We have to disable the exhaustive-deps rule here, so pay attention to the dependencies.
-    [type, id],
+    () => getEditedEntityRecord('postType', type, id)?.meta,
+    [getEditedEntityRecord, type, id],
   );
 
   // Get the return value from useEntityProp so we can wrap it for safety.
