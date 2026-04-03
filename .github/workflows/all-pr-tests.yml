@@ -12,18 +12,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20, 22, 24]
+        node: [18, 20, 22, 24, 25]
     name: "Build and Test: Node ${{ matrix.node }}"
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Cache turbo build setup
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .turbo
           key: ${{ runner.os }}-${{ matrix.node }}-turbo-${{ github.sha }}
@@ -31,7 +31,7 @@ jobs:
             ${{ runner.os }}-${{ matrix.node }}-turbo-
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: 'npm'
@@ -52,12 +52,12 @@ jobs:
     name: "PHP Tests"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Run PHP Tests
         uses: alleyinteractive/action-test-php@develop
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           skip-audit: 'true'
           skip-core-test-suite: 'true'
           skip-wordpress-install: 'true'
