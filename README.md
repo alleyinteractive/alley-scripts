@@ -24,6 +24,7 @@ This monorepo contains the following packages:
 - [`@alleyinteractive/create-entry`](./packages/create-entry/README.md)
 - [`@alleyinteractive/create-release`](./packages/create-release/README.md)
 - [`@alleyinteractive/eslint-config`](./packages/eslint-config/README.md)
+- [`@alleyinteractive/oxlint-config`](./packages/oxlint-config/README.md)
 - [`@alleyinteractive/scaffolder`](./packages/scaffolder/README.md)
 - [`@alleyinteractive/scaffolder-features`](./packages/scaffolder-features/README.md)
 - [`@alleyinteractive/stylelint-config`](./packages/stylelint-config/README.md)
