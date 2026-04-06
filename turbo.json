@@ -23,6 +23,9 @@
         "test/**/*.jsx"
       ]
     },
+    "stylelint": {
+      "dependsOn": []
+    },
     "lint": {
       "dependsOn": [
         "build"
