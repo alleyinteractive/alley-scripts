@@ -1,5 +1,16 @@
 # alley-scripts-demo-plugin
 
+## 1.4.0
+
+### Minor Changes
+
+- 02d34caf: Drop support for Node 18/20 (and test for Node 25)
+
+### Patch Changes
+
+- Updated dependencies [02d34caf]
+  - @alleyinteractive/block-editor-tools@0.16.0
+
 ## 1.3.2
 
 ### Patch Changes

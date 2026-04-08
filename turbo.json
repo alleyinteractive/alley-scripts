@@ -29,6 +29,9 @@
     "format:check": {
       "dependsOn": []
     },
+    "stylelint": {
+      "dependsOn": []
+    },
     "lint": {
       "dependsOn": []
     }
