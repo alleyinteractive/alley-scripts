@@ -23,6 +23,9 @@
         "test/**/*.jsx"
       ]
     },
+    "format": {
+      "dependsOn": []
+    },
     "format:check": {
       "dependsOn": []
     },

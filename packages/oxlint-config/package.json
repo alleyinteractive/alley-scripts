@@ -22,20 +22,20 @@
     "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
   },
   "files": [
-    "oxlintrc.json",
-    "oxfmtrc.json",
+    ".oxlintrc.json",
+    ".oxfmtrc.json",
     "LICENSE",
     "README.md"
   ],
-  "main": "oxlintrc.json",
+  "main": ".oxlintrc.json",
   "exports": {
-    ".": "./oxlintrc.json",
-    "./oxfmt": "./oxfmtrc.json"
+    ".": "./.oxlintrc.json",
+    "./oxfmt": "./.oxfmtrc.json"
   },
   "scripts": {
-    "format": "oxfmt -c oxfmtrc.json .",
-    "format:check": "oxfmt -c oxfmtrc.json . --check",
-    "lint": "oxlint -c oxlintrc.json ."
+    "format": "oxfmt -c .oxfmtrc.json .",
+    "format:check": "oxfmt -c .oxfmtrc.json . --check",
+    "lint": "oxlint -c .oxlintrc.json ."
   },
   "peerDependencies": {
     "oxfmt": "^0.43",
