@@ -41,7 +41,7 @@
   ],
   "main": "./dist/bin/scaffolder.js",
   "bin": {
-    "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
+    "scaffolder": "dist/bin/scaffolder.js"
   },
   "scripts": {
     "build:types": "npx tsc --declaration --emitDeclarationOnly",
