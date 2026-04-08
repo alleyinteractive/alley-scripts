@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- 633cf1dc: Prompt user to create a CHANGELOG entry when releasing. They can either provide it via CLI or have their default editor open to edit the changelog directly.
+
+## 0.3.0
+
+### Minor Changes
+
+- 39a76a8: Adding force, adjusting logic to make console output more accurate.
+
+## 0.2.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
 ## 0.1.5
 
 ### Patch Changes

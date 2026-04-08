@@ -113,7 +113,7 @@ Render a CSV upload component with a callback to further process the JSON data.
     attributeName="data"
     callback={transformData}
     setAttributes={setAttributes}
-  /> 
+  />
 ```
 #### Callback Function
 
@@ -326,12 +326,39 @@ Importantly, this component does not save the selected item, it just returns it 
 | threshold   | 3                | false    | integer  | If specified, this overrides the default minimum number of characters that must be entered in order for the search to fire. |
 
 
-### TermSelect
+### TermSelector
 
-A component for selecting terms.
+Allows users to select an term or multiple terms using a search query against the REST API. Optionally, accepts a list of subtypes to which to restrict the search. Utilizes the search endpoint, so terms must have the appropriate visibility within the REST API to appear in the result list.
+
+Importantly, this component does not save the selected term, it just returns it in the `onSelect` method. The enclosing block or component is responsible for managing the selected terms in some way, and using this component as a method for picking a new one.
 
 **Usage**
-See the Selector component for usage details. The `type` prop is preset to `term`.
+
+``` js
+  <TermSelector
+    className="custom-termselector-classname"
+    label="Select a category"
+    multiple
+    onSelect={onSelect}
+    placeholder="Select a category..."
+    subTypes={['category', 'post_tag']}
+    selected={[{
+      id: 123,
+      title: 'Title of Category',
+    }]}
+  />
+```
+**Props**
+
+| Prop        | Default          | Required | Type     | Description                                                                                                                 |
+|-------------|------------------|----------|----------|-----------------------------------------------------------------------------------------------------------------------------|
+| className   |                  | false    | string   | If specified, the className is prepended to the top-level container.                                                        |
+| label       | Search for items | false    | string   | If specified, this overrides the default label text for the item selection search input.                                    |
+| multiple    | false            | false    | boolean  | If set to true the component allows for the ability to select multiple terms returned through the `onSelect` callback.      |
+| onSelect    | NA               | true     | function | Callback to receive the selected item array, as it is returned from the `search` REST endpoint. Required.                   |
+| placeholder | Search for items | false    | string   | If specified, this overrides the default input placeholder value.                                                           |
+| subTypes   | []               | false    | array    | All queryable subtypes that will be included in the form of a comma-separated array. The default query is "any" subtype.     |
+| selected    | []               | false    | array    | Optional array of objects with id and title keys to auto-hydrate selections on load.                                        |
 
 ### VideoPicker
 
@@ -579,8 +606,10 @@ A custom React hook to retrieve post data given a post ID and post type.
 ```jsx
 const MyBlock = ({
  postID,
+ postType = 'post',
+ options = { context: 'view' }
 }) => {
-  const post = usePost(postID, postType);
+  const post = usePost(postID, postType, options);
 
   if (post) {
     ...
@@ -608,6 +637,7 @@ const MyBlock = ({
 ```
 
 You can also pass a function to lookup the post type when passed the post id.
+This function must return a string that is the post type.
 
 ```jsx
 const MyBlock = ({
@@ -625,7 +655,20 @@ const MyBlock = ({
 };
 ```
 
-This function must return a string that is the post type.
+You are also able to pass options to the underlying API query. For example,
+here is how we would get a post with the Edit context.
+
+```jsx
+const MyBlock = ({
+ postID,
+}) => {
+  const post = usePostById(postID, null, { context: 'edit' });
+
+  if (post) {
+    ...
+  }
+};
+```
 
 ### usePostMeta
 

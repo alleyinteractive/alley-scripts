@@ -1,6 +1,5 @@
-import { useState } from '@wordpress/element';
+import React, { useState, JSX } from 'react';
 import styled from 'styled-components';
-import { JSX } from 'react';
 
 import {
   Button,
@@ -18,16 +17,18 @@ import { usePostById } from '../../hooks';
 import SearchModal from './search-modal';
 import Post from './post';
 
-import './style.scss';
-
 interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
+  filters?: React.ReactNode;
   getPostType?: (id: number) => string;
   modalTitle?: string;
+  modalFormat?: 'grid' | 'list';
   onReset: () => void;
   onUpdate: (id: number) => void;
   params?: object;
+  // eslint-disable-next-line camelcase
+  previewLookup?: (id: number) => WP_REST_API_Post;
   // eslint-disable-next-line camelcase
   previewRender?: (post: object | WP_REST_API_Post) => JSX.Element;
   replaceText?: string;
@@ -50,19 +51,25 @@ const Preview = styled.div`
   border: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  margin: 5px 0;
-  padding: 0.5rem 0.75rem;
-  text-align: center;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem;
+`;
+
+const StyledNotice = styled(Notice)`
+  margin: 0 0 0.5rem 0;
 `;
 
 const PostPicker = ({
   allowedTypes,
   className,
+  filters,
   getPostType,
   modalTitle = __('Select Post', 'alley-scripts'),
+  modalFormat = 'grid',
   onReset,
   onUpdate,
   params = {},
+  previewLookup,
   previewRender,
   replaceText = __('Replace', 'alley-scripts'),
   resetText = __('Reset', 'alley-scripts'),
@@ -84,8 +91,9 @@ const PostPicker = ({
     },
   );
 
-  // eslint-disable-next-line camelcase
-  const post = usePostById(value, getPostType) as any as WP_REST_API_Post;
+  const post = previewLookup
+    ? previewLookup(value)
+    : usePostById(value, getPostType) as any as WP_REST_API_Post; // eslint-disable-line react-hooks/rules-of-hooks, camelcase, max-len
 
   const {
     featured_media: featuredMediaId,
@@ -109,7 +117,7 @@ const PostPicker = ({
         variant="secondary"
         onClick={onReset}
         style={{
-          margin: '0 4px',
+          margin: '0 0.5rem 0 0',
         }}
       >
         {resetText}
@@ -117,9 +125,6 @@ const PostPicker = ({
       <Button
         variant="secondary"
         onClick={openModal}
-        style={{
-          margin: '0 4px',
-        }}
       >
         {replaceText}
       </Button>
@@ -129,7 +134,7 @@ const PostPicker = ({
   // getEntityRecord returns `null` if the load is in progress.
   if (value !== 0 && post === null) {
     return (
-      <Spinner />
+      <Spinner onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
     );
   }
 
@@ -142,15 +147,14 @@ const PostPicker = ({
       ) : null}
       {value !== 0 && post === undefined ? (
         <>
-          <Notice
+          <StyledNotice
             status="error"
             isDismissible={false}
-            className="post-picker-notice"
           >
             <p>
               {sprintf(__('Post %d is no longer available; it has been unpublished or deleted', 'alley-scripts'), value)}
             </p>
-          </Notice>
+          </StyledNotice>
           {controls()}
         </>
       ) : null}
@@ -182,10 +186,12 @@ const PostPicker = ({
         <SearchModal
           closeModal={closeModal}
           baseUrl={baseUrl}
+          format={modalFormat}
           modalTitle={modalTitle}
           onUpdate={onUpdate}
           searchRender={searchRender}
           suppressPostIds={suppressPostIds}
+          filters={filters}
         />
       ) : null}
     </Container>

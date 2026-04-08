@@ -3,9 +3,9 @@
   "description": "Quickly scaffold project template files.",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/scaffolder",
-  "version": "0.0.0",
+  "version": "0.3.0",
   "engines": {
-    "node": ">=16.0.0 <21.0.0",
+    "node": ">=22.0.0 <26.0.0",
     "npm": ">=8"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@types/js-yaml": "^4.0.9"
   },
   "dependencies": {
+    "@alleyinteractive/scaffolder-features": "*",
     "chalk": "^4.1.2",
     "cli-progress": "^3.12.0",
     "fast-glob": "^3.3.2",
@@ -40,7 +41,7 @@
   ],
   "main": "./dist/bin/scaffolder.js",
   "bin": {
-    "@alleyinteractive/scaffolder": "./dist/bin/scaffolder.js"
+    "scaffolder": "dist/bin/scaffolder.js"
   },
   "scripts": {
     "build:types": "npx tsc --declaration --emitDeclarationOnly",

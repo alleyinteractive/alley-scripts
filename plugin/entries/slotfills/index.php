@@ -54,4 +54,5 @@ add_action( 'init', __NAMESPACE__ . '\register_example_slotfills_scripts' );
  */
 function action_enqueue_example_slotfills_assets() {
 	wp_enqueue_script( 'alley-scripts-demo-plugin-example_slotfills' );
+	wp_enqueue_style( 'alley-scripts-demo-plugin-example_slotfills', plugins_url( 'index.css', __FILE__ ), [], '1.0.0' );
 }

@@ -8,6 +8,8 @@ import {
   getArgsFromCLI,
   getDefaultArgs,
   getWebpackConfig,
+  getUserWebpackConfigFilePath,
+  getUserWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
 } from './index';
@@ -76,9 +78,23 @@ describe('hasArgInCLI', () => {
 });
 
 describe('getWebpackConfig', () => {
+  test('returns the path to the extended webpack config file', () => {
+    const expectedPath = path.join(__dirname, '../config/extended.config.js');
+    expect(getWebpackConfig()).toBe(expectedPath);
+  });
+});
+
+describe('getUserWebpackConfigFilePath', () => {
   afterEach(() => {
     // reset process.argv to default value that is the webpack config path in the package.
-    process.argv = ['node', 'index.js', `--config=${path.join(__dirname, '../config/webpack.config.js')}`];
+    process.argv = ['node', 'index.js', `--config=${path.join(__dirname, '../config/extended.config.js')}`];
+  });
+
+  test('returns the path to the webpack config file specified in the CLI', () => {
+    const argName = '--config';
+    const argValue = 'path/to/webpack.config.js';
+    process.argv = ['node', 'index.js', `${argName}=${argValue}`];
+    expect(getUserWebpackConfigFilePath()).toBe(path.join(process.cwd(), argValue));
   });
 
   test('returns the path to the webpack config file in the project root', () => {
@@ -92,32 +108,56 @@ describe('getWebpackConfig', () => {
       console.error(err);
     }
 
-    expect(getWebpackConfig()).toBe(rootWebpackConfigPath);
+    expect(getUserWebpackConfigFilePath()).toBe(rootWebpackConfigPath);
 
     // remove webpack config file from project root.
     try {
       fs.unlinkSync(rootWebpackConfigPath);
       // file removed
     } catch (err) {
-      console.error(err);
+      console.log(err);
+    }
+  });
+});
+
+describe('getUserWebpackConfig', () => {
+  const rootWebpackConfigPath = path.join(process.cwd(), 'webpack.config.js');
+
+  afterEach(() => {
+    jest.resetAllMocks();
+
+    try {
+      fs.unlinkSync(rootWebpackConfigPath);
+      // file removed
+    } catch (err) {
+      console.log(err);
     }
   });
 
-  test('returns the path to the webpack config file specified in the CLI', () => {
-    const argName = '--config';
-    const argValue = 'path/to/webpack.config.js';
-    process.argv = ['node', 'index.js', `${argName}=${argValue}`];
-    expect(getWebpackConfig()).toBe(argValue);
+  test('returns the user webpack configuration if the webpack config file path is defined', () => {
+    // Define the contents to write to the file
+    const fileContents = "const config = { entry: './src/index.js' }; module.exports = config;";
+
+    // create webpack config file in project root.
+    try {
+      fs.writeFileSync(rootWebpackConfigPath, fileContents);
+      // file written successfully
+    } catch (err) {
+      console.log(err);
+    }
+    const mockConfig = { entry: './src/index.js' };
+    jest.spyOn(require, 'resolve').mockImplementation(() => rootWebpackConfigPath);
+    expect(getUserWebpackConfig()).toEqual(mockConfig);
   });
 
-  test('returns the default path to the webpack config file', () => {
-    const expectedPath = path.join(__dirname, '../config/webpack.config.js');
-    expect(getWebpackConfig()).toBe(expectedPath);
+  test('returns an empty object if an error occurs when requiring the webpack config file', () => {
+    jest.spyOn(require, 'resolve').mockImplementation(() => { throw new Error(); });
+    expect(getUserWebpackConfig()).toEqual({});
   });
 });
 
 describe('getDefaultArgs', () => {
-  const defaultWebpackConfigPath = path.join(__dirname, '../config/webpack.config.js');
+  const extendedConfigPath = path.join(__dirname, '../config/extended.config.js');
 
   it('should return an empty array if neither "build" nor "start" command is used', () => {
     process.argv = ['node', 'index.js'];
@@ -126,12 +166,12 @@ describe('getDefaultArgs', () => {
 
   it('should include "--config" argument if "build" command is used', () => {
     process.argv = ['node', 'index.js', 'build'];
-    expect(getDefaultArgs()).toContain(`--config=${defaultWebpackConfigPath}`);
+    expect(getDefaultArgs()).toContain(`--config=${extendedConfigPath}`);
   });
 
-  it('should include "--config" argument with value from "--config" CLI argument if "build" command is used', () => {
+  it('should default to extended config if "--config" CLI argument is used with "build" command', () => {
     process.argv = ['node', 'index.js', 'build', '--config=my-webpack.config.js'];
-    expect(getDefaultArgs()).toContain('--config=my-webpack.config.js');
+    expect(getDefaultArgs()).toContain(`--config=${extendedConfigPath}`);
   });
 
   it('should include "--webpack-copy-php" argument if "build" command is used and "--webpack-copy-php" CLI argument is not present', () => {
@@ -151,12 +191,12 @@ describe('getDefaultArgs', () => {
 
   it('should include "--config" argument if "start" command is used', () => {
     process.argv = ['node', 'index.js', 'start'];
-    expect(getDefaultArgs()).toContain(`--config=${defaultWebpackConfigPath}`);
+    expect(getDefaultArgs()).toContain(`--config=${extendedConfigPath}`);
   });
 
-  it('should include "--config" argument with value from "--config" CLI argument if "start" command is used', () => {
+  it('should default to extended config if "--config" CLI argument is used with "start" command', () => {
     process.argv = ['node', 'index.js', 'start', '--config=my-webpack.config.js'];
-    expect(getDefaultArgs()).toContain('--config=my-webpack.config.js');
+    expect(getDefaultArgs()).toContain(`--config=${extendedConfigPath}`);
   });
 
   it('should include "--webpack-copy-php" argument if "start" command is used and "--webpack-copy-php" CLI argument is not present', () => {

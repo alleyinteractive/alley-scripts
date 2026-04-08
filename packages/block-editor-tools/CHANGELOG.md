@@ -1,5 +1,137 @@
 # Changelog
 
+## 0.16.0
+
+### Minor Changes
+
+- 02d34caf: Drop support for Node 18/20 (and test for Node 25)
+
+## 0.15.1
+
+### Patch Changes
+
+- 0085cfdf: Get selector for latest meta from `useRegistry()`
+
+## 0.15.0
+
+### Minor Changes
+
+- afc4ff9b: Add a buttonText prop to the Sortable component to allow developers to customize the "add item" button text.
+
+## 0.14.0
+
+### Minor Changes
+
+- dbe18ee: Update TermSelector component to use FormTokenField
+- b9ce351: Adds filters prop to PostSelector to allow custom filters or instructions in the modal.
+
+## 0.13.2
+
+### Patch Changes
+
+- b98204b: Export missing useBlockName and useParentClientId hooks.
+
+## 0.13.1
+
+### Patch Changes
+
+- ef73f89: Drop Node 16 support.
+- e2235d7: Deprecate useDebounce in favor of the version in @wordpress/compose.
+- 244a618: Add Node 24 support
+
+## 0.13.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+## 0.12.2
+
+### Patch Changes
+
+- c35bdd4: Convert PostPicker styles to styled components
+- 5985d15: Convert TermSelector to TypeScript
+
+## 0.12.1
+
+### Patch Changes
+
+- 0022bb9: Memoize functions returned by hooks
+
+## 0.12.0
+
+### Minor Changes
+
+- df2e0f2: Add list view option to PostPicker component
+
+## 0.11.0
+
+### Minor Changes
+
+- 2900b04: Extending support for Node 22.
+
+## 0.10.3
+
+### Patch Changes
+
+- 2ada8ed: Improve stability of usePostMeta hooks
+
+## 0.10.2
+
+### Patch Changes
+
+- eb6e2dc: Hard code all references to the core-data store.
+
+## 0.10.1
+
+### Patch Changes
+
+- 2dad703: Switch usePost back to core store to fix error in wp-curate
+
+## 0.10.0
+
+### Minor Changes
+
+- 0138b99: Introducing new hooks
+
+### Patch Changes
+
+- 0390423: Feature: Allow override of post preview lookup function in PostPicker.
+
+## 0.9.0
+
+### Minor Changes
+
+- 3ad4c4e: Updated `usePostById` and `usePost` to allow overriding context value for `getEntityRecord`
+
+## 0.8.0
+
+### Minor Changes
+
+- fb51636: Adds Sortable and SortableItem components
+
+## 0.7.0
+
+### Minor Changes
+
+- 37ff706: Adds a useOption hook for reading/writing options
+
+### Patch Changes
+
+- 89a2447: Move away from wordpress/element to React
+
+## 0.6.4
+
+### Patch Changes
+
+- 840ec15: Reduces the time usePostById returns undefined while looking up the post type.
+
+## 0.6.3
+
+### Patch Changes
+
+- 8b21cc1: - Bug Fix: Post Picker causes all Block Editor modals to be too wide
+
 ## 0.6.2
 
 ### Patch Changes

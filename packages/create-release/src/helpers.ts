@@ -4,12 +4,14 @@ import { valid } from 'semver';
 
 import { ReleaseType } from './options';
 
+/* eslint-disable no-console */
+
 /**
  * Exit error display message. The process will exit with a message.
  * @param message - The error message to display on exit.
  */
 function exitError(message: string): void {
-  console.error(chalk?.red(message)); // eslint-disable-line no-console
+  console.error(chalk?.red(message));
   process.exit();
 }
 
@@ -217,7 +219,7 @@ function upgradeComposerVersion(basePath: string, version: string): void {
       );
     }
   } catch (error) {
-    console.error(error); // eslint-disable-line no-console
+    console.error(error);
 
     exitError(
       'There was an error upgrading the version number in the composer.json file.',
@@ -245,6 +247,11 @@ function getNpmPackageVersion(basePath: string): string | undefined {
  */
 function upgradeNpmPackageVersion(basePath: string, version: string): void {
   try {
+    if (!fs.existsSync(`${basePath}/package.json`)) {
+      console.log('Skipping package.json, not found.');
+      return;
+    }
+
     const contents = JSON.parse(
       fs.readFileSync(`${basePath}/package.json`, 'utf8'),
     );
@@ -277,8 +284,10 @@ function upgradeNpmPackageVersion(basePath: string, version: string): void {
         `${JSON.stringify(contents, null, 4)}\n`,
       );
     }
+
+    console.log(`Updated "version" in ${chalk.yellow('package.json')} to ${chalk.yellow(version)}`);
   } catch (error) {
-    console.error(error); // eslint-disable-line no-console
+    console.error(error);
 
     exitError(
       'There was an error upgrading the version number in the package.json file.',
@@ -295,7 +304,6 @@ function upgradePluginVersion(basePath: string, version: string): void {
     'plugin.php',
   ];
 
-  // Loop through the files and check if they exist.
   for (let i = 0; i < files.length; i += 1) {
     const file = `${basePath}/${files[i]}`;
 
@@ -312,21 +320,24 @@ function upgradePluginVersion(basePath: string, version: string): void {
 
     if (contents !== newContents) {
       fs.writeFileSync(file, newContents);
-      return;
+
+      console.log(`Updated "Version" plugin header to ${chalk.yellow(version)} in ${chalk.yellow(files[i])}.`);
+    } else {
+      console.log(`Unable to update version header in ${chalk.yellow(files[i])}.`);
     }
+
+    return;
   }
 
-  exitError('Unable to upgrade the "Version" plugin header.');
+  // If no plugin file was able to be detected, we should stop proceeding and exit.
+  exitError('Unable to find main plugin file.');
 }
 
 /**
  * Upgrade the version number in the README.md/README.txt file.
  */
 function upgradeReadmeVersion(basePath: string, version: string): void {
-  const files = [
-    'README.md',
-    'README.txt',
-  ];
+  const files = ['README.md', 'README.txt'];
 
   // Loop through the files and check if they exist.
   for (let i = 0; i < files.length; i += 1) {
@@ -346,6 +357,10 @@ function upgradeReadmeVersion(basePath: string, version: string): void {
 
     if (contents !== newContents) {
       fs.writeFileSync(file, newContents);
+
+      console.log(`Updated "Stable tag" in ${chalk.yellow(files[i])} to ${chalk.yellow(version)}.`);
+    } else {
+      console.log(chalk.red(`Not able to update the ${chalk.yellow(files[i])} file.`));
     }
   }
 }

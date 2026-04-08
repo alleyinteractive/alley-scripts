@@ -5,15 +5,17 @@
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "engines": {
-    "node": ">=16.0.0 <21.0.0",
+    "node": ">=22.0.0 <26.0.0",
     "npm": ">=8"
   },
   "scripts": {
     "prebuild": "check-node-version --package",
     "build": "turbo run build --cache-dir=.turbo",
+    "changeset": "npx @changesets/cli",
     "preinstall": "check-node-version --package",
     "prelint": "check-node-version --package",
     "lint": "turbo run lint --cache-dir=.turbo",
+    "stylelint": "turbo run stylelint --cache-dir=.turbo",
     "prepublish-packages": "check-node-version --package",
     "publish-packages": "turbo run build lint test --cache-dir=.turbo && changeset version && changeset publish",
     "pretest": "check-node-version --package",
@@ -51,7 +53,8 @@
     "storybook": "^7.5.1",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "turbo": "^1.10.16",
-    "typescript": "^5.3.2"
-  }
+    "turbo": "^2.5.6",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "npm@10.9.0"
 }

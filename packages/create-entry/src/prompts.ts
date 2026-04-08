@@ -136,7 +136,7 @@ async function promptForEnqueueStyleHook(): Promise<string> {
       message: 'The hook to use for enqueueing the entry styles:',
       validate: (value) => validateFunctionName(value)
         || 'Please enter a valid function name (lowercase, no spaces, only underscores)',
-      initial: 'wp_enqueue_styles',
+      initial: 'wp_enqueue_scripts',
     },
   ]);
 

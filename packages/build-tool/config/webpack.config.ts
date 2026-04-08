@@ -1,6 +1,6 @@
 import path from 'path';
 import { cwd } from 'node:process';
-import webpack, { type PathData } from 'webpack';
+import { Configuration, type PathData } from 'webpack';
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -10,13 +10,8 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 // eslint-disable-next-line import/no-unresolved
 import { getEntries, processFilename } from '../utils/webpack';
 
-interface WPScriptsConfig extends webpack.Configuration {
+interface WPScriptsConfig extends Configuration {
   devServer?: WebpackDevServerConfiguration;
-  resolve: {
-    alias: {
-      [x: string]: string;
-    };
-  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -54,7 +49,7 @@ const mode: string = isProduction ? 'production' : 'development';
  * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#extending-the-webpack-config
  * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/config/webpack.config.js
  */
-const config = (): webpack.Configuration => (defaultConfig ? {
+const config: Configuration = (defaultConfig ? {
   ...defaultConfig,
 
   // Dynamically produce entries from the slotfills index file and all blocks.
@@ -126,7 +121,7 @@ const config = (): webpack.Configuration => (defaultConfig ? {
   resolve: {
     ...defaultConfig.resolve,
     alias: {
-      ...defaultConfig.resolve.alias,
+      ...defaultConfig?.resolve?.alias,
       // Custom alias to resolve paths to the project root. Example: '@/client/src/index.js'.
       '@': path.resolve(cwd()),
     },

@@ -226,8 +226,10 @@ export class FeatureStore {
     logger().debug(`Loading configurations from NPM paths: ${chalk.blue(paths.join(', '))}`);
 
     const features = await Promise.all(
-      paths.map(async (nodeModulesPath) => fg.glob(
+      paths.map((nodeModulesPath) => fg.glob(
         [
+          // Same-level (e.g. scaffolder/config.yml)
+          'scaffolder/*/config.yml',
           // One-level (e.g. package/scaffolder/<feature>/config.yml)
           '*/scaffolder/*/config.yml',
           // Two-level (e.g. @organization/package/scaffolder/<feature>/config.yml)
@@ -250,6 +252,13 @@ export class FeatureStore {
    */
   private static getLocalNpmPaths(): string[] {
     const paths: string[] = [];
+
+    // Retrieve the path to the node_modules using a known package.
+    const resolvedNodeModulesPath = require.resolve('chalk').match(/(.*node_modules)/)?.[0];
+
+    if (resolvedNodeModulesPath && fs.existsSync(resolvedNodeModulesPath)) {
+      paths.push(resolvedNodeModulesPath);
+    }
 
     let currentDirectory = process.cwd();
 
@@ -274,8 +283,12 @@ export class FeatureStore {
     }
 
     // Check if we're developing on the scaffolder locally.
-    if (__dirname.includes('packages/scaffolder') && fs.existsSync(path.join(__dirname, '..', '..', '..', '..', 'node_modules'))) {
-      paths.push(path.join(__dirname, '..', '..', '..', '..', 'node_modules'));
+    if (__dirname.includes('packages/scaffolder')) {
+      const projectRoot = path.join(__dirname, '..', '..');
+
+      if (fs.existsSync(path.join(projectRoot, '..', 'scaffolder-features'))) {
+        paths.push(path.join(projectRoot, '..', 'scaffolder-features'));
+      }
     }
 
     return uniq(paths);
@@ -344,7 +357,9 @@ export function getFeatureStore(): FeatureStore {
  *
  * Discovers all configured features, sources, and features from said sources.
  */
-export async function initializeFeatureStore(configStore: ConfigurationStore = getConfigurationStore()) {
+export async function initializeFeatureStore(
+  configStore: ConfigurationStore = getConfigurationStore(),
+) {
   store = new FeatureStore(configStore);
 
   try {

@@ -1,5 +1,6 @@
-import { useEntityProp } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
+import React from 'react';
+import { useEntityProp, useEntityId } from '@wordpress/core-data';
+import { useSelect, useRegistry } from '@wordpress/data';
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
@@ -11,29 +12,55 @@ import { useSelect } from '@wordpress/data';
  *                            Defaults to the post type of the current post.
  * @param {number} postId - Optional. The post ID to get and set meta for.
  *                          Defaults to the ID of the current post.
- * @returns {array} An array containing an object representing postmeta and an update function.
+ * @returns {array} A tuple containing an object representing postmeta and a setter function.
  */
 const usePostMeta = (postType = null, postId = null) => {
-  // Ensures that we have a post type, since we need it as an argument to useEntityProp.
+  // Ensure that we have a post type.
   const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
 
+  // Ensure that we have a post ID.
+  const providerId = useEntityId('postType', type);
+  const id = postId ?? providerId;
+
+  // Create a selector for the latest meta for the setter to optionally use.
+  const { getEditedEntityRecord } = useRegistry().select('core');
+  const getLatestMeta = React.useCallback(
+    () => getEditedEntityRecord('postType', type, id)?.meta,
+    [getEditedEntityRecord, type, id],
+  );
+
   // Get the return value from useEntityProp so we can wrap it for safety.
-  const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', postId);
+  const [metaRaw, setMetaRaw] = useEntityProp('postType', type, 'meta', id);
+
+  const setMetaError = React.useCallback(
+    () => console.error(`Error attempting to set post meta for post type ${type}. Does it have support for custom-fields?`), // eslint-disable-line no-console
+    [type],
+  );
 
   /*
    * Ensure meta is an object and set meta is a function. useEntityProp can
    * return `undefined` if the post type doesn't have support for custom-fields.
    */
   const meta = typeof metaRaw === 'object' ? metaRaw : {};
-  const setMeta = typeof setMetaRaw === 'function'
-    ? setMetaRaw
-    : () => console.error(`Error attempting to set post meta for post type ${type}. Does it have support for custom-fields?`); // eslint-disable-line no-console
+  const setMeta = typeof setMetaRaw === 'function' ? setMetaRaw : setMetaError;
 
   /**
-   * Define a wrapper for the setMeta function that spreads the next meta value into a new object.
-   * @param {object} next - The new value for meta.
+   * Wrapper for the setMeta function that can accept a function as a setter which will get the
+   * latest edited meta from the data store.
+   *
+   * @param {object|function} next - A new value for meta or a function that takes the current value
+   *                                 and returns a new value.
    */
-  const setMetaSafe = (next) => setMeta({ ...next });
+  const setMetaSafe = React.useCallback(
+    (next) => {
+      if (typeof next === 'object') {
+        setMeta({ ...next });
+      } else if (typeof next === 'function') {
+        setMeta({ ...next(getLatestMeta()) });
+      }
+    },
+    [setMeta, getLatestMeta],
+  );
 
   return [meta, setMetaSafe];
 };

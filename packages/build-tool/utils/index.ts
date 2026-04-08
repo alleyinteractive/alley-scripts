@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { cwd } from 'node:process';
 import path from 'path';
+import { Configuration } from 'webpack';
 
 type CliArg = string | undefined;
 type PathToConfig = CliArg;
@@ -55,18 +56,55 @@ const getArgFromCLI = (arg: string): CliArg => {
 const hasArgInCLI = (arg: string): boolean => getArgFromCLI(arg) !== undefined;
 
 /**
- * Get the path to the webpack config file.
+ * Get the path to the user's webpack config file.
  */
-const getWebpackConfig = (): PathToConfig => {
+const getUserWebpackConfigFilePath = (): PathToConfig => {
   if (hasProjectFile('webpack.config.js')) {
     return fromProjectRoot('webpack.config.js');
   }
 
   if (hasArgInCLI('--config')) {
-    return getArgFromCLI('--config');
+    const args = getArgsFromCLI();
+    // Get the --config flag that is not the one from this package.
+    const userCLIConfigArg: string[] = args.filter((arg) => arg.startsWith('--config')
+      && !arg.includes('build-tool/dist'));
+
+    if (typeof userCLIConfigArg[0] !== 'undefined') {
+      // Get the value of the --config flag.
+      const configPath = userCLIConfigArg[0].split('=')[1];
+
+      if (typeof configPath !== 'undefined') {
+        return path.join(cwd(), configPath);
+      }
+    }
+  }
+  return undefined;
+};
+
+/**
+ * Get the path to the webpack config file.
+ */
+const getWebpackConfig = (): PathToConfig => path.join(__dirname, '../config/extended.config.js');
+
+/**
+ * Get the user's webpack configuration.
+ */
+const getUserWebpackConfig = (): Configuration | {} => {
+  const webpackConfigFilePath = getUserWebpackConfigFilePath();
+
+  if (typeof webpackConfigFilePath === 'undefined') {
+    return {};
   }
 
-  return path.join(__dirname, '../config/webpack.config.js');
+  try {
+    // eslint-disable-next-line global-require, import/no-dynamic-require
+    const webpackConfig = require(require.resolve(webpackConfigFilePath));
+    return webpackConfig;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Failed to load webpack config from ${webpackConfigFilePath}:`, error);
+    return {};
+  }
 };
 
 /**
@@ -92,11 +130,11 @@ const getDefaultArgs = (): string[] => {
     }
 
     /**
-   * The default directory where wp-scripts will detect block.json files.
-   * Explicitly set the webpack source directory to "blocks" unless specified.
-   *
-   * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#automatic-blockjson-detection-and-the-source-code-directory
-   */
+     * The default directory where wp-scripts will detect block.json files.
+     * Explicitly set the webpack source directory to "blocks" unless specified.
+     *
+     * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#automatic-blockjson-detection-and-the-source-code-directory
+     */
     const webpackSrcDir: PathToConfig = hasArgInCLI('--webpack-src-dir')
       ? getArgFromCLI('--webpack-src-dir') : 'blocks';
 
@@ -112,6 +150,8 @@ export {
   getArgsFromCLI,
   getDefaultArgs,
   getWebpackConfig,
+  getUserWebpackConfigFilePath,
+  getUserWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
 };
