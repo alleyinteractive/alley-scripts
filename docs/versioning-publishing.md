@@ -32,26 +32,25 @@ This repository uses npm's [Trusted Publishers](https://docs.npmjs.com/trusted-p
 
 ### Workflow requirements
 
-Both publishing workflows are already configured correctly:
+The publishing workflow is configured correctly:
 
-| Workflow | `id-token: write` | `registry-url` in `setup-node` |
-|---|---|---|
-| `release.yml` | yes | yes |
-| `snapshot-release.yml` | yes | yes |
+| Workflow | Jobs | `id-token: write` | `registry-url` in `setup-node` |
+|---|---|---|---|
+| `release.yml` | `release`, `snapshot` | yes | yes |
 
 ### Configuring Trusted Publishers on npmjs.com
 
-Each workflow that publishes needs its own trusted publisher entry. This can be done **per-package** or once at the **`@alleyinteractive` org level** (recommended, applies to all packages).
+Only one trusted publisher entry is needed — both the `release` and `snapshot` jobs live in `release.yml`. This can be done **per-package** or once at the **`@alleyinteractive` org level** (recommended, applies to all packages).
 
-To configure at the org level: go to the `@alleyinteractive` org page on npmjs.com → **Settings** → **Trusted Publishers** → add two entries:
+To configure at the org level: go to the `@alleyinteractive` org page on npmjs.com → **Settings** → **Trusted Publishers** → add one entry:
 
-| Field | Entry 1 | Entry 2 |
-|---|---|---|
-| Repository owner | `alleyinteractive` | `alleyinteractive` |
-| Repository name | `alley-scripts` | `alley-scripts` |
-| Workflow filename | `release.yml` | `snapshot-release.yml` |
-| Environment | *(blank)* | *(blank)* |
+| Field | Value |
+|---|---|
+| Repository owner | `alleyinteractive` |
+| Repository name | `alley-scripts` |
+| Workflow filename | `release.yml` |
+| Environment | *(blank)* |
 
-To configure per-package instead: go to the package page on npmjs.com → **Settings** → **Publishing** → **Trusted Publishers** and add the same two entries above.
+To configure per-package instead: go to the package page on npmjs.com → **Settings** → **Publishing** → **Trusted Publishers** and add the same entry above.
 
-> **When adding a new package**, ensure it either inherits org-level Trusted Publisher config or has both entries added manually before its first publish.
+> **When adding a new package**, ensure it either inherits org-level Trusted Publisher config or has the entry above added manually before its first publish.

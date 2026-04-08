@@ -6,18 +6,25 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag slug for snapshot (e.g., "fix-ajv", "test-feature")'
+        required: true
+        type: string
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  id-token: write # Required for OIDC
+  id-token: write # Required for OIDC / Trusted Publishers
   contents: write
-  pull-requests: write
+  pull-requests: write # Required by changesets action
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v6
@@ -40,10 +47,49 @@ jobs:
         uses: changesets/action@v1
         with:
           publish: npm run release
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-      # - name: Send a Slack notification if a publish happens
-      #   if: steps.changesets.outputs.published == 'true'
-      #   # You can do something when a publish happens.
-      #   run: my-slack-bot send-notification --message "A new version of ${GITHUB_REPOSITORY} was published!"
+  snapshot:
+    name: Create Snapshot Release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Validate branch naming
+        run: |
+          if [[ ! "${{ github.ref_name }}" =~ ^snapshot/ ]]; then
+            echo "❌ Snapshot releases must be created from branches starting with 'snapshot/'"
+            echo "Current branch: ${{ github.ref_name }}"
+            echo "Please create a branch like: snapshot/fix-ajv-deps"
+            exit 1
+          fi
+          echo "✅ Valid snapshot branch: ${{ github.ref_name }}"
+
+      - name: Checkout Repo
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js 24.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Create Snapshot Version
+        run: npx changeset version --snapshot ${{ inputs.tag }}
+
+      - name: Build Packages
+        run: npm run build
+
+      - name: Publish Snapshot
+        run: npx changeset publish --tag ${{ inputs.tag }} --no-git-tag
+
+      - name: Output Snapshot Info
+        run: |
+          echo "🚀 Snapshot published with tag: ${{ inputs.tag }}"
+          echo "📦 Install with: npm install @alleyinteractive/PACKAGE@${{ inputs.tag }}"
+          echo "⚠️  This is a snapshot release for testing only"

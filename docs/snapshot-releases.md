@@ -24,7 +24,7 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
 
 3. **Changeset**: At least one [changeset](./versioning-publishing.md) must exist for the packages you want to snapshot. Run `npm run changeset` on your branch before triggering the workflow.
 
-4. **Trusted Publisher**: The `snapshot-release.yml` workflow must be configured as a Trusted Publisher on npmjs.com alongside `release.yml`. See [Versioning and Publishing § Trusted Publishers](./versioning-publishing.md#trusted-publishers) for setup steps.
+4. **Trusted Publisher**: The `release.yml` workflow (which contains the `snapshot` job) must be configured as a Trusted Publisher on npmjs.com. See [Versioning and Publishing § Trusted Publishers](./versioning-publishing.md#trusted-publishers) for setup steps.
 
 ## How to Create a Snapshot Release
 
@@ -42,7 +42,7 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
 
 2. **Trigger the snapshot workflow**:
    - Go to the **Actions** tab in GitHub
-   - Click on **"Snapshot Release"** workflow
+   - Click on **"Release"** workflow
    - Click **"Run workflow"**
    - Select your `snapshot/` branch from the dropdown
    - Enter a descriptive **tag slug** (e.g., `fix-ajv`, `test-feature`)
