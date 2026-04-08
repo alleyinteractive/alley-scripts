@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- cf23a72e: - Change all command options to be kebab-case. Existing aliases such as -b are unchanged.
+  - Allow blocks to be generated without registering themselves.
+
+## 0.3.1
+
+### Patch Changes
+
+- a4a181b: Ensure that parent process exits with same code as child process
+
+## 0.3.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+## 0.2.1
+
+### Patch Changes
+
+- 397a80a: Improve the phpstan typings.
+
 ## 0.2.0
 
 ### Minor Changes

@@ -11,6 +11,7 @@ export type EntryArgs = {
   path?: string;
   composer?: boolean;
   npm?: boolean;
+  force?: boolean;
   'dry-run'?: boolean;
   help?: boolean;
 };
@@ -60,6 +61,11 @@ const entryArgs = parse<EntryArgs>(
     'dry-run': {
       type: Boolean,
       description: 'Run the script without making any changes.',
+      optional: true,
+    },
+    force: {
+      type: Boolean,
+      description: 'Accept any changes without confirmation.',
       optional: true,
     },
     help: {

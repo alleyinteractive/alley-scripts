@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/create-block",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "Alley's custom block scaffolding variation for the @wordpress/create-block script.",
   "main": "dist/index.js",
   "scripts": {
@@ -36,6 +36,7 @@
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
     "@wordpress/create-block": "*",
+    "chalk": "^4.1.2",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^7.0.1",
     "prompts": "^2.4.2"

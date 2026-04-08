@@ -72,6 +72,15 @@ function main() {
 	register_meta_helper(
 		'post',
 		[ 'post' ],
+		'alley_scripts_post_picker_list_id',
+		[
+			'type' => 'integer',
+		]
+	);
+
+	register_meta_helper(
+		'post',
+		[ 'post' ],
 		'alley_scripts_repeater',
 		[
 			'type'         => 'array',
@@ -79,6 +88,36 @@ function main() {
 				'schema' => [
 					'items' => [
 						'type' => 'string',
+					],
+				],
+			],
+		]
+	);
+
+	register_meta_helper(
+		'post',
+		[ 'post' ],
+		'alley_scripts_term_selector',
+		[
+			'type'         => 'array',
+			'show_in_rest' => [
+				'schema' => [
+					'items' => [
+						'type'       => 'object',
+						'properties' => [
+							'id'    => [
+								'type' => 'integer',
+							],
+							'title' => [
+								'type' => 'string',
+							],
+							'type'  => [
+								'type' => 'string',
+							],
+							'url'   => [
+								'type' => 'string',
+							],
+						],
 					],
 				],
 			],

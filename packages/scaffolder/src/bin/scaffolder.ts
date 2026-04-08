@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import { ScaffolderCommand } from '../command';
 
 /**

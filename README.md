@@ -7,7 +7,8 @@ for projects to speed up development.
 
 - [Packages](#packages)
 - [Adding and Managing Packages](#adding-and-managing-packages)
-- [Versioning and Publishing Packages in this Monorepo](##versioning-and-publishing-packages-in-this-monorepo)
+- [Versioning and Publishing Packages in this Monorepo](#versioning-and-publishing-packages-in-this-monorepo)
+- [Snapshot Releases](#snapshot-releases)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [Maintainers](#maintainers)
@@ -23,53 +24,23 @@ This monorepo contains the following packages:
 - [`@alleyinteractive/create-entry`](./packages/create-entry/README.md)
 - [`@alleyinteractive/create-release`](./packages/create-release/README.md)
 - [`@alleyinteractive/eslint-config`](./packages/eslint-config/README.md)
+- [`@alleyinteractive/oxlint-config`](./packages/oxlint-config/README.md)
+- [`@alleyinteractive/scaffolder-features`](./packages/scaffolder-features/README.md)
 - [`@alleyinteractive/scaffolder`](./packages/scaffolder/README.md)
 - [`@alleyinteractive/stylelint-config`](./packages/stylelint-config/README.md)
 - [`@alleyinteractive/tsconfig`](./packages/tsconfig/README.md)
 
 ## Adding and Managing Packages
 
-This project uses [Turborepo](https://turbo.build/repo/docs) with NPM to add and manage packages in this monorepo. To add a new package, you can add the package manually or run a command.
-
-**NOTE**: _If the workspace is to be created in a location other than the default `packages` directory, the path to the directory needs to be provided in the root `package.json` workspaces configuration._
-
-### Scaffold a new package
-
-```sh
-npx turbo gen workspace --type package
-```
-
-The command above will walk through some prompts and create a new package in the `packages` directory with a basic `package.json` and `README.md` file.
-
-**NOTE**: _The `package.json` file will be scaffolded with the `private` configuration set to `true`. When the package is ready to be published to the public registry, this configuration should be removed._
-
-For more information on the `Turborepo` code generation, see the [Turborepo Code Generation documentation](https://turbo.build/repo/docs/core-concepts/monorepos/code-generation).
-
-### Add a package manually
-
-To add a package manually you can create a new directory with the same name as the package in the `packages` directory and add a `package.json` file with the following content:
-
-```json
-{
-  "name": "@alleyinteractive/package-name",
-  "version": "0.0.0",
-  "license": "GPL-2.0-or-later",
-}
-```
+This project uses [Turborepo](https://turbo.build/repo/docs) with NPM to manage packages in this monorepo. See [docs/adding-packages.md](./docs/adding-packages.md) for full instructions on scaffolding or manually adding a package.
 
 ## Versioning and Publishing Packages in this Monorepo
 
-This project uses the [Changesets CLI](https://github.com/changesets/changesets) to manage versioning and publishing of packages in this monorepo. To release a new version of a package that you are working on, you can run the following command:
+This project uses the [Changesets CLI](https://github.com/changesets/changesets) and npm [Trusted Publishers](https://docs.npmjs.com/trusted-publishers#for-github-actions) (OIDC) to manage versioning and publishing. See [docs/versioning-publishing.md](./docs/versioning-publishing.md) for the full workflow and Trusted Publisher setup.
 
-```sh
-npx changeset
-```
+## Snapshot Releases
 
-The command above will walk through some prompts and create a new changeset file in the `.changeset` directory. Commit this file to version control in your feature branch and open a pull request.
-
-Once the pull request is approved, merge the branch into the `main` branch. The changeset Github actions will automatically create a new branch, e.g. `changeset-release/main` and pull request titled "Version Packages". Once you are ready to release the package merge the pull request. You may need to check with other developers releasing versions for other packages as the changeset release will add all changes to that pull request. Once the `changeset-release/main` branch is merged it will publish the new version of the package to the NPM registry.
-
-**You do not need to manually bump the version of the package in the `package.json` file. The changeset Github actions will handle this for you.**
+Snapshot releases let you publish pre-release test versions (e.g. `0.0.0-fix-ajv-20250929142301`) without affecting the `latest` tag. See [docs/snapshot-releases.md](./docs/snapshot-releases.md) for full instructions.
 
 ## Changelog
 

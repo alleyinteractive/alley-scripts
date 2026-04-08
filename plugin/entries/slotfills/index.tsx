@@ -35,19 +35,40 @@ import {
 // Create a new Gutenberg sidebar
 registerPlugin('alley-scripts-plugin-sidebar', {
   icon: 'shield',
+  // @ts-ignore // TODO: Fix this TypeScript error.
   render: () => {
     const [meta, setMeta] = usePostMeta(); // eslint-disable-line react-hooks/rules-of-hooks
     const [
       selectedCheckboxes, setSelectedCheckboxes,
     ] = useState<string[]>([]); // eslint-disable-line react-hooks/rules-of-hooks
+    const [
+      testFilterPostTypes,
+      setTestFilterPostTypes,
+    ] = useState<string[]>(['post']); // eslint-disable-line react-hooks/rules-of-hooks
 
     const {
       alley_scripts_audio_picker_id: audioPickerId = '',
       alley_scripts_image_picker_id: imageId = '',
       alley_scripts_media_picker_id: mediaId = 0,
       alley_scripts_post_picker_id: postId = 0,
+      alley_scripts_post_picker_list_id: listPostId = 0,
       alley_scripts_repeater: repeater = [],
+      alley_scripts_term_selector: termSelector = [],
     } = meta;
+
+    function TestFilter() {
+      return (
+        <Checkboxes
+          label={__('Filter Post Types', 'alley-scripts')}
+          value={testFilterPostTypes}
+          onChange={(newValue: string[]) => setTestFilterPostTypes(newValue.length ? newValue : ['post'])}
+          options={[
+            { value: 'post', label: __('Posts', 'alley-scripts') },
+            { value: 'page', label: __('Pages', 'alley-scripts') },
+          ]}
+        />
+      );
+    }
 
     return (
       <>
@@ -99,19 +120,52 @@ registerPlugin('alley-scripts-plugin-sidebar', {
               onSelect={(value: any) => console.log('PostSelector onSelect', value)} // eslint-disable-line no-console
             />
           </PanelBody>
-          <PanelBody initialOpen title={__('Post Picker', 'alley-scripts')}>
+          <PanelBody initialOpen title={__('Post Picker (Grid)', 'alley-scripts')}>
             <PostPicker
               onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_id: id })}
               onReset={() => setMeta({ alley_scripts_post_picker_id: 0 })}
               value={postId}
+              filters={<TestFilter />}
+              allowedTypes={testFilterPostTypes.length ? testFilterPostTypes : []}
+            />
+          </PanelBody>
+          <PanelBody initialOpen title={__('Post Picker (List)', 'alley-scripts')}>
+            <PostPicker
+              modalFormat="list"
+              onUpdate={(id: number) => setMeta({ alley_scripts_post_picker_list_id: id })}
+              onReset={() => setMeta({ alley_scripts_post_picker_list_id: 0 })}
+              value={listPostId}
             />
           </PanelBody>
           <PanelBody initialOpen title={__('Term Selector', 'alley-scripts')}>
-            {/*
-              // @ts-ignore Handle error with TermSelector not working in Typescript */}
-            <TermSelector
-              multiple={false}
-              onSelect={(value: any) => console.log('TermSelector onSelect', value)} // eslint-disable-line no-console
+            {
+              /**
+               * TermSelector is generic.
+               * The example below also adds a type and url to selected terms.
+               */
+            }
+            <TermSelector<{ type: string; url: string }>
+              onSelect={(value) => {
+                // eslint-disable-next-line no-console
+                console.log('TermSelector onSelect', value);
+
+                if (!Array.isArray(value) || value.length === 0) {
+                  setMeta({ alley_scripts_term_selector: [] });
+                  return;
+                }
+
+                setMeta({
+                  alley_scripts_term_selector: value.map(
+                    (term) => ({
+                      id: term.id,
+                      title: term.title,
+                      type: term.type,
+                      url: term.url,
+                    }),
+                  ),
+                });
+              }}
+              selected={termSelector}
             />
           </PanelBody>
         </PluginSidebar>

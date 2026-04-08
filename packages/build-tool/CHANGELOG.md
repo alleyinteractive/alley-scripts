@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- a01fe7b7: Bump @wordpress/scripts
+
+## 0.2.2
+
+### Patch Changes
+
+- 3a40f53: Add ajv and ajv-keywords as dev dependencies. This fixes dependency issue when running the build
+  tool via `npx`.
+
+## 0.2.1
+
+### Patch Changes
+
+- a4a181b: Ensure that parent process exits with same code as child process
+
+## 0.2.0
+
+### Minor Changes
+
+- 88bd605: Security patch: Bump form-data from 3.0.1 to 3.0.4
+
+## 0.1.6
+
+### Patch Changes
+
+- daf4557: Fix ESM import types for Webpack configs.
+
 ## 0.1.5
 
 ### Patch Changes

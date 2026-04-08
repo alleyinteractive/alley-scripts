@@ -1,6 +1,11 @@
-import {
-  useCallback, useEffect, useState, JSX,
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  JSX,
 } from 'react';
+import styled, { css } from 'styled-components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
@@ -9,11 +14,12 @@ import classNames from 'classnames';
 // eslint-disable-next-line camelcase
 import type { WP_REST_API_Search_Results } from 'wp-types';
 
-import './post-list.scss';
 import Post from './post';
 
 interface PostListProps {
   baseUrl: string;
+  filters?: React.ReactNode;
+  format?: 'grid' | 'list';
   searchRender?: (post: object) => JSX.Element;
   selected?: number;
   setSelected: (id: number) => void;
@@ -25,6 +31,94 @@ interface Params {
   page: number;
 }
 
+const Container = styled.div`
+  // Allow space for focus state.
+  margin: 0 -0.5rem;
+  overflow-y: auto;
+  padding: 0 0.5rem;
+`;
+
+const Wrapper = styled.div<{ $format?: string; }>`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding-bottom: 2rem;
+  gap: 0.5rem;
+  width: 100%;
+
+  ${(props) => props.$format === 'grid'
+    && css`
+      ul {
+        grid-template-columns: repeat(2, 1fr);
+
+        @media (min-width: 600px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (min-width: 1024px) {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+    `};
+`;
+
+const List = styled.ul`
+  display: grid;
+  grid-gap: 0.5rem;
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+  width: 100%;
+`;
+
+const ListItem = styled.li`
+  margin: 0;
+  padding: 0;
+`;
+
+const StyledButton = styled(Button) <{ $format?: string }>`
+  align-items: flex-start;
+  border: 1px solid #eee;
+  color: #1e1e1e;
+  height: 100%;
+  padding: 0.8rem;
+  text-align: left;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+
+  // Increase specificity to override core.
+  &&:hover {
+    background-color: #f0f0f0;
+    color: #1e1e1e;
+  }
+
+  &.is-selected {
+    background-color: #f0f0f0;
+  }
+
+  ${(props) => props.$format === 'list'
+    && css`
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+    `};
+`;
+
+const SpinnerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  height: 2.25rem;
+  justify-content: center;
+  padding: 0.5rem 0 0;
+`;
+
+const LoadMore = styled.div`
+  clear: both;
+  float: left;
+  text-align: center;
+  width: 100%;
+`;
+
 /**
  * Displays a list of posts in the post picker modal.
  *
@@ -32,6 +126,8 @@ interface Params {
  */
 const PostList = ({
   baseUrl,
+  filters,
+  format,
   searchRender,
   selected,
   setSelected,
@@ -149,6 +245,12 @@ const PostList = ({
     };
   }, [getPosts, initialLoad, pathParams]);
 
+  useEffect(() => {
+    handleSearchTextChange(pathParams.searchValue);
+  }, [baseUrl]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const filterDiv = useRef<HTMLDivElement>(null);
+  const modalHeight = window.innerWidth < 600 ? '95vh' : '70vh';
   return (
     <>
       <TextControl
@@ -158,44 +260,57 @@ const PostList = ({
         // @ts-ignore
         onChange={handleSearchTextChange}
       />
-      <div className="alley-scripts-post-picker__post-list">
-        {listposts ? (
-          listposts.map((t) => (
-            <Button
-              key={t.id}
-              className={classNames({
-                'alley-scripts-post-picker__post': true,
-                'is-selected': t.id === selected,
-              })}
-              onClick={() => setSelected(t.id as number)}
-            >
-              {searchRender ? (
-                searchRender(t)
-              ) : (
-                <Post
-                  title={t.title}
-                  postType={t.subtype}
-                    // eslint-disable-next-line no-underscore-dangle
-                  attachmentID={t?._embedded?.self[0]?.featured_media}
-                />
-              )}
-            </Button>
-          ))
-        ) : null}
-        {isUpdating ? (
-          <Spinner />
-        ) : null}
-        {totalPages > 0 && pathParams.page < totalPages ? (
-          <div className="alley-scripts-post-picker__load-more">
-            <Button
-              variant="secondary"
-              onClick={loadMore}
-            >
-              {__('Load More', 'alley-scripts')}
-            </Button>
-          </div>
-        ) : null}
-      </div>
+      {filters ? <div ref={filterDiv}>{filters}</div> : null}
+      <Container style={{ height: filterDiv.current?.offsetHeight ? `calc(${modalHeight} - ${filterDiv.current?.offsetHeight}px - 254px)` : `calc(${modalHeight} - 254px)` }}>
+        <Wrapper $format={format}>
+          <h2 id="post-picker-results-heading" className="screen-reader-text">
+            {__('Search Results', 'alley-scripts')}
+          </h2>
+          {listposts ? (
+            // eslint-disable-next-line jsx-a11y/no-redundant-roles
+            <List aria-labelledby="post-picker-results-heading" role="list">
+              {listposts.map((t) => (
+                <ListItem key={t.id}>
+                  <StyledButton
+                    className={classNames({
+                      'is-selected': t.id === selected,
+                    })}
+                    onClick={() => setSelected(t.id as number)}
+                    $format={format}
+                  >
+                    {searchRender ? (
+                      searchRender(t)
+                    ) : (
+                      <Post
+                        format={format}
+                        title={t.title}
+                        postType={t.subtype}
+                        // eslint-disable-next-line no-underscore-dangle
+                        attachmentID={t?._embedded?.self[0]?.featured_media}
+                      />
+                    )}
+                  </StyledButton>
+                </ListItem>
+              ))}
+            </List>
+          ) : null}
+          {isUpdating ? (
+            <SpinnerContainer>
+              <Spinner onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+            </SpinnerContainer>
+          ) : null}
+          {totalPages > 0 && pathParams.page < totalPages && !isUpdating ? (
+            <LoadMore>
+              <Button
+                variant="secondary"
+                onClick={loadMore}
+              >
+                {__('Load More', 'alley-scripts')}
+              </Button>
+            </LoadMore>
+          ) : null}
+        </Wrapper>
+      </Container>
     </>
   );
 };

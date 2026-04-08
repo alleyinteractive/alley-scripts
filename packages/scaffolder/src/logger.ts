@@ -14,7 +14,7 @@ export const initializeLogger = (debug: boolean = false) => {
     transports: [
       new transports.Console(),
     ],
-    format: format.printf(({ message }) => message),
+    format: format.printf(({ message }) => String(message)),
   });
 
   instance.debug('Logger initialized.');

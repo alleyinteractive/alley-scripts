@@ -1,11 +1,11 @@
 {
   "name": "alley-scripts-demo-plugin",
-  "version": "1.1.0",
+  "version": "1.4.0",
   "license": "GPL-2.0-or-later",
   "private": true,
   "main": "plugin.php",
   "engines": {
-    "node": ">=16.0.0 <23.0.0",
+    "node": ">=22.0.0 <26.0.0",
     "npm": ">=8"
   },
   "browserslist": [
@@ -13,7 +13,7 @@
     "not IE 11"
   ],
   "scripts": {
-    "build": "npx @alleyinteractive/build-tool@latest build",
+    "build": "node ../packages/build-tool/dist/cjs/index.js build",
     "dev": "npm run start",
     "create-block": "alley-create-block -n alley-scripts-demo-plugin",
     "create-entry": "npx @alleyinteractive/create-entry@latest -n alley-scripts-demo-plugin -t alley-scripts-demo-plugin",
@@ -44,8 +44,8 @@
     "dompurify": "^3.0.6",
     "prompts": "^2.4.2",
     "prop-types": "^15.8.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@alleyinteractive/build-tool": "*",

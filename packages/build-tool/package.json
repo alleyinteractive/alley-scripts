@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/build-tool",
-  "version": "0.1.5",
+  "version": "0.3.0",
   "description": "An opinionated set of build configurations for wp-scripts",
   "bin": {
     "alley-build": "./dist/cjs/index.js"
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "dependencies": {
-    "@wordpress/scripts": "^30.5.1",
+    "@wordpress/scripts": "^30.26.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "deep-extend": "^0.6.0",
@@ -55,7 +55,9 @@
   },
   "devDependencies": {
     "@alleyinteractive/eslint-config": "*",
-    "@types/deep-extend": "^0.6.2"
+    "@types/deep-extend": "^0.6.2",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0"
   },
   "exports": {
     ".": {
@@ -68,7 +70,13 @@
         "default": "./dist/cjs/index.js"
       }
     },
-    "./dist/cjs/config/webpack.config": "./dist/cjs/config/webpack.config.js",
-    "./dist/esm/config/webpack.config": "./dist/esm/config/webpack.config.js"
+    "./dist/cjs/config/webpack.config": {
+      "types": "./dist/cjs/types/config/webpack.config.d.ts",
+      "default": "./dist/cjs/config/webpack.config.js"
+    },
+    "./dist/esm/config/webpack.config": {
+      "types": "./dist/esm/types/config/webpack.config.d.ts",
+      "default": "./dist/esm/config/webpack.config.js"
+    }
   }
 }
