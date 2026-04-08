@@ -34,23 +34,19 @@ This repository uses npm's [Trusted Publishers](https://docs.npmjs.com/trusted-p
 
 The publishing workflow is configured correctly:
 
-| Workflow | Jobs | `id-token: write` | `registry-url` in `setup-node` |
-|---|---|---|---|
-| `release.yml` | `release`, `snapshot` | yes | yes |
+| Workflow      | Jobs                  | `id-token: write` | `registry-url` in `setup-node` |
+|---------------|-----------------------|-------------------|--------------------------------|
+| `release.yml` | `release`, `snapshot` | yes               | yes                            |
 
 ### Configuring Trusted Publishers on npmjs.com
 
-Only one trusted publisher entry is needed — both the `release` and `snapshot` jobs live in `release.yml`. This can be done **per-package** or once at the **`@alleyinteractive` org level** (recommended, applies to all packages).
-
-To configure at the org level: go to the `@alleyinteractive` org page on npmjs.com → **Settings** → **Trusted Publishers** → add one entry:
-
-| Field | Value |
-|---|---|
-| Repository owner | `alleyinteractive` |
-| Repository name | `alley-scripts` |
-| Workflow filename | `release.yml` |
-| Environment | *(blank)* |
+Only one trusted publisher entry is needed — both the `release` and `snapshot` jobs live in `release.yml`. This can be done **per-package**.
 
 To configure per-package instead: go to the package page on npmjs.com → **Settings** → **Publishing** → **Trusted Publishers** and add the same entry above.
 
-> **When adding a new package**, ensure it either inherits org-level Trusted Publisher config or has the entry above added manually before its first publish.
+| Field             | Value              |
+|-------------------|--------------------|
+| Repository owner  | `alleyinteractive` |
+| Repository name   | `alley-scripts`    |
+| Workflow filename | `release.yml`      |
+| Environment       | *(blank)*          |

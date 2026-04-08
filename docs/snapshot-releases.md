@@ -16,15 +16,15 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
 ## Requirements
 
 1. **Branch Naming**: Your branch must start with `snapshot/`
-   - ✅ `snapshot/fix-ajv-deps`
-   - ✅ `snapshot/test-new-feature`
-   - ❌ `feature/fix-ajv` (will be rejected)
+  - ✅ `snapshot/fix-ajv-deps`
+  - ✅ `snapshot/test-new-feature`
+  - ❌ `feature/fix-ajv` (will be rejected)
 
-2. **GitHub Permissions**: You need write access to the repository to trigger the workflow.
+1. **GitHub Permissions**: You need write access to the repository to trigger the workflow.
 
-3. **Changeset**: At least one [changeset](./versioning-publishing.md) must exist for the packages you want to snapshot. Run `npm run changeset` on your branch before triggering the workflow.
+2. **Changeset**: At least one [changeset](./versioning-publishing.md) must exist for the packages you want to snapshot. Run `npm run changeset` on your branch before triggering the workflow.
 
-4. **Trusted Publisher**: The `release.yml` workflow (which contains the `snapshot` job) must be configured as a Trusted Publisher on npmjs.com. See [Versioning and Publishing § Trusted Publishers](./versioning-publishing.md#trusted-publishers) for setup steps.
+3. **Trusted Publisher**: The `release.yml` workflow (which contains the `snapshot` job) must be configured as a Trusted Publisher on npmjs.com. See [Versioning and Publishing § Trusted Publishers](./versioning-publishing.md#trusted-publishers) for setup steps.
 
 ## How to Create a Snapshot Release
 
@@ -41,14 +41,14 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
    ```
 
 2. **Trigger the snapshot workflow**:
-   - Go to the **Actions** tab in GitHub
-   - Click on **"Release"** workflow
-   - Click **"Run workflow"**
-   - Select your `snapshot/` branch from the dropdown
-   - Enter a descriptive **tag slug** (e.g., `fix-ajv`, `test-feature`)
-   - Click **"Run workflow"**
+  - Go to the **Actions** tab in GitHub
+  - Click on **"Release"** workflow
+  - Click **"Run workflow"**
+  - Select your `snapshot/` branch from the dropdown
+  - Enter a descriptive **tag slug** (e.g., `fix-ajv`, `test-feature`)
+  - Click **"Run workflow"**
 
-3. **Test the snapshot**:
+1. **Test the snapshot**:
    ```bash
    # Install the snapshot version
    npm install @alleyinteractive/build-tool@fix-ajv
@@ -57,7 +57,7 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
    npm run build
    ```
 
-4. **Clean up** (after testing):
+2. **Clean up** (after testing):
    ```bash
    # Remove snapshot version and reinstall latest
    npm uninstall @alleyinteractive/build-tool
@@ -70,9 +70,9 @@ Snapshot releases create versions with the format `0.0.0-{tag}-DATETIMESTAMP` th
 
 ## Workflow Parameters
 
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `tag` | Yes | A descriptive slug for your snapshot (e.g. `fix-ajv`, `test-webpack-config`). Creates versions like `0.2.3-fix-ajv-20250929142301`. |
+| Parameter | Required | Description                                                                                                                         |
+|-----------|----------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `tag`     | Yes      | A descriptive slug for your snapshot (e.g. `fix-ajv`, `test-webpack-config`). Creates versions like `0.2.3-fix-ajv-20250929142301`. |
 
 ## Best Practices
 
