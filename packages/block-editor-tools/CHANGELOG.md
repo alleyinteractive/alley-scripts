@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.0
+
+### Minor Changes
+
+- 02d34caf: Drop support for Node 18/20 (and test for Node 25)
+
 ## 0.15.1
 
 ### Patch Changes
