@@ -11,8 +11,8 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  id-token: write
-  contents: read
+  id-token: write # Required for OIDC
+  contents: write
 
 jobs:
   snapshot:
@@ -54,7 +54,8 @@ jobs:
       - name: Publish Snapshot
         run: npx changeset publish --tag ${{ inputs.tag }} --no-git-tag
         env:
-          NPM_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Output Snapshot Info
         run: |
