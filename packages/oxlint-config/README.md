@@ -84,7 +84,7 @@ JS Plugins:
 - Semicolons
 - Trailing commas
 - 2-space indentation
-- 100 character print width
+- 80 character print width
 - LF line endings
 
 ## CSS Linting

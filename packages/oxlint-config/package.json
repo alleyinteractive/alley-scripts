@@ -39,6 +39,7 @@
   },
   "peerDependencies": {
     "oxlint": "^1.52",
+    "oxfmt": "^0.43",
     "oxlint-plugin-eslint": "^1.59"
   }
 }
