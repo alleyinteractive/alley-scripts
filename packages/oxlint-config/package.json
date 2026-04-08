@@ -38,8 +38,8 @@
     "lint": "oxlint -c oxlintrc.json ."
   },
   "peerDependencies": {
-    "oxlint": "^1.52",
     "oxfmt": "^0.43",
+    "oxlint": "^1.52",
     "oxlint-plugin-eslint": "^1.59"
   }
 }
