@@ -22,6 +22,12 @@ Here are some resources to help you get started with open source contributions:
 - [GitHub flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 - [Collaborating with pull requests](https://docs.github.com/en/github/collaborating-with-pull-requests)
 
+## Documentation
+
+- [Adding and Managing Packages](./docs/adding-packages.md)
+- [Versioning and Publishing Packages](./docs/versioning-publishing.md)
+- [Snapshot Releases](./docs/snapshot-releases.md)
+
 ## Getting Started
 
 ### Issues
