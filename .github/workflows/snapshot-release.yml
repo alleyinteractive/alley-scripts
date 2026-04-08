@@ -54,7 +54,7 @@ jobs:
       - name: Publish Snapshot
         run: npx changeset publish --tag ${{ inputs.tag }} --no-git-tag
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Output Snapshot Info
         run: |
