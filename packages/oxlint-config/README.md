@@ -66,6 +66,7 @@ Add rule overrides in your local `.oxlintrc.json`:
 ### Linting (Oxlint)
 
 Plugins enabled:
+
 - `react` - React-specific rules
 - `typescript` - TypeScript rules
 - `import` - Import/export rules
@@ -74,6 +75,7 @@ Plugins enabled:
 - `unicorn` - Various helpful rules
 
 JS Plugins:
+
 - `oxlint-plugin-eslint` - Bridges ESLint core rules (e.g., `no-restricted-syntax`)
 
 ### Formatting (Oxfmt)

@@ -1,44 +1,44 @@
 {
-  "author": "Alley <info@alley.com> (https://alley.com)",
+  "name": "@alleyinteractive/oxlint-config",
+  "version": "0.1.0",
+  "description": "Alley's Oxlint configuration with linting and formatting",
+  "keywords": [
+    "eslint",
+    "formatter",
+    "linter",
+    "oxfmt",
+    "oxlint",
+    "react",
+    "typescript"
+  ],
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "bugs": {
     "url": "https://github.com/alleyinteractive/alley-scripts/issues"
   },
-  "dependencies": {
-    "oxlint": "^1.52.0"
-  },
-  "devDependencies": {
-    "oxlint-plugin-eslint": "*"
-  },
-  "description": "Alley's Oxlint configuration with linting and formatting",
-  "exports": {
-    ".": "./oxlintrc.json",
-    "./oxfmt": "./oxfmt.json"
-  },
-  "files": [
-    "oxlintrc.json",
-    "oxfmt.json",
-    "LICENSE",
-    "README.md"
-  ],
-  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
-  "keywords": [
-    "oxlint",
-    "oxfmt",
-    "linter",
-    "eslint",
-    "formatter",
-    "typescript",
-    "react"
-  ],
   "license": "GPL-2.0-or-later",
-  "main": "oxlintrc.json",
-  "name": "@alleyinteractive/oxlint-config",
+  "author": "Alley <info@alley.com> (https://alley.com)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
   },
+  "files": [
+    "oxlintrc.json",
+    "oxfmtrc.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "oxlintrc.json",
+  "exports": {
+    ".": "./oxlintrc.json",
+    "./oxfmt": "./oxfmtrc.json"
+  },
   "scripts": {
+    "format": "oxfmt -c oxfmtrc.json .",
+    "format:check": "oxfmt -c oxfmtrc.json . --check",
     "lint": "oxlint -c oxlintrc.json ."
   },
-  "version": "0.1.0"
+  "peerDependencies": {
+    "oxlint": "^1.52",
+    "oxlint-plugin-eslint": "^1.59"
+  }
 }

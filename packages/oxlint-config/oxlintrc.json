@@ -1,14 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
-  "plugins": [
-    "react",
-    "typescript",
-    "import",
-    "jsx-a11y",
-  ],
-  "jsPlugins": [
-    "oxlint-plugin-eslint"
-  ],
+  "plugins": ["react", "typescript", "import", "jsx-a11y"],
+  "jsPlugins": ["oxlint-plugin-eslint"],
   "env": {
     "browser": true,
     "es2022": true,

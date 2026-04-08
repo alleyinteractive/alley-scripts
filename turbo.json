@@ -23,6 +23,9 @@
         "test/**/*.jsx"
       ]
     },
+    "format:check": {
+      "dependsOn": []
+    },
     "lint": {
       "dependsOn": []
     }
