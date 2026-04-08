@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- de0711b1: Address errors from npm pkg fix (raised while trying to publish a new version)
+
 ## 0.3.0
 
 ### Minor Changes
