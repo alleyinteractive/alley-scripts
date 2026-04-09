@@ -5,7 +5,7 @@
   "author": "Alley Interactive",
   "license": "GPL-2.0-or-later",
   "engines": {
-    "node": ">=18.0.0 <25.0.0",
+    "node": ">=22.0.0 <26.0.0",
     "npm": ">=8"
   },
   "scripts": {
@@ -15,6 +15,7 @@
     "preinstall": "check-node-version --package",
     "prelint": "check-node-version --package",
     "lint": "turbo run lint --cache-dir=.turbo",
+    "stylelint": "turbo run stylelint --cache-dir=.turbo",
     "prepublish-packages": "check-node-version --package",
     "publish-packages": "turbo run build lint test --cache-dir=.turbo && changeset version && changeset publish",
     "pretest": "check-node-version --package",
