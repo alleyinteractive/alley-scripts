@@ -1,0 +1,57 @@
+{
+  "name": "@alleyinteractive/oxlint-config",
+  "version": "0.1.0",
+  "description": "Alley's custom Oxlint and Oxfmt shareable configuration with linting and formatting",
+  "keywords": [
+    "eslint",
+    "formatter",
+    "linter",
+    "oxfmt",
+    "oxlint",
+    "react",
+    "typescript"
+  ],
+  "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "license": "GPL-2.0-or-later",
+  "author": "Alley <info@alley.com> (https://alley.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "fmt.d.ts",
+    "fmt.js"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./oxfmt": "./fmt.js"
+  },
+  "scripts": {
+    "format": "oxfmt -c oxfmt.config.ts .",
+    "format:check": "oxfmt -c oxfmt.config.ts . --check",
+    "lint": "oxlint -c oxlint.config.ts ."
+  },
+  "devDependencies": {
+    "oxfmt": "^0.43",
+    "oxlint": "^1.52",
+    "oxlint-plugin-eslint": "^1.59",
+    "oxlint-tsgolint": "^0.20"
+  },
+  "peerDependencies": {
+    "oxfmt": "^0.43",
+    "oxlint": "^1.52",
+    "oxlint-plugin-eslint": "^1.59",
+    "oxlint-tsgolint": "^0.20"
+  },
+  "engines": {
+    "node": ">=22.0.0 <26.0.0",
+    "npm": ">=8"
+  }
+}
