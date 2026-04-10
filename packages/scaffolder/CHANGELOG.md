@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+### Patch Changes
+
+- be730cd2: Remove duplicate key/value already set at @alleyinteractive/tsconfig
+
 ## 0.3.1
 
 ### Patch Changes
