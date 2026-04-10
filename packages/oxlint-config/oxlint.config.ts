@@ -1,0 +1,57 @@
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  plugins: ['react', 'typescript', 'import', 'jsx-a11y'],
+  jsPlugins: ['oxlint-plugin-eslint'],
+  env: {
+    builtin: true,
+    browser: true,
+    es2024: true,
+    jest: true,
+    node: true,
+  },
+  rules: {
+    'react/jsx-props-no-spreading': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-filename-extension': [
+      'error',
+      {
+        extensions: ['.jsx', '.tsx'],
+      },
+    ],
+    'react/jsx-no-useless-fragment': [
+      'error',
+      {
+        allowExpressions: true,
+      },
+    ],
+    'import/extensions': [
+      'error',
+      'always',
+      {
+        pattern: {
+          js: 'never',
+          ts: 'never',
+          jsx: 'never',
+          tsx: 'never',
+          mjs: 'never',
+        },
+      },
+    ],
+    'eslint-js/no-restricted-syntax': [
+      'error',
+      {
+        message:
+          'Ternaries must be used instead of && in JSX expressions to avoid the potential for accidental output. Use, for example, {condition ? <Element /> : null}.',
+        selector:
+          ":matches(JSXElement, JSXFragment) > JSXExpressionContainer > LogicalExpression[operator='&&']",
+      },
+      {
+        message:
+          'Ternaries must be used instead of || in JSX expressions to avoid the potential for accidental output. Use, for example, {thing1 ? thing1 : thing2}.',
+        selector:
+          ":matches(JSXElement, JSXFragment) > JSXExpressionContainer > LogicalExpression[operator='||']",
+      },
+    ],
+  },
+});
