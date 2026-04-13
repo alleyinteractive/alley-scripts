@@ -1,7 +1,21 @@
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
-  plugins: ['react', 'typescript', 'import', 'jsx-a11y'],
+  categories: {
+    correctness: 'error',
+    suspicious: 'error',
+  },
+  plugins: [
+    'react',
+    'typescript',
+    'import',
+    'unicorn',
+    'jsx-a11y',
+    'jsdoc',
+    'promise',
+    'oxc',
+    'node',
+  ],
   jsPlugins: ['oxlint-plugin-eslint'],
   options: {
     typeAware: true,
@@ -57,4 +71,19 @@ export default defineConfig({
       },
     ],
   },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+      rules: {
+        'import/extensions': [
+          'error',
+          'always',
+          {
+            checkTypeImports: true,
+            ignorePackages: true,
+          },
+        ],
+      },
+    },
+  ],
 });

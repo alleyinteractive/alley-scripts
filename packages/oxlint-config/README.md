@@ -19,14 +19,14 @@ npm install --save-dev @alleyinteractive/oxlint-config
 Create an `oxlintrc.config.ts` in your project root:
 
 ```ts
-import { defineConfig } from "oxlint";
-import oxlintConfig from "@alleyinteractive/oxlint-config";
+import { defineConfig } from 'oxlint';
+import oxlintConfig from '@alleyinteractive/oxlint-config';
 
 export default defineConfig({
   extends: [oxlintConfig],
   rules: {
     // Example of how to override a config rule.
-    "import/extensions": "off",
+    'import/extensions': 'off',
   },
 });
 ```
@@ -46,13 +46,13 @@ Add a `lint` script to your `package.json`:
 Create an `oxfmt.config.ts` in your project root:
 
 ```ts
-import { defineConfig } from "oxfmt";
-import oxfmtConfig from "@alleyinteractive/oxlint-config/oxfmt";
+import { defineConfig } from 'oxfmt';
+import oxfmtConfig from '@alleyinteractive/oxlint-config/oxfmt';
 
 export default defineConfig({
   ...oxfmtConfig,
   // Example of how to extend the config.
-  ignorePatterns: ["build", "dist"],
+  ignorePatterns: ['build', 'dist'],
 });
 ```
 
