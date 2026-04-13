@@ -1,6 +1,10 @@
-# @alleyinteractive/oxlint-config
+# Alley's Oxlint/Oxfmt Configuration(s)
 
 Alley's shared [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration for linting and formatting JavaScript, TypeScript, React, and JSX/TSX.
+
+## Releases
+
+This package adheres to semantic versioning and is released on https://www.npmjs.com/.
 
 ## Installation
 
@@ -10,53 +14,55 @@ npm install --save-dev @alleyinteractive/oxlint-config
 
 ## Usage
 
-### Linting
+### Linting (Oxlint)
 
-Create an `.oxlintrc.json` in your project root:
+Create an `oxlintrc.config.ts` in your project root:
 
-```json
-{
-  "extends": ["./node_modules/@alleyinteractive/oxlint-config/oxlintrc.json"]
-}
+```ts
+import { defineConfig } from "oxlint";
+import oxlintConfig from "@alleyinteractive/oxlint-config";
+
+export default defineConfig({
+  extends: [oxlintConfig],
+  rules: {
+    // Example of how to override a config rule.
+    "import/extensions": "off",
+  },
+});
 ```
 
-Add a lint script to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "lint": "oxlint -c .oxlintrc.json ."
-  }
-}
-```
-
-### Formatting
-
-Use the shared Oxfmt configuration:
-
-```bash
-oxfmt --config ./node_modules/@alleyinteractive/oxlint-config/oxfmt.json .
-```
-
-Or add a format script to your `package.json`:
+Add a `lint` script to your `package.json`:
 
 ```json
 {
   "scripts": {
-    "format": "oxfmt --config ./node_modules/@alleyinteractive/oxlint-config/oxfmt.json ."
+    "lint": "oxlint -c oxlintrc.config.ts ."
   }
 }
 ```
 
-### Overriding Rules
+### Formatting (Oxfmt)
 
-Add rule overrides in your local `.oxlintrc.json`:
+Create an `oxfmt.config.ts` in your project root:
+
+```ts
+import { defineConfig } from "oxfmt";
+import oxfmtConfig from "@alleyinteractive/oxlint-config/oxfmt";
+
+export default defineConfig({
+  ...oxfmtConfig,
+  // Example of how to extend the config.
+  ignorePatterns: ["build", "dist"],
+});
+```
+
+Add a formatter script to your `package.json`:
 
 ```json
 {
-  "extends": ["./node_modules/@alleyinteractive/oxlint-config/oxlintrc.json"],
-  "rules": {
-    "no-console": "off"
+  "scripts": {
+    "format": "oxfmt -c oxfmt.config.ts .",
+    "format:check": "oxfmt -c oxfmt.config.ts . --check"
   }
 }
 ```
@@ -87,18 +93,28 @@ JS Plugins:
 - 80 character print width
 - LF line endings
 
-## CSS Linting
+### CSS Linting
 
-Oxlint does not lint CSS/SCSS. For CSS linting, use [@alleyinteractive/stylelint-config](https://github.com/alleyinteractive/alley-scripts/tree/main/packages/stylelint-config) separately. Oxfmt can format CSS/SCSS files.
+Oxlint does not lint CSS/SCSS (Oxfmt can format CSS/SCSS files). For CSS linting, use [@alleyinteractive/stylelint-config](https://github.com/alleyinteractive/alley-scripts/tree/main/packages/stylelint-config).
 
 ## Migrating from @alleyinteractive/eslint-config
 
 1. Replace `@alleyinteractive/eslint-config` with `@alleyinteractive/oxlint-config` in your `devDependencies`
 2. Delete `.eslintrc.json` / `.eslintrc.js`
-3. Create `.oxlintrc.json` extending the shared config (see above)
-4. Update your `lint` script from `eslint ...` to `oxlint -c .oxlintrc.json .`
+3. Create `oxlintrc.config.ts` extending the shared config (see above)
+4. Update your `lint` script from `eslint ...` to `oxlint -c oxlintrc.config.ts .`
 5. Delete `tsconfig.eslint.json` if it only served ESLint's TypeScript parser
+
+## Maintainers
+
+- [Alley](https://github.com/alleyinteractive)
+
+![Alley logo](https://avatars.githubusercontent.com/u/1733454?s=200&v=4)
+
+### Contributors
+
+Thanks to all the [contributors](../../CONTRIBUTORS.md) to this project.
 
 ## License
 
-GPL-2.0-or-later
+This software is released under the terms of the GNU General Public License version 2 or any later version.
