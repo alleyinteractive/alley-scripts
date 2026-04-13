@@ -73,7 +73,7 @@ export default defineConfig({
   },
   overrides: [
     {
-      files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+      files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts', '**/*.d.ts'],
       rules: {
         'import/extensions': [
           'error',
@@ -83,6 +83,45 @@ export default defineConfig({
             ignorePackages: true,
           },
         ],
+        // Type-aware rules — not auto-enabled by typeAware: true, require explicit listing.
+        'typescript/consistent-type-exports': 'error',
+        'typescript/no-confusing-void-expression': 'error',
+        'typescript/no-deprecated': 'error',
+        'typescript/no-duplicate-type-constituents': 'error',
+        'typescript/no-misused-promises': 'error',
+        'typescript/no-mixed-enums': 'error',
+        'typescript/no-unnecessary-type-assertion': 'error',
+        'typescript/no-unsafe-argument': 'error',
+        'typescript/no-unsafe-assignment': 'error',
+        'typescript/no-unsafe-call': 'error',
+        'typescript/no-unsafe-enum-comparison': 'error',
+        'typescript/no-unsafe-member-access': 'error',
+        'typescript/no-unsafe-return': 'error',
+        'typescript/no-unsafe-type-assertion': 'error',
+        'typescript/no-unsafe-unary-minus': 'error',
+        'typescript/only-throw-error': 'error',
+        'typescript/prefer-nullish-coalescing': 'error',
+        'typescript/prefer-optional-chain': 'error',
+        'typescript/prefer-promise-reject-errors': 'error',
+        'typescript/restrict-plus-operands': [
+          'error',
+          {
+            allowAny: false,
+            allowBoolean: false,
+            allowNullish: false,
+            allowNumberAndString: false,
+            allowRegExp: false,
+          },
+        ],
+        'typescript/restrict-template-expressions': [
+          'error',
+          {
+            allowNumber: true,
+          },
+        ],
+        'typescript/return-await': ['error', 'error-handling-correctness-only'],
+        'typescript/switch-exhaustiveness-check': 'error',
+        'typescript/use-unknown-in-catch-callback-variable': 'error',
       },
     },
   ],
