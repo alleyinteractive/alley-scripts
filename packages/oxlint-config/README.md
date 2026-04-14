@@ -67,44 +67,6 @@ Add a formatter script to your `package.json`:
 }
 ```
 
-## What's Included
-
-### Linting (Oxlint)
-
-Plugins enabled:
-
-- `react` - React-specific rules
-- `typescript` - TypeScript rules
-- `import` - Import/export rules
-- `jsx-a11y` - Accessibility rules for JSX
-- `react-hooks` - Rules of Hooks enforcement
-- `unicorn` - Various helpful rules
-
-JS Plugins:
-
-- `oxlint-plugin-eslint` - Bridges ESLint core rules (e.g., `no-restricted-syntax`)
-
-### Formatting (Oxfmt)
-
-- Single quotes
-- Semicolons
-- Trailing commas
-- 2-space indentation
-- 80 character print width
-- LF line endings
-
-### CSS Linting
-
-Oxlint does not lint CSS/SCSS (Oxfmt can format CSS/SCSS files). For CSS linting, use [@alleyinteractive/stylelint-config](https://github.com/alleyinteractive/alley-scripts/tree/main/packages/stylelint-config).
-
-## Migrating from @alleyinteractive/eslint-config
-
-1. Replace `@alleyinteractive/eslint-config` with `@alleyinteractive/oxlint-config` in your `devDependencies`
-2. Delete `.eslintrc.json` / `.eslintrc.js`
-3. Create `oxlintrc.config.ts` extending the shared config (see above)
-4. Update your `lint` script from `eslint ...` to `oxlint -c oxlintrc.config.ts .`
-5. Delete `tsconfig.eslint.json` if it only served ESLint's TypeScript parser
-
 ## Maintainers
 
 - [Alley](https://github.com/alleyinteractive)
