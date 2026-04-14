@@ -23,13 +23,17 @@
         "test/**/*.jsx"
       ]
     },
+    "format": {
+      "dependsOn": []
+    },
+    "format:check": {
+      "dependsOn": []
+    },
     "stylelint": {
       "dependsOn": []
     },
     "lint": {
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": []
     }
   }
 }

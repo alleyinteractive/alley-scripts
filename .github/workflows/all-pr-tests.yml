@@ -39,14 +39,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Lint
+        run: npm run lint
+
+      - name: Formatter
+        run: npm run format:check
 
       - name: Test
         run: npm run test
 
-      - name: Lint
-        run: npm run lint
+      - name: Build
+        run: npm run build
 
   php-tests:
     name: "PHP Tests"
