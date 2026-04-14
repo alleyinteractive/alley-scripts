@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.3
+
+### Patch Changes
+
+- dbf2f02c: Improvements to the Oxlint and Oxfmt shared configuration
+
 ## 0.3.2
 
 ### Patch Changes
