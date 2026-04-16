@@ -15,7 +15,7 @@
  */
 
 ?>
-<p <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<p <?php echo get_block_wrapper_attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 	<?php esc_html_e( '{{title}} - hello from a dynamic block!' ); ?>
 </p>
 {{/isDynamicVariant}}
