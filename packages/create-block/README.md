@@ -21,19 +21,29 @@ Without providing any options the tool will prompt the user through several opti
 
 ### `CLI options`
 ```bash
-  -n, --namespace <string>      The namespace for the block. (default: create-block)
-  -b, --blocks-dir <string>     The directory where the blocks will be created
-                                relative to the current working directory.
-                                (default: blocks)
-  -l, --block-language <string> The language for the block. Accepts `typescript`
-                                or `javascript`. (default: typescript)
-  -r, --skip-registration       Skip registering the block in PHP with register_block_type().
-                                (default: false)
-  -h, --help                    Display the help usage guide.
+  -n, --namespace <string>          The namespace for the block. (default: create-block)
+  -b, --blocks-dir <string>         The directory where the blocks will be created
+                                    relative to the current working directory.
+                                    (default: blocks)
+  -l, --block-language <string>     The language for the block. Accepts `typescript`
+                                    or `javascript`. (default: typescript)
+  -v, --has-view-script             Whether the block will have a frontend view script.
+  -r, --skip-registration           Skip registering the block in PHP with register_block_type().
+                                    (default: false)
+  -s, --slug <string>               The slug for the block used for its identification
+                                    and output directory. Providing this enables
+                                    non-interactive mode.
+  -t, --title <string>              The display title for the block.
+  -d, --short-description <string>  The short description for the block.
+  -c, --category <string>           The category name for the block. (default: widgets)
+      --textdomain <string>         The text domain for internationalization.
+  -h, --help                        Display the help usage guide.
 ```
 
 ### Prompt options
 The script will run and will start prompting for the input required to scaffold the block using `@wordpress/create-block` in [interactive mode](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#interactive-mode). See details about the available prompts in the [@wordpress/create-block documentation](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#options).
+
+When `--slug` is provided (along with the other flags above), all prompts are skipped and the block is scaffolded in fully non-interactive mode. This is useful for scripted environments or LLM-driven tooling.
 
 ### Recommended Setup
 * Install `@alleyinteractive/create-block` as a devDependency on a project.
@@ -47,6 +57,18 @@ Example in `package.json`:
 }
 ```
 The example above will scaffold blocks in the default "blocks" directory in a project using the namespace of "my-projects-namespace" and using typescript as the block language.
+
+For fully non-interactive use (e.g. in LLM-driven tooling or CI), pass `--slug` along with any other desired flags:
+```bash
+npx @alleyinteractive/create-block \
+  --namespace my-namespace \
+  --block-language typescript \
+  --slug my-block \
+  --title "My Block" \
+  --short-description "A custom block." \
+  --category widgets \
+  --skip-registration
+```
 
 ### From Source
 
