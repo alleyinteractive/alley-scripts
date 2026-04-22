@@ -2,6 +2,7 @@
 
 import { chdir, cwd } from 'node:process';
 import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
 
 /* eslint-disable no-console */
 import chalk from 'chalk';
@@ -204,14 +205,22 @@ console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-b
     createBlockArgs.push('--textdomain', textdomain);
   }
 
+  // Resolve the @wordpress/create-block entry script relative to this package so
+  // that it is found regardless of whether wp-create-block is on PATH.
+  const localRequire = createRequire(__filename);
+  const wpCreateBlockScript = localRequire.resolve('@wordpress/create-block');
+
   spawn(
-    'wp-create-block',
-    createBlockArgs,
+    process.execPath,
+    [wpCreateBlockScript, ...createBlockArgs],
     {
       cwd: cwd(),
       stdio: 'inherit',
     },
-  ).on('exit', (code, signal) => {
+  ).on('error', (err) => {
+    console.error(chalk.red(`\nFailed to run @wordpress/create-block: ${err.message}\n`));
+    process.exit(1);
+  }).on('exit', (code, signal) => {
     if (signal) {
       process.exit(1);
     } else {
