@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- d65e9e45: Addresses an issue in which the textdomain for block.json was the block name, instead of the plugin name.
+
 ## 0.4.0
 
 ### Minor Changes
