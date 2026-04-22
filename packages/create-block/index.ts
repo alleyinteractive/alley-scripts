@@ -2,6 +2,7 @@
 
 import { chdir, cwd } from 'node:process';
 import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
 
 /* eslint-disable no-console */
 import chalk from 'chalk';
@@ -59,6 +60,35 @@ const options: Options[] = [
     type: Boolean,
   },
   {
+    name: 'slug',
+    alias: 's',
+    description: 'The slug for the block used for its identification and output directory. Providing this enables non-interactive mode.',
+    type: String,
+  },
+  {
+    name: 'title',
+    alias: 't',
+    description: 'The display title for the block.',
+    type: String,
+  },
+  {
+    name: 'short-description',
+    alias: 'd',
+    description: 'The short description for the block.',
+    type: String,
+  },
+  {
+    name: 'category',
+    alias: 'c',
+    description: 'The category name for the block. (default: widgets)',
+    type: String,
+  },
+  {
+    name: 'textdomain',
+    description: 'The text domain for internationalization.',
+    type: String,
+  },
+  {
     name: 'help',
     alias: 'h',
     description: 'Display this usage guide.',
@@ -73,6 +103,11 @@ const {
   'block-language': blockLanguage,
   'has-view-script': hasViewScript,
   'skip-registration': skipBlockRegistration,
+  slug,
+  title,
+  'short-description': shortDescription,
+  category,
+  textdomain,
   help,
 } = commandLineArgs(options as OptionDefinition[]);
 
@@ -125,34 +160,67 @@ console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-b
   }
 
   // Create a block using the @wordpress/create-block package.
+  const createBlockArgs: string[] = [
+    /**
+     * This argument specifies an external npm package as a template.
+     * In this case, the select-templates.js file is used as a the entry for the template.
+     * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
+     */
+    '--template',
+    path.join(__dirname, 'src/select-templates.js'),
+    /**
+     * With this argument, the create-block package runs in
+     * "No plugin mode" which only scaffolds block files into the current directory.
+     * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#no-plugin
+     */
+    '--no-plugin',
+    /**
+     * Set the block variant as dynamic, the only variant that is supported in this script
+     * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#variant
+     */
+    '--variant',
+    'dynamic',
+  ];
+
+  // When a slug is provided, pass it as a positional argument to wp-create-block.
+  // This triggers non-interactive mode, using template defaults for any unspecified values.
+  if (slug) {
+    createBlockArgs.push(slug);
+  }
+
+  // Forward optional metadata flags to wp-create-block when provided.
+  if (title) {
+    createBlockArgs.push('--title', title);
+  }
+
+  if (shortDescription) {
+    createBlockArgs.push('--short-description', shortDescription);
+  }
+
+  if (category) {
+    createBlockArgs.push('--category', category);
+  }
+
+  if (textdomain) {
+    createBlockArgs.push('--textdomain', textdomain);
+  }
+
+  // Resolve the @wordpress/create-block entry script relative to this package so
+  // that it is found regardless of whether wp-create-block is on PATH.
+  const localRequire = createRequire(__filename);
+  const wpCreateBlockScript = localRequire.resolve('@wordpress/create-block');
+
   spawn(
-    'wp-create-block',
-    [
-      /**
-       * This argument specifies an external npm package as a template.
-       * In this case, the select-templates.js file is used as a the entry for the template.
-       * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#template
-       */
-      '--template',
-      path.join(__dirname, 'src/select-templates.js'),
-      /**
-       * With this argument, the create-block package runs in
-       * "No plugin mode" which only scaffolds block files into the current directory.
-       * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#no-plugin
-       */
-      '--no-plugin',
-      /**
-       * Set the block variant as dynamic, the only variant that is supported in this script
-       * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#variant
-       */
-      '--variant',
-      'dynamic',
-    ],
+    process.execPath,
+    [wpCreateBlockScript, ...createBlockArgs],
     {
       cwd: cwd(),
       stdio: 'inherit',
     },
-  ).on('exit', (code, signal) => {
+  ).on('error', (err) => {
+    console.error(chalk.red(`\nFailed to run @wordpress/create-block: ${err.message}\n`));
+    process.exit(1);
+  }).on('exit', (code, signal) => {
     if (signal) {
       process.exit(1);
     } else {
