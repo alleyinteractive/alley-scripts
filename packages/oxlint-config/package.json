@@ -42,13 +42,13 @@
     "oxfmt": "^0.43",
     "oxlint": "^1.52",
     "oxlint-plugin-eslint": "^1.59",
-    "oxlint-tsgolint": "^0.20"
+    "oxlint-tsgolint": "^0.21"
   },
   "peerDependencies": {
     "oxfmt": "^0.43",
     "oxlint": "^1.52",
     "oxlint-plugin-eslint": "^1.59",
-    "oxlint-tsgolint": "^0.20"
+    "oxlint-tsgolint": "^0.21"
   },
   "engines": {
     "node": ">=22.0.0 <26.0.0",
