@@ -180,6 +180,12 @@ console.log(`🚀 ${chalk.underline(chalk.bold.green('@alleyinteractive/create-b
      */
     '--variant',
     'dynamic',
+    /**
+     * Set the textdomain to the namespace (plugin name) rather than the block slug.
+     * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-create-block/#textdomain
+     */
+    '--textdomain',
+    namespace,
   ];
 
   // When a slug is provided, pass it as a positional argument to wp-create-block.
