@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "dependencies": {
-    "@wordpress/scripts": "^32",
+    "@wordpress/scripts": "^32.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "deep-extend": "^0.6.0",
