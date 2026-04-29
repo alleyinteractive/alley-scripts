@@ -1,11 +1,7 @@
 const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
-const tsParser = require('@typescript-eslint/parser');
-const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const reactPlugin = require('eslint-plugin-react');
+const babelParser = require('@babel/eslint-parser');
 const globals = require('globals');
-const { cwd } = require('node:process');
-const importsRules = require('../rules/imports');
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -13,28 +9,24 @@ const compat = new FlatCompat({
 });
 
 module.exports = [
-  ...compat.extends('airbnb-typescript', 'airbnb/hooks'),
+  ...compat.extends('airbnb', 'airbnb/hooks'),
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
-    plugins: {
-      react: reactPlugin,
-      '@typescript-eslint': tsPlugin,
-    },
     languageOptions: {
-      parser: tsParser,
+      parser: babelParser,
       parserOptions: {
-        project: true,
-        tsconfigRootDir: cwd(),
-        warnOnUnsupportedTypeScriptVersion: false,
         ecmaFeatures: { globalReturn: true, impliedStrict: true, jsx: true },
+        requireConfigFile: false,
         sourceType: 'module',
       },
       globals: {
         ...globals.browser,
-        ...globals.es2022,
+        ...globals.es2021,
         ...globals.jest,
         ...globals.node,
       },
+    },
+    settings: {
+      'import/resolver': 'webpack',
     },
     rules: {
       'no-restricted-syntax': [
@@ -48,12 +40,6 @@ module.exports = [
           selector: ":matches(JSXElement, JSXFragment) > JSXExpressionContainer > LogicalExpression[operator='||']",
         },
       ],
-      'react/jsx-props-no-spreading': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
-      'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
-      'react/require-default-props': 'off',
-      ...importsRules.rules,
     },
   },
 ];

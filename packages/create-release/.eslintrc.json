@@ -1,3 +1,0 @@
-{
-  "extends": ["@alleyinteractive/eslint-config/typescript"]
-}

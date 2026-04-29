@@ -15,7 +15,7 @@
   "types": "./dist/cjs/types/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
-    "lint": "eslint -c .eslintrc.js --ext .ts .",
+    "lint": "eslint .",
     "test:watch": "jest --watch",
     "test": "jest --passWithNoTests --silent",
     "build": "npm run build:esm && npm run build:cjs",
