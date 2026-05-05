@@ -19,7 +19,7 @@
     "alley-create-block": "./dist/index.js"
   },
   "peerDependencies": {
-    "@wordpress/create-block": "*",
+    "@wordpress/create-block": "^4.66.0",
     "@wordpress/scripts": "*"
   },
   "keywords": [
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/create-block",
   "dependencies": {
-    "@wordpress/create-block": "*",
+    "@wordpress/create-block": "^4.66.0",
     "chalk": "^4.1.2",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^7.0.1",
