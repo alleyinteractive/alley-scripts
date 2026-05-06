@@ -1,6 +1,6 @@
 {
   "name": "@alleyinteractive/oxlint-config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Alley's custom Oxlint and Oxfmt shareable configuration with linting and formatting",
   "keywords": [
     "eslint",
