@@ -13,7 +13,8 @@
     "not IE 11"
   ],
   "scripts": {
-    "build": "node ../packages/build-tool/dist/cjs/index.js build",
+    "build": "npm run build:tooling && node ../packages/build-tool/dist/cjs/index.js build",
+    "build:tooling": "npm run build --workspace=@alleyinteractive/build-tool",
     "dev": "npm run start",
     "create-block": "alley-create-block -n alley-scripts-demo-plugin",
     "create-entry": "npx @alleyinteractive/create-entry@latest -n alley-scripts-demo-plugin -t alley-scripts-demo-plugin",
@@ -22,9 +23,10 @@
     "lint:fix": "eslint --ext .jsx --ext .js --ext .ts --ext .tsx . --fix",
     "lint": "npm run check-types && eslint --ext .jsx --ext .js --ext .ts --ext .tsx .",
     "postinstall": "rm -rf node_modules/.cache/babel-loader && rm -rf node_modules/.cache/webpack",
+    "packages-update": "npm run build:tooling && node ../packages/build-tool/dist/cjs/index.js packages-update",
     "scaffold": "scaffold dir ./scaffold --theme=./",
-    "start": "alley-build start",
-    "start:hot": "alley-build start --hot",
+    "start": "npm run build:tooling && node ../packages/build-tool/dist/cjs/index.js start",
+    "start:hot": "npm run build:tooling && node ../packages/build-tool/dist/cjs/index.js start --hot",
     "stylelint:fix": "stylelint --fix \"**/*.scss\"",
     "stylelint": "stylelint \"**/*.scss\" --allow-empty-input",
     "test:watch": "jest --watch",

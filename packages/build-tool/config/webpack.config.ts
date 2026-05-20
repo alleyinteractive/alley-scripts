@@ -131,7 +131,7 @@ const config: Configuration = (defaultConfig ? {
     ...defaultConfig.devServer,
     allowedHosts: 'all',
     static: {
-      directory: '/build',
+      directory: path.join(cwd(), 'build'),
     },
   },
 } : {});

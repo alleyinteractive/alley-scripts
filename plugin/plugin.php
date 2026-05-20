@@ -7,7 +7,7 @@
  * Author: Alley
  * Author URI: https://github.com/alleyinteractive/alley-scripts
  * Requires at least: 6.4
- * Tested up to: 6.4
+ * Tested up to: 7.0
  *
  * Text Domain: alley-scripts-demo-plugin
  * Domain Path: /languages/
