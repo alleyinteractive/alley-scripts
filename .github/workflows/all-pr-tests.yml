@@ -19,8 +19,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Cache turbo build setup
         uses: actions/cache@v5
@@ -39,14 +37,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Lint
+        run: npm run lint
+
+      - name: Formatter
+        run: npm run format:check
 
       - name: Test
         run: npm run test
 
-      - name: Lint
-        run: npm run lint
+      - name: Build
+        run: npm run build
 
   php-tests:
     name: "PHP Tests"

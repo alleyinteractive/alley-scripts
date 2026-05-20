@@ -1,0 +1,6 @@
+{
+  "extends": "@alleyinteractive/tsconfig/base.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  }
+}

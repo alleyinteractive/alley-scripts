@@ -15,6 +15,8 @@
     "preinstall": "check-node-version --package",
     "prelint": "check-node-version --package",
     "lint": "turbo run lint --cache-dir=.turbo",
+    "format": "turbo run format --cache-dir=.turbo",
+    "format:check": "turbo run format:check --cache-dir=.turbo",
     "stylelint": "turbo run stylelint --cache-dir=.turbo",
     "prepublish-packages": "check-node-version --package",
     "publish-packages": "turbo run build lint test --cache-dir=.turbo && changeset version && changeset publish",
