@@ -61,10 +61,6 @@ const TermSelector = <T extends Record<string, unknown>>({
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortController = useRef<AbortController | null>(null);
 
-  // Cache of results keyed by `${subtypes}:${search}`, so repeated queries
-  // (e.g. backspacing and re-typing) resolve instantly without another request.
-  const resultCache = useRef<Map<string, BaseSelectedTerm[]>>(new Map());
-
   const selectedSubTypes = useMemo(
     () => (subTypes.length > 0 ? subTypes.join(',') : 'any'),
     [subTypes],
@@ -74,15 +70,6 @@ const TermSelector = <T extends Record<string, unknown>>({
     // Any in-flight request is now superseded.
     if (abortController.current) {
       abortController.current.abort();
-    }
-
-    // Serve repeated queries from cache instantly — no request, no spinner.
-    const cacheKey = `${selectedSubTypes}:${search}`;
-    const cached = resultCache.current.get(cacheKey);
-    if (cached) {
-      setFoundItems(cached);
-      setIsSearching(false);
-      return;
     }
 
     abortController.current = new AbortController();
@@ -103,7 +90,6 @@ const TermSelector = <T extends Record<string, unknown>>({
       .then((items) => {
         const results = items as BaseSelectedTerm[];
         results.forEach((item) => knownTerms.current.set(item.title, item.id));
-        resultCache.current.set(cacheKey, results);
         setFoundItems(results);
         setIsSearching(false);
       })
