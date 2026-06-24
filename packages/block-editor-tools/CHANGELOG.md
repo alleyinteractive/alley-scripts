@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0
+
+### Minor Changes
+
+- 8b52ae8e: Replace exhaustive pagination with debounced search-as-you-type in TermSelector; removes the maxPages prop
+
 ## 0.16.0
 
 ### Minor Changes
