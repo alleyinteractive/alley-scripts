@@ -12,7 +12,7 @@
     "@alleyinteractive/eslint-config": "*",
     "@alleyinteractive/tsconfig": "*",
     "@babel/cli": "7.23.4",
-    "@babel/core": "7.23.7",
+    "@babel/core": "7.29.0",
     "@babel/preset-env": "7.23.8",
     "@babel/preset-typescript": "7.23.3",
     "@types/cli-progress": "^3.11.5",
