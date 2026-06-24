@@ -10,19 +10,6 @@ import { runCommand } from '../helpers';
  */
 export class ComposerGenerator extends Generator {
   /**
-   * Run the post command if one is specified with child_process.spawn().
-   */
-  runPostCommand(destination: string): Promise<void> {
-    const {
-      composer: { postCommand = '' } = {},
-    } = this.config;
-
-    logger().info(`Running post command: ${chalk.yellow(postCommand)}`);
-
-    return runCommand(postCommand, destination);
-  }
-
-  /**
    * Process a feature and scaffold the files.
    */
   async invoke() {
