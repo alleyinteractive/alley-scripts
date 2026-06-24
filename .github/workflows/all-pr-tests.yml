@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Cache turbo build setup
         uses: actions/cache@v5
@@ -53,7 +53,7 @@ jobs:
     name: "PHP Tests"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Run PHP Tests
         uses: alleyinteractive/action-test-php@develop
