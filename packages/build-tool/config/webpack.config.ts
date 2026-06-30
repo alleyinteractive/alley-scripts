@@ -14,126 +14,190 @@ interface WPScriptsConfig extends Configuration {
   devServer?: WebpackDevServerConfiguration;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const defaultConfig: WPScriptsConfig = require('@wordpress/scripts/config/webpack.config');
+/** Controls how a single wp-scripts configuration is transformed. */
+interface BuildConfigOptions {
+  /** True when this config is the module compiler (`output.module === true`). */
+  isModule: boolean;
+
+  /** True when wp-scripts is in dual-compiler (`--experimental-modules`) mode. */
+  isArrayMode: boolean;
+}
 
 /**
- * Check if the build is running in production mode.
+ * Raw export from the wp-scripts webpack config — a single object normally, or
+ * `[scriptConfig, moduleConfig]` under `--experimental-modules`. Detected via
+ * `Array.isArray` rather than the env var so we react to the actual structure.
  */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const defaultConfigExport: WPScriptsConfig | WPScriptsConfig[] = require('@wordpress/scripts/config/webpack.config');
+
+/** True when wp-scripts produced the dual-compiler array configuration. */
+const isArrayMode: boolean = Array.isArray(defaultConfigExport);
+
 const isProduction: boolean = process.env.NODE_ENV === 'production';
 
-/**
- * The directory name where the entry point directories are located.
- * These are entries NOT associated with blocks.
- */
+/** Directory containing non-block entry points. */
 const entriesDir: string = process.env.ENTRIES_DIRECTORY || 'entries';
 
-/**
- * Whether to only build blocks from the `--webpack-src-dir` and ignore the
- * entry points in the `--webpack-entries-dir` or 'entries' directory.
- */
+/** When true, skip `entries/` and build only blocks. */
 const blocksOnly: boolean = process.env.BLOCKS_ONLY === 'true';
 
-/**
- * The mode to run webpack in. Either production or development.
- */
 const mode: string = isProduction ? 'production' : 'development';
 
 /**
- * webpack configuration.
- *
- * This webpack configuration is an extension of the default configuration
- * provided by @wordpress/scripts. Read the documentation for
- * extending the wp-scripts webpack configuration for more information.
+ * Transform a single wp-scripts configuration into the build-tool customized
+ * version. Pure function so it can be unit-tested without a WordPress runtime.
  *
  * @see https://github.com/WordPress/gutenberg/tree/trunk/packages/scripts#extending-the-webpack-config
- * @see https://github.com/WordPress/gutenberg/blob/trunk/packages/scripts/config/webpack.config.js
+ *
+ * @param wpConfig - A single wp-scripts webpack configuration.
+ * @param options  - Whether this is the module config and whether array mode is active.
+ * @returns The customized webpack configuration.
  */
-const config: Configuration = (defaultConfig ? {
-  ...defaultConfig,
-
-  // Dynamically produce entries from the slotfills index file and all blocks.
-  entry: () => {
-    let blocks = typeof defaultConfig.entry === 'function' ? defaultConfig.entry() : {};
-    blocks = blocks && typeof blocks === 'object' ? blocks : {};
-
-    const entries = blocksOnly === true ? {} : getEntries(entriesDir);
-
-    return {
-      ...blocks,
-      ...entries,
-    };
-  },
-
+function buildConfig(
+  wpConfig: WPScriptsConfig,
+  { isModule, isArrayMode: arrayMode }: BuildConfigOptions,
+): WPScriptsConfig {
   /**
-   * This configuration option is being overridden from the default wp-scripts
-   * config in order to process the build so that each entry point is output
-   * to its own directory.
-   *
-   * The 'build' output path is maintained due to the
-   * devServer configuration from wp-scripts.
+   * Spread wp-scripts `output` first to preserve the module config's
+   * `module: true`, `chunkFormat`, `environment`, and `library` settings;
+   * these are harmless on the script config.
    */
-  output: {
-    clean: mode === 'production',
-
+  const output: Configuration['output'] = {
+    ...wpConfig.output,
     filename: (pathData: PathData) => processFilename(pathData, true, 'js'),
     chunkFilename: (pathData: PathData) => processFilename(pathData, false, 'js', 'runtime'),
     path: path.join(cwd(), 'build'),
-  },
+  };
 
-  // Configure plugins.
-  plugins: [
-    ...(Array.isArray(defaultConfig.plugins) ? defaultConfig.plugins : []),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: '**/{index.php,*.css}',
-          context: entriesDir,
-          noErrorOnMissing: true,
-        },
-      ],
-    }),
-    new MiniCssExtractPlugin({
-      filename: (pathData: PathData) => processFilename(pathData, true, 'css'),
-      chunkFilename: (pathData: PathData) => processFilename(pathData, false, 'css', 'runtime'),
-    }),
-    new CleanWebpackPlugin({
-      cleanAfterEveryBuildPatterns: [
-        /**
-         * Remove duplicate entry CSS files generated from default
-         * MiniCssExtractPlugin plugin in wpScripts.
-         *
-         * The default MiniCssExtractPlugin filename is [name].css
-         * resulting in the generation of the `${entriesDir}-*.css` files.
-         * The configuration in this file for MiniCssExtractPlugin outputs
-         * the entry CSS into the entry src directory name.
-         */
-        `${entriesDir}-*.css`,
-        // Maps are built when running the start mode with wpScripts.
-        `${entriesDir}-*.css.map`,
-      ],
-      protectWebpackAssets: false,
-    }),
-  ],
+  /**
+   * Only force `clean` in non-array mode. In array mode both compilers write
+   * to `build/` and would clean each other's output.
+   */
+  if (!arrayMode) {
+    output.clean = mode === 'production';
+  }
 
-  // This webpack alias rule is needed at the root to ensure that the paths are resolved
-  // using the custom alias defined below.
-  resolve: {
-    ...defaultConfig.resolve,
-    alias: {
-      ...defaultConfig?.resolve?.alias,
-      // Custom alias to resolve paths to the project root. Example: '@/client/src/index.js'.
-      '@': path.resolve(cwd()),
+  /**
+   * Script config merges `entries/` directory entries into the wp-scripts entry
+   * function. Module config passes through untouched — modules are block-only
+   * and `entries/` doesn't apply.
+   */
+  const entry: Configuration['entry'] = isModule
+    ? wpConfig.entry
+    : () => {
+      let blocks = typeof wpConfig.entry === 'function' ? wpConfig.entry() : {};
+      blocks = blocks && typeof blocks === 'object' ? blocks : {};
+
+      const entries = blocksOnly === true ? {} : getEntries(entriesDir);
+
+      return {
+        ...blocks,
+        ...entries,
+      };
+    };
+
+  /**
+   * Build-tool's extra plugins (Copy, custom MiniCssExtract, CleanWebpack) are
+   * added only to the script config. Adding them to the module config would
+   * double-copy files, conflict with its CSS-extraction plugin, and clean
+   * script-pipeline artifacts.
+   */
+  const plugins: Configuration['plugins'] = [
+    ...(Array.isArray(wpConfig.plugins) ? wpConfig.plugins : []),
+    ...(isModule ? [] : [
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: '**/{index.php,*.css}',
+            context: entriesDir,
+            noErrorOnMissing: true,
+          },
+        ],
+      }),
+      new MiniCssExtractPlugin({
+        filename: (pathData: PathData) => processFilename(pathData, true, 'css'),
+        chunkFilename: (pathData: PathData) => processFilename(pathData, false, 'css', 'runtime'),
+      }),
+      new CleanWebpackPlugin({
+        cleanAfterEveryBuildPatterns: [
+          /**
+           * Remove `${entriesDir}-*.css` files generated by wp-scripts'
+           * default MiniCssExtractPlugin (`[name].css`). Our config outputs
+           * CSS into the entry src directory name instead.
+           */
+          `${entriesDir}-*.css`,
+          `${entriesDir}-*.css.map`,
+        ],
+        protectWebpackAssets: false,
+      }),
+    ]),
+  ];
+
+  const customConfig: WPScriptsConfig = {
+    ...wpConfig,
+    entry,
+    output,
+    plugins,
+
+    // `@` alias merged for both configs so module source files share the same import ergonomics.
+    resolve: {
+      ...wpConfig.resolve,
+      alias: {
+        ...wpConfig?.resolve?.alias,
+        '@': path.resolve(cwd()),
+      },
     },
-  },
+  };
 
-  devServer: mode === 'production' ? {} : {
-    ...defaultConfig.devServer,
-    allowedHosts: 'all',
-    static: {
-      directory: '/build',
-    },
-  },
-} : {});
+  /**
+   * `devServer` only on the script config. In a multi-compiler array, webpack
+   * reads devServer from the first config only; a block on the module config is dead.
+   */
+  if (!isModule) {
+    customConfig.devServer = mode === 'production' ? {} : {
+      ...wpConfig.devServer,
+      allowedHosts: 'all',
+      static: {
+        directory: '/build',
+      },
+    };
+  }
 
+  return customConfig;
+}
+
+/** Script config: the element without `output.module`, or the single export in non-array mode. */
+const scriptWpConfig: WPScriptsConfig | undefined = isArrayMode
+  ? (defaultConfigExport as WPScriptsConfig[]).find((c) => c.output?.module !== true)
+  : (defaultConfigExport as WPScriptsConfig);
+
+/**
+ * Module config identified by `output.module === true` rather than array index —
+ * module output is a webpack invariant; array order is a wp-scripts convention.
+ * Only present in array mode.
+ */
+const moduleWpConfig: WPScriptsConfig | undefined = isArrayMode
+  ? (defaultConfigExport as WPScriptsConfig[]).find((c) => c.output?.module === true)
+  : undefined;
+
+/**
+ * Default export is always the script config (never an array), even under
+ * `--experimental-modules`. This preserves the `defaultConfig.default.entry()`
+ * extension pattern, which would throw if the default export became an array.
+ */
+const config: Configuration = scriptWpConfig
+  ? buildConfig(scriptWpConfig, { isModule: false, isArrayMode })
+  : {};
+
+/**
+ * Named export for the module config when in `--experimental-modules` mode;
+ * `null` otherwise. The extended config assembles this and `config` into the
+ * array webpack runs.
+ */
+const moduleConfig: Configuration | null = moduleWpConfig
+  ? buildConfig(moduleWpConfig, { isModule: true, isArrayMode })
+  : null;
+
+export { buildConfig, moduleConfig };
 export default config;
