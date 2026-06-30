@@ -86,8 +86,12 @@ function buildConfig(
   const entry: Configuration['entry'] = isModule
     ? wpConfig.entry
     : () => {
-      let blocks = typeof wpConfig.entry === 'function' ? wpConfig.entry() : {};
-      blocks = blocks && typeof blocks === 'object' ? blocks : {};
+      const rawBlocks = typeof wpConfig.entry === 'function' ? wpConfig.entry() : wpConfig.entry;
+      if (rawBlocks && typeof rawBlocks !== 'object') {
+        // eslint-disable-next-line no-console
+        console.warn('[build-tool] wp-scripts entry returned an unexpected type; block entries will be empty.');
+      }
+      const blocks = (rawBlocks && typeof rawBlocks === 'object') ? rawBlocks : {};
 
       const entries = blocksOnly === true ? {} : getEntries(entriesDir);
 
