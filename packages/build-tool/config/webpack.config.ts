@@ -36,12 +36,21 @@ const isArrayMode: boolean = Array.isArray(defaultConfigExport);
 
 const isProduction: boolean = process.env.NODE_ENV === 'production';
 
-/** Directory containing non-block entry points. */
+/**
+ * The directory name where the entry point directories are located.
+ * These are entries NOT associated with blocks.
+ */
 const entriesDir: string = process.env.ENTRIES_DIRECTORY || 'entries';
 
-/** When true, skip `entries/` and build only blocks. */
+/**
+ * Whether to only build blocks from the `--webpack-src-dir` and ignore the
+ * entry points in the `--webpack-entries-dir` or 'entries' directory.
+ */
 const blocksOnly: boolean = process.env.BLOCKS_ONLY === 'true';
 
+/**
+ * The mode to run webpack in. Either production or development.
+ */
 const mode: string = isProduction ? 'production' : 'development';
 
 /**
