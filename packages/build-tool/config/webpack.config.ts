@@ -133,6 +133,15 @@ function buildConfig(
         chunkFilename: (pathData: PathData) => processFilename(pathData, false, 'css', 'runtime'),
       }),
       new CleanWebpackPlugin({
+        /**
+         * CleanWebpackPlugin defaults `cleanOnceBeforeBuildPatterns` to a
+         * wipe-everything glob that fires at this compiler's `emit` hook. In
+         * array mode the module compiler emits into the shared `build/`
+         * first, so that default wipe would delete the module output.
+         * Disable it in array mode (mirroring the `output.clean` suppression
+         * above) while keeping the after-build CSS dedup below.
+         */
+        ...(arrayMode ? { cleanOnceBeforeBuildPatterns: [] } : {}),
         cleanAfterEveryBuildPatterns: [
           /**
            * Remove duplicate entry CSS files generated from default

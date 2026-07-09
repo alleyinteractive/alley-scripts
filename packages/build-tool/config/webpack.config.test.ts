@@ -1,7 +1,18 @@
 /* eslint-disable global-require, @typescript-eslint/no-var-requires */
 import type { Configuration } from 'webpack';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 import { buildConfig } from './webpack.config';
+
+/**
+ * Pull the CleanWebpackPlugin instance out of a built config's plugins and
+ * expose its (typed-private) resolved options for assertions.
+ */
+const getCleanPlugin = (result: Configuration): { cleanOnceBeforeBuildPatterns: string[] } => {
+  const plugin = (result.plugins ?? []).find((p) => p instanceof CleanWebpackPlugin);
+  expect(plugin).toBeDefined();
+  return plugin as unknown as { cleanOnceBeforeBuildPatterns: string[] };
+};
 
 /**
  * Mock the build-tool webpack utilities so the `entries/` directory merge is
@@ -72,6 +83,9 @@ describe('buildConfig', () => {
       // devServer is set on the script config in development.
       expect((result as { devServer?: object }).devServer).toMatchObject({ allowedHosts: 'all' });
 
+      // CleanWebpackPlugin keeps its default initial wipe of the output path.
+      expect(getCleanPlugin(result).cleanOnceBeforeBuildPatterns).toEqual(['**/*']);
+
       // The `@` alias is merged alongside the existing alias.
       expect(result.resolve?.alias).toHaveProperty('@');
       expect(result.resolve?.alias).toHaveProperty('existing', '/existing');
@@ -141,6 +155,10 @@ describe('buildConfig', () => {
 
     it('suppresses clean to avoid the cross-compiler race', () => {
       expect(result.output).not.toHaveProperty('clean');
+    });
+
+    it('disables the CleanWebpackPlugin initial wipe so it cannot delete module output', () => {
+      expect(getCleanPlugin(result).cleanOnceBeforeBuildPatterns).toEqual([]);
     });
   });
 });
