@@ -59,7 +59,7 @@
     "check-node-version": "^4.2.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "mini-css-extract-plugin": "^2.7.6",
+    "mini-css-extract-plugin": "^2.10.2",
     "webpack-cli": "^5.1.4"
   }
 }
