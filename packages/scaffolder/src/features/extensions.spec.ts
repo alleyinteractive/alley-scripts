@@ -1,9 +1,10 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { loadFeaturePackage } from './extensions';
+import { loadFeatureHooks, loadFeaturePackage } from './extensions';
 
 const modulesPath = path.resolve(__dirname, '../../__tests__/fixtures/node_modules');
+const fixturesPath = path.resolve(__dirname, '../../__tests__/fixtures');
 
 describe('loadFeaturePackage', () => {
   it('loads a CommonJS package feature', async () => {
@@ -75,6 +76,42 @@ describe('loadFeaturePackage', () => {
 
     await expect(loadFeaturePackage(manifestPath)).rejects.toThrow(packageName);
     await expect(loadFeaturePackage(manifestPath)).rejects.toThrow(invalidField);
+
+    fs.rmSync(directory, { force: true, recursive: true });
+  });
+});
+
+describe('loadFeatureHooks', () => {
+  it('loads CommonJS lifecycle hooks relative to the feature directory', async () => {
+    const hooks = await loadFeatureHooks(fixturesPath, './hooks/lifecycle.cjs');
+
+    expect(hooks.beforeGenerate).toEqual(expect.any(Function));
+    expect(hooks.afterGenerate).toEqual(expect.any(Function));
+  });
+
+  it('reports the resolved module and supported hooks when the module is missing', async () => {
+    const modulePath = path.resolve(fixturesPath, './hooks/missing.cjs');
+
+    await expect(loadFeatureHooks(fixturesPath, './hooks/missing.cjs')).rejects.toThrow(modulePath);
+    await expect(loadFeatureHooks(fixturesPath, './hooks/missing.cjs')).rejects.toThrow('beforeGenerate');
+    await expect(loadFeatureHooks(fixturesPath, './hooks/missing.cjs')).rejects.toThrow('afterGenerate');
+  });
+
+  it('rejects a module without a supported lifecycle hook', async () => {
+    const modulePath = path.resolve(fixturesPath, './hooks/invalid.cjs');
+
+    await expect(loadFeatureHooks(fixturesPath, './hooks/invalid.cjs')).rejects.toThrow(modulePath);
+    await expect(loadFeatureHooks(fixturesPath, './hooks/invalid.cjs')).rejects.toThrow('beforeGenerate');
+    await expect(loadFeatureHooks(fixturesPath, './hooks/invalid.cjs')).rejects.toThrow('afterGenerate');
+  });
+
+  it('rejects a non-function lifecycle hook', async () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'scaffolder-hooks-'));
+    const hooksPath = './invalid.cjs';
+
+    fs.writeFileSync(path.join(directory, hooksPath), 'module.exports = { beforeGenerate: true };');
+
+    await expect(loadFeatureHooks(directory, hooksPath)).rejects.toThrow('beforeGenerate');
 
     fs.rmSync(directory, { force: true, recursive: true });
   });

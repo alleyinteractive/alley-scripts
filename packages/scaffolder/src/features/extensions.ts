@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import type { JavaScriptFeature } from '../types';
+import type { FeatureHookModule, JavaScriptFeature } from '../types';
 
 export type LoadedFeaturePackage = {
   directory: string;
@@ -16,8 +16,78 @@ type FeaturePackageManifest = {
 
 type DynamicImporter = (specifier: string) => Promise<Record<string, unknown>>;
 
+const supportedHookNames = ['beforeGenerate', 'afterGenerate'] as const;
+type SupportedHookName = (typeof supportedHookNames)[number];
+
 // Keep dynamic import native when this module is compiled for Jest's CommonJS runtime.
 const importModule = new Function('specifier', 'return import(specifier);') as DynamicImporter; // eslint-disable-line no-new-func, @typescript-eslint/no-implied-eval
+
+function hookExport(
+  namespace: Record<string, unknown>,
+  hookName: SupportedHookName,
+): { defined: boolean; value: unknown } {
+  if (hookName in namespace) {
+    return { defined: true, value: namespace[hookName] };
+  }
+
+  const defaultExport = namespace.default;
+
+  if (defaultExport && typeof defaultExport === 'object' && hookName in defaultExport) {
+    return { defined: true, value: defaultExport[hookName as keyof typeof defaultExport] };
+  }
+
+  return { defined: false, value: undefined };
+}
+
+/**
+ * Load lifecycle hooks declared by a YAML feature.
+ */
+export async function loadFeatureHooks(
+  featureDirectory: string,
+  hooksPath: string,
+): Promise<FeatureHookModule> {
+  const modulePath = path.resolve(featureDirectory, hooksPath);
+  let namespace: Record<string, unknown>;
+
+  try {
+    namespace = await importModule(pathToFileURL(modulePath).href);
+  } catch (error: any) {
+    throw new Error(
+      `Could not load YAML lifecycle hook module "${hooksPath}" resolved to "${modulePath}". Supported hooks are "beforeGenerate" and "afterGenerate": ${error.message}`,
+      { cause: error },
+    );
+  }
+
+  const hooks: FeatureHookModule = {};
+
+  supportedHookNames.forEach((hookName) => {
+    const exported = hookExport(namespace, hookName);
+
+    if (!exported.defined) {
+      return;
+    }
+
+    if (typeof exported.value !== 'function') {
+      throw new Error(
+        `YAML lifecycle hook module "${hooksPath}" resolved to "${modulePath}" must export "${hookName}" as a function. Supported hooks are "beforeGenerate" and "afterGenerate".`,
+      );
+    }
+
+    if (hookName === 'beforeGenerate') {
+      hooks.beforeGenerate = exported.value as FeatureHookModule['beforeGenerate'];
+    } else {
+      hooks.afterGenerate = exported.value as FeatureHookModule['afterGenerate'];
+    }
+  });
+
+  if (!hooks.beforeGenerate && !hooks.afterGenerate) {
+    throw new Error(
+      `YAML lifecycle hook module "${hooksPath}" resolved to "${modulePath}" must export at least one supported hook: "beforeGenerate" or "afterGenerate".`,
+    );
+  }
+
+  return hooks;
+}
 
 function assertJavaScriptFeature(
   value: unknown,
