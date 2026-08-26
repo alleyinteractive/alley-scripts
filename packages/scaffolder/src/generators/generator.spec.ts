@@ -120,18 +120,29 @@ describe('generators/generator', () => {
 
   it('stops before generation when beforeGenerate throws', async () => {
     const generator = new TestGenerator(createConfig(hookModule), featureDirectory);
+    const beforeError = new Error('before failed');
 
     loadFeatureHooksMock.mockResolvedValue({
       beforeGenerate: () => {
         generator.events.push('before');
-        throw new Error('before failed');
+        throw beforeError;
       },
       afterGenerate: () => { generator.events.push('after'); },
     });
 
-    await expect(generator.resolveAndInvoke(false)).rejects.toThrow(
+    let error: Error | undefined;
+
+    try {
+      await generator.resolveAndInvoke(false);
+    } catch (caught) {
+      error = caught as Error;
+    }
+
+    expect(error).toEqual(expect.objectContaining({
+      cause: beforeError,
+      message:
       'Error running "beforeGenerate" lifecycle hook for feature "hooked-feature" from "./hooks/lifecycle.cjs" resolved to "/tmp/scaffolder-feature/hooks/lifecycle.cjs".',
-    );
+    }));
 
     expect(generator.events).toEqual(['before']);
   });
@@ -148,6 +159,34 @@ describe('generators/generator', () => {
     await expect(generator.resolveAndInvoke(false)).rejects.toThrow('generation failed');
 
     expect(generator.events).toEqual(['before', 'generate']);
+  });
+
+  it('wraps afterGenerate failures with the feature, module, stage, and cause', async () => {
+    const generator = new TestGenerator(createConfig(hookModule), featureDirectory);
+    const afterError = new Error('after failed');
+
+    loadFeatureHooksMock.mockResolvedValue({
+      beforeGenerate: () => { generator.events.push('before'); },
+      afterGenerate: () => {
+        generator.events.push('after');
+        throw afterError;
+      },
+    });
+
+    let error: Error | undefined;
+
+    try {
+      await generator.resolveAndInvoke(false);
+    } catch (caught) {
+      error = caught as Error;
+    }
+
+    expect(error).toEqual(expect.objectContaining({
+      cause: afterError,
+      message:
+        'Error running "afterGenerate" lifecycle hook for feature "hooked-feature" from "./hooks/lifecycle.cjs" resolved to "/tmp/scaffolder-feature/hooks/lifecycle.cjs".',
+    }));
+    expect(generator.events).toEqual(['before', 'generate', 'after']);
   });
 
   it('passes dryRun to both lifecycle hooks', async () => {
