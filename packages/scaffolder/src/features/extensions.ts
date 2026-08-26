@@ -22,6 +22,24 @@ type SupportedHookName = (typeof supportedHookNames)[number];
 // Keep dynamic import native when this module is compiled for Jest's CommonJS runtime.
 const importModule = new Function('specifier', 'return import(specifier);') as DynamicImporter; // eslint-disable-line no-new-func, @typescript-eslint/no-implied-eval
 
+let testImportId = 0;
+
+function moduleSpecifier(modulePath: string): string {
+  const specifier = pathToFileURL(modulePath).href;
+
+  // Jest runs every suite in a separate VM context. Cache-bust fixture imports
+  // so a later suite does not receive a module tied to an earlier, torn-down
+  // context. Production keeps Node's normal module cache.
+  if (!process.env.JEST_WORKER_ID) {
+    return specifier;
+  }
+
+  const importId = testImportId;
+  testImportId += 1;
+
+  return `${specifier}?scaffolder-test-import=${importId}`;
+}
+
 function hookExport(
   namespace: Record<string, unknown>,
   hookName: SupportedHookName,
@@ -50,7 +68,7 @@ export async function loadFeatureHooks(
   let namespace: Record<string, unknown>;
 
   try {
-    namespace = await importModule(pathToFileURL(modulePath).href);
+    namespace = await importModule(moduleSpecifier(modulePath));
   } catch (error: any) {
     throw new Error(
       `Could not load YAML lifecycle hook module "${hooksPath}" resolved to "${modulePath}". Supported hooks are "beforeGenerate" and "afterGenerate": ${error.message}`,
@@ -138,7 +156,7 @@ export async function loadFeaturePackage(manifestPath: string): Promise<LoadedFe
   let namespace: Record<string, unknown>;
 
   try {
-    namespace = await importModule(pathToFileURL(entryPath).href);
+    namespace = await importModule(moduleSpecifier(entryPath));
   } catch (error: any) {
     throw new Error(`Scaffolder package "${packageName}" could not load scaffolder entry point "${manifest.scaffolder}": ${error.message}`);
   }
