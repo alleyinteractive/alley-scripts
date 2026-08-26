@@ -1,11 +1,15 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import type { FeatureHookModule, JavaScriptFeature } from '../types';
+import type {
+  FeatureHookModule,
+  JavaScriptFeature,
+  RegisteredJavaScriptFeature,
+} from '../types';
 
 export type LoadedFeaturePackage = {
   directory: string;
-  features: JavaScriptFeature[];
+  features: RegisteredJavaScriptFeature[];
   packageName: string;
 };
 
@@ -92,12 +96,15 @@ export async function loadFeatureHooks(
 function assertJavaScriptFeature(
   value: unknown,
   packageName: string,
-): asserts value is Omit<JavaScriptFeature, 'type'> {
+): asserts value is JavaScriptFeature {
   if (!value || typeof value !== 'object') {
     throw new Error(`Scaffolder package "${packageName}" must export a feature object or array.`);
   }
   if (!('name' in value) || typeof value.name !== 'string' || !value.name) {
     throw new Error(`Scaffolder package "${packageName}" exported a feature without a valid name.`);
+  }
+  if ('description' in value && value.description !== undefined && typeof value.description !== 'string') {
+    throw new Error(`Scaffolder package "${packageName}" feature "${value.name}" has an invalid description.`);
   }
   if (!('generate' in value) || typeof value.generate !== 'function') {
     throw new Error(`Scaffolder package "${packageName}" feature "${value.name}" must define generate().`);

@@ -1,4 +1,6 @@
-import path from 'path';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { ConfigurationStore } from '../configuration/store';
 import { logger } from '../logger';
 import { FeatureStore } from './store';
@@ -57,5 +59,50 @@ describe('features/store', () => {
     );
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('invalid-scaffolder'));
     warn.mockRestore();
+  });
+
+  it('isolates a package with an invalid description from valid packages', async () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'scaffolder-node-modules-'));
+    const validPackage = path.join(directory, 'valid-description');
+    const invalidPackage = path.join(directory, 'invalid-description');
+    const warn = jest.spyOn(logger(), 'warn');
+
+    fs.mkdirSync(validPackage);
+    fs.mkdirSync(invalidPackage);
+    fs.writeFileSync(path.join(validPackage, 'package.json'), JSON.stringify({
+      name: 'valid-description',
+      scaffolder: './scaffolder.cjs',
+    }));
+    fs.writeFileSync(
+      path.join(validPackage, 'scaffolder.cjs'),
+      "module.exports = { name: 'valid-description-feature', description: 'Valid', generate() {} };",
+    );
+    fs.writeFileSync(path.join(invalidPackage, 'package.json'), JSON.stringify({
+      name: 'invalid-description',
+      scaffolder: './scaffolder.cjs',
+    }));
+    fs.writeFileSync(
+      path.join(invalidPackage, 'scaffolder.cjs'),
+      "module.exports = { name: 'invalid-description-feature', description: Symbol('invalid'), generate() {} };",
+    );
+
+    try {
+      const store = new FeatureStore(new ConfigurationStore(), () => [directory]);
+
+      await store.initialize();
+
+      expect(Object.values(store.all()).flat().map(({ name }) => name)).toContain(
+        'valid-description-feature',
+      );
+      expect(Object.values(store.all()).flat().map(({ name }) => name)).not.toContain(
+        'invalid-description-feature',
+      );
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('invalid-description'));
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('invalid-description-feature'));
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('description'));
+    } finally {
+      warn.mockRestore();
+      fs.rmSync(directory, { force: true, recursive: true });
+    }
   });
 });

@@ -2,15 +2,15 @@ import prompts from 'prompts';
 
 import handleError from '../error';
 import { Generator } from './generator';
-import type { JavaScriptFeature } from '../types';
+import type { RegisteredJavaScriptFeature } from '../types';
 
 /**
  * JavaScript-based feature.
  */
-export class JavaScriptGenerator extends Generator<JavaScriptFeature> {
-  public feature: JavaScriptFeature;
+export class JavaScriptGenerator extends Generator<RegisteredJavaScriptFeature> {
+  public feature: RegisteredJavaScriptFeature;
 
-  constructor(feature: JavaScriptFeature, directory: string) {
+  constructor(feature: RegisteredJavaScriptFeature, directory: string) {
     super(feature, directory);
     this.feature = feature;
   }

@@ -8,12 +8,12 @@ import { collectInputs } from '../inputs';
 import { loadFeatureHooks } from '../features/extensions';
 
 // Types.
-import type { RegisteredFeature, ScaffolderContext } from '../types';
+import type { FeatureConfig, RegisteredFeature, ScaffolderContext } from '../types';
 
 /**
  * Base generator class.
  */
-export abstract class Generator<T extends RegisteredFeature = RegisteredFeature> {
+export abstract class Generator<T extends RegisteredFeature = FeatureConfig> {
   /* Feature configuration. */
   public config: T;
 

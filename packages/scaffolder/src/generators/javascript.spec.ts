@@ -1,7 +1,11 @@
+import os from 'node:os';
+import path from 'node:path';
 import { prompt } from 'prompts';
 
 import { JavaScriptGenerator } from './javascript';
 import type { ScaffolderContext } from '../types';
+
+const featureDirectory = path.join(os.tmpdir(), 'extensions', 'post-type');
 
 describe('generators/javascript', () => {
   it('collects custom prompt answers before generation', async () => {
@@ -14,7 +18,7 @@ describe('generators/javascript', () => {
       description: 'Creates a post type.',
       prompts,
       generate,
-    }, '/extensions/post-type');
+    }, featureDirectory);
 
     await generator.resolveAndInvoke(false);
 
@@ -40,7 +44,7 @@ describe('generators/javascript', () => {
       generate: async (context: ScaffolderContext) => {
         receivedContext = context;
       },
-    }, '/extensions/post-type');
+    }, featureDirectory);
 
     await generator.resolveAndInvoke(true);
 
@@ -51,12 +55,14 @@ describe('generators/javascript', () => {
         name: 'post-type',
         description: 'Creates a post type.',
       },
-      featureDirectory: '/extensions/post-type',
+      featureDirectory,
       inputs: {},
       logger: expect.anything(),
       resolveDestination: expect.any(Function),
     }));
-    expect(receivedContext?.resolveDestination('generated/post-type.ts')).toBe(`${process.cwd()}/generated/post-type.ts`);
+    expect(receivedContext?.resolveDestination('generated/post-type.ts')).toBe(
+      path.resolve(process.cwd(), 'generated/post-type.ts'),
+    );
   });
 
   it('adds feature and stage details when prompts fail', async () => {
@@ -68,7 +74,7 @@ describe('generators/javascript', () => {
         throw cause;
       },
       generate: async () => {},
-    }, '/extensions/post-type');
+    }, featureDirectory);
 
     let error: Error | undefined;
 
@@ -93,7 +99,7 @@ describe('generators/javascript', () => {
       generate: async () => {
         throw cause;
       },
-    }, '/extensions/post-type');
+    }, featureDirectory);
 
     let error: Error | undefined;
 
@@ -118,7 +124,7 @@ describe('generators/javascript', () => {
       name: 'post-type',
       prompts: () => ({ slug: 'movie' }),
       generate,
-    }, '/extensions/post-type');
+    }, featureDirectory);
 
     await generator.resolveAndInvoke(false);
 

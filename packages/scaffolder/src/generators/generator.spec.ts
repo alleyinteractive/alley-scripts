@@ -1,4 +1,5 @@
 import path from 'node:path';
+import os from 'node:os';
 import { Generator } from './generator';
 import { logger } from '../logger';
 import { loadFeatureHooks } from '../features/extensions';
@@ -20,6 +21,10 @@ class TestGenerator extends Generator {
 
   public shouldThrowWhenInvoked = false;
 
+  public configuredFiles(): FeatureConfig['files'] {
+    return this.config.files;
+  }
+
   public async collectInputs(): Promise<void> {
     this.inputs = { existing: 'input' };
   }
@@ -34,7 +39,7 @@ class TestGenerator extends Generator {
   }
 }
 
-const featureDirectory = '/tmp/scaffolder-feature';
+const featureDirectory = path.join(os.tmpdir(), 'scaffolder-feature');
 const hookModule = './hooks/lifecycle.cjs';
 const loadFeatureHooksMock = loadFeatureHooks as jest.MockedFunction<typeof loadFeatureHooks>;
 
@@ -51,7 +56,7 @@ describe('generators/generator', () => {
   });
 
   it('provides the extension runtime context', () => {
-    const runtimeFeatureDirectory = '/tmp/scaffolder-feature';
+    const runtimeFeatureDirectory = path.join(os.tmpdir(), 'scaffolder-feature');
     const config: FeatureConfig = {
       name: 'post-type',
       description: 'Creates a post type.',
@@ -141,7 +146,7 @@ describe('generators/generator', () => {
     expect(error).toEqual(expect.objectContaining({
       cause: beforeError,
       message:
-      'Error running "beforeGenerate" lifecycle hook for feature "hooked-feature" from "./hooks/lifecycle.cjs" resolved to "/tmp/scaffolder-feature/hooks/lifecycle.cjs".',
+      `Error running "beforeGenerate" lifecycle hook for feature "hooked-feature" from "./hooks/lifecycle.cjs" resolved to "${path.resolve(featureDirectory, hookModule)}".`,
     }));
 
     expect(generator.events).toEqual(['before']);
@@ -184,7 +189,7 @@ describe('generators/generator', () => {
     expect(error).toEqual(expect.objectContaining({
       cause: afterError,
       message:
-        'Error running "afterGenerate" lifecycle hook for feature "hooked-feature" from "./hooks/lifecycle.cjs" resolved to "/tmp/scaffolder-feature/hooks/lifecycle.cjs".',
+        `Error running "afterGenerate" lifecycle hook for feature "hooked-feature" from "./hooks/lifecycle.cjs" resolved to "${path.resolve(featureDirectory, hookModule)}".`,
     }));
     expect(generator.events).toEqual(['before', 'generate', 'after']);
   });

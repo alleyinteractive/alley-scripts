@@ -2,11 +2,21 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { loadFeatureHooks, loadFeaturePackage } from './extensions';
+import type { JavaScriptFeature } from '../types';
+
+const documentedFeatureExport: JavaScriptFeature = {
+  name: 'documented-feature',
+  generate() {},
+};
 
 const modulesPath = path.resolve(__dirname, '../../__tests__/fixtures/node_modules');
 const fixturesPath = path.resolve(__dirname, '../../__tests__/fixtures');
 
 describe('loadFeaturePackage', () => {
+  it('accepts the documented author export without an internal discriminator', () => {
+    expect(documentedFeatureExport).not.toHaveProperty('type');
+  });
+
   it('loads a CommonJS package feature', async () => {
     const loaded = await loadFeaturePackage(
       path.join(modulesPath, 'plain-scaffolder/package.json'),
@@ -76,6 +86,26 @@ describe('loadFeaturePackage', () => {
 
     await expect(loadFeaturePackage(manifestPath)).rejects.toThrow(packageName);
     await expect(loadFeaturePackage(manifestPath)).rejects.toThrow(invalidField);
+
+    fs.rmSync(directory, { force: true, recursive: true });
+  });
+
+  it('rejects a non-string description with package, feature, and field provenance', async () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'scaffolder-package-'));
+    const manifestPath = path.join(directory, 'package.json');
+
+    fs.writeFileSync(manifestPath, JSON.stringify({
+      name: 'invalid-description-package',
+      scaffolder: './scaffolder.cjs',
+    }));
+    fs.writeFileSync(
+      path.join(directory, 'scaffolder.cjs'),
+      "module.exports = { name: 'invalid-description-feature', description: {}, generate() {} };",
+    );
+
+    await expect(loadFeaturePackage(manifestPath)).rejects.toThrow(
+      'Scaffolder package "invalid-description-package" feature "invalid-description-feature" has an invalid description.',
+    );
 
     fs.rmSync(directory, { force: true, recursive: true });
   });

@@ -13,7 +13,6 @@ export type ScaffolderContext = {
 };
 
 export type JavaScriptFeature = {
-  type: 'javascript';
   name: string;
   description?: string;
   prompts?: (
@@ -24,10 +23,14 @@ export type JavaScriptFeature = {
   generate: (context: ScaffolderContext) => Promise<void> | void;
 };
 
+export type RegisteredJavaScriptFeature = JavaScriptFeature & {
+  type: 'javascript';
+};
+
 export type FeatureHookModule = {
   beforeGenerate?: (context: ScaffolderContext) => Promise<void> | void;
   afterGenerate?: (context: ScaffolderContext) => Promise<void> | void;
 };
 
-export type RegisteredFeature = FeatureConfig | JavaScriptFeature;
+export type RegisteredFeature = FeatureConfig | RegisteredJavaScriptFeature;
 export type FeatureContext = ScaffolderContext;
