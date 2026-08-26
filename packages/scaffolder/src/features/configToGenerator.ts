@@ -1,35 +1,42 @@
 import chalk from 'chalk';
 
 // Services.
-import { FileGenerator, Generator, RepositoryGenerator } from '../generators';
+import {
+  FileGenerator,
+  Generator,
+  JavaScriptGenerator,
+  RepositoryGenerator,
+} from '../generators';
 
 // Types.
 import type { RegisteredFeature } from '../types';
 import { ComposerGenerator } from '../generators/composer';
 
 /**
- * Convert a feature configuration to a generator.
+ * Convert a registered feature to a generator.
  *
- * @param {RegisteredFeature} config The selected feature.
- * @param {string} configPath The path to the feature configuration
- *                            directory that defined the feature.
+ * @param {RegisteredFeature} feature The selected feature.
+ * @param {string} directory The path to the feature configuration
+ *                           directory that defined the feature.
  */
-export const configToGenerator = (config: RegisteredFeature, configPath: string): Generator => {
-  if (config.type !== 'javascript') {
-    const { name, type = 'file' } = config;
-
-    if (type === 'file') {
-      return new FileGenerator(config, configPath);
-    } if (type === 'repository') {
-      return new RepositoryGenerator(config, configPath);
-    } if (type === 'composer') {
-      return new ComposerGenerator(config, configPath);
-    }
-
-    // Throw an error if an invalid type has reached this far (though Joi
-    // validation should have caught it).
-    throw new Error(`The feature "${name}" has an invalid type "${chalk.yellow(type)}" defined.`);
+export const featureToGenerator = (feature: RegisteredFeature, directory: string): Generator => {
+  if (feature.type === 'javascript') {
+    return new JavaScriptGenerator(feature, directory);
   }
 
-  throw new Error(`The feature "${config.name}" has an invalid type "${chalk.yellow(config.type)}" defined.`);
+  const { name, type = 'file' } = feature;
+
+  if (type === 'file') {
+    return new FileGenerator(feature, directory);
+  } if (type === 'repository') {
+    return new RepositoryGenerator(feature, directory);
+  } if (type === 'composer') {
+    return new ComposerGenerator(feature, directory);
+  }
+
+  // Throw an error if an invalid type has reached this far (though Joi
+  // validation should have caught it).
+  throw new Error(`The feature "${name}" has an invalid type "${chalk.yellow(type)}" defined.`);
 };
+
+export const configToGenerator = featureToGenerator;

@@ -1,11 +1,14 @@
-import { configToGenerator } from './configToGenerator';
+import { featureToGenerator } from './configToGenerator';
+import { JavaScriptGenerator } from '../generators';
 
 describe('configToGenerator', () => {
-  it('rejects JavaScript features until their generator is implemented', () => {
-    expect(() => configToGenerator({
+  it('creates a JavaScript generator for a JavaScript feature', () => {
+    const generator = featureToGenerator({
       type: 'javascript',
       name: 'extension-feature',
-      generate() {},
-    }, '/extensions')).toThrow('invalid type');
+      generate: async () => {},
+    }, '/extensions');
+
+    expect(generator).toBeInstanceOf(JavaScriptGenerator);
   });
 });

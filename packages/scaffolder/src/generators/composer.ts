@@ -4,11 +4,12 @@ import { Generator } from './generator';
 import { parseExpression } from '../expressions';
 import { logger } from '../logger';
 import { runCommand } from '../helpers';
+import type { FeatureConfig } from '../types';
 
 /**
  * Composer-based feature.
  */
-export class ComposerGenerator extends Generator {
+export class ComposerGenerator extends Generator<FeatureConfig> {
   /**
    * Run the post command if one is specified with child_process.spawn().
    */
