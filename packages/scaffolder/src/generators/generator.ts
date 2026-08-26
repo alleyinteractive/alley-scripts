@@ -37,12 +37,16 @@ export abstract class Generator {
    * Collect the context variables passed to the template engine.
    */
   public collectContextVariables() {
-    const { name } = this.config;
+    const { name, description } = this.config;
 
     return {
       cwd: process.cwd(),
-      feature: { name },
+      feature: { name, description },
       inputs: this.inputs,
+      dryRun: this.dryRun,
+      featureDirectory: this.path,
+      resolveDestination: (relativePath = '') => this.getDestinationDirectory(relativePath),
+      logger: logger(),
     } as FeatureContext;
   }
 
