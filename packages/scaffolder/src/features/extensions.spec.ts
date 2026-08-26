@@ -57,6 +57,7 @@ describe('loadFeaturePackage', () => {
     ['a missing entry point', 'invalid-entry', './missing.cjs', undefined, 'scaffolder'],
     ['a feature without a name', 'invalid-name', './scaffolder.cjs', 'module.exports = { generate() {} };', 'name'],
     ['a feature without generate', 'invalid-generate', './scaffolder.cjs', "module.exports = { name: 'missing-generate' };", 'generate'],
+    ['a feature with invalid prompts', 'invalid-prompts', './scaffolder.cjs', "module.exports = { name: 'invalid-prompts', prompts: true, generate() {} };", 'prompts'],
   ])('rejects %s with the package name and invalid field', async (
     _description,
     packageName,

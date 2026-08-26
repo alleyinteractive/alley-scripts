@@ -51,7 +51,7 @@
     "lint:fix": "eslint src --fix",
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",
-    "test:watch": "jest --watchAll",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
