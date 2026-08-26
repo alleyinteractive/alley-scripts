@@ -1,5 +1,6 @@
 import path from 'path';
 import { ConfigurationStore } from '../configuration/store';
+import { logger } from '../logger';
 import { FeatureStore } from './store';
 
 describe('features/store', () => {
@@ -30,5 +31,31 @@ describe('features/store', () => {
       name: 'manually-configured-feature',
       type: 'file',
     }]);
+  });
+
+  it('discovers scoped and unscoped JavaScript feature packages', async () => {
+    const store = new FeatureStore(new ConfigurationStore(), () => [
+      path.join(fixturesPath, 'node_modules'),
+    ]);
+    await store.initialize();
+
+    expect(Object.values(store.all()).flat().map(({ name }) => name)).toEqual(
+      expect.arrayContaining(['plain-feature', 'first-feature', 'second-feature']),
+    );
+  });
+
+  it('continues discovery when a JavaScript package cannot load', async () => {
+    const warn = jest.spyOn(logger(), 'warn');
+    const store = new FeatureStore(new ConfigurationStore(), () => [
+      path.join(fixturesPath, 'node_modules'),
+    ]);
+
+    await store.initialize();
+
+    expect(Object.values(store.all()).flat().map(({ name }) => name)).toEqual(
+      expect.arrayContaining(['plain-feature', 'first-feature', 'second-feature']),
+    );
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('invalid-scaffolder'));
+    warn.mockRestore();
   });
 });

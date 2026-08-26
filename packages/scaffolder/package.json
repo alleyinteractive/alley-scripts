@@ -52,7 +52,7 @@
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",
     "test:watch": "jest --watchAll",
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",
