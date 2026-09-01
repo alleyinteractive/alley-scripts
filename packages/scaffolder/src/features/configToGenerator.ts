@@ -1,20 +1,28 @@
 import chalk from 'chalk';
 
 // Services.
-import { FileGenerator, Generator, RepositoryGenerator } from '../generators';
+import {
+  FileGenerator,
+  Generator,
+  JavaScriptGenerator,
+  RepositoryGenerator,
+} from '../generators';
 
 // Types.
-import type { FeatureConfig } from '../types/config';
+import type { FeatureConfig, RegisteredFeature } from '../types';
 import { ComposerGenerator } from '../generators/composer';
 
 /**
- * Convert a feature configuration to a generator.
+ * Convert a YAML feature configuration to a generator.
  *
- * @param {FeatureConfig} config The feature configuration.
+ * @param {FeatureConfig} config The selected YAML feature configuration.
  * @param {string} configPath The path to the feature configuration
  *                            directory that defined the feature.
  */
-export const configToGenerator = (config: FeatureConfig, configPath: string): Generator => {
+export const configToGenerator = (
+  config: FeatureConfig,
+  configPath: string,
+): Generator<FeatureConfig> => {
   const { name, type = 'file' } = config;
 
   if (type === 'file') {
@@ -28,4 +36,22 @@ export const configToGenerator = (config: FeatureConfig, configPath: string): Ge
   // Throw an error if an invalid type has reached this far (though Joi
   // validation should have caught it).
   throw new Error(`The feature "${name}" has an invalid type "${chalk.yellow(type)}" defined.`);
+};
+
+/**
+ * Convert a registered feature to a generator.
+ *
+ * @param {RegisteredFeature} feature The selected feature.
+ * @param {string} directory The path to the feature configuration
+ *                           directory that defined the feature.
+ */
+export const featureToGenerator = (
+  feature: RegisteredFeature,
+  directory: string,
+): Generator<RegisteredFeature> => {
+  if (feature.type === 'javascript') {
+    return new JavaScriptGenerator(feature, directory);
+  }
+
+  return configToGenerator(feature, directory);
 };
