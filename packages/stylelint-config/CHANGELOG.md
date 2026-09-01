@@ -1,5 +1,11 @@
 # @alleyinteractive/stylelint-config
 
+## 0.3.0
+
+### Minor Changes
+
+- 3943b81d: Add @starting-style to allowed at-rules
+
 ## 0.2.0
 
 ### Minor Changes
