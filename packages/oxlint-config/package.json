@@ -39,16 +39,16 @@
     "lint": "oxlint -c oxlint.config.ts ."
   },
   "devDependencies": {
-    "oxfmt": "^0.43",
-    "oxlint": "^1.52",
-    "oxlint-plugin-eslint": "^1.59",
-    "oxlint-tsgolint": "^0.22"
+    "oxfmt": "~0.43",
+    "oxlint": "~1.52",
+    "oxlint-plugin-eslint": "~1.59",
+    "oxlint-tsgolint": "~0.22"
   },
   "peerDependencies": {
-    "oxfmt": "^0.43",
-    "oxlint": "^1.52",
-    "oxlint-plugin-eslint": "^1.59",
-    "oxlint-tsgolint": "^0.22"
+    "oxfmt": "~0.43",
+    "oxlint": "~1.52",
+    "oxlint-plugin-eslint": "~1.59",
+    "oxlint-tsgolint": "~0.22"
   },
   "engines": {
     "node": ">=22.0.0 <26.0.0",
