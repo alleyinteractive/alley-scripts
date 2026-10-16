@@ -4,6 +4,10 @@
 
 This package contains a set of modules used by [Alley](https://alley.com) to aid in building features for the WordPress block editor.
 
+## TypeScript
+
+This package is 100% TypeScript — source, tests and build config. Types ship with the build (`build/index.d.ts`), so hooks and components come typed out of the box without an extra `@types` package. JavaScript projects can still use it the same as before; they just don't get the autocomplete.
+
 ## Install
 
 Install this package in your project:
