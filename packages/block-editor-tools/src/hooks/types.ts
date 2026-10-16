@@ -1,4 +1,5 @@
 import type { BlockInstance } from '@wordpress/blocks';
+import type { WP_REST_API_Attachment as WPAttachment } from 'wp-types';
 
 /**
  * Selectors used from the `core/block-editor` store. The package ships no
@@ -19,4 +20,12 @@ export interface EditorSelectors {
   getCurrentPostId: () => number | null;
   getCurrentPostType: () => string;
   getEditedPostPreviewLink: () => string | undefined;
+}
+
+/**
+ * Selectors from the `core` store that core-data generates at runtime and
+ * leaves out of its types.
+ */
+export interface CoreGeneratedSelectors {
+  getMedia: (id: number) => WPAttachment | undefined;
 }
