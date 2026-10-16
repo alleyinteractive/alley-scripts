@@ -179,7 +179,7 @@ export default class CSVUploader extends React.PureComponent {
     return (
       <div className="alley-scripts-block-csv-uploader">
         <h2>{__('Upload CSV', 'alley-scripts')}</h2>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={CSVUploader.handleSubmit}>
           {error !== '' ? (
             <div style={{ color: '#c00' }}>
               <strong>
