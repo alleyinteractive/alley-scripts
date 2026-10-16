@@ -45,3 +45,15 @@ function MyComponent({ id, type = 'post' }) {
   );
 }
 ```
+
+## TypeScript Support
+
+`usePostMetaValue` types the value as `unknown` by default. Pass the value type
+to type both the value and the setter.
+
+```ts
+const [value, setValue] = usePostMetaValue<string>('my_meta_key');
+// value --> string
+
+setValue((old) => old.trim());
+```

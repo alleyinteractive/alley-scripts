@@ -82,3 +82,22 @@ function MyComponent() {
   );
 }
 ```
+
+## TypeScript Support
+
+`usePostMeta` types post meta as `Record<string, unknown>` by default, so
+values must be narrowed before use. Pass your registered meta shape to type
+reads and writes. The `PostMetaSetter` and `UsePostMetaReturn` types are
+exported from the package.
+
+```ts
+type MyMeta = {
+  my_meta_key: string;
+  last_meta_key: string;
+};
+
+const [meta, setMeta] = usePostMeta<MyMeta>();
+// meta --> MyMeta
+
+setMeta((old) => ({ ...old, my_meta_key: 'new value' }));
+```

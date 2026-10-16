@@ -16,3 +16,21 @@ const MyBlock = ({
   }
 };
 ```
+
+The hook returns `undefined` until the term has loaded.
+
+## TypeScript Support
+
+`useTerm` returns a `WP_REST_API_Term` from `wp-types` by default. Pass your
+own term shape to type registered meta or a partial `_fields` record.
+
+```ts
+import type { WP_REST_API_Term } from 'wp-types';
+
+interface Topic extends WP_REST_API_Term {
+  meta: { color: string };
+}
+
+const topic = useTerm<Topic>(termId, 'topic');
+// --> Topic | undefined
+```

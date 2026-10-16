@@ -111,3 +111,11 @@ useOption('page_on_front').value
 useOption('my_custom_option').value
 // --> unknown
 ```
+
+The return type is exported from the package as `UseOptionReturn`:
+
+```ts
+import type { UseOptionReturn } from '@alleyinteractive/block-editor-tools';
+
+type BrandColorOption = UseOptionReturn<string>;
+```

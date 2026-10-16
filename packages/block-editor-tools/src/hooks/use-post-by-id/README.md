@@ -51,3 +51,16 @@ const MyBlock = ({
 };
 ```
 
+The hook returns `null` while it is still looking up the post type or waiting
+for the post to load, and otherwise returns whatever `usePost` returns (which
+may be `undefined`).
+
+## TypeScript Support
+
+`usePostById` returns a `WP_REST_API_Post` from `wp-types` by default. Pass
+your own post shape to type custom fields or registered meta.
+
+```ts
+const post = usePostById<Event>(postID);
+// --> Event | null | undefined
+```

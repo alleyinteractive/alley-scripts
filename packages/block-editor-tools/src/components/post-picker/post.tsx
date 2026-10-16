@@ -125,7 +125,7 @@ const Post = ({
   postType,
   attachmentID,
 }: PostInterface) => {
-  const media = useMedia(attachmentID) as Media;
+  const media = useMedia(attachmentID as number) as Media;
   const thumbUrl = media?.media_details?.sizes?.thumbnail?.source_url;
   const thumbAlt = media?.alt_text ?? '';
 

@@ -9,7 +9,7 @@ type RootSiteEntityRecordSelector<T> = (kind:string, name:string) => (
 type RootSiteEntityRecordEditsSelector<T> = (kind:string, name:string) => (
   undefined | Partial<ExtendedSettings<T>>
 );
-type UseOptionReturn<T> = {
+export type UseOptionReturn<T> = {
   value: T | undefined;
   isEdited: boolean;
   isSaving: boolean;

@@ -20,3 +20,6 @@ export { default as usePosts } from './use-posts';
 export { default as usePreviewLink } from './use-preview-link';
 export { default as useTerm } from './use-term';
 export { default as useTerms } from './use-terms';
+
+export type { UseOptionReturn } from './use-option';
+export type { PostMetaSetter, UsePostMetaReturn } from './use-post-meta';
