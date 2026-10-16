@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 // Components.
 import { MediaPicker } from '..';
+import type { SelectedMedia } from '../media-picker';
 
 // Styled components.
 const PreviewContainer = styled.div`
@@ -19,7 +19,7 @@ const PreviewContainer = styled.div`
 `;
 
 // Create a component to represent the image preview.
-const Preview = ({ src }) => (
+const Preview = ({ src }: { src: string }) => (
   <PreviewContainer>
     <img
       alt={__('Edit image', 'alley-scripts')}
@@ -30,9 +30,41 @@ const Preview = ({ src }) => (
   </PreviewContainer>
 );
 
-Preview.propTypes = {
-  src: PropTypes.string.isRequired,
-};
+export interface ImagePickerProps {
+  /**
+   * Class name for the media picker container.
+   */
+  className?: string;
+  /**
+   * The size to display in the preview. Defaults to `thumbnail`.
+   */
+  imageSize?: string;
+  /**
+   * Determines if controls should render in the block toolbar.
+   */
+  displayControlsInToolbar?: boolean;
+  /**
+   * Function to reset the image ID to 0 and/or the image URL to an empty string.
+   */
+  onReset: () => void;
+  /**
+   * Function to set the image ID on image selection/upload.
+   */
+  onUpdate: (media: SelectedMedia) => void;
+  /**
+   * Function to set the image URL on entry. If not set, the button to enter a
+   * URL manually will not display.
+   */
+  onUpdateURL?: (url: string) => void;
+  /**
+   * The ID of the selected image. 0 represents no selection.
+   */
+  value: number;
+  /**
+   * The URL of the image. An empty string represents no selection.
+   */
+  valueURL?: string;
+}
 
 /**
  * Allows a user to select or remove an image using the media modal or via
@@ -41,15 +73,15 @@ Preview.propTypes = {
  * custom preview component that embeds the selected image in the editor.
  */
 const ImagePicker = ({
-  className,
-  imageSize,
-  displayControlsInToolbar,
+  className = '',
+  imageSize = 'thumbnail',
+  displayControlsInToolbar = false,
   onReset,
   onUpdate,
   onUpdateURL,
   value,
-  valueURL,
-}) => (
+  valueURL = '',
+}: ImagePickerProps) => (
   <MediaPicker
     allowedTypes={['image']}
     className={className}
@@ -64,49 +96,5 @@ const ImagePicker = ({
     valueURL={valueURL}
   />
 );
-
-ImagePicker.defaultProps = {
-  className: '',
-  imageSize: 'thumbnail',
-  displayControlsInToolbar: false,
-  onUpdateURL: null,
-  valueURL: '',
-};
-
-ImagePicker.propTypes = {
-  /**
-   * Class name for the media picker container.
-   */
-  className: PropTypes.string,
-  /**
-   * The size to display in the preview. Defaults to `thumbnail`.
-   */
-  imageSize: PropTypes.string,
-  /**
-   * Determines if controls should render in the block toolbar.
-   */
-  displayControlsInToolbar: PropTypes.bool,
-  /**
-   * Function to reset the image ID to 0 and/or the image URL to an empty string.
-   */
-  onReset: PropTypes.func.isRequired,
-  /**
-   * Function to set the image ID on image selection/upload.
-   */
-  onUpdate: PropTypes.func.isRequired,
-  /**
-   * Function to set the image URL on entry. If not set, the button to enter a
-   * URL manually will not display.
-   */
-  onUpdateURL: PropTypes.func,
-  /**
-   * The ID of the selected image. 0 represents no selection.
-   */
-  value: PropTypes.number.isRequired,
-  /**
-   * The URL of the image. An empty string represents no selection.
-   */
-  valueURL: PropTypes.string,
-};
 
 export default ImagePicker;

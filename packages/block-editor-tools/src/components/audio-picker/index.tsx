@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 // Components.
 import { MediaPicker } from '..';
+import type { SelectedMedia } from '../media-picker';
 
 // Styled components.
 const PreviewContainer = styled.div`
@@ -11,7 +11,7 @@ const PreviewContainer = styled.div`
 `;
 
 // Create a component to represent the audio preview.
-const Preview = ({ src }) => (
+const Preview = ({ src }: { src: string }) => (
   <PreviewContainer>
     <audio // eslint-disable-line jsx-a11y/media-has-caption
       className="edit-audio-preview"
@@ -21,9 +21,33 @@ const Preview = ({ src }) => (
   </PreviewContainer>
 );
 
-Preview.propTypes = {
-  src: PropTypes.string.isRequired,
-};
+export interface AudioPickerProps {
+  /**
+   * Class name for the media picker container.
+   */
+  className?: string;
+  /**
+   * Function to reset the audio ID to 0 and/or the audio URL to an empty string.
+   */
+  onReset: () => void;
+  /**
+   * Function to set the audio ID on audio selection/upload.
+   */
+  onUpdate: (media: SelectedMedia) => void;
+  /**
+   * Function to set the audio URL on entry. If not set, the button to enter a
+   * URL manually will not display.
+   */
+  onUpdateURL?: (url: string) => void;
+  /**
+   * The ID of the selected audio. 0 represents no selection.
+   */
+  value: number;
+  /**
+   * The URL of the audio. An empty string represents no selection.
+   */
+  valueURL?: string;
+}
 
 /**
  * Allows a user to select or remove audio using the media modal or via direct
@@ -32,13 +56,13 @@ Preview.propTypes = {
  * preview component that embeds the selected audio in the editor.
  */
 const AudioPicker = ({
-  className,
+  className = '',
   onReset,
   onUpdate,
   onUpdateURL,
   value,
-  valueURL,
-}) => (
+  valueURL = '',
+}: AudioPickerProps) => (
   <MediaPicker
     allowedTypes={['audio']}
     className={className}
@@ -51,39 +75,5 @@ const AudioPicker = ({
     valueURL={valueURL}
   />
 );
-
-AudioPicker.defaultProps = {
-  className: '',
-  onUpdateURL: null,
-  valueURL: '',
-};
-
-AudioPicker.propTypes = {
-  /**
-   * Class name for the media picker container.
-   */
-  className: PropTypes.string,
-  /**
-   * Function to reset the audio ID to 0 and/or the audio URL to an empty string.
-   */
-  onReset: PropTypes.func.isRequired,
-  /**
-   * Function to set the audio ID on audio selection/upload.
-   */
-  onUpdate: PropTypes.func.isRequired,
-  /**
-   * Function to set the audio URL on entry. If not set, the button to enter a
-   * URL manually will not display.
-   */
-  onUpdateURL: PropTypes.func,
-  /**
-   * The ID of the selected audio. 0 represents no selection.
-   */
-  value: PropTypes.number.isRequired,
-  /**
-   * The URL of the audio. An empty string represents no selection.
-   */
-  valueURL: PropTypes.string,
-};
 
 export default AudioPicker;
