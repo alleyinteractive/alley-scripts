@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 // Components.
-import { MediaPicker } from '..';
+import MediaPicker, { type MediaPickerProps } from '../media-picker';
 
 // Styled components.
 const PreviewContainer = styled.div`
@@ -11,7 +10,7 @@ const PreviewContainer = styled.div`
 `;
 
 // Create a component to represent the video preview.
-const Preview = ({ src }) => (
+const Preview = ({ src }: { src: string }) => (
   <PreviewContainer>
     <video // eslint-disable-line jsx-a11y/media-has-caption
       className="edit-video-preview"
@@ -21,18 +20,16 @@ const Preview = ({ src }) => (
   </PreviewContainer>
 );
 
-Preview.propTypes = {
-  src: PropTypes.string.isRequired,
-};
+type VideoPickerProps = Omit<MediaPickerProps, 'allowedTypes' | 'icon' | 'preview' | 'imageSize' | 'displayControlsInToolbar'>;
 
 const VideoPicker = ({
-  className,
+  className = '',
   onReset,
   onUpdate,
-  onUpdateURL,
+  onUpdateURL = null,
   value,
-  valueURL,
-}) => (
+  valueURL = '',
+}: VideoPickerProps) => (
   <MediaPicker
     allowedTypes={['video']}
     className={className}
@@ -45,20 +42,5 @@ const VideoPicker = ({
     valueURL={valueURL}
   />
 );
-
-VideoPicker.defaultProps = {
-  className: '',
-  onUpdateURL: null,
-  valueURL: '',
-};
-
-VideoPicker.propTypes = {
-  className: PropTypes.string,
-  onReset: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onUpdateURL: PropTypes.func,
-  value: PropTypes.number.isRequired,
-  valueURL: PropTypes.string,
-};
 
 export default VideoPicker;
