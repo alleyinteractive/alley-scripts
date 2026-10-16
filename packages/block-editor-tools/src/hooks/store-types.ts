@@ -34,7 +34,7 @@ export type EditorSelectors = {
 export type BlockEditorSelectors = {
   getBlock: (clientId: string) => BlockInstance | null;
   getBlockAttributes: (clientId: string) => BlockInstance['attributes'] | null;
-  getBlockName: (clientId: string) => string | null;
+  getBlockName: (clientId: string | null) => string | null;
   getBlockRootClientId: (clientId: string) => string | null;
   getBlocks: (rootClientId?: string) => BlockInstance[];
 };
