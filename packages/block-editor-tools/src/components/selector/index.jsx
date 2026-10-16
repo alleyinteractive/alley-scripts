@@ -312,7 +312,7 @@ const Selector = ({
         <SearchResults
           emptyLabel={emptyLabel}
           error={error}
-          labelledById={`autocomplete-${uniqueKey}`}
+          labelledbyId={`autocomplete-${uniqueKey}`}
           id={`listbox-${uniqueKey}`}
           isOpen={isOpen}
           loading={loading && debouncedSearchString}
