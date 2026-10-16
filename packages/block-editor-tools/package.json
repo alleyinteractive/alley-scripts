@@ -45,6 +45,7 @@
   },
   "homepage": "https://github.com/alleyinteractive/alley-scripts#readme",
   "dependencies": {
+    "@types/wordpress__blocks": "^12.5.18",
     "wp-types": "^3.64.0"
   },
   "devDependencies": {

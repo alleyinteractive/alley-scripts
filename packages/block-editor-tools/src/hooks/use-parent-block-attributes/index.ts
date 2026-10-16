@@ -1,18 +1,21 @@
 import { store } from '@wordpress/block-editor';
+import type { BlockInstance } from '@wordpress/blocks';
 import { useSelect } from '@wordpress/data';
+
+import type { BlockEditorSelectors } from '../store-types';
 
 /**
  * Gets the parent block attributes for a specific block.
  *
  * @param {string} clientId The block client ID.
- * @returns {array} The parent block attributes.
+ * @returns {object | null} The parent block attributes, otherwise null.
  */
-const useParentBlockAttributes = (clientId) => useSelect(
+const useParentBlockAttributes = (clientId: string): BlockInstance['attributes'] | null => useSelect(
   (select) => {
     const {
       getBlockAttributes,
       getBlockRootClientId,
-    } = select(store);
+    } = select(store) as BlockEditorSelectors; // Store boundary: `store` is typed as `any`.
 
     // Get parent block client ID.
     const rootBlockClientId = getBlockRootClientId(clientId);
