@@ -3,13 +3,15 @@ import { useState, useEffect } from 'react';
 /**
  * Set value on a delay.
  *
- * @param {string} value value to set at a delay
- * @param {int} delay delay in ms
+ * @template T - The type of the value.
+ * @param {T}      value value to set at a delay
+ * @param {number} delay delay in ms
+ * @returns {T} The debounced value.
  *
  * @deprecated Use the version from `@wordpress/compose`.
  */
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+const useDebounce = <T>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   // Intentionally log a warning to the console (for devs) when this hook is used.
   // eslint-disable-next-line no-console

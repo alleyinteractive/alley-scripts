@@ -82,7 +82,7 @@ const usePostMeta = <TMeta extends Record<string, unknown> = Record<string, unkn
       if (typeof next === 'object') {
         setMeta({ ...next });
       } else if (typeof next === 'function') {
-        // The edited record holds the meta whenever meta can be edited.
+        // Assumes the record has loaded; getLatestMeta() returns undefined otherwise.
         setMeta({ ...next(getLatestMeta() as TMeta) });
       }
     },
