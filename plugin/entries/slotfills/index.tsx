@@ -37,7 +37,8 @@ registerPlugin('alley-scripts-plugin-sidebar', {
   icon: 'shield',
   // @ts-ignore // TODO: Fix this TypeScript error.
   render: () => {
-    const [meta, setMeta] = usePostMeta(); // eslint-disable-line react-hooks/rules-of-hooks
+    // eslint-disable-next-line react-hooks/rules-of-hooks, @typescript-eslint/no-explicit-any
+    const [meta, setMeta] = usePostMeta<Record<string, any>>();
     const [
       selectedCheckboxes, setSelectedCheckboxes,
     ] = useState<string[]>([]); // eslint-disable-line react-hooks/rules-of-hooks
