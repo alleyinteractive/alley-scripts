@@ -4,7 +4,7 @@
   "description": "A set of tools to help build products for the WordPress block editor.",
   "main": "./build/index.bundle.min.js",
   "types": "./build/index.d.ts",
-  "source": "./src/index.js",
+  "source": "./src/index.ts",
   "files": [
     "build",
     "README.md"
