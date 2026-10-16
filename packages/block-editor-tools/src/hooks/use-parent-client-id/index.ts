@@ -7,8 +7,13 @@ import { useSelect } from '@wordpress/data';
  * @param {string} clientId The child block client ID.
  * @returns {string} String of the parent block client id, otherwise null.
  */
-const useParentClientId = (clientId) => useSelect(
-  (select) => select(store).getBlockRootClientId(clientId),
+const useParentClientId = (clientId: string): string | null => useSelect(
+  (select) => {
+    const { getBlockRootClientId } = select(store) as {
+      getBlockRootClientId: (id: string) => string | null,
+    };
+    return getBlockRootClientId(clientId);
+  },
   [clientId],
 );
 

@@ -7,8 +7,10 @@ import { useSelect } from '@wordpress/data';
  *                    or null if the post has not yet been saved or the redux store
  *                    is not initialized.
  */
-const useCurrentPostId = () => useSelect((select) => {
-  const editorStore = select('core/editor');
+const useCurrentPostId = (): number | null => useSelect((select) => {
+  const editorStore = select('core/editor') as {
+    getCurrentPostId: () => number | null,
+  } | undefined;
   return editorStore ? editorStore.getCurrentPostId() : null;
 }, []);
 

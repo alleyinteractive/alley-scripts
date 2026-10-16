@@ -19,18 +19,32 @@ import { useSelect } from '@wordpress/data';
  * @returns {array} An array containing an object representing terms and an
  *                  update function.
  */
-const useTerms = (postType = null, postId = null, taxonomy = 'categories') => {
+const useTerms = (
+  postType: string | null = null,
+  postId: number | null = null,
+  taxonomy: string = 'categories',
+): [number[], (values: number[]) => void] => {
   // Ensures that we have a post type, since we need it as an argument to useEntityProp.
-  const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
+  const type: string = useSelect((select) => postType || (select('core/editor') as {
+    getCurrentPostType: () => string,
+  }).getCurrentPostType(), []);
 
   // Get the terms and a function for updating terms from useEntityProp.
-  const [terms, setTerms] = useEntityProp('postType', type, taxonomy, postId);
+  const [terms, setTerms] = useEntityProp(
+    'postType',
+    type,
+    taxonomy,
+    (postId ?? undefined) as unknown as string | undefined,
+  );
 
   /**
    * A helper function for updating terms that accepts an array of term IDs.
    * @param {array} values - The term IDs to set.
    */
-  const setPostTerms = React.useCallback((values) => setTerms(values), [setTerms]);
+  const setPostTerms = React.useCallback(
+    (values: number[]) => setTerms(values),
+    [setTerms],
+  );
 
   return [terms, setPostTerms];
 };

@@ -7,12 +7,12 @@ import { useInnerBlocks, useParentBlock } from '..';
  * @param {string} clientId The block client ID.
  * @returns {integer} The block index.
  */
-const useInnerBlockIndex = (clientId) => {
+const useInnerBlockIndex = (clientId: string): number => {
   // Get the parent block.
   const parentBlockClientId = useParentBlock(clientId);
 
   // Get all children of that parent block.
-  const childBlocks = useInnerBlocks(parentBlockClientId);
+  const childBlocks = useInnerBlocks(parentBlockClientId as unknown as string);
 
   // No child blocks found.
   if (!childBlocks) {

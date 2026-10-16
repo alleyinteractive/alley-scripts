@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import usePost from '../use-post';
+import type { EntityRecord, EntityRecordOptions } from '../types';
 
 /**
  * Gets post data for a specific post given its ID. The post type is
@@ -13,8 +14,12 @@ import usePost from '../use-post';
  * @returns {object} An object containing a hasResolved property
  *                   and the returned post object.
  */
-const usePostById = (postId, getPostType = null, options = { context: 'view' }) => {
-  const [postTypeCache, setPostTypeCache] = useState({});
+const usePostById = (
+  postId: number,
+  getPostType: ((id: number) => string | Promise<string>) | null = null,
+  options: EntityRecordOptions = { context: 'view' },
+): EntityRecord | null | undefined => {
+  const [postTypeCache, setPostTypeCache] = useState<Record<number, string>>({});
   const [working, setWorking] = useState(true);
 
   useEffect(() => {
@@ -31,7 +36,7 @@ const usePostById = (postId, getPostType = null, options = { context: 'view' }) 
           }
         } else {
           const path = addQueryArgs('/wp/v2/search', { include: postId });
-          const newPost = await apiFetch({ path });
+          const newPost = await apiFetch<Array<{ subtype: string }>>({ path });
           if (newPost.length > 0) {
             setPostTypeCache((prev) => ({ ...prev, [postId]: newPost[0]?.subtype }));
           }

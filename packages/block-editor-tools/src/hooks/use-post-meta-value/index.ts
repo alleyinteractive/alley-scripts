@@ -17,7 +17,11 @@ import { usePostMeta } from '..';
  *                          Defaults to the ID of the current post.
  * @returns {array} A tuple containing the post meta value and a setter function.
  */
-const usePostMetaValue = (metaKey, postType = null, postId = null) => {
+const usePostMetaValue = <T = unknown>(
+  metaKey: string,
+  postType: string | null = null,
+  postId: number | null = null,
+): [T, (value: T | ((prev: T) => T)) => void] => {
   const [meta, setMeta] = usePostMeta(postType, postId);
 
   /**
@@ -28,14 +32,16 @@ const usePostMetaValue = (metaKey, postType = null, postId = null) => {
    *                    value.
    */
   const setPostMetaValue = React.useCallback(
-    (value) => setMeta((oldMeta) => {
-      const newValue = typeof value === 'function' ? value(oldMeta[metaKey]) : value;
+    (value: T | ((prev: T) => T)) => setMeta((oldMeta) => {
+      const newValue = typeof value === 'function'
+        ? (value as (prev: T) => T)(oldMeta[metaKey] as T)
+        : value;
       return { ...oldMeta, [metaKey]: newValue };
     }),
     [metaKey, setMeta],
   );
 
-  return [meta[metaKey], setPostMetaValue];
+  return [meta[metaKey] as T, setPostMetaValue];
 };
 
 export default usePostMetaValue;

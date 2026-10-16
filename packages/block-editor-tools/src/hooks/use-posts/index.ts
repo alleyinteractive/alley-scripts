@@ -1,4 +1,5 @@
 import { useSelect } from '@wordpress/data';
+import type { EntityRecord } from '../types';
 
 /**
  * Gets post data for a set of posts given their IDs and post type.
@@ -8,8 +9,17 @@ import { useSelect } from '@wordpress/data';
  * @returns {object} An object containing a hasResolved property
  *                   and an array of returned post objects.
  */
-const usePosts = (postIds, postType = 'post') => useSelect((select) => {
-  const { getEntityRecords } = select('core');
+const usePosts = (
+  postIds: number[],
+  postType: string = 'post',
+): EntityRecord[] | null => useSelect((select) => {
+  const { getEntityRecords } = select('core') as {
+    getEntityRecords: (
+      kind: string,
+      name: string,
+      query: { include: number[] },
+    ) => EntityRecord[] | null,
+  };
   return getEntityRecords(
     'postType',
     postType,

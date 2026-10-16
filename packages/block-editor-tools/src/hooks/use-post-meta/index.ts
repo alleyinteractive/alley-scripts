@@ -1,6 +1,9 @@
 import React from 'react';
 import { useEntityProp, useEntityId } from '@wordpress/core-data';
 import { useSelect, useRegistry } from '@wordpress/data';
+import type { PostMeta } from '../types';
+
+export type PostMetaSetter = (next: PostMeta | ((prev: PostMeta) => PostMeta)) => void;
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
@@ -14,16 +17,29 @@ import { useSelect, useRegistry } from '@wordpress/data';
  *                          Defaults to the ID of the current post.
  * @returns {array} A tuple containing an object representing postmeta and a setter function.
  */
-const usePostMeta = (postType = null, postId = null) => {
+const usePostMeta = (
+  postType: string | null = null,
+  postId: number | null = null,
+): [PostMeta, PostMetaSetter] => {
   // Ensure that we have a post type.
-  const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
+  const type: string = useSelect((select) => postType || (select('core/editor') as {
+    getCurrentPostType: () => string,
+  }).getCurrentPostType(), []);
 
   // Ensure that we have a post ID.
   const providerId = useEntityId('postType', type);
   const id = postId ?? providerId;
 
   // Create a selector for the latest meta for the setter to optionally use.
-  const { getEditedEntityRecord } = useRegistry().select('core');
+  const { getEditedEntityRecord } = (useRegistry() as unknown as {
+    select: (store: string) => {
+      getEditedEntityRecord: (
+        kind: string,
+        name: string,
+        key: number,
+      ) => { meta?: PostMeta } | undefined,
+    },
+  }).select('core');
   const getLatestMeta = React.useCallback(
     () => getEditedEntityRecord('postType', type, id)?.meta,
     [getEditedEntityRecord, type, id],
@@ -41,8 +57,10 @@ const usePostMeta = (postType = null, postId = null) => {
    * Ensure meta is an object and set meta is a function. useEntityProp can
    * return `undefined` if the post type doesn't have support for custom-fields.
    */
-  const meta = typeof metaRaw === 'object' ? metaRaw : {};
-  const setMeta = typeof setMetaRaw === 'function' ? setMetaRaw : setMetaError;
+  const meta: PostMeta = typeof metaRaw === 'object' ? metaRaw : {};
+  const setMeta = (
+    typeof setMetaRaw === 'function' ? setMetaRaw : setMetaError
+  ) as (value: PostMeta) => void;
 
   /**
    * Wrapper for the setMeta function that can accept a function as a setter which will get the
@@ -51,12 +69,12 @@ const usePostMeta = (postType = null, postId = null) => {
    * @param {object|function} next - A new value for meta or a function that takes the current value
    *                                 and returns a new value.
    */
-  const setMetaSafe = React.useCallback(
+  const setMetaSafe: PostMetaSetter = React.useCallback(
     (next) => {
       if (typeof next === 'object') {
         setMeta({ ...next });
       } else if (typeof next === 'function') {
-        setMeta({ ...next(getLatestMeta()) });
+        setMeta({ ...next(getLatestMeta() ?? {}) });
       }
     },
     [setMeta, getLatestMeta],
