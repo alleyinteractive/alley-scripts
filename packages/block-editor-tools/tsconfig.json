@@ -10,6 +10,11 @@
       "@/*": ["*"]
     }
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "exclude": [
     "**/*.stories.tsx"
   ],

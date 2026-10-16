@@ -1,8 +1,10 @@
-const path = require('path');
-const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
-const autoprefixer = require('autoprefixer');
+import fs from 'fs';
+import path from 'path';
+import type { Configuration } from 'webpack';
+import DependencyExtractionWebpackPlugin from '@wordpress/dependency-extraction-webpack-plugin';
+import autoprefixer from 'autoprefixer';
 
-const fs = require('fs');
+type Entries = Record<string, { import: string, filename: string }>;
 
 /**
  * Create entry points from a directory path while maintaining the directory structure.
@@ -13,25 +15,25 @@ const fs = require('fs');
  * @param {string} directoryPath - The path to the directory to search.
  * @returns An object of entries.
  */
-function createEntriesPerDirPath(directoryPath) {
+function createEntriesPerDirPath(directoryPath: string): Entries {
   // Check if the directory exists before continuing.
   const directoryExists = fs.existsSync(directoryPath);
 
   if (directoryExists) {
     // Read the directory and reduce its content to an entries object.
     return fs.readdirSync(directoryPath)
-      .reduce((acc, dirItemName) => {
+      .reduce((acc: Entries, dirItemName) => {
         // Define the full path of the current directory item.
         const fullPath = path.join(directoryPath, dirItemName);
 
         // Define the base directory.
         const baseDir = '/src/';
         // Initialize an object to hold nested entries.
-        let nestedEntries = {};
+        let nestedEntries: Entries = {};
 
         if (fs.statSync(fullPath).isDirectory()) {
           // Ensure that the directory has an index file.
-          const indexExists = ['js', 'jsx', 'ts', 'tsx']
+          const indexExists = ['ts', 'tsx']
             .some((ext) => fs.existsSync(path.join(fullPath, `index.${ext}`)));
 
           if (indexExists) {
@@ -56,7 +58,10 @@ function createEntriesPerDirPath(directoryPath) {
   return {};
 }
 
-module.exports = (env, { mode }) => ({
+export default (
+  _env: Record<string, unknown>,
+  { mode }: { mode?: Configuration['mode'] },
+): Configuration => ({
   /*
    * See https://webpack.js.org/configuration/devtool/ for an explanation of how
    * to configure this directive. We are using the recommended options for
@@ -79,7 +84,7 @@ module.exports = (env, { mode }) => ({
     rules: [
       {
         exclude: /node_modules/,
-        test: /\.(j|t)sx?$/,
+        test: /\.tsx?$/,
         use: {
           loader: 'ts-loader',
           options: {
@@ -130,7 +135,8 @@ module.exports = (env, { mode }) => ({
   ],
 
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    // `.js` stays so extensionless imports inside dependencies still resolve.
+    extensions: ['.tsx', '.ts', '.js'],
   },
 
   // Cache the generated webpack modules and chunks to improve build speed.

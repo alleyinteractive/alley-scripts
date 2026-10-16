@@ -6,9 +6,9 @@
   },
   "include": [
     "./src/**/*",
-    "./jest.config.js",
+    "./jest.config.ts",
     "./.eslintrc.js",
-    "./webpack.config.js",
+    "./webpack.config.ts",
   ],
   "exclude": []
 }
