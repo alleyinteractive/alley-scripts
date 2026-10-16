@@ -4,10 +4,10 @@ import { useInnerBlocks, useParentClientId } from '..';
 /**
  * Gets the current index of a specific block relative to its siblings.
  *
- * @param {string} clientId The block client ID.
- * @returns {integer} The block index.
+ * @param clientId The block client ID.
+ * @returns The block index.
  */
-const useInnerBlockIndex = (clientId) => {
+const useInnerBlockIndex = (clientId: string): number => {
   // Get the parent block client ID.
   const parentBlockClientId = useParentClientId(clientId);
 

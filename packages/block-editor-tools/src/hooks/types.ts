@@ -10,7 +10,7 @@ export interface BlockEditorSelectors {
   getBlockAttributes: (clientId: string) => Record<string, unknown> | null;
   getBlockName: (clientId: string) => string | null;
   getBlockRootClientId: (clientId: string) => string | null;
-  getBlocks: (rootClientId?: string) => BlockInstance[];
+  getBlocks: (rootClientId?: string | null) => BlockInstance[];
 }
 
 /**
