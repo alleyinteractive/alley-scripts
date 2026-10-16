@@ -20,3 +20,5 @@ export { default as usePosts } from './use-posts';
 export { default as usePreviewLink } from './use-preview-link';
 export { default as useTerm } from './use-term';
 export { default as useTerms } from './use-terms';
+
+export type { BlockEditorSelectors, BlockInstance } from './types';
