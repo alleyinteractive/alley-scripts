@@ -1,8 +1,30 @@
 // Dependencies.
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * An item returned by the /wp/v2/search endpoint.
+ */
+export interface SelectorItem {
+  id: number;
+  title: string;
+  [key: string]: unknown;
+}
+
+export interface SearchResultsProps {
+  emptyLabel: string;
+  error: string;
+  id: string;
+  isOpen: boolean;
+  labelledbyId: string;
+  loading: boolean;
+  onSelect: (item: SelectorItem) => void;
+  options: SelectorItem[];
+  selectedItems: SelectorItem[];
+  threshold: number;
+  value: string;
+}
 
 /**
  * Render search results list.
@@ -19,7 +41,7 @@ const SearchResults = ({
   selectedItems,
   threshold,
   value,
-}) => {
+}: SearchResultsProps) => {
   // Don't show anything if we aren't loading and don't have a value.
   if (!loading && (value === '' || threshold > value.length)) {
     return null;
@@ -100,7 +122,7 @@ const SearchResults = ({
               onClick={() => onSelect(item)}
               type="button"
               disabled={selectedItems.some((post) => post.id === item.id)}
-              isTertiary
+              variant="tertiary"
             >
               {item.title}
             </Button>
@@ -109,29 +131,6 @@ const SearchResults = ({
       </ul>
     </div>
   );
-};
-
-/**
- * Set PropTypes for this component.
- * @type {object}
- */
-SearchResults.propTypes = {
-  emptyLabel: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  labelledbyId: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ).isRequired,
-  onSelect: PropTypes.func.isRequired,
-  selectedItems: PropTypes.shape([]).isRequired,
-  threshold: PropTypes.number.isRequired,
-  value: PropTypes.string.isRequired,
 };
 
 export default SearchResults;

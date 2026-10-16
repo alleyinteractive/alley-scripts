@@ -1,5 +1,4 @@
 // Dependencies.
-import PropTypes from 'prop-types';
 import {
   useCallback,
   useEffect,
@@ -19,45 +18,65 @@ import { useDebounce } from '@wordpress/compose';
 
 // Components.
 import SearchResults from './components/search-results';
+import type { SelectorItem } from './components/search-results';
 
 // Styles.
 import './styles.scss';
+
+export type { SelectorItem };
+
+export interface SelectorProps {
+  type?: string;
+  className?: string;
+  emptyLabel?: string;
+  label?: string;
+  maxPages?: number;
+  multiple?: boolean;
+  onSelect: (items: SelectorItem[]) => void;
+  placeholder?: string;
+  subTypes?: string[];
+  selected?: SelectorItem[];
+  threshold?: number;
+}
+
+const DEFAULT_SUB_TYPES: string[] = [];
+const DEFAULT_SELECTED: SelectorItem[] = [];
 
 /**
  * Render autocomplete component.
  */
 const Selector = ({
-  type,
-  className,
-  emptyLabel,
-  label,
-  maxPages,
-  multiple,
+  type = 'post',
+  className = '',
+  emptyLabel = __('No items found', 'alley-scripts'),
+  label = __('Search for items', 'alley-scripts'),
+  maxPages = 5,
+  multiple = false,
   onSelect,
-  placeholder,
-  subTypes,
-  selected,
-  threshold,
-}) => {
+  placeholder = __('Search for items', 'alley-scripts'),
+  subTypes = DEFAULT_SUB_TYPES,
+  selected = DEFAULT_SELECTED,
+  threshold = 3,
+}: SelectorProps) => {
   // Unique ID.
   const uniqueKey = uuidv4();
 
   // Setup state.
   const [error, setError] = useState('');
-  const [foundItems, setFoundItems] = useState([]);
+  const [foundItems, setFoundItems] = useState<SelectorItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoadState] = useState(false);
   const [searchString, setSearchString] = useState('');
   const [debouncedSearchString, setDebouncedSearchString] = useState('');
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState<SelectorItem[]>([]);
 
   // Create ref.
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
 
   // Memoize subType string.
   const selectedSubTypes = useMemo(() => (subTypes.length > 0 ? subTypes.join(',') : 'any'), [subTypes]);
 
-  const debouncedSetSearchString = useDebounce((value) => {
+  const debouncedSetSearchString = useDebounce((value: string) => {
     setDebouncedSearchString(value);
   }, 750);
 
@@ -71,7 +90,7 @@ const Selector = ({
    *
    * @param {int} page current page number.
    */
-  const fetchItems = useCallback(async (page = 1) => {
+  const fetchItems = useCallback(async (page = 1): Promise<void> => {
     // Prevent fetch if we haven't
     // met our search string threshold.
     if (debouncedSearchString.length < threshold) {
@@ -102,10 +121,10 @@ const Selector = ({
     );
 
     // Fetch items by page.
-    await apiFetch({ path, parse: false })
-      .then((response) => {
+    await apiFetch<Response>({ path, parse: false })
+      .then((response: Response) => {
         const totalPagesFromResponse = parseInt(
-          response.headers.get('X-WP-TotalPages'),
+          response.headers.get('X-WP-TotalPages') ?? '0',
           10,
         );
         // Set totalPage count to received page count unless larger than maxPages prop.
@@ -113,7 +132,7 @@ const Selector = ({
           ? maxPages : totalPagesFromResponse;
         return response.json();
       })
-      .then((items) => {
+      .then((items: SelectorItem[]) => {
         setFoundItems((prevState) => [...prevState, ...items]);
         setLoadState(false);
 
@@ -125,7 +144,7 @@ const Selector = ({
           fetchItems(page + 1);
         }
       })
-      .catch((err) => setError(err.message));
+      .catch((err: Error) => setError(err.message));
   }, [
     debouncedSearchString,
     maxPages,
@@ -157,8 +176,8 @@ const Selector = ({
    *
    * @param {MouseEvent} event mouse event.
    */
-  const handleClick = (event) => {
-    setIsOpen(ref.current.contains(event.target));
+  const handleClick = (event: MouseEvent) => {
+    setIsOpen(!!ref.current?.contains(event.target as Node));
   };
 
   /**
@@ -166,7 +185,7 @@ const Selector = ({
    *
    * @param {KeyboardEvent} event keyboard event.
    */
-  const handleKeyboard = (event) => {
+  const handleKeyboard = (event: KeyboardEvent) => {
     if (event.key === 'Escape') { setIsOpen(false); }
   };
 
@@ -194,8 +213,8 @@ const Selector = ({
    *
    * @param {object} item selected item object.
    */
-  const handleItemSelection = (item) => {
-    let newSelectedItems = [];
+  const handleItemSelection = (item: SelectorItem) => {
+    let newSelectedItems: SelectorItem[] = [];
 
     // If multiple item selection is available.
     // Add selection to foundItems array.
@@ -278,7 +297,7 @@ const Selector = ({
                 >
                   <Button
                     className="autocomplete__selection-list--item--button"
-                    isSecondary
+                    variant="secondary"
                     isSmall
                     onClick={() => handleItemSelection(item)}
                     type="button"
@@ -312,10 +331,10 @@ const Selector = ({
         <SearchResults
           emptyLabel={emptyLabel}
           error={error}
-          labelledById={`autocomplete-${uniqueKey}`}
+          labelledbyId={`autocomplete-${uniqueKey}`}
           id={`listbox-${uniqueKey}`}
           isOpen={isOpen}
-          loading={loading && debouncedSearchString}
+          loading={loading && !!debouncedSearchString}
           onSelect={handleItemSelection}
           options={foundItems}
           selectedItems={selectedItems}
@@ -325,46 +344,6 @@ const Selector = ({
       </div>
     </form>
   );
-};
-
-/**
- * Set initial props.
- * @type {object}
- */
-Selector.defaultProps = {
-  type: 'post',
-  className: '',
-  emptyLabel: __('No items found', 'alley-scripts'),
-  label: __('Search for items', 'alley-scripts'),
-  maxPages: 5,
-  multiple: false,
-  placeholder: __('Search for items', 'alley-scripts'),
-  subTypes: [],
-  selected: [],
-  threshold: 3,
-};
-
-/**
- * Set PropTypes for this component.
- * @type {object}
- */
-Selector.propTypes = {
-  type: PropTypes.string,
-  className: PropTypes.string,
-  emptyLabel: PropTypes.string,
-  label: PropTypes.string,
-  maxPages: PropTypes.number,
-  multiple: PropTypes.bool,
-  onSelect: PropTypes.func.isRequired,
-  placeholder: PropTypes.string,
-  subTypes: PropTypes.arrayOf(PropTypes.string),
-  selected: PropTypes.arrayOf([
-    PropTypes.shape({
-      id: PropTypes.number,
-      title: PropTypes.string,
-    }),
-  ]),
-  threshold: PropTypes.number,
 };
 
 export default Selector;
