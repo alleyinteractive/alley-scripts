@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
+import type { ComponentType, ReactNode } from 'react';
 import styled from 'styled-components';
 
 import {
-  BlockControls,
-  BlockIcon,
-  MediaPlaceholder,
+  BlockControls as UntypedBlockControls,
+  BlockIcon as UntypedBlockIcon,
+  MediaPlaceholder as UntypedMediaPlaceholder,
+  // @ts-expect-error MediaReplaceFlow is missing from @types/wordpress__block-editor.
   MediaReplaceFlow,
 } from '@wordpress/block-editor';
 import {
@@ -17,6 +18,50 @@ import { __ } from '@wordpress/i18n';
 
 // Services.
 import { getMediaUrl } from '../../services';
+import type { MediaObject } from '../../services/media/get-media-url';
+
+/**
+ * A media item as passed to onUpdate by the media modal or upload flow.
+ */
+export interface SelectedMedia {
+  id: number;
+  url?: string;
+  [key: string]: unknown;
+}
+
+export interface MediaPickerProps {
+  allowedTypes?: string[];
+  className?: string;
+  icon?: string;
+  imageSize?: string;
+  displayControlsInToolbar?: boolean;
+  onReset: () => void;
+  onUpdate: (media: SelectedMedia) => void;
+  onUpdateURL?: (url: string) => void;
+  preview?: ComponentType<{ src: string }> | null;
+  value: number;
+  valueURL?: string;
+}
+
+/*
+ * @types/wordpress__block-editor omits BlockControls' group prop and
+ * MediaPlaceholder's disableMediaButtons prop, types MediaPlaceholder's value
+ * as an ID although it reads { id, src }, and its nested copy of @types/react
+ * makes BlockIcon unusable as a JSX component here.
+ */
+const BlockControls = UntypedBlockControls as unknown as ComponentType<{
+  children: ReactNode,
+  group?: string,
+}>;
+const BlockIcon = UntypedBlockIcon as unknown as ComponentType<{ icon: string }>;
+const MediaPlaceholder = UntypedMediaPlaceholder as unknown as ComponentType<{
+  allowedTypes: string[],
+  disableMediaButtons: boolean,
+  icon: ReactNode,
+  onSelect: (media: SelectedMedia) => void,
+  onSelectURL?: (url: string) => void,
+  value: { id: number, src: string },
+}>;
 
 // Styled components.
 const Container = styled.div`
@@ -31,23 +76,25 @@ const DefaultPreview = styled.div`
 `;
 
 const MediaPicker = ({
-  allowedTypes,
-  className,
-  icon,
-  imageSize,
-  displayControlsInToolbar,
+  allowedTypes = [],
+  className = '',
+  icon = 'format-aside',
+  imageSize = 'thumbnail',
+  displayControlsInToolbar = false,
   onReset,
   onUpdate,
   onUpdateURL,
-  preview: Preview,
+  preview: Preview = null,
   value,
-  valueURL,
-}) => {
+  valueURL = '',
+}: MediaPickerProps) => {
   // Get the media object, if given the media ID.
   const {
     media = undefined,
   } = useSelect((select) => ({
-    media: value ? select('core').getMedia(value) : undefined,
+    media: value ? (select('core') as {
+      getMedia: (id: number) => MediaObject | null | undefined,
+    }).getMedia(value) : undefined,
   }), [value]);
 
   // getEntityRecord returns `null` if the load is in progress.
@@ -120,31 +167,6 @@ const MediaPicker = ({
       />
     </Container>
   );
-};
-
-MediaPicker.defaultProps = {
-  allowedTypes: [],
-  className: '',
-  icon: 'format-aside',
-  imageSize: 'thumbnail',
-  displayControlsInToolbar: false,
-  onUpdateURL: null,
-  preview: null,
-  valueURL: '',
-};
-
-MediaPicker.propTypes = {
-  allowedTypes: PropTypes.arrayOf(PropTypes.string),
-  className: PropTypes.string,
-  icon: PropTypes.string,
-  imageSize: PropTypes.string,
-  displayControlsInToolbar: PropTypes.bool,
-  onReset: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onUpdateURL: PropTypes.func,
-  preview: PropTypes.element,
-  value: PropTypes.number.isRequired,
-  valueURL: PropTypes.string,
 };
 
 export default MediaPicker;
