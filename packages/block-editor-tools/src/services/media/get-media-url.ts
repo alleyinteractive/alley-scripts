@@ -4,11 +4,20 @@
  * size if it does not. Returns an empty string if unable to find either.
  * Uses a superset of the same logic that the Gutenberg Image component uses
  * for selecting the correct image size from a media REST API response.
- * @param {object} media - A media object returned by the WordPress API.
- * @param {string} size - Media size to request. Default: full
- * @returns {string} - The URL to the asset, or an empty string on failure.
+ * @param media - A media object returned by the WordPress API.
+ * @param size - Media size to request. Default: full
+ * @returns The URL to the asset, or an empty string on failure.
  */
-const getMediaUrl = (media, size = 'full') => {
+type MediaLike = {
+  media_details?: {
+    sizes?: Record<string, { source_url?: string } | undefined>,
+  },
+  sizes?: Record<string, { url?: string } | undefined>,
+  source_url?: string,
+  url?: string,
+};
+
+const getMediaUrl = (media: MediaLike, size: string = 'full'): string => {
   const {
     media_details: {
       sizes: {
