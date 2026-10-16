@@ -187,11 +187,12 @@ registerPlugin('alley-scripts-plugin-sidebar', {
             />
           </PanelBody>
           <PanelBody initialOpen title={__('CSV Uploader', 'alley-scripts')}>
-            {/*
-              // @ts-ignore Allow for use of PureComponent classes in Typescript */}
             <CSVUploader
               attributeName="alley_scripts_csv_uploader"
-              callback={(data: any) => console.log('CSVUploader callback', data)} // eslint-disable-line no-console
+              callback={(data) => {
+                console.log('CSVUploader callback', data); // eslint-disable-line no-console
+                return data;
+              }}
               setAttributes={(data: any) => console.log('CSVUploader setAttributes', data)} // eslint-disable-line no-console
             />
           </PanelBody>

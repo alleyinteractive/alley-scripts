@@ -22,6 +22,11 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
   },
   settings: {
-    'import/resolver': 'webpack',
+    'import/resolver': {
+      node: {
+        // `.js` is still needed to resolve extensionless imports within dependencies.
+        extensions: ['.ts', '.tsx', '.js'],
+      },
+    },
   },
 };
