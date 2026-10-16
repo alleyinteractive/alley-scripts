@@ -93,7 +93,7 @@ const PostPicker = ({
 
   const post = previewLookup
     ? previewLookup(value)
-    : usePostById(value, getPostType) as any as WP_REST_API_Post; // eslint-disable-line react-hooks/rules-of-hooks, camelcase, max-len
+    : usePostById(value, getPostType) as WP_REST_API_Post; // eslint-disable-line react-hooks/rules-of-hooks, camelcase, max-len
 
   const {
     featured_media: featuredMediaId,
