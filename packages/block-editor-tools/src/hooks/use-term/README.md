@@ -22,7 +22,7 @@ The hook returns `undefined` until the term has loaded.
 ## TypeScript Support
 
 `useTerm` returns a `WP_REST_API_Term` from `wp-types` by default. Pass your
-own term shape to type registered meta or a partial `_fields` record.
+own term shape, extending `WP_REST_API_Term`, to type registered meta.
 
 ```ts
 import type { WP_REST_API_Term } from 'wp-types';

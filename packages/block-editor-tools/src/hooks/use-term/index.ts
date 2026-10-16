@@ -7,8 +7,8 @@ import type { CoreSelectors } from '../store-types';
 /**
  * Gets term data for a specific term given its ID and taxonomy.
  *
- * @template T - The term shape. Defaults to `WP_REST_API_Term`; pass a narrower
- *               type for registered meta or `_fields` queries.
+ * @template T - The term shape. Defaults to `WP_REST_API_Term`; pass an extended
+ *               type for registered meta.
  * @param {number} termId   The ID for the term to return.
  * @param {string} taxonomy Optional. The taxonomy name. Defaults to 'category'.
  * @param {object} options  Optional object containing parameters to pass to getEntityRecord.

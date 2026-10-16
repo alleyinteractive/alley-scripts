@@ -18,8 +18,8 @@ type GetPostType = (postId: number) => (
  * Gets post data for a specific post given its ID. The post type is
  * looked up from the search endpoint, cached, and then passed to usePost.
  *
- * @template T - The post shape. Defaults to `WP_REST_API_Post`; pass a narrower
- *               type for custom post types, registered meta, or `_fields` queries.
+ * @template T - The post shape. Defaults to `WP_REST_API_Post`; pass an extended
+ *               type for custom post types or registered meta.
  * @param {number}   postId      The ID for the post to return.
  * @param {function} getPostType Optional custom function that returns a post type string.
  * @param {object}   options     Optional object containing parameters to pass to getEntityRecord.

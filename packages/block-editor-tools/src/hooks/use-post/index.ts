@@ -7,8 +7,8 @@ import type { CoreSelectors } from '../store-types';
 /**
  * Gets post data for a specific post given its ID and post type.
  *
- * @template T - The post shape. Defaults to `WP_REST_API_Post`; pass a narrower
- *               type for custom post types, registered meta, or `_fields` queries.
+ * @template T - The post shape. Defaults to `WP_REST_API_Post`; pass an extended
+ *               type for custom post types or registered meta.
  * @param {number} postId   The ID for the post to return.
  * @param {string} postType Optional. The post type to select. Default 'post'.
  * @param {object} options  Optional object containing parameters to pass to getEntityRecord.
