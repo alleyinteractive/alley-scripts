@@ -1,6 +1,7 @@
 {
   "extends": "@alleyinteractive/tsconfig/base.json",
   "compilerOptions": {
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "declaration": true,
