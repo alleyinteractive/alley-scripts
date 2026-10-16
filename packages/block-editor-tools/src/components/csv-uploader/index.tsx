@@ -1,8 +1,28 @@
 import React from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 
 import { parseCSVFile } from '../../services';
+
+export interface CSVUploaderProps {
+  /**
+   * The name of the attribute to set.
+   */
+  attributeName: string;
+  /**
+   * A callback to transform the data before setting the attribute.
+   */
+  callback?: ((data: Record<string, unknown>[]) => unknown) | null;
+  /**
+   * A callback to set the attributes.
+   */
+  setAttributes: (attributes: Record<string, string>) => void;
+}
+
+interface CSVUploaderState {
+  error: string;
+  success: string;
+}
 
 /**
  * Allows a user to upload a CSV file, which is parsed in the browser, converted
@@ -95,19 +115,19 @@ import { parseCSVFile } from '../../services';
  *  }
  * ```
  */
-export default class CSVUploader extends React.PureComponent {
+export default class CSVUploader extends React.PureComponent<CSVUploaderProps, CSVUploaderState> {
   /**
    * A callback for the upload form submit action.
-   * @param {Event} e - The form submit event.
+   * @param e - The form submit event.
    */
-  static handleSubmit(e) {
+  static handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
   }
 
   /**
    * Re-binds class methods to use `this` properly.
    */
-  constructor(props) {
+  constructor(props: CSVUploaderProps) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
 
@@ -120,12 +140,12 @@ export default class CSVUploader extends React.PureComponent {
 
   /**
    * A callback for the change event on the file input.
-   * @param {Event} e - The input change event.
+   * @param e - The input change event.
    */
-  handleChange(e) {
+  handleChange(e: ChangeEvent<HTMLInputElement>) {
     const {
       attributeName,
-      callback,
+      callback = null,
       setAttributes,
     } = this.props;
 
@@ -161,7 +181,7 @@ export default class CSVUploader extends React.PureComponent {
       })
       .catch((error) => {
         this.setState({
-          error,
+          error: error instanceof Error ? error.message : String(error),
           success: '',
         });
       });
@@ -169,7 +189,7 @@ export default class CSVUploader extends React.PureComponent {
 
   /**
    * Renders this component.
-   * @returns {object} - JSX for the component.
+   * @returns JSX for the component.
    */
   render() {
     const {
@@ -179,7 +199,7 @@ export default class CSVUploader extends React.PureComponent {
     return (
       <div className="alley-scripts-block-csv-uploader">
         <h2>{__('Upload CSV', 'alley-scripts')}</h2>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={CSVUploader.handleSubmit}>
           {error !== '' ? (
             <div style={{ color: '#c00' }}>
               <strong>
@@ -226,30 +246,3 @@ export default class CSVUploader extends React.PureComponent {
     );
   }
 }
-
-/**
- * Default props.
- * @type {object}
- */
-CSVUploader.defaultProps = {
-  callback: null,
-};
-
-/**
- * Set PropTypes for this component.
- * @type {object}
- */
-CSVUploader.propTypes = {
-  /**
-   * The name of the attribute to set.
-   */
-  attributeName: PropTypes.string.isRequired,
-  /**
-   * A callback to transform the data before setting the attribute.
-   */
-  callback: PropTypes.func,
-  /**
-   * A callback to set the attributes.
-   */
-  setAttributes: PropTypes.func.isRequired,
-};
