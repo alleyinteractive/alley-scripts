@@ -39,6 +39,7 @@ const Checkboxes = ({
     </BaseControl>
     {options.map((option) => (
       <CheckboxControl
+        key={option.value}
         label={option.label}
         checked={value.includes(option.value)}
         onChange={(checked) => {
