@@ -6,7 +6,7 @@ import useInnerBlocks from '../use-inner-blocks';
  * @param clientId The block client ID.
  * @returns An array of child block attributes.
  */
-const useInnerBlocksAttributes = <T extends Record<string, unknown> = Record<string, unknown>>(
+const useInnerBlocksAttributes = <T extends object = Record<string, any>>(
   clientId: string,
 ): T[] => useInnerBlocks(clientId).map((block) => block.attributes as T);
 

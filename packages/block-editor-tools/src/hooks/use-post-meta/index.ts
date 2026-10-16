@@ -16,7 +16,7 @@ type MetaSetter<T> = T | ((current: T) => T);
  *                 Defaults to the ID of the current post.
  * @returns A tuple containing an object representing postmeta and a setter function.
  */
-const usePostMeta = <T extends Record<string, unknown> = Record<string, unknown>>(
+const usePostMeta = <T extends object = Record<string, any>>(
   postType: string | null = null,
   postId: number | null = null,
 ): [T, (next: MetaSetter<T>) => void] => {

@@ -7,7 +7,7 @@ import type { BlockEditorSelectors } from '../types';
  * @param clientId The block client ID.
  * @returns The parent block attributes, otherwise null.
  */
-const useParentBlockAttributes = <T extends Record<string, unknown> = Record<string, unknown>>(
+const useParentBlockAttributes = <T extends object = Record<string, any>>(
   clientId: string,
 ): T | null => useSelect(
     (select) => {

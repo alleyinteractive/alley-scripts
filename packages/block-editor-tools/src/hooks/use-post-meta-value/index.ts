@@ -17,7 +17,7 @@ import usePostMeta from '../use-post-meta';
  *                 Defaults to the ID of the current post.
  * @returns A tuple containing the post meta value and a setter function.
  */
-const usePostMetaValue = <T = unknown>(
+const usePostMetaValue = <T = any>(
   metaKey: string,
   postType: string | null = null,
   postId: number | null = null,
