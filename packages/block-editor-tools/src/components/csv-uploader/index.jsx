@@ -161,7 +161,7 @@ export default class CSVUploader extends React.PureComponent {
       })
       .catch((error) => {
         this.setState({
-          error,
+          error: error.message,
           success: '',
         });
       });
