@@ -142,15 +142,14 @@ const PostList = ({
     searchValue: '',
     page: 1,
   });
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   /**
    * Gets the posts based on the params.
    *
    * @param {object} params The parameters.
-   * @param {bool} cancelled Whether the useEffect has been cancelled.
-   * @param {bool} overrideCache Whether we should override the cache.
    */
-  const getPosts = useCallback(async (params: Params, cancelled: Boolean = false) => {
+  const getPosts = useCallback(async (params: Params) => {
     /**
      * Gets the api path.
      *
@@ -176,19 +175,44 @@ const PostList = ({
       return path;
     }
 
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+
     if (params.searchValue && params.searchValue.length <= 2) {
+      setIsUpdating(false);
       return;
     }
+
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     const path = getPath();
     setIsUpdating(true);
-    const response = await apiFetch({ path, parse: false });
+
+    let response: Response;
+    let result: unknown;
+    try {
+      response = await apiFetch<Response>({
+        path,
+        parse: false,
+        signal: abortController.signal,
+      });
+
+      result = await response.json();
+    } catch (error) {
+      if (abortController.signal.aborted) {
+        return;
+      }
+      throw error;
+    }
+
     setTotalPages(parseInt(
       // @ts-ignore
       response.headers.get('X-WP-TotalPages'),
       10,
     ));
-    // @ts-ignore
-    const result = await response.json();
     // eslint-disable-next-line camelcase
     let posts = result as any as WP_REST_API_Search_Results;
     if (params.page > 1) {
@@ -197,9 +221,6 @@ const PostList = ({
         // eslint-disable-next-line camelcase
         ...result as any as WP_REST_API_Search_Results,
       ];
-    }
-    if (cancelled) {
-      return;
     }
     // @ts-ignore
     // eslint-disable-next-line camelcase
@@ -235,15 +256,27 @@ const PostList = ({
 
   // Load posts on page load.
   useEffect(() => {
-    let cancelled = false;
     if (!initialLoad) {
       setInitialLoad(true);
-      getPosts(pathParams, cancelled);
+      getPosts(pathParams);
     }
-    return () => {
-      cancelled = true;
-    };
   }, [getPosts, initialLoad, pathParams]);
+
+  /*
+   * Cancel the pending request when the modal closes. The modal unmounts this
+   * component when it closes, and React calls the returned cleanup function
+   * only on unmount because the dependency array is empty. The cleanup reads
+   * the ref when it runs, so it cancels the newest request.
+   */
+  useEffect(() => {
+    const cancelPendingRequest = () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+
+    return cancelPendingRequest;
+  }, []);
 
   useEffect(() => {
     handleSearchTextChange(pathParams.searchValue);
