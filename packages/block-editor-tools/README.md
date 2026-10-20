@@ -4,6 +4,8 @@
 
 This package contains a set of modules used by [Alley](https://alley.com) to aid in building features for the WordPress block editor.
 
+The package source is written in 100% TypeScript, and the published build ships type declarations for every component, hook and service, including their props types.
+
 ## Install
 
 Install this package in your project:
