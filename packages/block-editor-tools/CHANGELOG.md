@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.1
+
+### Patch Changes
+
+- 3eb3bcaf: Cancel pending PostPicker search requests when the search text changes.
+
 ## 0.17.0
 
 ### Minor Changes
