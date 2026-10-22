@@ -3,6 +3,7 @@
 .thumbsdb
 .idea
 .vscode
+.worktrees
 *.code-workspace
 .turbo
 .next

@@ -7,6 +7,12 @@ export default {
         ignoreAtRules: ["each", "media", "supports", "include"]
       }
     ],
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        ignoreAtRules: ["starting-style"]
+      }
+    ],
     "selector-class-pattern": [
       "^[a-z0-9\\-_]+$",
       {

@@ -132,7 +132,7 @@ main();
  * @param mixed $meta_value Meta value to sanitize.
  * @return string Sanitized meta value.
  */
-function sanitize_csv_data( $meta_value ) : string {
+function sanitize_csv_data( $meta_value ): string {
 	// The meta value should be a stringified JSON array. Ensure that it is.
 	$raw_meta_value = json_decode( $meta_value, true );
 	if ( ! is_array( $raw_meta_value ) ) {

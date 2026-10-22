@@ -82,6 +82,7 @@ export type FeatureConfig = {
   name: string;
   description?: string;
   type: 'file' | 'repository' | 'composer';
+  hooks?: string;
   config?: {
     /* Defaults to 'cwd'. */
     'destination-resolver'?: 'cwd' | 'theme' | 'plugin' | 'relative' | 'relative-parent';

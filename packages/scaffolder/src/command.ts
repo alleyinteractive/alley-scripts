@@ -2,7 +2,7 @@ import chalk from 'chalk';
 
 import { getFeatureStore, initializeFeatureStore } from './features/store';
 import { initializeLogger } from './logger';
-import { configToGenerator, promptUserForFeature } from './features';
+import { featureToGenerator, promptUserForFeature } from './features';
 import commandArguments from './arguments';
 import { initializeConfigurationStore } from './configuration';
 import handleError from './error';
@@ -55,7 +55,7 @@ class ScaffolderCommand {
 
     const feature = await promptUserForFeature(argv ? argv[0] : undefined);
 
-    await configToGenerator(...feature).resolveAndInvoke(dryRun);
+    await featureToGenerator(...feature).resolveAndInvoke(dryRun);
 
     this.logger.info('🎉 Done. Happy coding!');
   }

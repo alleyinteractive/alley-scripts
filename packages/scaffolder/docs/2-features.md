@@ -341,4 +341,184 @@ composer:
   postCommand: "php configure.php"
 ```
 
+## JavaScript Feature Packages
+
+Installed packages can register features implemented in JavaScript. This is a
+trusted-code extension mechanism: a package's extension module runs in the
+scaffolder process with the same filesystem and process permissions as the
+person running Scaffolder. Only install and run extension packages you trust.
+
+Add a `scaffolder` entry point to the package manifest:
+
+```json
+{
+  "name": "@example/project-scaffolder",
+  "scaffolder": "./scaffolder.js"
+}
+```
+
+Scaffolder searches the same local and global `node_modules` locations used for
+YAML feature packages. The entry point is resolved relative to this manifest.
+It can default-export one feature or an array of features. A feature must have a
+`name` and a `generate` function; `description` and `prompts` are optional.
+
+Here is an ES module that exports one feature and supplies prompt definitions:
+
+```js
+export default {
+  name: 'post-type',
+  description: 'Generate a WordPress post type',
+
+  async prompts(context) {
+    return [
+      {
+        name: 'slug',
+        type: 'text',
+        message: 'Post type slug',
+      },
+    ];
+  },
+
+  async generate(context) {
+    const destination = context.resolveDestination(
+      `src/post-types/${context.inputs.slug}.js`,
+    );
+
+    if (context.dryRun) {
+      context.logger.info(`Would generate ${destination}.`);
+      return;
+    }
+
+    // Generate or modify project files.
+  },
+};
+```
+
+When `prompts()` returns an array, Scaffolder passes those definitions to the
+[`prompts`](https://www.npmjs.com/package/prompts) package and supplies the
+answers as `context.inputs` to `generate()`. A package can instead collect its
+own inputs and return the resolved object directly:
+
+```js
+export default {
+  name: 'post-type-from-config',
+
+  async prompts(context) {
+    return {
+      slug: process.env.POST_TYPE_SLUG || 'book',
+      directory: context.cwd,
+    };
+  },
+
+  async generate(context) {
+    context.logger.info(`Generating ${context.inputs.slug}.`);
+  },
+};
+```
+
+The object returned from `prompts()` becomes the feature's resolved inputs;
+Scaffolder does not invoke the `prompts` package for that form.
+
+To register several features from one ES module, default-export an array:
+
+```js
+export default [
+  {
+    name: 'post-type',
+    async generate(context) {
+      context.logger.info(`Generating ${context.feature.name}.`);
+    },
+  },
+  {
+    name: 'taxonomy',
+    async generate(context) {
+      context.logger.info(`Generating ${context.feature.name}.`);
+    },
+  },
+];
+```
+
+Both ES modules and CommonJS packages are supported. Use `export default` for
+an ES module, or assign the feature or feature array to `module.exports` in a
+CommonJS entry point:
+
+```js
+module.exports = {
+  name: 'post-type',
+  async generate(context) {
+    context.logger.info(`Generating ${context.feature.name}.`);
+  },
+};
+```
+
+Each JavaScript feature and YAML hook receives this shared context:
+
+- `cwd`: the directory from which Scaffolder was invoked.
+- `feature`: an object containing the feature's `name` and optional
+  `description`.
+- `inputs`: the mutable object of resolved feature inputs.
+- `dryRun`: `true` when Scaffolder was invoked with `--dry-run`.
+- `featureDirectory`: the directory containing the JavaScript package entry
+  point or the YAML feature configuration.
+- `resolveDestination(relativePath)`: resolves a destination using the active
+  feature's destination rules. JavaScript package features resolve from `cwd`;
+  YAML features also honor their configured destination resolver.
+- `logger`: Scaffolder's initialized Winston logger.
+
+Package discovery failures are isolated. If an opted-in package has a missing
+entry point, cannot be imported, or exports an invalid feature, Scaffolder logs
+a warning naming that package and continues loading other packages.
+
+## JavaScript Hooks for YAML Features
+
+YAML features can run a JavaScript module before and after their built-in
+generator. Set `hooks` to a module path relative to the feature's `config.yml`:
+
+```yaml
+name: Post Type
+type: file
+hooks: ./hooks.js
+inputs:
+  - name: slug
+files:
+  - source: post-type.stub
+    destination: src/post-types/{{ inputs.slug }}.php
+```
+
+The module may export either or both supported hooks. In an ES module, use
+named exports:
+
+```js
+export async function beforeGenerate(context) {
+  // Runs after YAML inputs are collected and before the built-in generator.
+  context.inputs.slug = context.inputs.slug.toLowerCase();
+}
+
+export async function afterGenerate(context) {
+  if (context.dryRun) {
+    context.logger.info('Would update the post type registry.');
+    return;
+  }
+
+  // Update the registry here.
+}
+```
+
+The lifecycle order is: collect YAML inputs, create the shared context, run
+`beforeGenerate(context)` when exported, run the built-in generator, then run
+`afterGenerate(context)` when exported. Hooks receive the same mutable context
+object. Changes made to `context.inputs` in `beforeGenerate` are synchronized
+to the generator, so YAML templates and `afterGenerate` receive those changes.
+
+At least one of `beforeGenerate` or `afterGenerate` must be a function. A hook
+module with neither supported export, a non-function hook, or an import failure
+stops the selected feature and reports the configured and resolved module path.
+If either `beforeGenerate` or the built-in generator throws,
+`afterGenerate` does not run. Unknown exports are ignored.
+
+Hooks run during `--dry-run`, including `afterGenerate`. The built-in YAML
+generator continues to honor dry-run mode, but extension code is responsible
+for avoiding its own mutations by checking `context.dryRun`, as in the example
+above. This responsibility cannot be enforced for arbitrary trusted code.
+
 [Next: Expressions](./3-expressions.md) &rarr;
