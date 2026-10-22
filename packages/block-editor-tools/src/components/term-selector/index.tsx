@@ -16,7 +16,7 @@ type BaseSelectedTerm = {
   title: string;
 };
 
-type SelectedTerm<T extends Record<string, unknown> = {}> = BaseSelectedTerm & T;
+export type SelectedTerm<T extends Record<string, unknown> = {}> = BaseSelectedTerm & T;
 
 // Rendered in place of the suggestion list while a search is pending. Defined
 // at module scope so it is a stable reference and not recreated each render.
@@ -27,7 +27,7 @@ const renderSearchingItem = () => (
   </span>
 );
 
-type TermSelectorProps<T extends Record<string, unknown> = {}> = {
+export type TermSelectorProps<T extends Record<string, unknown> = {}> = {
   className?: string;
   label?: string;
   multiple?: boolean;

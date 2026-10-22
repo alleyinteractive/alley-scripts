@@ -17,7 +17,7 @@ import { usePostById } from '../../hooks';
 import SearchModal from './search-modal';
 import Post from './post';
 
-interface PostPickerProps {
+export interface PostPickerProps {
   allowedTypes?: string[];
   className?: string;
   filters?: React.ReactNode;
