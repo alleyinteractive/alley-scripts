@@ -1,0 +1,54 @@
+import React from 'react';
+import usePostMeta from '../use-post-meta';
+
+/**
+ * A setter for a single post meta value. Accepts either a new value or a
+ * function that receives the current value and returns a new value.
+ */
+export type SetPostMetaValue<T> = (value: T | ((current: T | undefined) => T)) => void;
+
+/**
+ * A custom React hook that wraps useEntityProp for working with a specific
+ * post meta value. It returns the value for the specified meta key as well as a
+ * setter for the meta value. This hook is intended to reduce boilerplate code
+ * in components that need to read and write post meta. It differs from
+ * usePostMeta in that it operates on a specific meta key/value pair.
+ * By default, it operates on post meta for the current post, but you can
+ * optionally pass a post type and post ID in order to get and set post meta
+ * for an arbitrary post.
+ *
+ * @param metaKey  The meta key for which to manage the value.
+ * @param postType Optional. The post type to get and set meta for.
+ *                 Defaults to the post type of the current post.
+ * @param postId   Optional. The post ID to get and set meta for.
+ *                 Defaults to the ID of the current post.
+ * @returns A tuple containing the post meta value and a setter function.
+ */
+const usePostMetaValue = <T = unknown>(
+  metaKey: string,
+  postType: string | null = null,
+  postId: number | null = null,
+): [T | undefined, SetPostMetaValue<T>] => {
+  const [meta, setMeta] = usePostMeta(postType, postId);
+
+  /**
+   * A helper function for setting the value for the meta key that this hook is
+   * responsible for.
+   *
+   * @param value The value to set for the key. Optionally, this can be a function that receives
+   *              the current value and returns a new value.
+   */
+  const setPostMetaValue: SetPostMetaValue<T> = React.useCallback(
+    (value) => setMeta((oldMeta) => {
+      const newValue = typeof value === 'function'
+        ? (value as (current: T | undefined) => T)(oldMeta[metaKey] as T | undefined)
+        : value;
+      return { ...oldMeta, [metaKey]: newValue };
+    }),
+    [metaKey, setMeta],
+  );
+
+  return [meta[metaKey] as T | undefined, setPostMetaValue];
+};
+
+export default usePostMetaValue;
