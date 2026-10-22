@@ -65,6 +65,29 @@ See the [start command](https://developer.wordpress.org/block-editor/reference-g
 
 _For fast refresh to work it requires that WordPress has the [`SCRIPT_DEBUG`](https://wordpress.org/documentation/article/debugging-in-wordpress/#script_debug) flag enabled and the [Gutenberg](https://wordpress.org/plugins/gutenberg/) plugin installed._
 
+### Block view modules (Interactivity API)
+
+Blocks that use the [Interactivity API](https://developer.wordpress.org/block-editor/reference-guides/interactivity-api/) register a [`viewScriptModule`](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script-module) (or `viewModule`) field in their `block.json`. To compile these as ES modules, pass the `--experimental-modules` flag to your `build`/`start` script:
+
+```json
+{
+  "scripts": {
+    "build": "alley-build build --experimental-modules",
+    "start": "alley-build start --experimental-modules"
+  }
+}
+```
+
+When this flag is present, `wp-scripts` runs two compilers — one for classic scripts and one for ES modules — and the Alley Build Tool configures both. The module compiler emits a valid ES module for each `viewScriptModule`/`viewModule` entry into the same per-block output structure as other block assets (e.g. `build/<block>/view.js`).
+
+Builds **without** `--experimental-modules` are completely unaffected.
+
+#### Limitations
+
+* **Extending the config and the `entries/` directory apply to the script compiler only.** Overrides in your project `webpack.config.js` are merged into the script configuration, and entry points in the `entries/` directory are compiled by the script compiler. The module compiler's entries come solely from the `viewScriptModule`/`viewModule` block fields. (The `@`-to-project-root import alias is available in module source files too.)
+* **Production builds with `--experimental-modules` do not auto-clean the `build/` directory.** Both compilers write to `build/`, so cleaning is disabled to prevent the two compilers from clobbering each other's output. This matches stock `wp-scripts` behavior.
+* **Fast Refresh (`--hot`) is not supported for module entries.** Running `start --experimental-modules` compiles modules for local development, but `--hot` for module entries is unsupported.
+
 ### Extending the config
 
 Extending the Alley Build Tool webpack configuration is possible by providing a `webpack.config.js` file in the root directory of your project. The Alley Build Tool will look for this file and use it to extend the default configuration.
