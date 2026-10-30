@@ -24,6 +24,14 @@ If you've installed `@alleyinteractive/stylelint-config` locally within your pro
 }
 ```
 
+### Property order
+
+Properties must be in alphabetical order (`order/properties-alphabetical-order`). To sort existing stylesheets automatically, run:
+
+```bash
+$ npx stylelint --fix "**/*.scss"
+```
+
 ### Extending the config
 
 Simply add a `"rules"` key to your config and add your overrides there.
