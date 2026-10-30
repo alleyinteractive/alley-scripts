@@ -4,6 +4,8 @@
 
 This package contains a set of modules used by [Alley](https://alley.com) to aid in building features for the WordPress block editor.
 
+This package is written in 100% TypeScript and ships type declarations for all of its components, hooks, and services.
+
 ## Install
 
 Install this package in your project:
@@ -33,6 +35,38 @@ const MyComponent = () => {
   );
 };
 ```
+
+### TypeScript
+
+Type declarations are included with the package, so no additional `@types` package is needed. In addition to the modules themselves, the package exports types for component props, hook return values, and common WordPress data structures:
+
+```tsx
+import { ImagePicker, usePostMeta } from '@alleyinteractive/block-editor-tools';
+import type { ImagePickerProps, PostMetaSetter, SelectedMedia } from '@alleyinteractive/block-editor-tools';
+
+interface MyMeta {
+  my_image_id: number;
+}
+
+const MyComponent = () => {
+  const [meta, setMeta] = usePostMeta<MyMeta>();
+
+  const onUpdate: ImagePickerProps['onUpdate'] = ({ id }: SelectedMedia) => {
+    setMeta({ ...meta, my_image_id: id });
+  };
+
+  ...
+};
+```
+
+Hooks that return data from the WordPress REST API accept an optional generic to describe the shape of the returned record (e.g. `usePost<MyPostType>(postId)`); they default to the corresponding [`wp-types`](https://www.npmjs.com/package/wp-types) interface.
+
+Exported types include:
+
+* **Components:** `AudioPickerProps`, `CheckboxesProps`, `CheckboxOption`, `CSVUploaderProps`, `ImagePickerProps`, `MediaPickerProps`, `MediaPickerPreviewProps`, `PostPickerProps`, `PostSelectorProps`, `SafeHTMLProps`, `SelectedTerm`, `SelectorItem`, `SelectorProps`, `SortableProps`, `SortableItemProps`, `TermSelectorProps`, `VideoPickerProps`
+* **Hooks:** `GetPostType`, `PostMetaSetter`, `PostMetaValueSetter`, `PostTermsSetter`
+* **Services:** `CSVRow`
+* **Shared:** `Block`, `BlockAttributes`, `EntityRecordOptions`, `MediaObject`, `MediaObjectSize`, `PostMeta`, `SelectedMedia`
 
 Below is the documentation for all available components, hooks, and services.
 
@@ -851,7 +885,7 @@ _Parameters_
 * {File} `file` - The CSV file object.
 
 _Returns_
-* {Promise} - A Promise that will resolve to an array of row objects.
+* {Promise<T[]>} - A Promise that will resolve to an array of row objects. `T` defaults to `CSVRow` (`Record<string, unknown>`).
 
 ### getMediaUrl
 
@@ -860,7 +894,7 @@ Extracts the URL for a media item at a requested size from a media object.
 Given a media object returned from the WordPress REST API, extracts the URL for the media item at the requested size if it exists, or the full size if it does not. Returns an empty string if unable to find either. Uses a superset of the same logic that the Gutenberg Image component uses for selecting the correct image size from a media REST API response.
 
 _Parameters_
-* {object} `media` - A media object returned by the WordPress API.
+* {MediaObject} `media` - A media object returned by the WordPress API.
 * {string} `size` - Media size to request. Default: full
 
 _Returns_
@@ -873,6 +907,8 @@ _Returns_
 This project keeps a [changelog](CHANGELOG.md).
 
 ## Development Process
+
+All source code is TypeScript (`.ts`/`.tsx`), including the webpack and Jest configs; JavaScript source files are not supported by the build or lint configuration.
 
 This package is developed as part of the [Alley Scripts](https://github.com/alleyinteractive/alley-scripts) project on GitHub. The project is organized as a monorepo using [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) and individual packages are published to npm under the [@alleyinteractive](https://www.npmjs.com/org/alleyinteractive) organization.
 

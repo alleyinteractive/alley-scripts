@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-interface SortableItemProps {
+export interface SortableItemProps {
   children: ReactNode;
   index: number;
   list: any[];
