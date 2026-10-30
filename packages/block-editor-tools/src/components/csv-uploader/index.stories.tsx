@@ -1,10 +1,20 @@
 import type { Meta, StoryFn } from '@storybook/react';
 
+import { resolveReadmeLinks } from '../../../../../.storybook/components/readme';
+import readme from './README.md?raw';
+
 import CSVUploader from './index';
 
 export default {
   component: CSVUploader,
   title: 'Block Editor Tools/Components/CSV Uploader',
+  parameters: {
+    docs: {
+      description: {
+        component: resolveReadmeLinks(readme, 'packages/block-editor-tools/src/components/csv-uploader'),
+      },
+    },
+  },
 } as Meta<typeof CSVUploader>;
 
 // @ts-expect-error CSVUploader is not a valid component.
