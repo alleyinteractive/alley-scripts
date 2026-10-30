@@ -6,6 +6,7 @@ This stylelint config:
 * extends the [stylelint-config-sass-guidelines](https://github.com/bjankord/stylelint-config-sass-guidelines) linter. You can view the documented configured lints for the [stylelint-config-sass-guidelines in the projects readme](https://github.com/bjankord/stylelint-config-sass-guidelines/tree/main#documentation).
 * has a peer dependency of [stylelint](https://github.com/stylelint/stylelint).
 * has a peer dependency of [stylelint-config-sass-guidelines](https://github.com/bjankord/stylelint-config-sass-guidelines).
+* has a peer dependency of [stylelint-order](https://github.com/hudochenkov/stylelint-order).
 
 ## Installation
 
@@ -40,7 +41,7 @@ For example, to change the `block-no-empty` to false and turn off the `block-no-
 
 ## Dependencies
 
-This configuration has peer dependencies of [stylelint](https://github.com/stylelint/stylelint) and [stylelint-config-sass-guidelines](https://github.com/bjankord/stylelint-config-sass-guidelines).
+This configuration has peer dependencies of [stylelint](https://github.com/stylelint/stylelint), [stylelint-config-sass-guidelines](https://github.com/bjankord/stylelint-config-sass-guidelines), and [stylelint-order](https://github.com/hudochenkov/stylelint-order).
 
 ## Changelog
 

@@ -1,5 +1,6 @@
 export default {
   extends: "stylelint-config-sass-guidelines",
+  plugins: ["stylelint-order"],
   rules: {
     "max-nesting-depth": [
       3,
@@ -20,6 +21,7 @@ export default {
           "Selector should be written in lowercase with hyphens and/or underscores (selector-class-pattern)"
       }
     ],
+    "order/properties-alphabetical-order": true,
     "selector-no-qualifying-type": null
   }
 };
