@@ -15,7 +15,7 @@
  */
 
 ?>
-<p <?php echo get_block_wrapper_attributes(); ?>>
+<p <?php echo get_block_wrapper_attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by core. ?>>
 	<?php esc_html_e( '{{title}} - hello from a dynamic block!' ); ?>
 </p>
 {{/isDynamicVariant}}
