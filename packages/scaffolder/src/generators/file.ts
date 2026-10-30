@@ -165,6 +165,7 @@ export class FileGenerator extends Generator<FeatureConfig> {
       if (!this.dryRun) {
         try {
           fs.writeFileSync(destination, compiledExpression);
+          this.recordFile(destination);
 
           logger().info(
             `${chalk.greenBright('✔')} Generated ${chalk.green(destination.replace(baseDirectory, '').replace(/^\//, ''))}`,
