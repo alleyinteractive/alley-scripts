@@ -4,11 +4,26 @@ import fs from 'node:fs';
 
 // Services.
 import { logger } from '../logger';
-import { collectInputs } from '../inputs';
+import { collectInputs, definitionsFromFeatureInputs } from '../inputs';
 import { loadFeatureHooks } from '../features/extensions';
 
 // Types.
-import type { FeatureConfig, RegisteredFeature, ScaffolderContext } from '../types';
+import type { InputDefinition, InputValues } from '../inputs';
+import type {
+  FeatureConfig,
+  GeneratedFile,
+  RegisteredFeature,
+  ScaffolderContext,
+} from '../types';
+
+export type GeneratorOptions = {
+  /* Whether the feature is a dry run. */
+  dryRun?: boolean;
+  /* Whether the user can be prompted for missing inputs. */
+  interactive?: boolean;
+  /* Inputs supplied on the command line. */
+  providedInputs?: InputValues;
+};
 
 /**
  * Base generator class.
@@ -25,6 +40,15 @@ export abstract class Generator<T extends RegisteredFeature = FeatureConfig> {
 
   /* Whether the feature is a dry run. */
   public dryRun: boolean = false;
+
+  /* Whether the user can be prompted for missing inputs. */
+  public interactive: boolean = true;
+
+  /* Inputs supplied on the command line. */
+  public providedInputs: InputValues = {};
+
+  /* Files created or modified by the feature. */
+  public files: GeneratedFile[] = [];
 
   /**
    * Constructor
@@ -48,7 +72,30 @@ export abstract class Generator<T extends RegisteredFeature = FeatureConfig> {
       featureDirectory: this.path,
       resolveDestination: (relativePath = '') => this.getDestinationDirectory(relativePath),
       logger: logger(),
+      recordFile: (filePath, action = 'created') => this.recordFile(filePath, action),
     };
+  }
+
+  /**
+   * Record a file created or modified by the feature.
+   */
+  public recordFile(filePath: string, action: GeneratedFile['action'] = 'created') {
+    const absolutePath = path.resolve(process.cwd(), filePath);
+
+    if (!this.files.some((file) => file.path === absolutePath)) {
+      this.files.push({ path: absolutePath, action });
+    }
+  }
+
+  /**
+   * Describe the inputs the feature accepts.
+   */
+  public async describeInputs(): Promise<InputDefinition[]> {
+    if (this.config.type === 'javascript') {
+      return [];
+    }
+
+    return definitionsFromFeatureInputs(this.config.inputs || []);
   }
 
   /**
@@ -90,7 +137,11 @@ export abstract class Generator<T extends RegisteredFeature = FeatureConfig> {
         }
       }
 
-      this.inputs = await collectInputs(featureInputs);
+      this.inputs = await collectInputs(featureInputs, {
+        provided: this.providedInputs,
+        interactive: this.interactive,
+        featureName: this.config.name,
+      });
 
       logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
     }
@@ -169,8 +220,12 @@ export abstract class Generator<T extends RegisteredFeature = FeatureConfig> {
   /**
    * Resolve the inputs for the feature and run it.
    */
-  public async resolveAndInvoke(dryRun: boolean) {
+  public async resolveAndInvoke(options: GeneratorOptions = {}) {
+    const { dryRun = false, interactive = true, providedInputs = {} } = options;
+
     this.dryRun = dryRun;
+    this.interactive = interactive;
+    this.providedInputs = providedInputs;
 
     await this.collectInputs();
 

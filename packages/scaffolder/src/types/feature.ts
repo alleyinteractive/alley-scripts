@@ -10,6 +10,13 @@ export type ScaffolderContext = {
   featureDirectory: string;
   resolveDestination: (relativePath?: string) => string;
   logger: Logger;
+  /* Record a file the feature created or modified, reported by --json. */
+  recordFile: (filePath: string, action?: GeneratedFile['action']) => void;
+};
+
+export type GeneratedFile = {
+  path: string;
+  action: 'created' | 'modified';
 };
 
 export type JavaScriptFeature = {
