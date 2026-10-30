@@ -1,0 +1,39 @@
+name: create-wordpress-plugin@post-type
+description: Add a custom post type feature to a create-wordpress-plugin plugin
+hooks: ./hooks.js
+
+inputs:
+  - name: slug
+    description: "Post type slug (lowercase, dashes or underscores, max 20 characters)"
+    type: string
+  - name: singular
+    description: "Singular label, e.g. Book"
+    type: string
+  - name: plural
+    description: "Plural label (defaults to the singular label pluralized)"
+    type: string
+    required: false
+  - name: public
+    description: "Public?"
+    type: boolean
+    default: true
+  - name: hierarchical
+    description: "Hierarchical?"
+    type: boolean
+    default: false
+  - name: menuIcon
+    description: "Dashicon for the admin menu"
+    type: string
+    default: dashicons-admin-post
+  - name: supports
+    description: "Supported features (comma-separated)"
+    type: string
+    default: title,editor,thumbnail,excerpt,revisions,author,custom-fields
+  - name: rewriteSlug
+    description: "Rewrite slug (defaults to the post type slug)"
+    type: string
+    required: false
+
+files:
+  - source: post-type.php.hbs
+    destination: "src/features/{{ inputs.fileName }}"

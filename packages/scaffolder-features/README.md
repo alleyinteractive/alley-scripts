@@ -14,6 +14,21 @@ This package provides a set of features for the
   PHPUnit tests to [Pest](https://pestphp.com/) using
   [pest-plugin-wordpress](https://github.com/alleyinteractive/pest-plugin-wordpress).
   Run it from the plugin's root. Raises the plugin's minimum PHP version to 8.3.
+- `create-wordpress-plugin@post-type`: Add a custom post type to a
+  create-wordpress-plugin plugin as a `Feature` class in `src/features` and
+  register it in `src/main.php`. Run it from the plugin's root.
+- `create-wordpress-plugin@taxonomy`: Add a custom taxonomy the same way.
+
+Both can run without prompts, which is how AI agents should call them:
+
+```sh
+npx @alleyinteractive/scaffolder@latest create-wordpress-plugin@post-type --non-interactive \
+  --input slug=book --input singular=Book
+npx @alleyinteractive/scaffolder@latest create-wordpress-plugin@taxonomy --non-interactive \
+  --input slug=genre --input singular=Genre --input objectTypes=book
+```
+
+Run either with `--describe` to see every input and its default.
 
 ## Changelog
 

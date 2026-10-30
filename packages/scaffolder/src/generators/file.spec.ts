@@ -38,7 +38,7 @@ describe('generators/file', () => {
     // Inject the inputs that will be used to resolve the destination.
     prompt.inject(['Feature Name']);
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     // Check that the directory was created.
     expect(fs.mkdirSync).toHaveBeenCalledWith(`${process.cwd()}/src/test-feature-a`, { recursive: true });
@@ -56,7 +56,7 @@ describe('generators/file', () => {
     // Inject the inputs that will be used to resolve the destination.
     prompt.inject(['Feature Name']);
 
-    await generator.resolveAndInvoke(true);
+    await generator.resolveAndInvoke({ dryRun: true });
 
     // Check that the directory was not created.
     expect(fs.mkdirSync).not.toHaveBeenCalled();
