@@ -1,6 +1,8 @@
 import React from 'react';
-import { useEntityProp, useEntityId } from '@wordpress/core-data';
+import { store as coreStore, useEntityProp, useEntityId } from '@wordpress/core-data';
 import { useSelect, useRegistry } from '@wordpress/data';
+
+import type { EditorSelectors } from '../types';
 
 /**
  * A custom React hook that wraps useEntityProp for working with postmeta. This
@@ -8,24 +10,32 @@ import { useSelect, useRegistry } from '@wordpress/data';
  * and write postmeta. By default, it operates on postmeta for the current post,
  * but you can optionally pass a post type and post ID in order to get and set
  * post meta for an arbitrary post.
- * @param {string} postType - Optional. The post type to get and set meta for.
- *                            Defaults to the post type of the current post.
- * @param {number} postId - Optional. The post ID to get and set meta for.
- *                          Defaults to the ID of the current post.
- * @returns {array} A tuple containing an object representing postmeta and a setter function.
+ * @param postType - Optional. The post type to get and set meta for.
+ *                   Defaults to the post type of the current post.
+ * @param postId - Optional. The post ID to get and set meta for.
+ *                 Defaults to the ID of the current post.
+ * @returns A tuple containing an object representing postmeta and a setter function.
  */
-const usePostMeta = (postType = null, postId = null) => {
+const usePostMeta = <T extends object = Record<string, unknown>>(
+  postType: string | null = null,
+  postId: number | null = null,
+): [T, (next: T | ((prev: T) => T)) => void] => {
   // Ensure that we have a post type.
-  const type = useSelect((select) => postType || select('core/editor').getCurrentPostType(), []);
+  const type = useSelect(
+    (select) => postType || (select('core/editor') as EditorSelectors).getCurrentPostType(),
+    [],
+  );
 
   // Ensure that we have a post ID.
   const providerId = useEntityId('postType', type);
   const id = postId ?? providerId;
 
   // Create a selector for the latest meta for the setter to optionally use.
-  const { getEditedEntityRecord } = useRegistry().select('core');
+  // DataRegistry's types leave out select().
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { getEditedEntityRecord } = (useRegistry() as any).select(coreStore);
   const getLatestMeta = React.useCallback(
-    () => getEditedEntityRecord('postType', type, id)?.meta,
+    (): T => getEditedEntityRecord('postType', type, id)?.meta,
     [getEditedEntityRecord, type, id],
   );
 
@@ -41,18 +51,18 @@ const usePostMeta = (postType = null, postId = null) => {
    * Ensure meta is an object and set meta is a function. useEntityProp can
    * return `undefined` if the post type doesn't have support for custom-fields.
    */
-  const meta = typeof metaRaw === 'object' ? metaRaw : {};
+  const meta: T = typeof metaRaw === 'object' ? metaRaw : {};
   const setMeta = typeof setMetaRaw === 'function' ? setMetaRaw : setMetaError;
 
   /**
    * Wrapper for the setMeta function that can accept a function as a setter which will get the
    * latest edited meta from the data store.
    *
-   * @param {object|function} next - A new value for meta or a function that takes the current value
-   *                                 and returns a new value.
+   * @param next - A new value for meta or a function that takes the current value
+   *               and returns a new value.
    */
   const setMetaSafe = React.useCallback(
-    (next) => {
+    (next: T | ((prev: T) => T)) => {
       if (typeof next === 'object') {
         setMeta({ ...next });
       } else if (typeof next === 'function') {
