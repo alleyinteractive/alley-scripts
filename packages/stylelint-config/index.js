@@ -21,6 +21,7 @@ export default {
           "Selector should be written in lowercase with hyphens and/or underscores (selector-class-pattern)"
       }
     ],
+    // stylelint-config-sass-guidelines v13 no longer enforces property order.
     "order/properties-alphabetical-order": true,
     "selector-no-qualifying-type": null
   }
