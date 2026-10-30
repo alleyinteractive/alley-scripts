@@ -6,6 +6,7 @@ for projects to speed up development.
 ## Table of Contents
 
 - [Packages](#packages)
+- [Storybook](#storybook)
 - [Adding and Managing Packages](#adding-and-managing-packages)
 - [Versioning and Publishing Packages in this Monorepo](#versioning-and-publishing-packages-in-this-monorepo)
 - [Snapshot Releases](#snapshot-releases)
@@ -29,6 +30,10 @@ This monorepo contains the following packages:
 - [`@alleyinteractive/scaffolder`](./packages/scaffolder/README.md)
 - [`@alleyinteractive/stylelint-config`](./packages/stylelint-config/README.md)
 - [`@alleyinteractive/tsconfig`](./packages/tsconfig/README.md)
+
+## Storybook
+
+Every package is documented in Storybook at [alley-scripts.alley.dev](https://alley-scripts.alley.dev/), with live demos of the Block Editor Tools components, hooks, and services. Run it locally with `npm run storybook`. Documentation comes from the README next to each component, hook, and package, so keep those READMEs up to date when you change something. See [docs/storybook.md](./docs/storybook.md) for how to add new components, hooks, and packages.
 
 ## Adding and Managing Packages
 

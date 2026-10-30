@@ -1,6 +1,9 @@
 import { Preview } from "@storybook/react";
 import { WithStyles } from "./decorators/with-styles";
 
+import "@wordpress/core-data";
+import "./mocks/api";
+
 const preview: Preview = {
   decorators: [
     WithStyles,
