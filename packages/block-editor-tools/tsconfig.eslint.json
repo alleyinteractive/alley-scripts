@@ -6,6 +6,7 @@
   },
   "include": [
     "./src/**/*",
+    "./__tests__/**/*",
     "./jest.config.js",
     "./.eslintrc.js",
     "./webpack.config.js",
