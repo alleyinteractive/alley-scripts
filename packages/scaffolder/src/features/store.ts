@@ -344,7 +344,8 @@ export class FeatureStore {
       const projectRoot = path.join(__dirname, '..', '..');
 
       if (fs.existsSync(path.join(projectRoot, '..', 'scaffolder-features'))) {
-        paths.push(path.join(projectRoot, '..', 'scaffolder-features'));
+        // The packages directory, so both scaffolder/*/config.yml and package.json globs match.
+        paths.push(path.join(projectRoot, '..'));
       }
     }
 
