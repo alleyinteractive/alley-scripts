@@ -1,5 +1,5 @@
 // Internal dependencies.
-import { useInnerBlocks, useParentBlock } from '..';
+import { useInnerBlocks, useParentClientId } from '..';
 
 /**
  * Gets the current index of a specific block relative to its siblings.
@@ -9,7 +9,7 @@ import { useInnerBlocks, useParentBlock } from '..';
  */
 const useInnerBlockIndex = (clientId) => {
   // Get the parent block.
-  const parentBlockClientId = useParentBlock(clientId);
+  const parentBlockClientId = useParentClientId(clientId);
 
   // Get all children of that parent block.
   const childBlocks = useInnerBlocks(parentBlockClientId);

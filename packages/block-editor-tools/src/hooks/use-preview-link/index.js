@@ -5,6 +5,6 @@ import { useSelect } from '@wordpress/data';
  *
  * @returns string
  */
-const usePreviewLink = () => useSelect((select) => select('core').getEditedPostPreviewLink(), []);
+const usePreviewLink = () => useSelect((select) => select('core/editor').getEditedPostPreviewLink(), []);
 
 export default usePreviewLink;
