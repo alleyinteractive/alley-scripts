@@ -10,10 +10,15 @@ import path from 'node:path';
 import { ConfigurationStore, getConfigurationStore } from '../configuration';
 import { logger } from '../logger';
 import { resolveSourceToDirectory } from './sources';
+import { loadFeaturePackage } from './extensions';
 import { parseYamlFile, validateFeatureConfiguration } from '../yaml';
 
 // Types.
-import type { DirectorySource, FeatureConfig, Source } from '../types';
+import type {
+  DirectorySource, FeatureConfig, RegisteredFeature, Source,
+} from '../types';
+
+type NpmPathsResolver = () => string[];
 
 /**
  * Feature Store
@@ -21,15 +26,21 @@ import type { DirectorySource, FeatureConfig, Source } from '../types';
 export class FeatureStore {
   private config: ConfigurationStore;
 
+  private readonly npmPaths: NpmPathsResolver;
+
   private readonly sources: DirectorySource[] = [];
 
-  private readonly features: Record<string, FeatureConfig[]> = {};
+  private readonly features: Record<string, RegisteredFeature[]> = {};
 
   /**
    * Constructor
    */
-  public constructor(store: ConfigurationStore) {
+  public constructor(
+    store: ConfigurationStore,
+    npmPaths: NpmPathsResolver = FeatureStore.getNpmPaths,
+  ) {
     this.config = store;
+    this.npmPaths = npmPaths;
   }
 
   /**
@@ -51,7 +62,7 @@ export class FeatureStore {
   /**
    * Add features to the store.
    */
-  public add(directory: string, features: FeatureConfig[] | FeatureConfig): void {
+  public add(directory: string, features: RegisteredFeature[] | RegisteredFeature): void {
     if (!this.features[directory]) {
       this.features[directory] = [];
     }
@@ -77,7 +88,7 @@ export class FeatureStore {
   /**
    * Retrieve all features from the store by their directory.
    */
-  public all(): Record<string, FeatureConfig[]> {
+  public all(): Record<string, RegisteredFeature[]> {
     return this.features;
   }
 
@@ -213,9 +224,7 @@ export class FeatureStore {
    * Load configurations from all available node modules.
    */
   private async loadFromNodeModules() {
-    const paths = uniq(
-      FeatureStore.getLocalNpmPaths().concat(FeatureStore.getGlobalNpmPaths()),
-    );
+    const paths = this.npmPaths();
 
     if (!paths.length) {
       logger().debug('No NPM paths found to load configurations from.');
@@ -225,8 +234,8 @@ export class FeatureStore {
 
     logger().debug(`Loading configurations from NPM paths: ${chalk.blue(paths.join(', '))}`);
 
-    const features = await Promise.all(
-      paths.map((nodeModulesPath) => fg.glob(
+    const [features, manifests] = await Promise.all([
+      Promise.all(paths.map((nodeModulesPath) => fg.glob(
         [
           // Same-level (e.g. scaffolder/config.yml)
           'scaffolder/*/config.yml',
@@ -239,12 +248,60 @@ export class FeatureStore {
           cwd: nodeModulesPath,
           absolute: true,
         },
-      ).catch(() => [])),
-    )
-      .then((item) => item.flat().filter((file, index, arr) => arr.indexOf(file) === index))
-      .then((files) => this.loadConfigurationFiles(files));
+      ).catch(() => []))),
+      Promise.all(paths.map((nodeModulesPath) => fg.glob(
+        [
+          '*/package.json',
+          '@*/*/package.json',
+        ],
+        {
+          cwd: nodeModulesPath,
+          absolute: true,
+        },
+      ).catch(() => []))),
+    ]);
 
-    logger().debug(`Loaded ${features.length} features from NPM paths.`);
+    const loadedFeatures = await this.loadConfigurationFiles(
+      features.flat().filter((file, index, arr) => arr.indexOf(file) === index),
+    );
+
+    const loadedPackages = await Promise.all(
+      manifests
+        .flat()
+        .filter((file, index, arr) => arr.indexOf(file) === index)
+        .map((manifestPath) => this.loadFeaturePackageManifest(manifestPath)),
+    );
+
+    logger().debug(`Loaded ${loadedFeatures.length + loadedPackages.flat().length} features from NPM paths.`);
+  }
+
+  /**
+   * Load JavaScript features declared by a package manifest.
+   */
+  private async loadFeaturePackageManifest(manifestPath: string): Promise<RegisteredFeature[]> {
+    try {
+      const manifest = JSON.parse(await fs.promises.readFile(manifestPath, 'utf8')) as { scaffolder?: unknown };
+
+      if (typeof manifest.scaffolder !== 'string') {
+        return [];
+      }
+
+      const loaded = await loadFeaturePackage(manifestPath);
+      this.add(loaded.directory, loaded.features);
+
+      return loaded.features;
+    } catch (error: any) {
+      logger().warn(`Error loading JavaScript scaffolder package from ${chalk.yellow(manifestPath)}: ${error.message}`);
+
+      return [];
+    }
+  }
+
+  /**
+   * Retrieve all local and global node_modules paths without duplicates.
+   */
+  public static getNpmPaths(): string[] {
+    return uniq(FeatureStore.getLocalNpmPaths().concat(FeatureStore.getGlobalNpmPaths()));
   }
 
   /**

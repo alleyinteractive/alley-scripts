@@ -7,11 +7,12 @@ import { parseExpression } from '../expressions';
 import { createGit } from '../git';
 import { logger } from '../logger';
 import { parseGitHubUrl, runCommand } from '../helpers';
+import type { FeatureConfig } from '../types';
 
 /**
  * Repository-based feature.
  */
-export class RepositoryGenerator extends Generator {
+export class RepositoryGenerator extends Generator<FeatureConfig> {
   /**
    * Resolve the git URL from the configuration.
    *

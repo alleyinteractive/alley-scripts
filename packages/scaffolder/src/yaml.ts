@@ -31,6 +31,7 @@ const featureConfigSchema = () => Joi.object({
   name: Joi.string(),
   description: Joi.string(),
   type: Joi.string().default('file').valid('composer', 'file', 'repository'),
+  hooks: Joi.string(),
   config: Joi.object({
     'destination-resolver': Joi.string().valid('cwd', 'theme', 'plugin', 'relative', 'relative-parent').default('cwd'),
   }),

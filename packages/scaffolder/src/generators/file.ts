@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { glob } from 'fast-glob';
 import path from 'node:path';
 
-import { FeatureFile } from '../types';
+import type { FeatureConfig, FeatureFile } from '../types';
 import { logger } from '../logger';
 import { Generator } from './generator';
 import { parseExpression, parseFalsy, parseObjectExpression } from '../expressions';
@@ -15,7 +15,7 @@ import handleError from '../error';
  * Can generate a set of files/folders in a new source directory while parsing
  * the files/folders for expressions based on the user's input.
  */
-export class FileGenerator extends Generator {
+export class FileGenerator extends Generator<FeatureConfig> {
   /**
    * Collect the feature source files and parse the expressions.
    *

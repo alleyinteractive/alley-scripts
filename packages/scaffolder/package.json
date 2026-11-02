@@ -3,7 +3,7 @@
   "description": "Quickly scaffold project template files.",
   "license": "GPL-2.0-or-later",
   "name": "@alleyinteractive/scaffolder",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "engines": {
     "node": ">=22.0.0 <26.0.0",
     "npm": ">=8"
@@ -51,8 +51,8 @@
     "lint:fix": "eslint src --fix",
     "prepublish": "npm run build",
     "pretest": "check-node-version --package",
-    "test:watch": "jest --watchAll",
-    "test": "jest"
+    "test:watch": "node --experimental-vm-modules --no-compilation-cache ../../node_modules/jest/bin/jest.js --watchAll",
+    "test": "node --experimental-vm-modules --no-compilation-cache ../../node_modules/jest/bin/jest.js"
   },
   "repository": {
     "type": "git",

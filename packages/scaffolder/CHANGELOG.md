@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- a18bd3bb: Add support for JavaScript feature packages and lifecycle hooks in YAML features.
+
 ## 0.3.3
 
 ### Patch Changes

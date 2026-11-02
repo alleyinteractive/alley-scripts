@@ -38,6 +38,9 @@ directory of the project.
 4. [Writing Stub Files](./docs/4-writing-stub-files.md)
 5. [Configuration](./docs/5-configuration.md)
 
+For extension authors, see [JavaScript feature packages](./docs/2-features.md#javascript-feature-packages)
+and [JavaScript hooks for YAML features](./docs/2-features.md#javascript-hooks-for-yaml-features).
+
 ## Changelog
 
 This project keeps a [changelog](CHANGELOG.md).

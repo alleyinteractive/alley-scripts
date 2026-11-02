@@ -4,17 +4,17 @@ import prompts, { Choice } from 'prompts';
 import handleError from '../error';
 import { logger } from '../logger';
 import { getFeatureStore } from './store';
-import type { FeatureConfig } from '../types';
+import type { RegisteredFeature } from '../types';
 
 /**
  * Prompt the user to select a feature from a list of features.
  *
  * Allows the user to select a feature by name using a fuzzy search.
  *
- * @returns {Promise<[FeatureConfig, string]>} The selected feature and the path to the
+ * @returns {Promise<[RegisteredFeature, string]>} The selected feature and the path to the
  *                                             configuration directory.
  */
-export async function promptUserForFeature(featureName?: string): Promise<[FeatureConfig, string]> { // eslint-disable-line consistent-return, max-len
+export async function promptUserForFeature(featureName?: string): Promise<[RegisteredFeature, string]> { // eslint-disable-line consistent-return, max-len
   const store = getFeatureStore().all();
 
   // Create a smaller list of available features to prompt the user with.

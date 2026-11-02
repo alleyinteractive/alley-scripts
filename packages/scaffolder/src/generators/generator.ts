@@ -5,16 +5,17 @@ import fs from 'node:fs';
 // Services.
 import { logger } from '../logger';
 import { collectInputs } from '../inputs';
+import { loadFeatureHooks } from '../features/extensions';
 
 // Types.
-import type { FeatureConfig, FeatureContext } from '../types';
+import type { FeatureConfig, RegisteredFeature, ScaffolderContext } from '../types';
 
 /**
  * Base generator class.
  */
-export abstract class Generator {
+export abstract class Generator<T extends RegisteredFeature = FeatureConfig> {
   /* Feature configuration. */
-  public config: FeatureConfig;
+  public config: T;
 
   /* Path to the directory that defined the feature. */
   public path: string;
@@ -28,7 +29,7 @@ export abstract class Generator {
   /**
    * Constructor
    */
-  constructor(config: FeatureConfig, directory: string) {
+  constructor(config: T, directory: string) {
     this.config = config;
     this.path = directory;
   }
@@ -36,57 +37,63 @@ export abstract class Generator {
   /**
    * Collect the context variables passed to the template engine.
    */
-  public collectContextVariables() {
-    const { name } = this.config;
+  public collectContextVariables(): ScaffolderContext {
+    const { name, description } = this.config;
 
     return {
       cwd: process.cwd(),
-      feature: { name },
+      feature: { name, description },
       inputs: this.inputs,
-    } as FeatureContext;
+      dryRun: this.dryRun,
+      featureDirectory: this.path,
+      resolveDestination: (relativePath = '') => this.getDestinationDirectory(relativePath),
+      logger: logger(),
+    };
   }
 
   /**
    * Resolve the inputs for the feature before being run.
    */
   public async collectInputs() {
-    const {
-      config: {
-        'destination-resolver': destinationResolver = 'cwd',
-      } = {},
-      inputs: featureInputs = [],
-    } = this.config;
+    if (this.config.type !== 'javascript') {
+      const {
+        config: {
+          'destination-resolver': destinationResolver = 'cwd',
+        } = {},
+        inputs: featureInputs = [],
+      } = this.config;
 
-    const cwd = process.cwd();
+      const cwd = process.cwd();
 
-    // Intelligently prompt the user if they would like to place their
-    // theme/plugin in the proper destination.
-    if ((cwd.includes('wp-content') || fs.existsSync(`${cwd}/wp-content`)) && ['theme', 'plugin'].includes(destinationResolver)) {
-      const wpContentPath = cwd.includes('wp-content')
-        ? `${cwd.split('/wp-content')[0]}/wp-content`
-        : `${cwd}/wp-content`;
+      // Intelligently prompt the user if they would like to place their
+      // theme/plugin in the proper destination.
+      if ((cwd.includes('wp-content') || fs.existsSync(`${cwd}/wp-content`)) && ['theme', 'plugin'].includes(destinationResolver)) {
+        const wpContentPath = cwd.includes('wp-content')
+          ? `${cwd.split('/wp-content')[0]}/wp-content`
+          : `${cwd}/wp-content`;
 
-      // Determine if the destination path should be resolved to a plugin or theme.
-      if (destinationResolver === 'theme' && !cwd.endsWith('wp-content/themes')) {
-        featureInputs.push({
-          name: 'destination-resolver-theme',
-          description: `Would you like to place the theme in the ${chalk.green(`${wpContentPath}/themes`)} directory?`,
-          type: 'boolean',
-          default: true,
-        });
-      } else if (destinationResolver === 'plugin' && !cwd.endsWith('wp-content/plugins')) {
-        featureInputs.push({
-          name: 'destination-resolver-plugin',
-          description: `Would you like to place the plugin in the ${chalk.green(`${wpContentPath}/plugins`)} directory?`,
-          type: 'boolean',
-          default: true,
-        });
+        // Determine if the destination path should be resolved to a plugin or theme.
+        if (destinationResolver === 'theme' && !cwd.endsWith('wp-content/themes')) {
+          featureInputs.push({
+            name: 'destination-resolver-theme',
+            description: `Would you like to place the theme in the ${chalk.green(`${wpContentPath}/themes`)} directory?`,
+            type: 'boolean',
+            default: true,
+          });
+        } else if (destinationResolver === 'plugin' && !cwd.endsWith('wp-content/plugins')) {
+          featureInputs.push({
+            name: 'destination-resolver-plugin',
+            description: `Would you like to place the plugin in the ${chalk.green(`${wpContentPath}/plugins`)} directory?`,
+            type: 'boolean',
+            default: true,
+          });
+        }
       }
+
+      this.inputs = await collectInputs(featureInputs);
+
+      logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
     }
-
-    this.inputs = await collectInputs(featureInputs);
-
-    logger().debug(`Resolved ${Object.keys(this.inputs).length} input(s) for ${this.config.name}: ${JSON.stringify(this.inputs, null, 2)}`);
   }
 
   /**
@@ -96,16 +103,14 @@ export abstract class Generator {
     const cwd = process.cwd();
 
     const {
-      config: {
-        config: {
-          'destination-resolver': destinationResolver = 'cwd',
-        } = {},
-      } = {},
       inputs: {
         'destination-resolver-plugin': inputResolveToPluginDirectory = false,
         'destination-resolver-theme': inputResolveToThemeDirectory = false,
       } = {},
     } = this;
+    const destinationResolver = this.config.type !== 'javascript'
+      ? this.config.config?.['destination-resolver'] || 'cwd'
+      : 'cwd';
 
     if (['plugin', 'theme'].includes(destinationResolver)) {
       const wpContentPath = fs.existsSync(`${cwd}/wp-content`)
@@ -141,6 +146,27 @@ export abstract class Generator {
   }
 
   /**
+   * Run a YAML lifecycle hook with feature and module provenance.
+   */
+  private async runHook(
+    stage: 'beforeGenerate' | 'afterGenerate',
+    hook: (context: ScaffolderContext) => Promise<void> | void,
+    context: ScaffolderContext,
+    hooksPath: string,
+  ): Promise<void> {
+    const modulePath = path.resolve(this.path, hooksPath);
+
+    try {
+      await hook(context);
+    } catch (error) {
+      throw new Error(
+        `Error running "${stage}" lifecycle hook for feature "${this.config.name}" from "${hooksPath}" resolved to "${modulePath}".`,
+        { cause: error },
+      );
+    }
+  }
+
+  /**
    * Resolve the inputs for the feature and run it.
    */
   public async resolveAndInvoke(dryRun: boolean) {
@@ -150,7 +176,26 @@ export abstract class Generator {
 
     logger().debug(`Running feature with config: ${JSON.stringify(this.config, null, 2)}`);
 
+    if (this.config.type === 'javascript' || !this.config.hooks) {
+      await this.invoke();
+
+      return;
+    }
+
+    const hooksPath = this.config.hooks;
+    const hooks = await loadFeatureHooks(this.path, hooksPath);
+    const context = this.collectContextVariables();
+
+    if (hooks.beforeGenerate) {
+      await this.runHook('beforeGenerate', hooks.beforeGenerate, context, hooksPath);
+    }
+
+    this.inputs = context.inputs;
     await this.invoke();
+
+    if (hooks.afterGenerate) {
+      await this.runHook('afterGenerate', hooks.afterGenerate, context, hooksPath);
+    }
   }
 
   /**

@@ -53,6 +53,9 @@ By default the following command options are applied when running the `build` an
 * `--webpack-copy-php` – enables copying all PHP files from the blocks directory and its subdirectories to the output directory.
 * `--webpack-src-dir` – Allows customization of the blocks source code directory. Default is `blocks`.
 
+### Block versions
+`build` and `start` set each built block's `version` to a hash of the files built for it, PHP and templates included, so a block's cached scripts and styles bust when that block changes. The blocks manifest gets the same versions. Leave the `version` in a block's source `block.json` alone.
+
 ### `Additional CLI options`
 
 * `--webpack-entries-dir` `<string>` - The directory where wp-scripts will detect entry point directories that are not blocks. These entries can be slotfills or webpack entry points (Default: `entries`)

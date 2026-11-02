@@ -3,6 +3,7 @@ import type { Configuration } from 'webpack';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 import { buildConfig } from './webpack.config';
+import { VersionBlocksPlugin } from '../utils/version-blocks';
 
 /**
  * Pull the CleanWebpackPlugin instance out of a built config's plugins and
@@ -66,14 +67,15 @@ const makeModuleWpConfig = (): Configuration => ({
 
 describe('buildConfig', () => {
   describe('{ isModule: false, isArrayMode: false } — the classic single-object path', () => {
-    it('forces clean, adds the three extra plugins, merges the entries directory, and sets devServer in development', () => {
+    it('forces clean, adds the four extra plugins, merges the entries directory, and sets devServer in development', () => {
       const result = buildConfig(makeScriptWpConfig(), { isModule: false, isArrayMode: false });
 
       // `clean` is forced (development => false), and the property is present.
       expect(result.output).toHaveProperty('clean', false);
 
-      // The three build-tool plugins are appended to the wp-scripts plugins.
-      expect(result.plugins).toHaveLength(2 + 3);
+      // VersionBlocksPlugin is prepended and the three other build-tool plugins appended.
+      expect(result.plugins).toHaveLength(1 + 2 + 3);
+      expect(result.plugins?.[0]).toBeInstanceOf(VersionBlocksPlugin);
 
       // The script entry merges the `entries/` directory.
       const entry = (result.entry as () => Record<string, string>)();
@@ -127,7 +129,7 @@ describe('buildConfig', () => {
       expect(result.output).not.toHaveProperty('clean');
     });
 
-    it('adds none of the three extra plugins', () => {
+    it('adds none of the four extra plugins', () => {
       expect(result.plugins).toHaveLength(2);
     });
 
@@ -149,8 +151,9 @@ describe('buildConfig', () => {
   describe('{ isModule: false, isArrayMode: true } — the script half of a module build', () => {
     const result = buildConfig(makeScriptWpConfig(), { isModule: false, isArrayMode: true });
 
-    it('retains its three extra plugins', () => {
-      expect(result.plugins).toHaveLength(2 + 3);
+    it('retains its four extra plugins', () => {
+      expect(result.plugins).toHaveLength(1 + 2 + 3);
+      expect(result.plugins?.[0]).toBeInstanceOf(VersionBlocksPlugin);
     });
 
     it('suppresses clean to avoid the cross-compiler race', () => {

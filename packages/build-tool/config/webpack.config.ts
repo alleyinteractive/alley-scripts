@@ -9,6 +9,8 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 // eslint-disable-next-line import/no-unresolved
 import { getEntries, processFilename } from '../utils/webpack';
+// eslint-disable-next-line import/no-unresolved
+import { VersionBlocksPlugin } from '../utils/version-blocks';
 
 interface WPScriptsConfig extends Configuration {
   devServer?: WebpackDevServerConfiguration;
@@ -117,6 +119,12 @@ function buildConfig(
    * script-pipeline artifacts.
    */
   const plugins: Configuration['plugins'] = [
+    /**
+     * Ahead of the defaults, so the blocks are versioned before the manifest is
+     * built from them. Script config only, since that's where wp-scripts puts
+     * the BlocksManifestPlugin.
+     */
+    ...(isModule ? [] : [new VersionBlocksPlugin()]),
     ...(Array.isArray(wpConfig.plugins) ? wpConfig.plugins : []),
     ...(isModule ? [] : [
       new CopyWebpackPlugin({

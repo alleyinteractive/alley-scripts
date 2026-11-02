@@ -14,7 +14,7 @@
         "php": "^8.0"
     },
     "require-dev": {
-        "alleyinteractive/alley-coding-standards": "^1.0"
+        "alleyinteractive/alley-coding-standards": "^2.5.0"
     },
     "config": {
         "sort-packages": true,
