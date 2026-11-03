@@ -29,6 +29,27 @@ export const raisePhpConstraint = (constraint) => (
   isBelowMinimum(constraint) ? `^${minimumPhp}` : constraint
 );
 
+export const AUTOLOADER_PACKAGE = 'alleyinteractive/composer-wordpress-autoloader';
+
+/**
+ * Check whether a composer.json manifest depends on composer-wordpress-autoloader.
+ */
+export const usesAutoloader = (composer) => (
+  AUTOLOADER_PACKAGE in { ...composer.require, ...composer['require-dev'] }
+);
+
+/**
+ * Require the composer-wordpress-autoloader release that can run alongside Pest's Composer plugin.
+ */
+export const raiseAutoloaderConstraint = (composer) => Object.fromEntries(
+  Object.entries(composer).map(([key, value]) => [
+    key,
+    ['require', 'require-dev'].includes(key) && value[AUTOLOADER_PACKAGE]
+      ? { ...value, [AUTOLOADER_PACKAGE]: '^1.4.1' }
+      : value,
+  ]),
+);
+
 /**
  * Point Composer scripts that ran PHPUnit at Pest instead.
  */

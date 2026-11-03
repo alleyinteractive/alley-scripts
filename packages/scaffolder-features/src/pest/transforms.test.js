@@ -4,6 +4,7 @@ import { describe, it } from 'node:test';
 import {
   pestComposerScripts,
   pestConfig,
+  raiseAutoloaderConstraint,
   raisePhpConstraint,
   raisePhpcsTestVersion,
   raiseRequiresPhpHeader,
@@ -18,6 +19,20 @@ describe('pest transforms', () => {
     assert.equal(usesPest({ 'require-dev': { 'pestphp/pest': '^4.0' } }), true);
     assert.equal(usesPest({ 'require-dev': { 'mantle-framework/testkit': '^1.15' } }), false);
     assert.equal(usesPest({}), false);
+  });
+
+  it('requires an autoloader release compatible with Pest', () => {
+    assert.deepEqual(
+      raiseAutoloaderConstraint({
+        require: { php: '^8.4', 'alleyinteractive/composer-wordpress-autoloader': '^1.0' },
+        'require-dev': { 'mantle-framework/testkit': '^1.15' },
+      }),
+      {
+        require: { php: '^8.4', 'alleyinteractive/composer-wordpress-autoloader': '^1.4.1' },
+        'require-dev': { 'mantle-framework/testkit': '^1.15' },
+      },
+    );
+    assert.deepEqual(raiseAutoloaderConstraint({ require: { php: '^8.4' } }), { require: { php: '^8.4' } });
   });
 
   it('raises PHP constraints below 8.3', () => {

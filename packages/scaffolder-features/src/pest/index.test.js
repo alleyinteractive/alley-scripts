@@ -47,6 +47,20 @@ describe('convert-plugin-to-pest', () => {
     assert.ok(ctx.messages.some((message) => message.includes('vendor/bin/pest --drift')));
   });
 
+  it('updates composer-wordpress-autoloader before installing Pest', async () => {
+    const root = await fixture();
+    await fs.writeFile(path.join(root, 'composer.json'), JSON.stringify({
+      require: { php: '^8.2', 'alleyinteractive/composer-wordpress-autoloader': '^1.0' },
+    }));
+    const ctx = context(root, { dryRun: true });
+
+    await feature.generate(ctx);
+
+    const commands = ctx.messages.filter((message) => message.startsWith('Would run: '));
+    assert.equal(commands[0], 'Would run: composer update --no-interaction alleyinteractive/composer-wordpress-autoloader');
+    assert.match(commands[1], /composer require .*pest-plugin-wordpress/);
+  });
+
   it('refuses to convert a project that already uses Pest', async () => {
     const root = await fixture();
     await fs.writeFile(path.join(root, 'composer.json'), JSON.stringify({

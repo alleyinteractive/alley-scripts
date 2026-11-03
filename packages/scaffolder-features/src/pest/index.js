@@ -4,15 +4,18 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 import {
+  AUTOLOADER_PACKAGE,
   pestComposerScripts,
   pestConfig,
   pestFeatureTestStub,
+  raiseAutoloaderConstraint,
   raisePhpConstraint,
   raisePhpcsTestVersion,
   raiseRequiresPhpHeader,
   raiseWorkflowPhpMatrix,
   stripUsesTestCase,
   testCaseClass,
+  usesAutoloader,
   usesPest,
 } from './transforms.js';
 
@@ -127,7 +130,7 @@ export default {
     const tag = await packageTag(root, composer);
 
     await updateFile(composerFile, () => {
-      const updated = { ...composer };
+      const updated = raiseAutoloaderConstraint(composer);
 
       if (updated.require?.php) {
         updated.require = { ...updated.require, php: raisePhpConstraint(updated.require.php) };
@@ -172,16 +175,21 @@ export default {
       context,
     );
 
-    const commands = [
-      'composer require --dev --with-all-dependencies --no-interaction alleyinteractive/pest-plugin-wordpress pestphp/pest-plugin-drift',
-      'vendor/bin/pest --drift',
-      'composer remove --dev --no-interaction pestphp/pest-plugin-drift',
-      'vendor/bin/phpcbf tests',
-    ];
+    // Older autoloader releases crash Composer once Pest's plugin is installed, and an
+    // upgrade only takes effect in the next Composer run, so it gets its own run first.
+    const updateAutoloader = usesAutoloader(composer)
+      ? `composer update --no-interaction ${AUTOLOADER_PACKAGE}`
+      : null;
+    const requirePest = 'composer require --dev --with-all-dependencies --no-interaction alleyinteractive/pest-plugin-wordpress pestphp/pest-plugin-drift';
+    const drift = 'vendor/bin/pest --drift';
+    const removeDrift = 'composer remove --dev --no-interaction pestphp/pest-plugin-drift';
+    const phpcbf = 'vendor/bin/phpcbf tests';
 
     if (dryRun) {
       logger.info('Would write tests/Pest.php.');
-      commands.forEach((command) => logger.info(`Would run: ${command}`));
+      [updateAutoloader, requirePest, drift, removeDrift, phpcbf]
+        .filter(Boolean)
+        .forEach((command) => logger.info(`Would run: ${command}`));
       return;
     }
 
@@ -189,11 +197,16 @@ export default {
 
     const existingTests = new Set(await listFiles(path.join(root, 'tests')));
 
-    logger.info(`Running: ${commands[0]}`);
-    await runCommand(commands[0], root);
+    if (updateAutoloader) {
+      logger.info(`Running: ${updateAutoloader}`);
+      await runCommand(updateAutoloader, root);
+    }
 
-    logger.info(`Running: ${commands[1]}`);
-    await runCommand(commands[1], root);
+    logger.info(`Running: ${requirePest}`);
+    await runCommand(requirePest, root);
+
+    logger.info(`Running: ${drift}`);
+    await runCommand(drift, root);
 
     // Drift runs `pest --init` first, which adds example tests and a TestCase.php in the wrong namespace.
     const createdByDrift = (await listFiles(path.join(root, 'tests')))
@@ -210,13 +223,13 @@ export default {
       )));
     }
 
-    logger.info(`Running: ${commands[2]}`);
-    await runCommand(commands[2], root);
+    logger.info(`Running: ${removeDrift}`);
+    await runCommand(removeDrift, root);
 
     if (existsSync(path.join(root, 'vendor', 'bin', 'phpcbf'))) {
-      logger.info(`Running: ${commands[3]}`);
+      logger.info(`Running: ${phpcbf}`);
       // phpcbf exits 1 when it fixed files and 2 when some errors remain.
-      const code = await runCommand(commands[3], root, [0, 1, 2]);
+      const code = await runCommand(phpcbf, root, [0, 1, 2]);
 
       if (code === 2) {
         logger.warn('phpcbf could not fix every coding standards error in tests/. Run "composer phpcs" to review them.');
