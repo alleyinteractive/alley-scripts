@@ -2,7 +2,7 @@
 import type { Configuration } from 'webpack';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
-import { buildConfig } from './webpack.config';
+import { buildConfig, findBlocksManifestPlugin } from './webpack.config';
 import { VersionBlocksPlugin } from '../utils/version-blocks';
 
 /**
@@ -64,6 +64,14 @@ const makeModuleWpConfig = (): Configuration => ({
     alias: { existing: '/existing' },
   },
 });
+
+/**
+ * Stand-in for wp-scripts' unexported BlocksManifestPlugin, which build-tool finds by name.
+ */
+class BlocksManifestPlugin {
+  // eslint-disable-next-line class-methods-use-this
+  apply(): void {}
+}
 
 describe('buildConfig', () => {
   describe('{ isModule: false, isArrayMode: false } — the classic single-object path', () => {
@@ -129,8 +137,21 @@ describe('buildConfig', () => {
       expect(result.output).not.toHaveProperty('clean');
     });
 
-    it('adds none of the four extra plugins', () => {
-      expect(result.plugins).toHaveLength(2);
+    it('adds only VersionBlocksPlugin, ahead of the wp-scripts plugins', () => {
+      expect(result.plugins).toHaveLength(1 + 2);
+      expect(result.plugins?.[0]).toBeInstanceOf(VersionBlocksPlugin);
+    });
+
+    it('runs the script config\'s blocks manifest plugin after its own plugins', () => {
+      const manifestPlugin = { apply: jest.fn() };
+      const withManifest = buildConfig(
+        makeModuleWpConfig(),
+        { isModule: true, isArrayMode: true, blocksManifestPlugin: manifestPlugin },
+      );
+
+      expect(withManifest.plugins).toHaveLength(1 + 2 + 1);
+      expect(withManifest.plugins?.[0]).toBeInstanceOf(VersionBlocksPlugin);
+      expect(withManifest.plugins?.[3]).toBe(manifestPlugin);
     });
 
     it('sets no devServer', () => {
@@ -156,6 +177,16 @@ describe('buildConfig', () => {
       expect(result.plugins?.[0]).toBeInstanceOf(VersionBlocksPlugin);
     });
 
+    it('does not add a second blocks manifest plugin', () => {
+      const manifestPlugin = { apply: jest.fn() };
+      const withManifest = buildConfig(
+        makeScriptWpConfig(),
+        { isModule: false, isArrayMode: true, blocksManifestPlugin: manifestPlugin },
+      );
+
+      expect(withManifest.plugins).not.toContain(manifestPlugin);
+    });
+
     it('suppresses clean to avoid the cross-compiler race', () => {
       expect(result.output).not.toHaveProperty('clean');
     });
@@ -163,6 +194,54 @@ describe('buildConfig', () => {
     it('disables the CleanWebpackPlugin initial wipe so it cannot delete module output', () => {
       expect(getCleanPlugin(result).cleanOnceBeforeBuildPatterns).toEqual([]);
     });
+  });
+});
+
+describe('findBlocksManifestPlugin', () => {
+  const originalManifestEnv = process.env.WP_BLOCKS_MANIFEST;
+  let warn: jest.SpyInstance;
+
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warn.mockRestore();
+    if (originalManifestEnv === undefined) {
+      delete process.env.WP_BLOCKS_MANIFEST;
+    } else {
+      process.env.WP_BLOCKS_MANIFEST = originalManifestEnv;
+    }
+  });
+
+  it('returns the BlocksManifestPlugin instance without warning', () => {
+    process.env.WP_BLOCKS_MANIFEST = 'true';
+    const manifestPlugin = new BlocksManifestPlugin();
+    const wpConfig = {
+      ...makeScriptWpConfig(),
+      plugins: ['wp-plugin-a', manifestPlugin],
+    } as unknown as Configuration;
+
+    expect(findBlocksManifestPlugin(wpConfig)).toBe(manifestPlugin);
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('warns when the manifest is enabled but the plugin is missing', () => {
+    process.env.WP_BLOCKS_MANIFEST = 'true';
+
+    expect(findBlocksManifestPlugin(makeScriptWpConfig())).toBeUndefined();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('BlocksManifestPlugin was not found'));
+  });
+
+  it.each([undefined, 'false', '0'])('does not warn when WP_BLOCKS_MANIFEST is %p', (value) => {
+    if (value === undefined) {
+      delete process.env.WP_BLOCKS_MANIFEST;
+    } else {
+      process.env.WP_BLOCKS_MANIFEST = value;
+    }
+
+    expect(findBlocksManifestPlugin(makeScriptWpConfig())).toBeUndefined();
+    expect(warn).not.toHaveBeenCalled();
   });
 });
 
@@ -183,6 +262,25 @@ describe('array detection and named exports', () => {
       // The module config is exposed as a defined named export.
       expect(mod.moduleConfig).not.toBeNull();
       expect((mod.moduleConfig.output as BuildConfigOutput).module).toBe(true);
+
+      jest.dontMock('@wordpress/scripts/config/webpack.config');
+    });
+  });
+
+  it('gives the module config the script config\'s BlocksManifestPlugin instance', () => {
+    jest.isolateModules(() => {
+      const manifestPlugin = new BlocksManifestPlugin();
+
+      jest.doMock('@wordpress/scripts/config/webpack.config', () => [
+        { ...makeScriptWpConfig(), plugins: ['wp-plugin-a', manifestPlugin] },
+        makeModuleWpConfig(),
+      ]);
+
+      const mod = require('./webpack.config');
+
+      // A fresh module registry, so compare by name rather than by class identity.
+      expect(mod.moduleConfig.plugins[0].constructor.name).toBe('VersionBlocksPlugin');
+      expect(mod.moduleConfig.plugins.at(-1)).toBe(manifestPlugin);
 
       jest.dontMock('@wordpress/scripts/config/webpack.config');
     });

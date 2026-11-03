@@ -1,6 +1,6 @@
 import path from 'path';
 import { cwd } from 'node:process';
-import { Configuration, type PathData } from 'webpack';
+import { Configuration, type PathData, type WebpackPluginInstance } from 'webpack';
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -23,6 +23,12 @@ interface BuildConfigOptions {
 
   /** True when wp-scripts is in dual-compiler (`--experimental-modules`) mode. */
   isArrayMode: boolean;
+
+  /**
+   * The script config's wp-scripts BlocksManifestPlugin, when it has one, for the
+   * module config to run as well. Ignored for the script config, which has its own.
+   */
+  blocksManifestPlugin?: WebpackPluginInstance;
 }
 
 /**
@@ -67,7 +73,7 @@ const mode: string = isProduction ? 'production' : 'development';
  */
 function buildConfig(
   wpConfig: WPScriptsConfig,
-  { isModule, isArrayMode: arrayMode }: BuildConfigOptions,
+  { isModule, isArrayMode: arrayMode, blocksManifestPlugin }: BuildConfigOptions,
 ): WPScriptsConfig {
   /**
    * Spread wp-scripts `output` first to preserve the module config's
@@ -83,7 +89,8 @@ function buildConfig(
 
   /**
    * Only force `clean` in non-array mode. In array mode both compilers write
-   * to `build/` and would clean each other's output.
+   * to `build/` and would clean each other's output; the CLI (`index.ts`)
+   * cleans `build/` once before a `build --experimental-modules` run instead.
    */
   if (!arrayMode) {
     output.clean = mode === 'production';
@@ -121,11 +128,26 @@ function buildConfig(
   const plugins: Configuration['plugins'] = [
     /**
      * Ahead of the defaults, so the blocks are versioned before the manifest is
-     * built from them. Script config only, since that's where wp-scripts puts
-     * the BlocksManifestPlugin.
+     * built from them.
+     *
+     * Both compilers version the blocks. They run in parallel and write into the
+     * same block directories, so whichever emits last hashes the complete set of
+     * files. A watch-mode change to only a view module rebuilds only the module
+     * compiler, which must re-version on its own.
+     *
+     * This is only race-free because `versionBlocks()` is fully synchronous: a
+     * run can't interleave with the other compiler's async writes, and each
+     * compiler's raw `block.json` write precedes its own `afterEmit`. Keep it
+     * synchronous; an async (`fs/promises`) version could hash a partial set.
      */
-    ...(isModule ? [] : [new VersionBlocksPlugin()]),
+    new VersionBlocksPlugin(),
     ...(Array.isArray(wpConfig.plugins) ? wpConfig.plugins : []),
+    /**
+     * wp-scripts adds BlocksManifestPlugin to the script config only. Run it after
+     * the module compiler's versioning too, so a module-only rebuild carries the
+     * new versions into the manifest WordPress registers blocks from.
+     */
+    ...(isModule && blocksManifestPlugin ? [blocksManifestPlugin] : []),
     ...(isModule ? [] : [
       new CopyWebpackPlugin({
         patterns: [
@@ -147,7 +169,8 @@ function buildConfig(
          * array mode the module compiler emits into the shared `build/`
          * first, so that default wipe would delete the module output.
          * Disable it in array mode (mirroring the `output.clean` suppression
-         * above) while keeping the after-build CSS dedup below.
+         * above) while keeping the after-build CSS dedup below. The CLI
+         * pre-cleans `build/` for production array-mode builds instead.
          */
         ...(arrayMode ? { cleanOnceBeforeBuildPatterns: [] } : {}),
         cleanAfterEveryBuildPatterns: [
@@ -202,6 +225,33 @@ function buildConfig(
   return customConfig;
 }
 
+/**
+ * Find wp-scripts' BlocksManifestPlugin instance in the script config.
+ *
+ * The class isn't exported by wp-scripts, so its instance is found by constructor name. If
+ * wp-scripts renames it, module-only rebuilds would silently stop refreshing the manifest,
+ * so warn when the manifest is enabled (`WP_BLOCKS_MANIFEST`, parsed the way wp-scripts
+ * parses it) but no instance is found.
+ *
+ * @param wpConfig - The wp-scripts script configuration.
+ * @returns The plugin instance, or undefined when there is none.
+ */
+function findBlocksManifestPlugin(wpConfig?: WPScriptsConfig): WebpackPluginInstance | undefined {
+  const plugin = wpConfig?.plugins?.find(
+    (p): p is WebpackPluginInstance => p?.constructor?.name === 'BlocksManifestPlugin',
+  );
+
+  const manifestEnv = process.env.WP_BLOCKS_MANIFEST;
+  const manifestExpected = !!manifestEnv && manifestEnv !== 'false' && manifestEnv !== '0';
+
+  if (!plugin && manifestExpected) {
+    // eslint-disable-next-line no-console
+    console.warn('[build-tool] WP_BLOCKS_MANIFEST is enabled but wp-scripts\' BlocksManifestPlugin was not found; the blocks manifest will not refresh on module-only rebuilds.');
+  }
+
+  return plugin;
+}
+
 /** Script config: the element without `output.module`, or the single export in non-array mode. */
 const scriptWpConfig: WPScriptsConfig | undefined = isArrayMode
   ? (defaultConfigExport as WPScriptsConfig[]).find((c) => c.output?.module !== true)
@@ -231,8 +281,12 @@ const config: Configuration = scriptWpConfig
  * array webpack runs.
  */
 const moduleConfig: Configuration | null = moduleWpConfig
-  ? buildConfig(moduleWpConfig, { isModule: true, isArrayMode })
+  ? buildConfig(moduleWpConfig, {
+    isModule: true,
+    isArrayMode,
+    blocksManifestPlugin: findBlocksManifestPlugin(scriptWpConfig),
+  })
   : null;
 
-export { buildConfig, moduleConfig };
+export { buildConfig, findBlocksManifestPlugin, moduleConfig };
 export default config;

@@ -85,10 +85,11 @@ When this flag is present, `wp-scripts` runs two compilers — one for classic s
 
 Builds **without** `--experimental-modules` are completely unaffected.
 
+Because both compilers write to `build/`, neither cleans it. Instead, `alley-build build --experimental-modules` deletes `build/` once before the compilers start.
+
 #### Limitations
 
 * **Extending the config and the `entries/` directory apply to the script compiler only.** Overrides in your project `webpack.config.js` are merged into the script configuration, and entry points in the `entries/` directory are compiled by the script compiler. The module compiler's entries come solely from the `viewScriptModule`/`viewModule` block fields. (The `@`-to-project-root import alias is available in module source files too.)
-* **Production builds with `--experimental-modules` do not auto-clean the `build/` directory.** Both compilers write to `build/`, so cleaning is disabled to prevent the two compilers from clobbering each other's output. This matches stock `wp-scripts` behavior.
 * **Fast Refresh (`--hot`) is not supported for module entries.** Running `start --experimental-modules` compiles modules for local development, but `--hot` for module entries is unsupported.
 
 ### Extending the config

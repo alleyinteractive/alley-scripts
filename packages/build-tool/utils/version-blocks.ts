@@ -11,6 +11,9 @@ import { type Compiler } from 'webpack';
  * WordPress versions a block's assets by the `version` in its metadata, and a source block.json
  * rarely changes it, so browsers and caches would keep serving old styles after a deploy.
  *
+ * Keep this synchronous. Under `--experimental-modules` two compilers run it on the same
+ * directory in parallel, and that's only race-free because a run can't be interleaved.
+ *
  * @param buildDir - The directory the blocks were built into.
  */
 function versionBlocks(buildDir: string): void {
