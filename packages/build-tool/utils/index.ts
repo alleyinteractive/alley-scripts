@@ -144,8 +144,25 @@ const getDefaultArgs = (): string[] => {
   return defaultArgs;
 };
 
+/**
+ * Get the build directory to clean once before a `build --experimental-modules` run.
+ *
+ * In that mode wp-scripts runs a script compiler and a module compiler in parallel, both
+ * writing to `build/`. Neither can clean it without deleting the other's output, so the
+ * CLI cleans it once before either compiler starts. Without the pre-clean, deleted or
+ * renamed blocks would linger in `build/` and still be versioned and registered.
+ *
+ * @returns The absolute build directory path, or undefined when no pre-clean is needed.
+ */
+const getBuildDirToPreClean = (): string | undefined => (
+  hasArgInCLI('build') && hasArgInCLI('--experimental-modules')
+    ? fromProjectRoot('build')
+    : undefined
+);
+
 export {
   fromProjectRoot,
+  getBuildDirToPreClean,
   getArgFromCLI,
   getArgsFromCLI,
   getDefaultArgs,

@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process';
+import { rmSync } from 'node:fs';
 import { argv, cwd } from 'node:process';
 
+import {
+  getBuildDirToPreClean,
+  getDefaultArgs,
+  hasArgInCLI,
+  getArgFromCLI,
 // eslint-disable-next-line import/no-unresolved
-import { getDefaultArgs, hasArgInCLI, getArgFromCLI } from './utils';
+} from './utils';
 /**
  * The default arguments to pass to wp-scripts.
  */
@@ -21,6 +27,15 @@ process.env.ENTRIES_DIRECTORY = hasArgInCLI('--webpack-entries-dir')
  * Set the environment variable to only build blocks.
  */
 process.env.BLOCKS_ONLY = hasArgInCLI('--webpack-blocks-only') ? 'true' : 'false';
+
+/**
+ * Clean the build directory once before a `build --experimental-modules` run, since the
+ * two parallel compilers can't clean it themselves without deleting each other's output.
+ */
+const buildDirToPreClean = getBuildDirToPreClean();
+if (buildDirToPreClean) {
+  rmSync(buildDirToPreClean, { recursive: true, force: true });
+}
 
 // Call wp-scripts with the default arguments.
 spawn(

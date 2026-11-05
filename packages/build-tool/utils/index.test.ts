@@ -6,6 +6,7 @@ import {
   fromProjectRoot,
   getArgFromCLI,
   getArgsFromCLI,
+  getBuildDirToPreClean,
   getDefaultArgs,
   getWebpackConfig,
   getUserWebpackConfigFilePath,
@@ -212,5 +213,22 @@ describe('getDefaultArgs', () => {
   it('should include "--webpack-src-dir" argument with value from "--webpack-src-dir" CLI argument if "start" command is used and "--webpack-src-dir" CLI argument is present', () => {
     process.argv = ['node', 'index.js', 'start', '--webpack-src-dir=my-blocks'];
     expect(getDefaultArgs()).toContain('--webpack-src-dir=my-blocks');
+  });
+});
+
+describe('getBuildDirToPreClean', () => {
+  it('returns the project build directory for "build --experimental-modules"', () => {
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules'];
+    expect(getBuildDirToPreClean()).toBe(path.join(process.cwd(), 'build'));
+  });
+
+  it('returns undefined for "build" without "--experimental-modules"', () => {
+    process.argv = ['node', 'index.js', 'build'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
+  });
+
+  it('returns undefined for "start --experimental-modules"', () => {
+    process.argv = ['node', 'index.js', 'start', '--experimental-modules'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
   });
 });
