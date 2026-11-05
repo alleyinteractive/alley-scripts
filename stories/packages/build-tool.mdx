@@ -1,0 +1,8 @@
+import { Meta } from '@storybook/blocks';
+
+import { Readme } from '../../.storybook/components/readme';
+import readme from '../../packages/build-tool/README.md?raw';
+
+<Meta title="Packages/Build Tool" />
+
+<Readme source={readme} directory="packages/build-tool" />

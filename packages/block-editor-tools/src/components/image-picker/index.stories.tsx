@@ -1,75 +1,61 @@
-import { useSelect } from '@wordpress/data';
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import type { Meta, StoryFn } from '@storybook/react';
+import { resolveReadmeLinks } from '../../../../../.storybook/components/readme';
+import readme from './README.md?raw';
 
 import ImagePicker from './index';
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-export default {
+const meta: Meta<typeof ImagePicker> = {
   component: ImagePicker,
   title: 'Block Editor Tools/Components/Image Picker',
-} as Meta<typeof ImagePicker>;
-
-const DefaultTemplate: StoryFn<typeof ImagePicker> = (args: any) => {
-  const store: {
-    getMedia: () => {
-      [key: string]: any;
-    };
-  } = useSelect(
-    (select) => select('core'),
-    [],
-  );
-
-  const { value = 0 } = args;
-  let { valueURL = '' } = args;
-
-  if (!value || value === '0') {
-    // Override the getMedia call to return nothing if no value is set.
-    store.getMedia = () => ({});
-  } else {
-    // Ensure that if an ID is set, we always have a URL. This will emulate an
-    // ID being set but not a URL.
-    if (!valueURL) {
-      valueURL = 'https://picsum.photos/200/300';
-    }
-
-    // Override the getMedia call to use a local image
-    store.getMedia = () => ({
-      id: value,
-      sizes: {
-        thumbnail: {
-          url: valueURL,
-        },
-        full: {
-          url: valueURL,
-        },
+  parameters: {
+    docs: {
+      description: {
+        component: resolveReadmeLinks(readme, 'packages/block-editor-tools/src/components/image-picker'),
       },
-      url: valueURL,
-      source_url: valueURL,
-    });
-  }
+    },
+  },
+  render: function Render(args) {
+    const [value, setValue] = useState(args.value);
+    const [valueURL, setValueURL] = useState(args.valueURL);
 
-  return (
-    <ImagePicker
-      // Setting the key to the URL forces it to re-render when the URL changes in Canvas.
-      key={`image-picker-${valueURL}-${value}`}
-      onReset={() => null}
-      onUpdate={() => null}
-      {...args}
-    />
-  );
+    return (
+      <ImagePicker
+        {...args}
+        value={value}
+        valueURL={valueURL}
+        onReset={() => {
+          setValue(0);
+          setValueURL('');
+        }}
+        onUpdate={({ id }: { id: number }) => setValue(id)}
+        onUpdateURL={(url: string) => setValueURL(url)}
+      />
+    );
+  },
 };
 
-export const Default = DefaultTemplate.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Default.args = {
-  value: 0,
-  valueURL: '',
+export default meta;
+
+type Story = StoryObj<typeof ImagePicker>;
+
+export const Default: Story = {
+  args: {
+    value: 0,
+    valueURL: '',
+  },
 };
 
-export const Selected = DefaultTemplate.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Selected.args = {
-  value: 1,
-  valueURL: 'https://picsum.photos/200/300',
+export const Selected: Story = {
+  args: {
+    value: 1,
+  },
+};
+
+export const FromURL: Story = {
+  args: {
+    value: 0,
+    valueURL: 'https://picsum.photos/seed/alley-url/600/400',
+  },
 };

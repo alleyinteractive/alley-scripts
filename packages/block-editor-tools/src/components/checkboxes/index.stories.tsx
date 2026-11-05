@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import type { Meta, StoryFn } from '@storybook/react';
 
+import { resolveReadmeLinks } from '../../../../../.storybook/components/readme';
+import readme from './README.md?raw';
+
 import Checkboxes from './index';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
   title: 'Block Editor Tools/Components/Checkboxes',
+  parameters: {
+    docs: {
+      description: {
+        component: resolveReadmeLinks(readme, 'packages/block-editor-tools/src/components/checkboxes'),
+      },
+    },
+  },
   component: Checkboxes,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

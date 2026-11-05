@@ -1,47 +1,54 @@
-import { useSelect } from '@wordpress/data';
-import type { Meta, StoryFn } from '@storybook/react';
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
+import { resolveReadmeLinks } from '../../../../../.storybook/components/readme';
+import readme from './README.md?raw';
 
 import AudioPicker from './index';
 
-export default {
-  title: 'Block Editor Tools/Components/Audio Picker',
+const meta: Meta<typeof AudioPicker> = {
   component: AudioPicker,
-  argTypes: {},
-} as Meta<typeof AudioPicker>;
+  title: 'Block Editor Tools/Components/Audio Picker',
+  parameters: {
+    docs: {
+      description: {
+        component: resolveReadmeLinks(readme, 'packages/block-editor-tools/src/components/audio-picker'),
+      },
+    },
+  },
+  render: function Render(args) {
+    const [value, setValue] = useState(args.value);
+    const [valueURL, setValueURL] = useState(args.valueURL);
 
-const Template: StoryFn<typeof AudioPicker> = (args: any) => {
-  const store: {
-    getMedia: () => {
-      [key: string]: any;
-    };
-  } = useSelect(
-    (select) => select('core'),
-    [],
-  );
-
-  const {
-    id = 1,
-    valueURL = 'https://cldup.com/59IrU0WJtq.mp3',
-  } = args;
-
-  // Override the getMedia call to use a local image.
-  store.getMedia = () => ({
-    id,
-    source_url: valueURL || 'https://picsum.photos/200/300',
-  });
-
-  return <AudioPicker {...args} />;
+    return (
+      <AudioPicker
+        {...args}
+        value={value}
+        valueURL={valueURL}
+        onReset={() => {
+          setValue(0);
+          setValueURL('');
+        }}
+        onUpdate={({ id }: { id: number }) => setValue(id)}
+        onUpdateURL={(url: string) => setValueURL(url)}
+      />
+    );
+  },
 };
 
-export const Default = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Default.args = {
-  valueURL: '',
-  value: 0,
+export default meta;
+
+type Story = StoryObj<typeof AudioPicker>;
+
+export const Default: Story = {
+  args: {
+    value: 0,
+    valueURL: '',
+  },
 };
 
-export const Selected = Template.bind({});
-Selected.args = {
-  value: 1,
-  valueURL: 'https://cldup.com/59IrU0WJtq.mp3',
+export const Selected: Story = {
+  args: {
+    value: 10,
+  },
 };
