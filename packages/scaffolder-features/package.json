@@ -17,8 +17,14 @@
   "license": "GPL-2.0-or-later",
   "author": "Alley",
   "main": "index.js",
+  "type": "module",
+  "scaffolder": "./src/pest/index.js",
+  "scripts": {
+    "test": "node --test \"src/**/*.test.js\""
+  },
   "files": [
     "scaffolder",
+    "src",
     "LICENSE",
     "README.md"
   ]
