@@ -464,6 +464,9 @@ Each JavaScript feature and YAML hook receives this shared context:
   feature's destination rules. JavaScript package features resolve from `cwd`;
   YAML features also honor their configured destination resolver.
 - `logger`: Scaffolder's initialized Winston logger.
+- `recordFile(path, action)`: records a file the feature created
+  (`action` defaults to `created`) or `modified`, which is reported by `--json`.
+  Files written by YAML file features are recorded automatically.
 
 Package discovery failures are isolated. If an opted-in package has a missing
 entry point, cannot be imported, or exports an invalid feature, Scaffolder logs

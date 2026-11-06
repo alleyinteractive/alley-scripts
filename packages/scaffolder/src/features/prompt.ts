@@ -14,7 +14,7 @@ import type { RegisteredFeature } from '../types';
  * @returns {Promise<[RegisteredFeature, string]>} The selected feature and the path to the
  *                                             configuration directory.
  */
-export async function promptUserForFeature(featureName?: string): Promise<[RegisteredFeature, string]> { // eslint-disable-line consistent-return, max-len
+export async function promptUserForFeature(featureName?: string, interactive: boolean = true): Promise<[RegisteredFeature, string]> { // eslint-disable-line consistent-return, max-len
   const store = getFeatureStore().all();
 
   // Create a smaller list of available features to prompt the user with.
@@ -31,6 +31,16 @@ export async function promptUserForFeature(featureName?: string): Promise<[Regis
   // matches. If multiple features match, allow the user to select from the
   // smaller list of features.
   if (featureName) {
+    const exactMatch = availableFeatures.find(
+      (item) => item.title.toLowerCase() === featureName.toLowerCase(),
+    );
+
+    if (exactMatch) {
+      const [configPath, index] = exactMatch.value;
+
+      return [store[configPath][index], configPath];
+    }
+
     availableFeatures = availableFeatures.filter(
       (item) => item.title.toLowerCase().includes(featureName.toLowerCase()),
     );
@@ -51,6 +61,12 @@ export async function promptUserForFeature(featureName?: string): Promise<[Regis
 
   if (!availableFeatures.length) {
     handleError('No features found to scaffold 😔.');
+  }
+
+  if (!interactive) {
+    handleError(featureName
+      ? `Multiple features include "${featureName}". Pass the exact name of one:\n${availableFeatures.map((item) => `  - ${item.title}`).join('\n')}`
+      : 'No feature specified. Pass a feature name, or run "scaffolder --list --json" to see the available features.');
   }
 
   const { selectedFeature } = await prompts({

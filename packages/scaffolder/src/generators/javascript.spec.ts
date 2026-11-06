@@ -20,7 +20,7 @@ describe('generators/javascript', () => {
       generate,
     }, featureDirectory);
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     expect(prompts).toHaveBeenCalledWith(expect.objectContaining({
       dryRun: false,
@@ -46,7 +46,7 @@ describe('generators/javascript', () => {
       },
     }, featureDirectory);
 
-    await generator.resolveAndInvoke(true);
+    await generator.resolveAndInvoke({ dryRun: true });
 
     expect(receivedContext).toEqual(expect.objectContaining({
       cwd: process.cwd(),
@@ -79,7 +79,7 @@ describe('generators/javascript', () => {
     let error: Error | undefined;
 
     try {
-      await generator.resolveAndInvoke(false);
+      await generator.resolveAndInvoke({ dryRun: false });
     } catch (caughtError) {
       error = caughtError as Error;
     }
@@ -104,7 +104,7 @@ describe('generators/javascript', () => {
     let error: Error | undefined;
 
     try {
-      await generator.resolveAndInvoke(false);
+      await generator.resolveAndInvoke({ dryRun: false });
     } catch (caughtError) {
       error = caughtError as Error;
     }
@@ -126,7 +126,7 @@ describe('generators/javascript', () => {
       generate,
     }, featureDirectory);
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     expect(generate).toHaveBeenCalledWith(expect.objectContaining({
       inputs: { slug: 'movie' },

@@ -22,8 +22,17 @@ The following arguments are available:
                        working directory.
   --debug              Print debug information.
   --dry-run            Run the command without making any changes.
+  -l, --list           List available features.
+  --input key=value    Set a feature input. Can be repeated.
+  --inputs <json>      Set feature inputs as a JSON object.
+  --non-interactive    Never prompt. Enabled automatically when stdin is not a TTY.
+  --describe           Print the selected feature and its inputs as JSON.
+  --json               Print machine-readable JSON to stdout and logs to stderr.
   -h, --help           Prints help information.
 ```
+
+See [Non-Interactive Use](./docs/1-getting-started.md#non-interactive-use-scripts-ci-and-ai-agents)
+for running the scaffolder from scripts and AI agents.
 
 If the command is not run from the root of a project with a `.scaffolder`
 directory, Scaffolder will attempt to find a `.scaffolder` configuration in a

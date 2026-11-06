@@ -9,6 +9,11 @@ export type Arguments = {
   'dry-run'?: boolean;
   help?: boolean;
   list?: boolean;
+  input?: string[];
+  inputs?: string;
+  'non-interactive'?: boolean;
+  describe?: boolean;
+  json?: boolean;
 };
 
 /**
@@ -43,6 +48,32 @@ const commandArguments = parse<Arguments>(
       description: 'List available features.',
       optional: true,
     },
+    input: {
+      type: String,
+      multiple: true,
+      description: 'Set a feature input as key=value. Can be repeated.',
+      optional: true,
+    },
+    inputs: {
+      type: String,
+      description: 'Set feature inputs as a JSON object.',
+      optional: true,
+    },
+    'non-interactive': {
+      type: Boolean,
+      description: 'Never prompt. Missing required inputs cause an error. Enabled automatically when stdin is not a TTY.',
+      optional: true,
+    },
+    describe: {
+      type: Boolean,
+      description: 'Print the selected feature and its inputs as JSON.',
+      optional: true,
+    },
+    json: {
+      type: Boolean,
+      description: 'Print machine-readable JSON to stdout and send logs to stderr.',
+      optional: true,
+    },
   },
   {
     helpArg: 'help',
@@ -50,9 +81,17 @@ const commandArguments = parse<Arguments>(
       header: 'Alley Scaffolder',
       content: 'Scaffold templates for your projects and work faster.',
     }],
+    footerContentSections: [{
+      header: 'Examples',
+      content: [
+        'scaffolder <feature>',
+        'scaffolder <feature> --describe',
+        'scaffolder <feature> --non-interactive --input name=value --input other=value',
+        'scaffolder --list --json',
+      ].join('\n'),
+    }],
     partial: true,
     processExitCode: 1,
-    stopAtFirstUnknown: true,
   },
 );
 

@@ -40,6 +40,7 @@ const featureConfigSchema = () => Joi.object({
     description: Joi.string(),
     type: Joi.string().valid('string', 'boolean').required(),
     default: Joi.any(),
+    required: Joi.boolean(),
   })),
   files: Joi.array().items(Joi.object({
     source: Joi.string().required(),

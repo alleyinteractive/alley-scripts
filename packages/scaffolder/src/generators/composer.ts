@@ -58,6 +58,8 @@ export class ComposerGenerator extends Generator<FeatureConfig> {
       logger().info(`Running command: ${chalk.yellow(args.join(' '))}`);
 
       await runCommand(args.join(' '), process.cwd());
+
+      this.recordFile(destination);
     }
 
     if (postCommand) {
