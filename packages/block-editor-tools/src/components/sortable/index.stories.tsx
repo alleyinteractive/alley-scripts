@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { TextControl } from '@wordpress/components';
 import { resolveReadmeLinks } from '../../../../../.storybook/components/readme';
 import readme from './README.md?raw';
-import { TextControl } from '@wordpress/components';
 
 import Sortable from './index';
 import SortableItem from '../sortable-item';

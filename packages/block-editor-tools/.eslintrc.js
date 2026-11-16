@@ -21,6 +21,15 @@ module.exports = {
      */
     'import/no-extraneous-dependencies': 'off',
   },
+  overrides: [
+    {
+      // Stories import the shared helpers in the repo-root .storybook directory.
+      files: ['**/*.stories.tsx'],
+      rules: {
+        'import/no-relative-packages': 'off',
+      },
+    },
+  ],
   settings: {
     'import/resolver': 'webpack',
   },
