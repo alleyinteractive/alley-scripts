@@ -1,0 +1,39 @@
+name: create-wordpress-plugin@taxonomy
+description: Add a custom taxonomy feature to a create-wordpress-plugin plugin
+hooks: ./hooks.js
+
+inputs:
+  - name: slug
+    description: "Taxonomy slug (lowercase, dashes or underscores, max 32 characters)"
+    type: string
+  - name: singular
+    description: "Singular label, e.g. Genre"
+    type: string
+  - name: plural
+    description: "Plural label (defaults to the singular label pluralized)"
+    type: string
+    required: false
+  - name: objectTypes
+    description: "Post types to attach the taxonomy to (comma-separated)"
+    type: string
+    default: post
+  - name: public
+    description: "Public?"
+    type: boolean
+    default: true
+  - name: hierarchical
+    description: "Hierarchical?"
+    type: boolean
+    default: false
+  - name: showAdminColumn
+    description: "Show a column in the post list table?"
+    type: boolean
+    default: true
+  - name: rewriteSlug
+    description: "Rewrite slug (defaults to the taxonomy slug)"
+    type: string
+    required: false
+
+files:
+  - source: taxonomy.php.hbs
+    destination: "src/features/{{ inputs.fileName }}"

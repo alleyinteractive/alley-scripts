@@ -84,7 +84,7 @@ describe('generators/generator', () => {
       afterGenerate: () => { generator.events.push('after'); },
     });
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     expect(generator.events).toEqual(['before', 'generate', 'after']);
   });
@@ -98,7 +98,7 @@ describe('generators/generator', () => {
       },
     });
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     expect(generator.invokedInputs).toEqual({ added: 'from-hook' });
   });
@@ -118,7 +118,7 @@ describe('generators/generator', () => {
       },
     });
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     expect(afterInputs).toBe(beforeInputs);
   });
@@ -138,7 +138,7 @@ describe('generators/generator', () => {
     let error: Error | undefined;
 
     try {
-      await generator.resolveAndInvoke(false);
+      await generator.resolveAndInvoke({ dryRun: false });
     } catch (caught) {
       error = caught as Error;
     }
@@ -161,7 +161,7 @@ describe('generators/generator', () => {
       afterGenerate: () => { generator.events.push('after'); },
     });
 
-    await expect(generator.resolveAndInvoke(false)).rejects.toThrow('generation failed');
+    await expect(generator.resolveAndInvoke({ dryRun: false })).rejects.toThrow('generation failed');
 
     expect(generator.events).toEqual(['before', 'generate']);
   });
@@ -181,7 +181,7 @@ describe('generators/generator', () => {
     let error: Error | undefined;
 
     try {
-      await generator.resolveAndInvoke(false);
+      await generator.resolveAndInvoke({ dryRun: false });
     } catch (caught) {
       error = caught as Error;
     }
@@ -203,7 +203,7 @@ describe('generators/generator', () => {
       afterGenerate: (context) => { dryRuns.push(context.dryRun); },
     });
 
-    await generator.resolveAndInvoke(true);
+    await generator.resolveAndInvoke({ dryRun: true });
 
     expect(dryRuns).toEqual([true, true]);
   });
@@ -212,7 +212,7 @@ describe('generators/generator', () => {
     const generator = new TestGenerator(createConfig(), featureDirectory);
     loadFeatureHooksMock.mockRejectedValue(new Error('hooks should not load'));
 
-    await generator.resolveAndInvoke(false);
+    await generator.resolveAndInvoke({ dryRun: false });
 
     expect(generator.events).toEqual(['generate']);
     expect(generator.invokedInputs).toEqual({ existing: 'input' });

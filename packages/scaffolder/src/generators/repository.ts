@@ -124,6 +124,8 @@ export class RepositoryGenerator extends Generator<FeatureConfig> {
 
       // Delete the .git directory.
       fs.rmSync(`${destination}/.git`, { recursive: true });
+
+      this.recordFile(destination);
     } else {
       logger().info(`Would be cloning ${chalk.green(this.resolveGitUrl())} to ${chalk.yellow(destination)}`);
     }

@@ -1,0 +1,109 @@
+<?php
+/**
+ * {{{inputs.className}}} class file
+ *
+ * @package {{{inputs.textDomain}}}
+ */
+
+declare(strict_types=1);
+
+namespace {{{inputs.namespace}}};
+
+use Alley\WP\Types\Feature;
+
+/**
+ * Registers the {{{inputs.slug}}} taxonomy.
+ */
+final class {{{inputs.className}}} implements Feature {
+	/**
+	 * Name of the taxonomy.
+	 *
+	 * @var string
+	 */
+	public const NAME = '{{{inputs.php.slug}}}';
+
+	/**
+	 * Post types the taxonomy is registered for.
+	 *
+	 * @var string[]
+	 */
+	public const OBJECT_TYPES = [ {{{inputs.php.objectTypes}}} ];
+
+	/**
+	 * Boot the feature.
+	 */
+	public function boot(): void {
+		add_action( 'init', [ $this, 'register_taxonomy' ] );
+		add_filter( 'term_updated_messages', [ $this, 'filter_term_updated_messages' ] );
+	}
+
+	/**
+	 * Register the taxonomy.
+	 */
+	public function register_taxonomy(): void {
+		register_taxonomy(
+			self::NAME,
+			self::OBJECT_TYPES,
+			[
+				'labels'            => [
+					'name'                       => __( '{{{inputs.php.plural}}}', '{{{inputs.php.textDomain}}}' ),
+					'singular_name'              => __( '{{{inputs.php.singular}}}', '{{{inputs.php.textDomain}}}' ),
+					'search_items'               => __( 'Search {{{inputs.php.plural}}}', '{{{inputs.php.textDomain}}}' ),
+					'popular_items'              => __( 'Popular {{{inputs.php.plural}}}', '{{{inputs.php.textDomain}}}' ),
+					'all_items'                  => __( 'All {{{inputs.php.plural}}}', '{{{inputs.php.textDomain}}}' ),
+					'parent_item'                => __( 'Parent {{{inputs.php.singular}}}', '{{{inputs.php.textDomain}}}' ),
+					'parent_item_colon'          => __( 'Parent {{{inputs.php.singular}}}:', '{{{inputs.php.textDomain}}}' ),
+					'edit_item'                  => __( 'Edit {{{inputs.php.singular}}}', '{{{inputs.php.textDomain}}}' ),
+					'view_item'                  => __( 'View {{{inputs.php.singular}}}', '{{{inputs.php.textDomain}}}' ),
+					'update_item'                => __( 'Update {{{inputs.php.singular}}}', '{{{inputs.php.textDomain}}}' ),
+					'add_new_item'               => __( 'Add New {{{inputs.php.singular}}}', '{{{inputs.php.textDomain}}}' ),
+					'new_item_name'              => __( 'New {{{inputs.php.singular}}} Name', '{{{inputs.php.textDomain}}}' ),
+					'separate_items_with_commas' => __( 'Separate {{{inputs.php.pluralLower}}} with commas', '{{{inputs.php.textDomain}}}' ),
+					'add_or_remove_items'        => __( 'Add or remove {{{inputs.php.pluralLower}}}', '{{{inputs.php.textDomain}}}' ),
+					'choose_from_most_used'      => __( 'Choose from the most used {{{inputs.php.pluralLower}}}', '{{{inputs.php.textDomain}}}' ),
+					'not_found'                  => __( 'No {{{inputs.php.pluralLower}}} found.', '{{{inputs.php.textDomain}}}' ),
+					'no_terms'                   => __( 'No {{{inputs.php.pluralLower}}}', '{{{inputs.php.textDomain}}}' ),
+					'filter_by_item'             => __( 'Filter by {{{inputs.php.singularLower}}}', '{{{inputs.php.textDomain}}}' ),
+					'items_list_navigation'      => __( '{{{inputs.php.plural}}} list navigation', '{{{inputs.php.textDomain}}}' ),
+					'items_list'                 => __( '{{{inputs.php.plural}}} list', '{{{inputs.php.textDomain}}}' ),
+					'back_to_items'              => __( '&larr; Go to {{{inputs.php.plural}}}', '{{{inputs.php.textDomain}}}' ),
+					'item_link'                  => __( '{{{inputs.php.singular}}} Link', '{{{inputs.php.textDomain}}}' ),
+					'item_link_description'      => __( 'A link to a {{{inputs.php.singularLower}}}.', '{{{inputs.php.textDomain}}}' ),
+					'menu_name'                  => __( '{{{inputs.php.plural}}}', '{{{inputs.php.textDomain}}}' ),
+				],
+				'public'            => {{#if inputs.public}}true{{else}}false{{/if}},
+				'hierarchical'      => {{#if inputs.hierarchical}}true{{else}}false{{/if}},
+				'show_in_rest'      => true,
+				'show_admin_column' => {{#if inputs.showAdminColumn}}true{{else}}false{{/if}},
+				'rewrite'           => [
+					'slug'       => '{{{inputs.php.rewriteSlug}}}',
+					'with_front' => false,
+				],
+			]
+		);
+	}
+
+	/**
+	 * Set the term updated messages for the taxonomy.
+	 *
+	 * @param mixed $messages Term updated messages keyed by taxonomy.
+	 * @return mixed
+	 */
+	public function filter_term_updated_messages( $messages ) {
+		if ( ! is_array( $messages ) ) {
+			return $messages;
+		}
+
+		$messages[ self::NAME ] = [
+			0 => '',
+			1 => __( '{{{inputs.php.singular}}} added.', '{{{inputs.php.textDomain}}}' ),
+			2 => __( '{{{inputs.php.singular}}} deleted.', '{{{inputs.php.textDomain}}}' ),
+			3 => __( '{{{inputs.php.singular}}} updated.', '{{{inputs.php.textDomain}}}' ),
+			4 => __( '{{{inputs.php.singular}}} not added.', '{{{inputs.php.textDomain}}}' ),
+			5 => __( '{{{inputs.php.singular}}} not updated.', '{{{inputs.php.textDomain}}}' ),
+			6 => __( '{{{inputs.php.plural}}} deleted.', '{{{inputs.php.textDomain}}}' ),
+		];
+
+		return $messages;
+	}
+}

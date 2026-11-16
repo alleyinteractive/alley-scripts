@@ -5,14 +5,17 @@ let instance: ReturnType<typeof createLogger>;
 /**
  * Initialize the logger.
  *
- * The logger should print to the console in pretty print.
+ * The logger should print to the console in pretty print. With stderr enabled,
+ * all output goes to stderr so stdout is left for JSON.
  */
-export const initializeLogger = (debug: boolean = false) => {
+export const initializeLogger = (debug: boolean = false, stderr: boolean = false) => {
   instance = createLogger({
     exitOnError: false,
     level: debug ? 'debug' : 'info',
     transports: [
-      new transports.Console(),
+      new transports.Console({
+        stderrLevels: stderr ? ['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly'] : ['error'],
+      }),
     ],
     format: format.printf(({ message }) => String(message)),
   });
