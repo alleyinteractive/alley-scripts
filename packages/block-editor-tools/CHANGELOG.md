@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.2
+
+### Patch Changes
+
+- e1e0a625: Fix `usePreviewLink` to read the preview link from the `core/editor` store; it previously called a selector that does not exist on the `core` store and threw.
+
+  Fix `useInnerBlocksIndex` always returning `-1`; it passed the parent block object instead of its client ID when looking up siblings.
+
 ## 0.17.1
 
 ### Patch Changes
