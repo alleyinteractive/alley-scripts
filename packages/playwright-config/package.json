@@ -1,0 +1,51 @@
+{
+  "name": "@alleyinteractive/playwright-config",
+  "version": "0.0.0",
+  "description": "Shared Playwright config, helpers, and CI workflows for screenshot and functional testing.",
+  "keywords": [
+    "playwright",
+    "screenshot",
+    "playwright-config",
+    "testing",
+    "wordpress"
+  ],
+  "homepage": "https://github.com/alleyinteractive/alley-scripts/tree/main/packages/playwright-config",
+  "bugs": {
+    "url": "https://github.com/alleyinteractive/alley-scripts/issues"
+  },
+  "license": "GPL-2.0-or-later",
+  "author": "Alley <info@alley.com> (https://alley.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alleyinteractive/alley-scripts.git"
+  },
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./styles/*": "./styles/*",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "alley-playwright": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "examples",
+    "styles",
+    "helpers.js",
+    "index.d.ts",
+    "index.js"
+  ],
+  "dependencies": {
+    "@playwright/test": "1.64.1"
+  },
+  "engines": {
+    "node": ">=22.0.0 <26.0.0",
+    "npm": ">=8"
+  }
+}

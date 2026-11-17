@@ -1,0 +1,14 @@
+name: Update Playwright baselines
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-baselines:
+    uses: alleyinteractive/alley-scripts/.github/workflows/playwright-update-baselines.yml@main
+    with:
+      base-url: https://preprod.example.com
+    secrets: inherit

@@ -1,0 +1,12 @@
+/* Opt-in preset: WordPress chrome and blocks that change between runs. */
+#wpadminbar,
+#query-monitor-main,
+#qm,
+.wp-block-latest-comments,
+.wp-block-calendar {
+  visibility: hidden !important;
+}
+
+html.wp-toolbar {
+  padding-top: 0 !important;
+}

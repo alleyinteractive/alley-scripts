@@ -1,0 +1,13 @@
+name: Playwright tests
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # Nightly; schedules only run from the default branch.
+  workflow_dispatch:
+
+jobs:
+  playwright:
+    uses: alleyinteractive/alley-scripts/.github/workflows/playwright.yml@main
+    with:
+      base-url: https://preprod.example.com
+    secrets: inherit
