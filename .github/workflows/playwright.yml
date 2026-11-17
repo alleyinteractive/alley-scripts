@@ -1,0 +1,107 @@
+# Reusable workflow: run Playwright screenshot/functional tests against a live URL.
+# Call it from a project with `workflow_call`; see
+# packages/playwright-config/examples/workflows/.
+name: Playwright tests (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      base-url:
+        description: Live URL to test (exposed to Playwright as PW_BASE_URL).
+        required: true
+        type: string
+      ref:
+        description: Branch to check out and test.
+        type: string
+        default: preprod
+      working-directory:
+        description: Directory containing package.json and playwright.config.
+        type: string
+        default: .
+      node-version:
+        type: string
+        default: '24'
+      playwright-args:
+        description: Extra arguments for `alley-playwright test`.
+        type: string
+        default: ''
+      timeout-minutes:
+        type: number
+        default: 30
+    secrets:
+      SLACK_WEBHOOK_URL:
+        description: Optional. Slack incoming webhook notified on failure.
+        required: false
+      PLAYWRIGHT_HTTP_USER:
+        description: Optional. Basic auth username.
+        required: false
+      PLAYWRIGHT_HTTP_PASS:
+        description: Optional. Basic auth password.
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Playwright tests
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    env:
+      CI: 'true'
+      PW_BASE_URL: ${{ inputs.base-url }}
+      PLAYWRIGHT_HTTP_USER: ${{ secrets.PLAYWRIGHT_HTTP_USER }}
+      PLAYWRIGHT_HTTP_PASS: ${{ secrets.PLAYWRIGHT_HTTP_PASS }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+      - run: npm ci
+
+      - run: npx alley-playwright install --with-deps chromium
+
+      - name: Run tests
+        env:
+          PLAYWRIGHT_ARGS: ${{ inputs.playwright-args }}
+        # Unquoted on purpose so multiple args split.
+        run: npx alley-playwright test $PLAYWRIGHT_ARGS
+
+      - name: Upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: ${{ inputs.working-directory }}/playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload diffs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: ${{ inputs.working-directory }}/test-results/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Notify Slack
+        if: ${{ failure() && env.SLACK_WEBHOOK_URL != '' }}
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPO: ${{ github.repository }}
+          TARGET: ${{ inputs.base-url }}
+        run: |
+          jq -n --arg text ":rotating_light: Playwright tests failed for *$REPO* ($TARGET). <$RUN_URL|View run and download the report>" \
+            '{text: $text}' \
+            | curl -sS --fail -X POST -H 'Content-type: application/json' --data @- "$SLACK_WEBHOOK_URL"

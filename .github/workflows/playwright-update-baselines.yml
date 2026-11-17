@@ -1,0 +1,84 @@
+# Reusable workflow: regenerate CI baselines on the Linux runner and commit
+# them to the tested branch. Baselines must come from CI, never from a laptop.
+name: Update Playwright baselines (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      base-url:
+        required: true
+        type: string
+      ref:
+        description: Branch to check out, update, and push to.
+        type: string
+        default: preprod
+      working-directory:
+        type: string
+        default: .
+      snapshot-path:
+        description: Committed baseline directory, relative to working-directory.
+        type: string
+        default: tests/__screenshots__/ci
+      update-mode:
+        description: Playwright --update-snapshots mode (changed, missing, or all).
+        type: string
+        default: changed
+      node-version:
+        type: string
+        default: '24'
+    secrets:
+      PLAYWRIGHT_HTTP_USER:
+        required: false
+      PLAYWRIGHT_HTTP_PASS:
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: 'true'
+      PW_BASE_URL: ${{ inputs.base-url }}
+      PLAYWRIGHT_HTTP_USER: ${{ secrets.PLAYWRIGHT_HTTP_USER }}
+      PLAYWRIGHT_HTTP_PASS: ${{ secrets.PLAYWRIGHT_HTTP_PASS }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+      - run: npm ci
+
+      - run: npx alley-playwright install --with-deps chromium
+
+      - name: Regenerate baselines
+        env:
+          UPDATE_MODE: ${{ inputs.update-mode }}
+        run: npx alley-playwright test --update-snapshots="$UPDATE_MODE"
+
+      - name: Commit baselines
+        env:
+          SNAPSHOT_PATH: ${{ inputs.snapshot-path }}
+          REF: ${{ inputs.ref }}
+        run: |
+          git add -A -- "$SNAPSHOT_PATH"
+          if git diff --cached --quiet; then
+            echo "Baselines are already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update Playwright baselines"
+          git push origin "HEAD:$REF"
