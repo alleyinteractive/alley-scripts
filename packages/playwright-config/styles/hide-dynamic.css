@@ -1,0 +1,26 @@
+/*
+ * Hides common sources of screenshot noise. Hidden (not removed) so layout is
+ * preserved. Add `data-pw-hide` to any element in a project to opt it in.
+ */
+[data-pw-hide],
+.adsbygoogle,
+ins.adsbygoogle,
+[id^='google_ads'],
+[id^='div-gpt-ad'],
+iframe[src*='doubleclick.net'],
+iframe[src*='youtube.com'],
+iframe[src*='youtube-nocookie.com'],
+iframe[src*='vimeo.com'],
+#onetrust-consent-sdk,
+#CybotCookiebotDialog,
+#cookie-law-info-bar,
+.cookie-banner,
+.cookie-notice,
+video {
+  visibility: hidden !important;
+}
+
+input,
+textarea {
+  caret-color: transparent !important;
+}
