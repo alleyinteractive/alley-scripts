@@ -153,7 +153,97 @@ tablet) leave empty space to the right of the image. If a PNG itself is wider
 than its viewport (mobile 375px, tablet 768px, desktop 1440px by default), the
 page overflows horizontally, and the full-page capture includes that blank area.
 
-### In CI
+### Setting up CI
+
+These steps run the tests against a preprod site on a schedule and on demand.
+Do them in the project repo.
+
+1. **Run `init`** (see [Per-project setup](#per-project-setup)) with the preprod
+   URL. This creates the caller workflows in `.github/workflows/`:
+
+   ```sh
+   npx alley-playwright init --base-url https://preprod.example.com
+   ```
+
+2. **Check the caller workflows** (`playwright.yml` and
+   `playwright-update-baselines.yml`):
+   - `base-url` is the preprod URL.
+   - `ref` is the branch to test and to commit baselines to. It defaults to
+     `preprod`, so that branch must exist, or set `ref:`.
+   - If `package.json` is in a subfolder, add `working-directory: <subfolder>`.
+   - Change the `cron` schedule if nightly is not what you want.
+
+3. **Commit `package-lock.json`.** The workflows use `npm ci`, so the lockfile
+   must be committed and in sync with `package.json`.
+
+4. **Add secrets** under Settings → Secrets and variables → Actions. All are
+   optional, and the callers pass them through with `secrets: inherit`:
+   - `PLAYWRIGHT_HTTP_USER` and `PLAYWRIGHT_HTTP_PASS`, if preprod is behind
+     basic auth.
+   - `SLACK_WEBHOOK_URL`, to get a message when the tests fail.
+
+5. **Allow the baseline commit.** The baseline workflow pushes to `ref` as
+   `github-actions[bot]`:
+   - If the branch is protected, add a bypass for `github-actions[bot]`.
+   - Under Settings → Actions → General → Workflow permissions, make sure
+     workflows are not forced to read-only.
+
+6. **Merge to the default branch.** Scheduled runs, and the "Run workflow"
+   button for `workflow_dispatch`, only work from the default branch's copy of
+   the caller file. The branch in `ref` (`preprod`) also needs the config,
+   `tests/`, and lockfile, because that is what the workflow checks out.
+
+7. **Record the first baselines.** Go to Actions → "Update Playwright
+   baselines" → Run workflow. It runs on the Linux runner and commits
+   `tests/__screenshots__/ci/` to `ref`. Open the committed PNGs to confirm
+   they look right. Never commit baselines made on a laptop to `ci/`; they
+   render differently and will fail every run.
+
+8. **Run the tests.** Go to Actions → "Playwright tests" → Run workflow. It
+   should pass against the new baselines, and then runs on the schedule.
+
+9. **When a run fails**, open it and download the artifacts:
+   - `playwright-report` (always uploaded): extract it and run
+     `npx alley-playwright show-report <folder>`.
+   - `playwright-test-results` (failures only): the expected, actual, and diff
+     images.
+
+   If the change is intended, re-run "Update Playwright baselines" (with
+   `update-mode: all` to rewrite everything). If it is a regression, fix the
+   site.
+
+Re-record baselines after upgrading this package, since a Playwright bump can
+change rendering.
+
+#### Different setups for local and CI
+
+`PW_BASE_URL` overrides `baseURL`, and the workflows set it from `base-url`, so
+CI and local runs can use different hosts. `createConfig` is plain JavaScript,
+so you can also choose the base URL and the page list from `process.env.CI`
+(set to `true` in the workflows, unset locally):
+
+```js
+const shared = ['/', '/about/'];
+
+export default createConfig({
+  baseURL: process.env.CI ? 'https://preprod.example.com' : 'http://mysite.test',
+  urls: [...shared, ...(process.env.CI ? ['/news/'] : ['/sandbox/'])],
+});
+```
+
+Local and CI baselines are stored separately (`local/` and `ci/`), so they are
+never compared with each other. Keep the CI page list stable: baselines are
+keyed by page name and viewport.
+
+#### Optional: run after every preprod deploy
+
+The callers only run on a schedule and on demand. To also run after a push to
+`preprod`, add `push: branches: [preprod]` to the `on:` block of
+`playwright.yml`. Run it after the deploy finishes, or the tests may hit the
+old build. The baseline workflow's own commit won't retrigger it, because
+pushes made with the default `GITHUB_TOKEN` don't start new workflow runs.
+
+### Reusable workflows
 
 The reusable workflows live in this repo under `.github/workflows/`:
 
