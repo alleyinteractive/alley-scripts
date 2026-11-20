@@ -2,6 +2,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { Decorator } from '@storybook/react';
 
+import '@wordpress/components/build-style/style.css';
+import '@wordpress/block-editor/build-style/style.css';
+import '@wordpress/block-library/build-style/style.css';
 import '../styles/global.css';
 
 /**
@@ -13,14 +16,7 @@ export const WithStyles: Decorator = (Story: any, context: any) => {
     'https://wordpress.org/gutenberg/wp-includes/css/dashicons.min.css',
     'https://wordpress.org/gutenberg/wp-admin/css/common.min.css',
     'https://wordpress.org/gutenberg/wp-admin/css/forms.min.css',
-
-    // Gutenberg Styles.
-    'https://wordpress.org/gutenberg/wp-content/plugins/gutenberg/build/block-editor/style.css',
-    'https://wordpress.org/gutenberg/wp-content/plugins/gutenberg/build/block-library/style.css',
-    'https://wordpress.org/gutenberg/wp-content/plugins/gutenberg/build/components/style.css',
   ];
-
-  console.log('externalStyles', externalStyles);
 
   // In wp-admin, these classes are added to the body element,
   // which is used as a class scope for some relevant styles in the external

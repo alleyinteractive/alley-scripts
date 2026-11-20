@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- acf51547: Set each built block's `version` to a hash of its built files, so its cached scripts and styles bust when the block changes.
+
 ## 0.3.0
 
 ### Minor Changes
