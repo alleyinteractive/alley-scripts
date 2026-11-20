@@ -55,3 +55,66 @@ describe('Test merging webpack configs', () => {
     expect(config?.output).toHaveProperty('asyncChunks', fileContents.output.asyncChunks);
   });
 });
+
+describe('Extended configuration in module mode (--experimental-modules)', () => {
+  const rootWebpackConfigPath = path.join(process.cwd(), 'webpack.config.js');
+
+  afterEach(() => {
+    jest.resetModules();
+
+    try {
+      fs.unlinkSync(rootWebpackConfigPath);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  });
+
+  test('exports an array, merging the user override into the script config only.', () => {
+    // The user override that should land on the script config but NOT the module config.
+    const fileContents = {
+      output: {
+        asyncChunks: true,
+      },
+    };
+
+    fs.writeFileSync(rootWebpackConfigPath, `module.exports = ${JSON.stringify(fileContents)}`);
+
+    jest.isolateModules(() => {
+      // Force wp-scripts to return its dual-compiler array shape.
+      jest.doMock('@wordpress/scripts/config/webpack.config', () => [
+        {
+          entry: () => ({ 'block-name/index': '/project/blocks/block-name' }),
+          output: { path: '/wp-scripts/build' },
+          plugins: [],
+          resolve: { alias: {} },
+        },
+        {
+          entry: () => ({ 'block-name/view': '/project/blocks/block-name/view' }),
+          output: { path: '/wp-scripts/build', module: true },
+          plugins: [],
+          resolve: { alias: {} },
+        },
+      ]);
+
+      // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+      const extendedConfig = require('./extended.config').default;
+
+      // In module mode the export is an array of [scriptConfig, moduleConfig].
+      expect(Array.isArray(extendedConfig)).toBe(true);
+      expect(extendedConfig).toHaveLength(2);
+
+      const [scriptConfig, moduleConfig] = extendedConfig;
+
+      // The user override is merged into the script config.
+      expect(scriptConfig.output).toHaveProperty('asyncChunks', true);
+
+      // The module config is identified by output.module and is left untouched
+      // by the user override.
+      expect(moduleConfig.output).toHaveProperty('module', true);
+      expect(moduleConfig.output).not.toHaveProperty('asyncChunks');
+
+      jest.dontMock('@wordpress/scripts/config/webpack.config');
+    });
+  });
+});
