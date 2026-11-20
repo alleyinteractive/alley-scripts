@@ -29,8 +29,8 @@ process.env.ENTRIES_DIRECTORY = hasArgInCLI('--webpack-entries-dir')
 process.env.BLOCKS_ONLY = hasArgInCLI('--webpack-blocks-only') ? 'true' : 'false';
 
 /**
- * Clean the build directory once before a `build --experimental-modules` run, since the
- * two parallel compilers can't clean it themselves without deleting each other's output.
+ * Clean the build directory once before an experimental modules `build` or `start`, since
+ * the two parallel compilers can't clean it themselves without deleting each other's output.
  */
 const buildDirToPreClean = getBuildDirToPreClean();
 if (buildDirToPreClean) {

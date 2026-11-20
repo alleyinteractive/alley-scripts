@@ -145,23 +145,76 @@ const getDefaultArgs = (): string[] => {
 };
 
 /**
- * Get the build directory to clean once before a `build --experimental-modules` run.
+ * Check whether wp-scripts will run in experimental modules (dual-compiler) mode.
+ *
+ * wp-scripts decides this from the `WP_EXPERIMENTAL_MODULES` environment variable; the
+ * `--experimental-modules` flag is just one way to set it. The variable is parsed the
+ * same way wp-scripts' `getAsBooleanFromENV()` parses it.
+ */
+const isExperimentalModulesMode = (): boolean => {
+  if (hasArgInCLI('--experimental-modules')) {
+    return true;
+  }
+
+  const value = process.env.WP_EXPERIMENTAL_MODULES;
+  return !!value && value !== 'false' && value !== '0';
+};
+
+/**
+ * Get the absolute build output directory.
+ *
+ * Defaults to `build/` (set in the webpack config), but webpack-cli's `--output-path`
+ * flag (also `-o`) overrides it for every compiler. Both `--output-path=dir` and
+ * `--output-path dir` forms are supported, matching webpack-cli.
+ */
+const getBuildDir = (): string => {
+  const args = getArgsFromCLI();
+  let outputPath: CliArg;
+
+  args.forEach((arg, index) => {
+    if (arg.startsWith('--output-path=')) {
+      outputPath = arg.slice('--output-path='.length);
+    } else if ((arg === '--output-path' || arg === '-o') && args[index + 1]) {
+      outputPath = args[index + 1];
+    }
+  });
+
+  return path.resolve(cwd(), outputPath || 'build');
+};
+
+/**
+ * Get the build directory to clean once before an experimental modules `build` or `start`.
  *
  * In that mode wp-scripts runs a script compiler and a module compiler in parallel, both
- * writing to `build/`. Neither can clean it without deleting the other's output, so the
- * CLI cleans it once before either compiler starts. Without the pre-clean, deleted or
- * renamed blocks would linger in `build/` and still be versioned and registered.
+ * writing to the build directory. Neither can clean it without deleting the other's
+ * output, so the CLI cleans it once before either compiler starts. Without the
+ * pre-clean, deleted or renamed blocks would linger and still be versioned and
+ * registered. This mirrors the initial wipe that `build` and `start` get in
+ * non-module mode.
+ *
+ * As a safeguard, a build directory that is the project root or lies outside it is
+ * never cleaned.
  *
  * @returns The absolute build directory path, or undefined when no pre-clean is needed.
  */
-const getBuildDirToPreClean = (): string | undefined => (
-  hasArgInCLI('build') && hasArgInCLI('--experimental-modules')
-    ? fromProjectRoot('build')
-    : undefined
-);
+const getBuildDirToPreClean = (): string | undefined => {
+  if (!(hasArgInCLI('build') || hasArgInCLI('start')) || !isExperimentalModulesMode()) {
+    return undefined;
+  }
+
+  const buildDir = getBuildDir();
+  const relativeToRoot = path.relative(cwd(), buildDir);
+
+  if (!relativeToRoot || relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
+    return undefined;
+  }
+
+  return buildDir;
+};
 
 export {
   fromProjectRoot,
+  getBuildDir,
   getBuildDirToPreClean,
   getArgFromCLI,
   getArgsFromCLI,
@@ -171,4 +224,5 @@ export {
   getUserWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
+  isExperimentalModulesMode,
 };

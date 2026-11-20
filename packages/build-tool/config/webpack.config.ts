@@ -90,7 +90,8 @@ function buildConfig(
   /**
    * Only force `clean` in non-array mode. In array mode both compilers write
    * to `build/` and would clean each other's output; the CLI (`index.ts`)
-   * cleans `build/` once before a `build --experimental-modules` run instead.
+   * cleans the build directory once before an experimental modules `build`
+   * or `start` instead.
    */
   if (!arrayMode) {
     output.clean = mode === 'production';
@@ -170,7 +171,7 @@ function buildConfig(
          * first, so that default wipe would delete the module output.
          * Disable it in array mode (mirroring the `output.clean` suppression
          * above) while keeping the after-build CSS dedup below. The CLI
-         * pre-cleans `build/` for production array-mode builds instead.
+         * pre-cleans the build directory for array-mode builds instead.
          */
         ...(arrayMode ? { cleanOnceBeforeBuildPatterns: [] } : {}),
         cleanAfterEveryBuildPatterns: [
