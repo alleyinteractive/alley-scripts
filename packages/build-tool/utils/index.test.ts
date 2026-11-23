@@ -6,12 +6,15 @@ import {
   fromProjectRoot,
   getArgFromCLI,
   getArgsFromCLI,
+  getBuildDir,
+  getBuildDirToPreClean,
   getDefaultArgs,
   getWebpackConfig,
   getUserWebpackConfigFilePath,
   getUserWebpackConfig,
   hasArgInCLI,
   hasProjectFile,
+  isExperimentalModulesMode,
 } from './index';
 
 describe('fromProjectRoot', () => {
@@ -212,5 +215,136 @@ describe('getDefaultArgs', () => {
   it('should include "--webpack-src-dir" argument with value from "--webpack-src-dir" CLI argument if "start" command is used and "--webpack-src-dir" CLI argument is present', () => {
     process.argv = ['node', 'index.js', 'start', '--webpack-src-dir=my-blocks'];
     expect(getDefaultArgs()).toContain('--webpack-src-dir=my-blocks');
+  });
+});
+
+describe('isExperimentalModulesMode', () => {
+  const originalEnv = process.env.WP_EXPERIMENTAL_MODULES;
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.WP_EXPERIMENTAL_MODULES;
+    } else {
+      process.env.WP_EXPERIMENTAL_MODULES = originalEnv;
+    }
+  });
+
+  beforeEach(() => {
+    delete process.env.WP_EXPERIMENTAL_MODULES;
+    process.argv = ['node', 'index.js', 'build'];
+  });
+
+  it('returns true when "--experimental-modules" is passed', () => {
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules'];
+    expect(isExperimentalModulesMode()).toBe(true);
+  });
+
+  it('returns true when WP_EXPERIMENTAL_MODULES is truthy', () => {
+    process.env.WP_EXPERIMENTAL_MODULES = 'true';
+    expect(isExperimentalModulesMode()).toBe(true);
+    process.env.WP_EXPERIMENTAL_MODULES = '1';
+    expect(isExperimentalModulesMode()).toBe(true);
+  });
+
+  it('returns false when WP_EXPERIMENTAL_MODULES is unset, "false", or "0"', () => {
+    expect(isExperimentalModulesMode()).toBe(false);
+    process.env.WP_EXPERIMENTAL_MODULES = 'false';
+    expect(isExperimentalModulesMode()).toBe(false);
+    process.env.WP_EXPERIMENTAL_MODULES = '0';
+    expect(isExperimentalModulesMode()).toBe(false);
+    process.env.WP_EXPERIMENTAL_MODULES = '';
+    expect(isExperimentalModulesMode()).toBe(false);
+  });
+});
+
+describe('getBuildDir', () => {
+  it('defaults to the project build directory', () => {
+    process.argv = ['node', 'index.js', 'build'];
+    expect(getBuildDir()).toBe(path.join(process.cwd(), 'build'));
+  });
+
+  it('uses "--output-path=dir"', () => {
+    process.argv = ['node', 'index.js', 'build', '--output-path=dist'];
+    expect(getBuildDir()).toBe(path.join(process.cwd(), 'dist'));
+  });
+
+  it('uses "--output-path dir"', () => {
+    process.argv = ['node', 'index.js', 'build', '--output-path', 'dist/assets'];
+    expect(getBuildDir()).toBe(path.join(process.cwd(), 'dist/assets'));
+  });
+
+  it('uses "-o dir"', () => {
+    process.argv = ['node', 'index.js', 'build', '-o', 'dist'];
+    expect(getBuildDir()).toBe(path.join(process.cwd(), 'dist'));
+  });
+
+  it('keeps an absolute output path as-is', () => {
+    process.argv = ['node', 'index.js', 'build', '--output-path=/tmp/out'];
+    expect(getBuildDir()).toBe(path.resolve('/tmp/out'));
+  });
+});
+
+describe('getBuildDirToPreClean', () => {
+  const originalEnv = process.env.WP_EXPERIMENTAL_MODULES;
+
+  beforeEach(() => {
+    delete process.env.WP_EXPERIMENTAL_MODULES;
+  });
+
+  afterEach(() => {
+    if (originalEnv === undefined) {
+      delete process.env.WP_EXPERIMENTAL_MODULES;
+    } else {
+      process.env.WP_EXPERIMENTAL_MODULES = originalEnv;
+    }
+  });
+
+  it('returns the project build directory for "build --experimental-modules"', () => {
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules'];
+    expect(getBuildDirToPreClean()).toBe(path.join(process.cwd(), 'build'));
+  });
+
+  it('returns the project build directory for "start --experimental-modules"', () => {
+    process.argv = ['node', 'index.js', 'start', '--experimental-modules'];
+    expect(getBuildDirToPreClean()).toBe(path.join(process.cwd(), 'build'));
+  });
+
+  it('returns the build directory when WP_EXPERIMENTAL_MODULES is set without the flag', () => {
+    process.env.WP_EXPERIMENTAL_MODULES = 'true';
+    process.argv = ['node', 'index.js', 'build'];
+    expect(getBuildDirToPreClean()).toBe(path.join(process.cwd(), 'build'));
+  });
+
+  it('returns undefined for "build" without experimental modules', () => {
+    process.argv = ['node', 'index.js', 'build'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
+  });
+
+  it('returns undefined for "build" when WP_EXPERIMENTAL_MODULES is "false"', () => {
+    process.env.WP_EXPERIMENTAL_MODULES = 'false';
+    process.argv = ['node', 'index.js', 'build'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
+  });
+
+  it('returns undefined for commands other than "build" and "start"', () => {
+    process.argv = ['node', 'index.js', 'lint-js', '--experimental-modules'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
+  });
+
+  it('follows "--output-path"', () => {
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules', '--output-path=dist'];
+    expect(getBuildDirToPreClean()).toBe(path.join(process.cwd(), 'dist'));
+  });
+
+  it('never cleans the project root', () => {
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules', '--output-path=.'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
+  });
+
+  it('never cleans a directory outside the project root', () => {
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules', '--output-path=../elsewhere'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
+    process.argv = ['node', 'index.js', 'build', '--experimental-modules', '--output-path=/tmp/out'];
+    expect(getBuildDirToPreClean()).toBeUndefined();
   });
 });
